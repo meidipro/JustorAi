@@ -6,10 +6,17 @@ import Groq from "groq-sdk";
 
 import mermaid from 'mermaid';
 
-// --- Types matching your DB schema ---
+// --- Types ---
 type Sender = 'user' | 'ai';
 interface Message { id?: number; sender: Sender; content: string; }
-interface Chat { id: string; title: string; messages: Message[]; dify_conversation_id?: string; has_document?: boolean; dify_file_ids?: string[]; }
+// Add Source type for citations
+interface Source {
+    source: string;
+    page?: number;
+    user_id?: string;
+    chat_id?: string;
+}
+interface Chat { id: string; title:string; messages: Message[]; dify_conversation_id?: string; has_document?: boolean; document_filename?: string; }
 interface AppState { chats: Chat[]; activeChatId: string | null; }
 
 interface SpeechRecognitionEvent extends Event { results: SpeechRecognitionResultList; }
@@ -24,7 +31,6 @@ declare global {
 }
 
 export async function renderAppPage(container: HTMLElement) {
-    const DIFY_REVIEWER_API_KEY = import.meta.env.VITE_DIFY_REVIEWER_API_KEY;
     const DIFY_GENERAL_API_KEY = import.meta.env.VITE_DIFY_GENERAL_API_KEY;
     const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
     const GUEST_STORAGE_KEY = 'legalAI.guestChats';
@@ -90,10 +96,9 @@ export async function renderAppPage(container: HTMLElement) {
               <div id="chat-window"></div>
               <div class="message-form-container">
                   <form id="message-form">
-                      <button type="button" id="upload-doc-btn" class="upload-btn" title="Analyze a document">
+                      <button type="button" id="upload-doc-btn" class="upload-btn" title="Document upload feature">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
                       </button>
-                      <input type="file" id="doc-file-input" style="display:none" accept=".pdf,.doc,.docx,.txt,.rtf,.odt,.jpg,.jpeg,.png,.heic,.webp,.csv,.xlsx,.xls,.ppt,.pptx,.zip,.rar,.7z,.tar,.gz,.json,.xml,.eml,.msg,.md,.html,.htm,.epub,.mobi,.azw,.azw3,.fb2,.djvu,.cbz,.cbr,.mp3,.wav,.mp4,.mov,.avi,.mkv,.flv,.wmv,.ogg,.aac,.flac,.m4a,.webm,.ts,.m4v,.3gp,.3g2,.m2ts,.mts,.vob,.dat,.iso,.swf,.svg,.psd,.ai,.indd,.xd,.sketch,.fig,.blend,.dwg,.dxf,.stl,.obj,.fbx,.gltf,.glb,.3ds,.max,.c4d,.lwo,.lws,.ma,.mb,.ase,.aseprite,.spr,.sai,.clip,.kra,.ora,.psb,.tif,.tiff,.bmp,.ico,.icns,.cur,.ani,.exr,.hdr,.dds,.tga,.pal,.act,.thm,.yuv,.cin,.dpx,.rle,.sgi,.bw,.rgb,.rgba,.int,.inta,.sid,.pcx,.pict,.pct,.pic,.mac,.mag,.img,.sun,.ras,.xpm,.xbm,.ppm,.pgm,.pbm,.pnm,.pam,.j2k,.jp2,.jpf,.jpx,.jpm,.mj2,.svgz,.webp,.avif,.apng,.jxl,.heif,.heic,.pdf,.djvu,.xps,.oxps,.cbz,.cbr,.cbt,.cba,.cb7,.zip,.rar,.7z,.tar,.gz,.bz2,.xz,.lz,.lzma,.z,.tz,.tbz,.tgz,.txz,.tlz,.lz4,.lzo,.sz,.zst,.cab,.arj,.ace,.uue,.bz,.bzip2,.gzip,.lz,.lzma,.lzo,.rar,.xz,.z,.zip,.001,.7z,.ace,.alz,.apk,.arj,.bin,.bz2,.cab,.cpio,.deb,.dmg,.egg,.gz,.hqx,.img,.iso,.jar,.lzh,.lzma,.lzo,.msi,.pkg,.rar,.rpm,.sea,.sit,.tar,.tbz2,.tgz,.tlz,.txz,.war,.wim,.xar,.xz,.z,.zip,.zipx" />
                       <button type="button" id="mic-button" class="mic-btn" title="Ask with voice">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
                       </button>
@@ -108,7 +113,6 @@ export async function renderAppPage(container: HTMLElement) {
       </div>`;
 
     const uploadDocBtn = document.getElementById('upload-doc-btn') as HTMLButtonElement;
-    const docFileInput = document.getElementById('doc-file-input') as HTMLInputElement;
     const sidebar = document.querySelector('.sidebar') as HTMLElement;
     const overlay = document.getElementById('overlay') as HTMLDivElement;
     const chatWindow = document.getElementById('chat-window') as HTMLDivElement;
@@ -201,7 +205,7 @@ export async function renderAppPage(container: HTMLElement) {
         }
     }
 
-    function displayMessage(text: string, sender: Sender): HTMLDivElement {
+    function displayMessage(text: string, sender: Sender, sources: Source[] = []): HTMLDivElement {
         if (!chatWindow) return document.createElement('div');
 
         const messageWrapper = document.createElement('div');
@@ -227,12 +231,46 @@ export async function renderAppPage(container: HTMLElement) {
         const messageBubble = document.createElement('div');
         messageBubble.className = 'message-bubble';
 
-        // --- NEW: Logic to parse follow-up questions ---
-        let mainContent = text;
+        if (sender === 'ai') {
+            const parsed = marked.parse(text, { gfm: true }) as string;
+            messageBubble.innerHTML = parsed;
+        } else {
+            messageBubble.innerText = text;
+        }
+        messageContent.appendChild(messageBubble);
+
+        // Add sources for AI messages
+        if (sender === 'ai' && sources && sources.length > 0) {
+            const sourcesContainer = document.createElement('div');
+            sourcesContainer.className = 'sources-container';
+
+            const sourcesTitle = document.createElement('h4');
+            sourcesTitle.className = 'sources-title';
+            sourcesTitle.textContent = 'Sources:';
+            sourcesContainer.appendChild(sourcesTitle);
+
+            const sourcesList = document.createElement('ul');
+            sourcesList.className = 'sources-list';
+            // Use a Set to only show unique sources
+            const uniqueSources = [...new Map(sources.map(s => [`${s.source}:${s.page}`, s])).values()];
+
+            uniqueSources.forEach(source => {
+                const listItem = document.createElement('li');
+                listItem.className = 'source-item';
+                const pageText = source.page !== undefined ? ` - Page ${source.page + 1}` : '';
+                listItem.textContent = `📄 ${source.source}${pageText}`;
+                sourcesList.appendChild(listItem);
+            });
+            sourcesContainer.appendChild(sourcesList);
+            messageContent.appendChild(sourcesContainer);
+        }
+
+        // Parse and handle follow-up questions
         let followUpQuestions: string[] = [];
         const followUpRegex = /<h4>Follow-up Suggestions:<\/h4>\s*<ol>(.*?)<\/ol>/s;
         const match = text.match(followUpRegex);
 
+        let mainContent = text;
         if (match) {
             mainContent = text.replace(followUpRegex, '').trim();
             const listItemsRegex = /<li>(.*?)<\/li>/g;
@@ -501,56 +539,28 @@ export async function renderAppPage(container: HTMLElement) {
         const activeChat = getActiveChat();
         if (!activeChat) return;
 
-        // --- FIX: Link #1 - Select the correct AI ---
-        const isDocumentChat = activeChat.has_document === true;
-        const API_KEY = isDocumentChat ? DIFY_REVIEWER_API_KEY : DIFY_GENERAL_API_KEY;
-
-        if (!API_KEY) {
-            const errorMsg = "Error: The AI for this mode is not configured. Please check API keys.";
-            console.error(errorMsg);
-            displayMessage(errorMsg, 'ai');
-            return;
-        }
-
         await addMessageToActiveChat({ sender: 'user', content: userInput });
         messageInput.value = '';
-        const tempMessageWrapper = displayMessage(i18n.t('app_thinking'), 'ai');
+
+        // Create a new, empty AI message bubble that we will stream into.
+        const aiMessageWrapper = displayMessage("", 'ai');
+        const aiMessageBubble = aiMessageWrapper.querySelector('.message-bubble') as HTMLDivElement;
+        // Add a typing cursor for immediate feedback
+        aiMessageBubble.innerHTML = '<span class="typing-cursor"></span>';
 
         try {
-            // --- FIX: Link #2 - Attach the file ID ---
-            let filesToAttach: { type: string; upload_file_id: string; }[] = [];
-            if (activeChat.dify_file_ids && activeChat.dify_file_ids.length > 0) {
-                filesToAttach = activeChat.dify_file_ids.map(id => ({
-                    type: "file",
-                    upload_file_id: id,
-                }));
-
-            }
-
-            const { fullResponse, finalDifyId } = await sendQueryToDify(
-                userInput,
-                filesToAttach,
-                activeChat.dify_conversation_id || "",
-                API_KEY,
-                tempMessageWrapper
-            );
-            await addMessageToActiveChat({ sender: 'ai', content: fullResponse }, finalDifyId);
-
-            // Fallback to Groq if Dify provides no answer
+            // Keep the old logic for general chats (Dify/Groq)
+            const { fullResponse } = await sendQueryToDify(userInput, [], activeChat.dify_conversation_id || "", DIFY_GENERAL_API_KEY, aiMessageWrapper);
+            aiMessageWrapper.remove(); // Remove the temp wrapper
+            await addMessageToActiveChat({ sender: 'ai', content: fullResponse });
             if (!fullResponse.trim()) {
-                const groqResponse = await groq.chat.completions.create({
-                    messages: [{ role: "user", content: userInput }],
-                    model: "llama3-8b-8192"
-                });
+                const groqResponse = await groq.chat.completions.create({ messages: [{ role: "user", content: userInput }], model: "llama3-8b-8192" });
                 const groqAnswer = groqResponse.choices[0]?.message?.content || "";
-                if (groqAnswer) {
-                    await addMessageToActiveChat({ sender: 'ai', content: groqAnswer });
-                } else {
-                    throw new Error("Both Dify and Groq failed to provide a response.");
-                }
+                if (groqAnswer) await addMessageToActiveChat({ sender: 'ai', content: groqAnswer });
+                else throw new Error("Both Dify and Groq failed.");
             }
         } catch (error) {
-            tempMessageWrapper?.remove();
+            aiMessageWrapper?.remove();
             const errorMessage = `${i18n.t('app_error')} ${error instanceof Error ? error.message : 'Unknown error'}`;
             await addMessageToActiveChat({ sender: 'ai', content: errorMessage });
             speakText(errorMessage);
@@ -622,105 +632,8 @@ export async function renderAppPage(container: HTMLElement) {
         return { fullResponse, finalDifyId };
     }
 
-    // --- Corrected handleDocumentUpload and analyzeDocument Logic ---
-
-    async function analyzeDocument(userId: string, filename: string): Promise<string> {
-        try {
-            const response = await fetch(`http://localhost:8000/analyze-document/${userId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ filename }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Failed to analyze document.');
-            }
-
-            const result = await response.json();
-            return result.analysis;
-
-        } catch (error) {
-            console.error('Error during analysis:', error);
-            throw error; // Re-throw the error to be caught by the caller
-        }
-    }
-
-    async function handleDocumentUpload(event: Event) {
-        const target = event.target as HTMLInputElement;
-        const file = target.files?.[0];
-        if (!file) return;
-
-        const sendButton = document.getElementById('send-button') as HTMLButtonElement;
-        const messageInput = document.getElementById('message-input') as HTMLInputElement;
-        const originalButtonContent = sendButton.innerHTML;
-
-        // --- Start of controlled UI state ---
-        sendButton.innerHTML = `<div class="loader"></div>`;
-        sendButton.disabled = true;
-        messageInput.disabled = true;
-        messageInput.placeholder = "Uploading document...";
-
-        if (!appState.activeChatId) {
-            await createNewChat();
-        }
-        const activeChat = getActiveChat();
-        if (!activeChat) {
-            // Reset UI on error
-            sendButton.innerHTML = originalButtonContent;
-            sendButton.disabled = false;
-            messageInput.disabled = false;
-            messageInput.placeholder = i18n.t('app_askAnything');
-            return;
-        }
-
-        try {
-            // Step 1: Upload the file
-            const formData = new FormData();
-            formData.append('file', file);
-            const uploadResponse = await fetch(`http://localhost:8000/upload-document/${userIdentifier}`, {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!uploadResponse.ok) {
-                const errorData = await uploadResponse.json();
-                throw new Error(`Upload failed: ${errorData.detail || 'Unknown error'}`);
-            }
-            
-            await uploadResponse.json(); // Consume the response body
-            
-            // Update chat state and persist
-            activeChat.has_document = true;
-            if (isGuestMode) {
-                localStorage.setItem(GUEST_STORAGE_KEY, JSON.stringify(appState));
-            } else {
-                await supabase.from('chats').update({ has_document: true }).eq('id', activeChat.id);
-            }
-
-            // Step 2: Notify user and start analysis
-            displayMessage(`📄 **${file.name}** uploaded. Now analyzing...`, 'ai');
-            messageInput.placeholder = "Analyzing document...";
-            renderSidebar();
-
-            // Step 3: Call and wait for analysis to complete
-            const analysisResult = await analyzeDocument(userIdentifier, file.name);
-
-            // Step 4: Display the analysis result
-            displayMessage(analysisResult, 'ai');
-
-        } catch (error) {
-            console.error("Document processing error:", error);
-            const errorMessage = `Error: ${error instanceof Error ? error.message : 'An unknown error occurred. Please try again.'}`;
-            displayMessage(errorMessage, 'ai');
-        } finally {
-            // --- End of controlled UI state: Reset UI ---
-            target.value = ''; // Clear the file input
-            sendButton.innerHTML = originalButtonContent;
-            sendButton.disabled = false;
-            messageInput.disabled = false;
-            messageInput.placeholder = i18n.t('app_askAnything');
-        }
+    function handleDocumentUploadComingSoon() {
+        alert('This feature is coming soon!');
     }
 
     function renderUserProfileLink() {
@@ -816,8 +729,7 @@ export async function renderAppPage(container: HTMLElement) {
         sidebarLangSwitcher?.querySelector('.lang-bn')?.addEventListener('click', () => {
             if (i18n.getLanguage() !== 'bn') i18n.setLanguage('bn');
         });
-        uploadDocBtn.addEventListener('click', () => { docFileInput.click(); });
-        docFileInput.addEventListener('change', handleDocumentUpload);
+        uploadDocBtn.addEventListener('click', handleDocumentUploadComingSoon);
     }
     await initApp();
 }

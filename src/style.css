@@ -1760,3 +1760,23 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* In style.css, add this at the end */
+
+/* Blinking cursor effect */
+.typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em; /* Should be similar to the text line-height */
+    background-color: var(--text-primary);
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes blink {
+    from, to {
+        background-color: transparent;
+    }
+    50% {
+        background-color: var(--text-primary);
+    }
+}

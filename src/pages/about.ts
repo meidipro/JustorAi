@@ -31,7 +31,7 @@ const aboutHTML = `
       <div class="infographic-step animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
         <div class="infographic-icon">📥</div>
         <h4>1. Ask or Upload</h4>
-        <p>Start by asking a question in plain English or Bengali, or upload a legal document for analysis.</p>
+        <p>Start by asking a question in plain English or Bengali. Document upload and analysis features are coming soon!</p>
       </div>
       <div class="infographic-step animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
         <div class="infographic-icon">🤖</div>
