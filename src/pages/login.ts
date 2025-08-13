@@ -7,7 +7,7 @@ let authMode: 'signIn' | 'signUp' = 'signIn';
 async function handleGoogleSignIn() {
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: `${window.location.origin}/app` }
+        options: { redirectTo: 'https://justorai.com/app' }
     });
     if (error) {
         console.error("Error signing in with Google:", error);
