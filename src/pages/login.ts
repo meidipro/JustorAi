@@ -5,9 +5,11 @@ import { i18n } from '../i18n';
 let authMode: 'signIn' | 'signUp' = 'signIn';
 
 async function handleGoogleSignIn() {
+    const redirectUrl = `${window.location.origin}/app`;
+    console.log('🔐 Google OAuth redirect URL:', redirectUrl);
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: `${window.location.origin}/app` }
+        options: { redirectTo: redirectUrl }
     });
     if (error) {
         console.error("Error signing in with Google:", error);
@@ -20,6 +22,8 @@ async function handleEmailAuth(e: Event) {
     const form = e.target as HTMLFormElement;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+
+    console.log('🔐 Email authentication attempt from:', window.location.origin);
 
     if (authMode === 'signUp') {
         const fullName = (form.elements.namedItem('fullName') as HTMLInputElement).value;
@@ -39,6 +43,7 @@ async function handleEmailAuth(e: Event) {
             }
         });
         if (error) {
+            console.error('🚨 Sign up error:', error);
             alert(error.message);
         } else {
             alert(i18n.t('login_page_confirmEmail'));
@@ -47,7 +52,12 @@ async function handleEmailAuth(e: Event) {
     } else {
         // --- SIGN IN LOGIC (unchanged) ---
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) { alert(error.message); }
+        if (error) { 
+            console.error('🚨 Sign in error:', error);
+            alert(error.message); 
+        } else {
+            console.log('✅ Email sign in successful');
+        }
     }
 }
 
