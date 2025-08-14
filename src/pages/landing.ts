@@ -7,9 +7,7 @@ declare const particlesJS: any;
 // --- Main render function for the landing page ---
 export function renderLandingPage(container: HTMLElement) {
     // --- NEW: Check the user's session state ---
-    console.log('🏠 landing.ts: Rendering landing page...');
     const session = auth.getSession();
-    console.log('🏠 landing.ts: Session for landing page:', session ? `USER: ${session.user?.email}` : 'NULL');
 
     // --- NEW: Dynamically generate the Call-to-Action buttons ---
     let ctaButtonsHTML = '';

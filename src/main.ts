@@ -36,19 +36,15 @@ const router = () => {
 };
 
 supabase.auth.onAuthStateChange((_event, session) => {
-    console.log('🔥 main.ts: Auth state change event:', _event, session ? `USER: ${session.user?.email}` : 'NULL');
     auth.setSession(session);
     // CHANGE 1: Pass the current path
     renderNavbar(navbarContainer, window.location.pathname);
     
     // Dispatch custom event for app page to update user profile link
-    console.log('📡 main.ts: Dispatching authStateChange event');
     window.dispatchEvent(new CustomEvent('authStateChange'));
 
     const currentPath = window.location.pathname;
-    console.log('🛣️ main.ts: Current path:', currentPath);
     if (!session) {
-        console.log('❌ main.ts: No session, handling logout redirect...');
         if (currentPath === '/app' || currentPath === '/profile') {
             history.pushState(null, '', '/');
             router(); 
@@ -56,7 +52,6 @@ supabase.auth.onAuthStateChange((_event, session) => {
             router();
         }
     } else {
-        console.log('✅ main.ts: Session exists, handling login redirect...');
         if (currentPath === '/login') {
             history.pushState(null, '', '/app');
             router();
@@ -67,9 +62,7 @@ supabase.auth.onAuthStateChange((_event, session) => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('🎯 main.ts: DOMContentLoaded, getting initial session...');
   const { data: { session } } = await supabase.auth.getSession();
-  console.log('🔍 main.ts: Initial session from DOMContentLoaded:', session ? `USER: ${session.user?.email}` : 'NULL');
   auth.setSession(session);
   
   // CHANGE 2: Pass the current path

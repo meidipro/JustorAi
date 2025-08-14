@@ -638,11 +638,9 @@ export async function renderAppPage(container: HTMLElement) {
 
     function updateGuestModeState() {
         const currentSession = auth.getSession();
-        const oldGuestMode = isGuestMode;
         isGuestMode = currentSession === null;
         // Update user identifier when auth state changes
         userIdentifier = currentSession?.user?.id || getOrCreateGuestUserId();
-        console.log('📱 app.ts: Updated guest mode state:', oldGuestMode, '->', isGuestMode, 'User ID:', userIdentifier);
     }
     
     function renderGuestNotice() {
@@ -663,21 +661,15 @@ export async function renderAppPage(container: HTMLElement) {
     }
 
     function renderUserProfileLink() {
-        if (!userProfileLink) {
-            console.log('📱 app.ts: userProfileLink element not found!');
-            return;
-        }
+        if (!userProfileLink) return;
         
-        console.log('📱 app.ts: Rendering user profile link, guest mode:', isGuestMode);
         if (isGuestMode) {
             userProfileLink.innerHTML = `<a href="/login" class="nav-button nav-button-primary" data-link>${i18n.t('app_signUpToSave')}</a>`;
-            console.log('📱 app.ts: Rendered guest signup button');
         } else {
             const currentSession = auth.getSession();
             const user = currentSession?.user;
             const userInitial = user?.email?.charAt(0).toUpperCase() || 'P';
             userProfileLink.innerHTML = `<a href="/profile" data-link><div class="avatar user-avatar">${userInitial}</div><span>${user?.email}</span></a>`;
-            console.log('📱 app.ts: Rendered user profile link for:', user?.email);
         }
     }
 
@@ -755,7 +747,6 @@ export async function renderAppPage(container: HTMLElement) {
         
         // Listen for auth state changes and update UI
         window.addEventListener('authStateChange', async () => {
-            console.log('📱 app.ts: Received authStateChange event');
             updateGuestModeState();
             renderGuestNotice();
             renderUserProfileLink();
