@@ -40,7 +40,7 @@ export async function renderAppPage(container: HTMLElement) {
 
     let appState: AppState;
     const session = auth.getSession();
-    const isGuestMode = session === null;
+    let isGuestMode = session === null;
 
     const SUGGESTED_QUERIES = ['app_query_1', 'app_query_2', 'app_query_3', 'app_query_4'];
 
@@ -57,7 +57,7 @@ export async function renderAppPage(container: HTMLElement) {
         }
         return guestId;
     }
-    const userIdentifier = session?.user?.id || getOrCreateGuestUserId();
+    let userIdentifier = session?.user?.id || getOrCreateGuestUserId();
 
     // --- HTML Structure ---
     container.innerHTML = `
@@ -636,12 +636,38 @@ export async function renderAppPage(container: HTMLElement) {
         alert('This feature is coming soon!');
     }
 
+    function updateGuestModeState() {
+        const currentSession = auth.getSession();
+        isGuestMode = currentSession === null;
+        // Update user identifier when auth state changes
+        userIdentifier = currentSession?.user?.id || getOrCreateGuestUserId();
+    }
+    
+    function renderGuestNotice() {
+        // Remove existing guest notice
+        const existingNotice = sidebar.querySelector('.guest-notice');
+        if (existingNotice) {
+            existingNotice.remove();
+        }
+        
+        // Add guest notice if in guest mode
+        if (isGuestMode) {
+            const guestNotice = document.createElement('div');
+            guestNotice.className = 'guest-notice';
+            guestNotice.style.cssText = 'background-color: var(--bg-soft); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 12px; text-align: center; font-size: 14px; border-radius: 8px; margin-bottom: 16px;';
+            guestNotice.innerHTML = `${i18n.t('app_guestNotice')} <a href="/login" data-link style="color: var(--accent-color-start); font-weight: 500;">${i18n.t('app_guestSignIn')}</a> ${i18n.t('app_guestToSave')}`;
+            sidebar.prepend(guestNotice);
+        }
+    }
+
     function renderUserProfileLink() {
         if (!userProfileLink) return;
+        
         if (isGuestMode) {
             userProfileLink.innerHTML = `<a href="/login" class="nav-button nav-button-primary" data-link>${i18n.t('app_signUpToSave')}</a>`;
         } else {
-            const user = session?.user;
+            const currentSession = auth.getSession();
+            const user = currentSession?.user;
             const userInitial = user?.email?.charAt(0).toUpperCase() || 'P';
             userProfileLink.innerHTML = `<a href="/profile" data-link><div class="avatar user-avatar">${userInitial}</div><span>${user?.email}</span></a>`;
         }
@@ -709,12 +735,7 @@ export async function renderAppPage(container: HTMLElement) {
             document.body.classList.toggle('dark-mode');
             if (themeText) themeText.textContent = document.body.classList.contains('dark-mode') ? i18n.t('app_lightMode') : i18n.t('app_darkMode');
         });
-        if (isGuestMode) {
-            const guestNotice = document.createElement('div');
-            guestNotice.style.cssText = 'background-color: var(--bg-soft); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 8px 12px; text-align: center; font-size: 14px; border-radius: 8px; margin-bottom: 16px;';
-            guestNotice.innerHTML = `${i18n.t('app_guestNotice')} <a href="/login" data-link style="color: var(--accent-color-start); font-weight: 500;">${i18n.t('app_guestSignIn')}</a> ${i18n.t('app_guestToSave')}`;
-            sidebar.prepend(guestNotice);
-        }
+        renderGuestNotice();
         await loadState();
         if (appState.chats.length === 0) {
             await createNewChat();
@@ -723,6 +744,17 @@ export async function renderAppPage(container: HTMLElement) {
         }
         renderUserProfileLink();
         setupSpeechRecognition();
+        
+        // Listen for auth state changes and update UI
+        window.addEventListener('authStateChange', async () => {
+            updateGuestModeState();
+            renderGuestNotice();
+            renderUserProfileLink();
+            // Reload app state when auth changes
+            await loadState();
+            renderSidebar();
+            renderChatWindow();
+        });
         sidebarLangSwitcher?.querySelector('.lang-en')?.addEventListener('click', () => {
             if (i18n.getLanguage() !== 'en') i18n.setLanguage('en');
         });

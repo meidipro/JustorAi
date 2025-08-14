@@ -39,6 +39,9 @@ supabase.auth.onAuthStateChange((_event, session) => {
     auth.setSession(session);
     // CHANGE 1: Pass the current path
     renderNavbar(navbarContainer, window.location.pathname);
+    
+    // Dispatch custom event for app page to update user profile link
+    window.dispatchEvent(new CustomEvent('authStateChange'));
 
     const currentPath = window.location.pathname;
     if (!session) {
