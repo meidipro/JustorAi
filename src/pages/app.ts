@@ -507,7 +507,7 @@ export async function renderAppPage(container: HTMLElement) {
     function shareChat(id: string, button: HTMLButtonElement) {
         const chat = appState.chats.find(c => c.id === id);
         if (!chat) return;
-        const formattedChat = `Chat: ${chat.title}\n\n${chat.messages.map(msg => `${msg.sender === 'user' ? 'You' : 'LegalAI'}:\n${msg.content}`).join('\n\n')}`;
+        const formattedChat = `Chat: ${chat.title}\n\n${chat.messages.map(msg => `${msg.sender === 'user' ? 'You' : 'JustorAI'}:\n${msg.content}`).join('\n\n')}`;
         navigator.clipboard.writeText(formattedChat).then(() => {
             const originalContent = button.innerHTML;
             button.innerHTML = '✅';

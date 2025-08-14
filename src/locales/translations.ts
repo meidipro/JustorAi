@@ -11,12 +11,12 @@ export const translations = {
     // --- Landing Page ---
     landing_heroTitle_1: { en: 'Your AI Partner in Navigating', bn: 'বাংলাদেশী আইন কানুন বুঝতে' },
     landing_heroTitle_2: { en: 'Bangladeshi Law', bn: 'আপনার এআই সহযোগী' },
-    landing_heroSubtitle: { en: `Get instant, clear answers to your legal questions. Whether you're a citizen, a law student, or a legal professional, LegalAI simplifies complexity.`, bn: 'আপনার আইনি জিজ্ঞাসার তাৎক্ষণিক ও সুস্পষ্ট উত্তর পান। নাগরিক, আইনের ছাত্র বা আইন পেশাজীবী, সকলের জন্য LegalAI আইনি জটিলতাকে সহজ করে তোলে।' },
+    landing_heroSubtitle: { en: `Get instant, clear answers to your legal questions. Whether you're a citizen, a law student, or a legal professional, JustorAI simplifies complexity.`, bn: 'আপনার আইনি জিজ্ঞাসার তাৎক্ষণিক ও সুস্পষ্ট উত্তর পান। নাগরিক, আইনের ছাত্র বা আইন পেশাজীবী, সকলের জন্য JustorAI আইনি জটিলতাকে সহজ করে তোলে।' },
     landing_cta_guest: { en: 'Try as Guest', bn: 'অতিথি হিসেবে দেখুন' },
     landing_cta_signup: { en: 'Sign Up for Full Features', bn: 'সম্পূর্ণ সুবিধা পেতে সাইন আপ করুন' },
     landing_cta_goToApp: { en: 'Go to App', bn: 'অ্যাপে যান' },
     landing_featuresTitle: { en: 'A Tailored Experience for Everyone', bn: 'প্রত্যেকের জন্য বিশেষভাবে তৈরি' },
-    landing_featuresSubtitle: { en: 'LegalAI understands your needs and adapts its responses to provide the most relevant and useful information for your role.', bn: 'LegalAI আপনার প্রয়োজন অনুযায়ী সবচেয়ে প্রাসঙ্গিক ও কার্যকরী তথ্য প্রদানের জন্য নিজেকে মানিয়ে নিতে সক্ষম।' },
+    landing_featuresSubtitle: { en: 'JustorAI understands your needs and adapts its responses to provide the most relevant and useful information for your role.', bn: 'JustorAI আপনার প্রয়োজন অনুযায়ী সবচেয়ে প্রাসঙ্গিক ও কার্যকরী তথ্য প্রদানের জন্য নিজেকে মানিয়ে নিতে সক্ষম।' },
     landing_feature1_title: { en: 'For the General Public', bn: 'সাধারণ মানুষের জন্য' },
     landing_feature1_text: { en: 'Get straightforward, jargon-free answers to everyday legal issues. Understand your rights and receive clear, step-by-step guidance on what to do next.', bn: 'দৈনন্দিন আইনি বিষয়ে সহজবোধ্য ও পরিভাষামুক্ত উত্তর নিন। আপনার অধিকার সম্পর্কে জানুন এবং পরবর্তী করণীয় সম্পর্কে সুস্পষ্ট নির্দেশনা পান।' },
     landing_feature2_title: { en: 'For Law Students', bn: 'আইনের শিক্ষার্থীদের জন্য' },
@@ -45,7 +45,7 @@ export const translations = {
     app_askAnything: { en: 'Ask anything...', bn: 'আপনার প্রশ্ন লিখুন...' },
     app_emptyChatTitle: { en: 'What can I help with?', bn: 'আমি আপনাকে কিভাবে সাহায্য করতে পারি?' },
     app_initialGreeting: { en: 'Peace be upon you! What can I help you with today?', bn: 'আস-সালামু আলাইকুম (ٱلسَّلَامُ عَلَيْكُمْ) ! আজ আমি আপনাকে কিভাবে সাহায্য করতে পারি?' },
-    app_aiSenderName: { en: 'LegalAI', bn: 'লিগ্যালএআই' },
+    app_aiSenderName: { en: 'JustorAI', bn: 'জাস্টরএআই' },
     app_thinking: { en: '...', bn: 'ভাবছে...' },
     app_error: { en: 'Sorry, an error occurred:', bn: 'দুঃখিত, একটি ত্রুটি ঘটেছে:' },
 
@@ -85,7 +85,7 @@ export const translations = {
     profile_alert_success: { en: 'Profile updated successfully!', bn: 'প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' },
     
     // --- Login / Sign Up Page ---
-    login_page_signInTitle: { en: 'Sign In to LegalAI', bn: 'LegalAI-তে সাইন ইন করুন' },
+    login_page_signInTitle: { en: 'Sign In to JustorAI', bn: 'JustorAI-তে সাইন ইন করুন' },
     login_page_signUpTitle: { en: 'Create Your Account', bn: 'আপনার অ্যাকাউন্ট তৈরি করুন' },
     login_page_subtitle: { en: 'Access your saved chats and full history.', bn: 'আপনার সংরক্ষিত চ্যাট এবং সম্পূর্ণ ইতিহাস দেখুন।' },
     login_page_googleButton: { en: 'Continue with Google', bn: 'Google দিয়ে চালিয়ে যান' },
