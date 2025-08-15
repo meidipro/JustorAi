@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient';
 import { auth } from '../auth';
 import { i18n } from '../i18n';
 import Groq from "groq-sdk";
+import { EnhancedSearchService } from '../services/enhanced-search';
 
 import mermaid from 'mermaid';
 
@@ -37,6 +38,7 @@ export async function renderAppPage(container: HTMLElement) {
     const GUEST_USER_ID_KEY = 'legalAI.guestUserId';
 
     const groq = new Groq({ apiKey: GROQ_API_KEY, dangerouslyAllowBrowser: true });
+    const enhancedSearch = new EnhancedSearchService();
 
     let appState: AppState;
     const session = auth.getSession();
@@ -517,6 +519,7 @@ export async function renderAppPage(container: HTMLElement) {
     }
 
     async function sendFeedback(chatId: string, msgContent: string, rating: 'good' | 'bad') {
+        // Save to database
         const { error } = await supabase
             .from('message_feedback')
             .insert({
@@ -527,6 +530,51 @@ export async function renderAppPage(container: HTMLElement) {
         if (error) {
             console.error('Error saving feedback:', error);
         }
+        
+        // Also record in search analytics (this would need search ID in real implementation)
+        // For now, we'll just log the feedback
+        console.log(`📊 User feedback recorded: ${rating} for message in chat ${chatId}`);
+        
+        // Optionally get analytics insights when negative feedback is received
+        if (rating === 'bad') {
+            const insights = enhancedSearch.getQualityInsights();
+            if (insights.suggestions.length > 0) {
+                console.log(`💡 Quality suggestions:`, insights.suggestions);
+            }
+        }
+    }
+
+    function calculateResponseConfidence(response: string): number {
+        // Simple heuristic to calculate confidence based on response characteristics
+        let confidence = 0.5; // Base confidence
+        
+        // Check for specific legal terms and structure
+        const legalTerms = ['section', 'act', 'article', 'constitution', 'law', 'court', 'legal', 'rights'];
+        const legalTermMatches = legalTerms.filter(term => response.toLowerCase().includes(term)).length;
+        confidence += (legalTermMatches * 0.05); // Add 0.05 per legal term
+        
+        // Check for uncertainty indicators
+        const uncertaintyPhrases = ['i think', 'maybe', 'possibly', 'might be', 'not sure', 'unclear'];
+        const uncertaintyMatches = uncertaintyPhrases.filter(phrase => response.toLowerCase().includes(phrase)).length;
+        confidence -= (uncertaintyMatches * 0.1); // Subtract 0.1 per uncertainty phrase
+        
+        // Check for specific citations or references
+        if (response.includes('Section ') || response.includes('Article ')) {
+            confidence += 0.15; // Boost for specific legal citations
+        }
+        
+        // Check response length and structure
+        if (response.length > 200 && response.includes('\n')) {
+            confidence += 0.1; // Well-structured responses get boost
+        }
+        
+        // Check for generic responses
+        if (response.length < 50) {
+            confidence -= 0.2; // Very short responses are less confident
+        }
+        
+        // Ensure confidence stays within 0-1 range
+        return Math.max(0, Math.min(1, confidence));
     }
 
     // --- Updated handleFormSubmit with AI switching and all previous features ---
@@ -549,15 +597,47 @@ export async function renderAppPage(container: HTMLElement) {
         aiMessageBubble.innerHTML = '<span class="typing-cursor"></span>';
 
         try {
-            // Keep the old logic for general chats (Dify/Groq)
+            // First, get initial response from Dify
             const { fullResponse } = await sendQueryToDify(userInput, [], activeChat.dify_conversation_id || "", DIFY_GENERAL_API_KEY, aiMessageWrapper);
             aiMessageWrapper.remove(); // Remove the temp wrapper
-            await addMessageToActiveChat({ sender: 'ai', content: fullResponse });
-            if (!fullResponse.trim()) {
+            
+            // Calculate confidence score for the internal response (simple heuristic)
+            const internalConfidence = calculateResponseConfidence(fullResponse);
+            
+            // Use enhanced search service to potentially improve the response
+            const enhancedResponse = await enhancedSearch.generateEnhancedResponse(
+                userInput,
+                fullResponse,
+                internalConfidence,
+                userIdentifier // Pass user ID for analytics
+            );
+            
+            await addMessageToActiveChat({ sender: 'ai', content: enhancedResponse.answer });
+            
+            // If enhanced search was triggered, show detailed analytics
+            if (enhancedResponse.searchTriggered) {
+                console.log(`🔍 Enhanced search used. Final confidence: ${enhancedResponse.confidence.toFixed(2)}`);
+                console.log(`Response type: ${enhancedResponse.responseType}`);
+                console.log(`Sources found: ${enhancedResponse.sources.length}`);
+                
+                // Log search metrics if available
+                if (enhancedResponse.searchMetrics) {
+                    console.log(`📊 Search metrics:`, enhancedResponse.searchMetrics);
+                }
+                
+                // Log real-time stats periodically
+                if (Math.random() < 0.1) { // 10% of the time
+                    const realTimeStats = enhancedSearch.getRealTimeStats();
+                    console.log(`📈 Real-time stats:`, realTimeStats);
+                }
+            }
+            
+            // Fallback to Groq if no response at all
+            if (!enhancedResponse.answer.trim()) {
                 const groqResponse = await groq.chat.completions.create({ messages: [{ role: "user", content: userInput }], model: "llama3-8b-8192" });
                 const groqAnswer = groqResponse.choices[0]?.message?.content || "";
                 if (groqAnswer) await addMessageToActiveChat({ sender: 'ai', content: groqAnswer });
-                else throw new Error("Both Dify and Groq failed.");
+                else throw new Error("All AI services failed.");
             }
         } catch (error) {
             aiMessageWrapper?.remove();

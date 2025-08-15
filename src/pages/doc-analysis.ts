@@ -14,20 +14,6 @@ const docAnalysisHTML = `
       </div>
       <h1 class="doc-title fade-in-up">Legal Document Analysis</h1>
       <p class="doc-subtitle fade-in-up">Upload, analyze, and understand complex legal documents with the power of artificial intelligence. Get instant insights, summaries, and key information extraction.</p>
-      <div class="hero-stats fade-in-up">
-        <div class="stat-item">
-          <div class="stat-number">95%</div>
-          <div class="stat-label">Accuracy Rate</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">50+</div>
-          <div class="stat-label">Document Types</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">&lt;30s</div>
-          <div class="stat-label">Analysis Time</div>
-        </div>
-      </div>
     </div>
   </section>
 
