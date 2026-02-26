@@ -596,50 +596,11 @@ export async function renderAppPage(container: HTMLElement) {
         // Add a typing cursor for immediate feedback
         aiMessageBubble.innerHTML = '<span class="typing-cursor"></span>';
 
-        try {
-            // First, get initial response from Dify
-            const { fullResponse } = await sendQueryToDify(userInput, [], activeChat.dify_conversation_id || "", DIFY_GENERAL_API_KEY, aiMessageWrapper);
+            // --- Updated handleFormSubmit with AI switching to CUSTOM BACKEND ---
+
+            // Call the custom backend endpoint instead of Dify
+            const { fullResponse } = await sendQueryToCustomBackend(userInput, activeChat.id, aiMessageWrapper);
             aiMessageWrapper.remove(); // Remove the temp wrapper
-            
-            // Calculate confidence score for the internal response (simple heuristic)
-            const internalConfidence = calculateResponseConfidence(fullResponse);
-            
-            // Use enhanced search service to potentially improve the response
-            const enhancedResponse = await enhancedSearch.generateEnhancedResponse(
-                userInput,
-                fullResponse,
-                internalConfidence,
-                userIdentifier // Pass user ID for analytics
-            );
-            
-            await addMessageToActiveChat({ sender: 'ai', content: enhancedResponse.answer });
-            
-            // If enhanced search was triggered, show detailed analytics
-            if (enhancedResponse.searchTriggered) {
-                console.log(`🔍 Enhanced search used. Final confidence: ${enhancedResponse.confidence.toFixed(2)}`);
-                console.log(`Response type: ${enhancedResponse.responseType}`);
-                console.log(`Sources found: ${enhancedResponse.sources.length}`);
-                
-                // Log search metrics if available
-                if (enhancedResponse.searchMetrics) {
-                    console.log(`📊 Search metrics:`, enhancedResponse.searchMetrics);
-                }
-                
-                // Log real-time stats periodically
-                if (Math.random() < 0.1) { // 10% of the time
-                    const realTimeStats = enhancedSearch.getRealTimeStats();
-                    console.log(`📈 Real-time stats:`, realTimeStats);
-                }
-            }
-            
-            // Fallback to Groq if no response at all
-            if (!enhancedResponse.answer.trim()) {
-                const groqResponse = await groq.chat.completions.create({ messages: [{ role: "user", content: userInput }], model: "llama3-8b-8192" });
-                const groqAnswer = groqResponse.choices[0]?.message?.content || "";
-                if (groqAnswer) await addMessageToActiveChat({ sender: 'ai', content: groqAnswer });
-                else throw new Error("All AI services failed.");
-            }
-        } catch (error) {
             aiMessageWrapper?.remove();
             const errorMessage = `${i18n.t('app_error')} ${error instanceof Error ? error.message : 'Unknown error'}`;
             await addMessageToActiveChat({ sender: 'ai', content: errorMessage });
@@ -647,25 +608,22 @@ export async function renderAppPage(container: HTMLElement) {
         }
     }
 
-    async function sendQueryToDify(query: string, files: Array<{ type: string; upload_file_id: string; }>, conversationId: string, apiKey: string, tempMessageWrapper: HTMLDivElement) {
+    async function sendQueryToCustomBackend(query: string, conversationId: string, tempMessageWrapper: HTMLDivElement) {
+        const userRole = (document.getElementById('role-selector') as HTMLSelectElement).value;
         const requestBody = JSON.stringify({
-            inputs: {
-                "LANGUAGE": i18n.getLanguage() === 'bn' ? 'Bengali' : 'English',
-                "USER_ROLE": (document.getElementById('role-selector') as HTMLSelectElement).value,
-                "QUERY": query.substring(0, 45) // Truncate for the input form
-            },
-            query: query, // Send the full query here
-            user: userIdentifier,
-            conversation_id: conversationId,
-            response_mode: 'streaming',
-            files: files
+            message: query,
+            user_id: userIdentifier,
+            role: userRole
         });
 
-        console.log("Dify chat API request body:", requestBody);
+        console.log("Custom RAG Backend request body:", requestBody);
 
-        const response = await fetch('https://api.dify.ai/v1/chat-messages', {
+        // Make sure to use the deployed Render URL if testing in production later
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+
+        const response = await fetch(`${backendUrl}/chat`, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: requestBody
         });
 
@@ -676,40 +634,25 @@ export async function renderAppPage(container: HTMLElement) {
 
         tempMessageWrapper.remove();
 
-        let fullResponse = "";
-        let finalDifyId = conversationId;
-        const reader = response.body!.getReader();
-        const decoder = new TextDecoder();
+        // The FastAPI backend returns a structured JSONResponse now, not a stream (can be updated to stream later if needed)
+        const data = await response.json();
+        const fullResponse = data.response || "No response generated.";
+        const contextUsedCount = data.context_used || 0;
+        
+        console.log(`Generated response using ${contextUsedCount} document chunks.`);
+
         const aiMessageWrapper = displayMessage("", 'ai');
         const aiMessageBubble = aiMessageWrapper.querySelector('.message-bubble') as HTMLDivElement;
-
-        while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-
-            for (const line of lines) {
-                try {
-                    const jsonStr = line.substring(6);
-                    if (jsonStr.trim() === '[DONE]') continue;
-                    const parsedJson = JSON.parse(jsonStr);
-                    if (parsedJson.conversation_id) finalDifyId = parsedJson.conversation_id;
-                    if (parsedJson.event === 'agent_message' || parsedJson.event === 'message') {
-                        fullResponse += parsedJson.answer;
-                        const parsedMarkdown = marked.parse(fullResponse, { gfm: true });
-                        if (parsedMarkdown instanceof Promise) {
-                            parsedMarkdown.then(html => { aiMessageBubble.innerHTML = html; });
-                        } else {
-                            aiMessageBubble.innerHTML = parsedMarkdown;
-                        }
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                    }
-                } catch (e) { /* Ignore partial JSON errors */ }
-            }
+        
+        const parsedMarkdown = marked.parse(fullResponse, { gfm: true });
+        if (parsedMarkdown instanceof Promise) {
+            parsedMarkdown.then(html => { aiMessageBubble.innerHTML = html; });
+        } else {
+            aiMessageBubble.innerHTML = parsedMarkdown as string;
         }
-        return { fullResponse, finalDifyId };
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        return { fullResponse };
     }
 
     function handleDocumentUploadComingSoon() {
