@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
-    title="Legal AI RAG Backend",
+    title="JustorAI RAG Backend",
     description="Custom RAG backend using Supabase pgvector, FastAPI, and Groq.",
     version="3.0.0"
 )
@@ -103,7 +103,7 @@ def extract_text_from_pdf(pdf_file) -> str:
 
 @app.get("/", tags=["Status"])
 async def root():
-    return {"message": "Legal AI RAG Backend is running!", "status": "OK"}
+    return {"message": "JustorAI RAG Backend is running!", "status": "OK"}
 
 @app.post("/upload", tags=["Document ingestion"])
 async def upload_document(
@@ -199,7 +199,7 @@ async def chat_endpoint(chat_request: ChatMessage):
 
         # 3. Construct prompt (Based on dify_prompt_instruction.md)
         system_prompt = f"""
-You are LegalAI.bd, a world-class legal information assistant specializing in Bangladeshi law.
+You are JustorAI, a world-class legal information assistant specializing in Bangladeshi law.
 
 Tone/Role Focus: {chat_request.role}
 
@@ -222,7 +222,7 @@ RETRIEVED CONTEXT:
                     "content": chat_request.message,
                 }
             ],
-            model="llama3-70b-8192", 
+            model="llama-3.1-8b-instant",
             temperature=0.3,
             max_tokens=2048
         )
