@@ -1,0 +1,51 @@
+{
+    "title": "Bangladesh Penal Code 1860 (Sample)",
+    "description": "Selected sections from the Penal Code of Bangladesh",
+    "sections": [
+        {
+            "section": "96",
+            "heading": "Right of Private Defence",
+            "content": "Nothing is an offence which is done in the exercise of the right of private defence. Every person has a right, subject to the restrictions contained in section 99, to defend his own body, and the body of any other person, against any offence affecting the human body."
+        },
+        {
+            "section": "299",
+            "heading": "Culpable Homicide",
+            "content": "Whoever causes death by doing an act with the intention of causing death, or with the intention of causing such bodily injury as is likely to cause death, or with the knowledge that he is likely by such act to cause death, commits the offence of culpable homicide."
+        },
+        {
+            "section": "300",
+            "heading": "Murder",
+            "content": "Except in the cases hereinafter excepted, culpable homicide is murder, if the act by which the death is caused is done with the intention of causing death, or if it is done with the intention of causing such bodily injury as the offender knows to be likely to cause death of the person to whom the harm is caused."
+        },
+        {
+            "section": "302",
+            "heading": "Punishment for Murder",
+            "content": "Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine."
+        },
+        {
+            "section": "375",
+            "heading": "Rape",
+            "content": "A man is said to commit rape who, except in the case hereinafter excepted, has sexual intercourse with a woman under circumstances falling under any of the six following descriptions: First, against her will. Secondly, without her consent. Thirdly, with her consent, when her consent has been obtained by putting her or any person in whom she is interested in fear of death or of hurt. Fourthly, with her consent, when the man knows that he is not her husband."
+        },
+        {
+            "section": "379",
+            "heading": "Punishment for Theft",
+            "content": "Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both."
+        },
+        {
+            "section": "420",
+            "heading": "Cheating and dishonestly inducing delivery of property",
+            "content": "Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed, and which is capable of being converted into a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine."
+        },
+        {
+            "section": "499",
+            "heading": "Defamation",
+            "content": "Whoever by words either spoken or intended to be read, or by signs or by visible representations, makes or publishes any imputation concerning any person intending to harm, or knowing or having reason to believe that such imputation will harm, the reputation of such person, is said to defame that person."
+        },
+        {
+            "section": "503",
+            "heading": "Criminal Intimidation",
+            "content": "Whoever threatens another with any injury to his person, reputation or property, or to the person or reputation of any one in whom that person is interested, with intent to cause alarm to that person, or to cause that person to do any act which he is not legally bound to do, or to omit to do any act which that person is legally entitled to do, as the means of avoiding the execution of such threat, commits criminal intimidation."
+        }
+    ]
+}

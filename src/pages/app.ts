@@ -2,7 +2,6 @@ import { marked } from 'marked';
 import { supabase } from '../supabaseClient';
 import { auth } from '../auth';
 import { i18n } from '../i18n';
-import Groq from "groq-sdk";
 import { EnhancedSearchService } from '../services/enhanced-search';
 
 import mermaid from 'mermaid';
@@ -17,7 +16,7 @@ interface Source {
     user_id?: string;
     chat_id?: string;
 }
-interface Chat { id: string; title:string; messages: Message[]; dify_conversation_id?: string; has_document?: boolean; document_filename?: string; }
+interface Chat { id: string; title: string; messages: Message[]; dify_conversation_id?: string; has_document?: boolean; document_filename?: string; createdAt?: string; }
 interface AppState { chats: Chat[]; activeChatId: string | null; }
 
 interface SpeechRecognitionEvent extends Event { results: SpeechRecognitionResultList; }
@@ -32,12 +31,9 @@ declare global {
 }
 
 export async function renderAppPage(container: HTMLElement) {
-    const DIFY_GENERAL_API_KEY = import.meta.env.VITE_DIFY_GENERAL_API_KEY;
-    const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
     const GUEST_STORAGE_KEY = 'legalAI.guestChats';
     const GUEST_USER_ID_KEY = 'legalAI.guestUserId';
 
-    const groq = new Groq({ apiKey: GROQ_API_KEY, dangerouslyAllowBrowser: true });
     const enhancedSearch = new EnhancedSearchService();
 
     let appState: AppState;
@@ -95,6 +91,27 @@ export async function renderAppPage(container: HTMLElement) {
               </div>
           </aside>
           <main class="main-content">
+               <div class="chat-header-bar">
+                   <div id="role-chip" class="role-chip">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                       <span id="role-chip-label">General Public</span>
+                       <svg class="role-chip-caret" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                   </div>
+                   <div id="role-dropdown" class="role-dropdown" hidden>
+                       <div class="role-option" data-role="General Public">
+                           <span class="role-option-name">General Public</span>
+                           <span class="role-option-desc">Plain language, practical advice</span>
+                       </div>
+                       <div class="role-option" data-role="Law Student">
+                           <span class="role-option-name">Law Student</span>
+                           <span class="role-option-desc">Case law, theory & academic context</span>
+                       </div>
+                       <div class="role-option" data-role="Legal Professional">
+                           <span class="role-option-name">Legal Professional</span>
+                           <span class="role-option-desc">Precise statutory & procedural guidance</span>
+                       </div>
+                   </div>
+               </div>
               <div id="chat-window"></div>
               <div class="message-form-container">
                   <form id="message-form">
@@ -151,38 +168,74 @@ export async function renderAppPage(container: HTMLElement) {
 
     function renderSidebar() {
         if (!conversationList) return;
-        conversationList.innerHTML = `<h2>${i18n.t('app_history')}</h2>`;
+        conversationList.innerHTML = ''; // removed the h2 app_history
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        const groups = {
+            today: [] as Chat[],
+            yesterday: [] as Chat[],
+            previous: [] as Chat[]
+        };
+
         (appState.chats || []).forEach(chat => {
-            const convoItem = document.createElement('div');
-            convoItem.className = 'conversation-item';
-            if (chat.id === appState.activeChatId) convoItem.classList.add('active');
-
-            const titleArea = document.createElement('div');
-            titleArea.className = 'conversation-title-area';
-            titleArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9l-5.05.9"></path></svg><span>${chat.title}</span>`;
-            titleArea.addEventListener('click', () => setActiveChat(chat.id));
-            convoItem.appendChild(titleArea);
-
-            const actionsMenu = document.createElement('div');
-            actionsMenu.className = 'conversation-actions';
-            actionsMenu.innerHTML = `
-                <button class="action-btn rename-btn" title="Rename">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                </button>
-                <button class="action-btn share-btn" title="Share">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-                </button>
-                <button class="action-btn delete-btn" title="Delete">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                </button>
-            `;
-            actionsMenu.querySelector('.rename-btn')?.addEventListener('click', (e) => { e.stopPropagation(); renameChat(chat.id); });
-            actionsMenu.querySelector('.share-btn')?.addEventListener('click', (e) => { e.stopPropagation(); shareChat(chat.id, e.currentTarget as HTMLButtonElement); });
-            actionsMenu.querySelector('.delete-btn')?.addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chat.id); });
-
-            convoItem.appendChild(actionsMenu);
-            conversationList.appendChild(convoItem);
+            if (!chat.createdAt) {
+                groups.previous.push(chat);
+                return;
+            }
+            const chatDate = new Date(chat.createdAt);
+            if (chatDate >= today) {
+                groups.today.push(chat);
+            } else if (chatDate >= yesterday) {
+                groups.yesterday.push(chat);
+            } else {
+                groups.previous.push(chat);
+            }
         });
+
+        function renderGroup(title: string, chats: Chat[]) {
+            if (chats.length === 0) return;
+
+            const groupHeader = document.createElement('div');
+            groupHeader.className = 'sidebar-group-label';
+            groupHeader.textContent = title;
+            conversationList.appendChild(groupHeader);
+
+            chats.forEach(chat => {
+                const convoItem = document.createElement('div');
+                convoItem.className = 'conversation-item grouped-item';
+                if (chat.id === appState.activeChatId) convoItem.classList.add('active');
+
+                const titleArea = document.createElement('div');
+                titleArea.className = 'conversation-title-area';
+                titleArea.innerHTML = `<span class="bullet">•</span><span class="chat-title-text">${chat.title}</span>`;
+                titleArea.addEventListener('click', () => setActiveChat(chat.id));
+                convoItem.appendChild(titleArea);
+
+                const actionsMenu = document.createElement('div');
+                actionsMenu.className = 'conversation-actions';
+                actionsMenu.innerHTML = `
+                    <button class="action-btn rename-btn" title="Rename">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button class="action-btn delete-btn" title="Delete">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                `;
+                actionsMenu.querySelector('.rename-btn')?.addEventListener('click', (e) => { e.stopPropagation(); renameChat(chat.id); });
+                actionsMenu.querySelector('.delete-btn')?.addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chat.id); });
+
+                convoItem.appendChild(actionsMenu);
+                conversationList.appendChild(convoItem);
+            });
+        }
+
+        renderGroup('TODAY', groups.today);
+        renderGroup('YESTERDAY', groups.yesterday);
+        renderGroup('PREVIOUS', groups.previous);
     }
 
     function renderChatWindow() {
@@ -192,11 +245,20 @@ export async function renderAppPage(container: HTMLElement) {
         if (showWelcomeScreen) {
             const suggestedQueriesHTML = SUGGESTED_QUERIES.map(key => `<div class="suggested-query-item">${i18n.t(key as any)}</div>`).join('');
             chatWindow.innerHTML = `
-                <div class="empty-chat-container"> 
-                    <div class="empty-chat-logo">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.153.34c-1.325 0-2.59-.523-3.536-1.465l-2.62-2.62m5.156 0l-2.62 2.62m-5.156 0l-2.62-2.62m6.75-10.726C12 4.5 11.25 4.5 10.5 4.5c-1.01 0-2.01.143-3 .52m3-.52l-2.62 10.726" /></svg> 
-                    </div> 
-                    <h2>${i18n.t('app_emptyChatTitle')}</h2>
+                <div class="empty-chat-container">
+                    <div class="welcome-hero">
+                        <div class="welcome-icon-ring">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.153.34c-1.325 0-2.59-.523-3.536-1.465l-2.62-2.62m5.156 0l-2.62 2.62m-5.156 0l-2.62-2.62m6.75-10.726C12 4.5 11.25 4.5 10.5 4.5c-1.01 0-2.01.143-3 .52m3-.52l-2.62 10.726" /></svg>
+                        </div>
+                        <p class="welcome-tagline">LEGAL INTELLIGENCE &middot; BANGLADESH</p>
+                        <h2 class="welcome-heading">How may I <em>counsel you</em> today?</h2>
+                        <p class="welcome-subtitle">Precise, reliable legal guidance grounded in Bangladeshi law &mdash; available at any hour.</p>
+                    </div>
+                    <div class="welcome-role-pills">
+                        <span class="role-pill" data-role="General Public">General Public</span>
+                        <span class="role-pill" data-role="Law Student">Law Student</span>
+                        <span class="role-pill" data-role="Legal Professional">Legal Professional</span>
+                    </div>
                     <div class="suggested-queries-container">
                         ${suggestedQueriesHTML}
                     </div>
@@ -415,13 +477,13 @@ export async function renderAppPage(container: HTMLElement) {
         if (isGuestMode) {
             const savedState = localStorage.getItem(GUEST_STORAGE_KEY);
             appState = savedState ? JSON.parse(savedState) : { chats: [], activeChatId: null };
+            // Ensure guest chats have a createdAt since they might have been created before this feature
+            appState.chats.forEach(chat => { if (!chat.createdAt) chat.createdAt = new Date().toISOString(); });
         } else {
-            // VVV THIS IS THE FIX VVV
             const { data, error } = await supabase
                 .from('chats')
-                .select('id, title, has_document') // <<< FIX: Request the new column
+                .select('id, title, has_document, created_at')
                 .order('created_at', { ascending: false });
-            // ^^^ THIS IS THE FIX ^^^
 
             if (error) {
                 console.error("Error fetching chats:", error);
@@ -429,15 +491,14 @@ export async function renderAppPage(container: HTMLElement) {
                 return;
             }
 
-            // The spread operator `...c` will now correctly include the `has_document` property
-            appState = { chats: data.map((c: any) => ({ ...c, messages: [] })), activeChatId: null };
+            appState = { chats: data.map((c: any) => ({ ...c, createdAt: c.created_at, messages: [] })), activeChatId: null };
         }
     }
 
     async function createNewChat() {
         const initialMessage = { sender: 'ai' as Sender, content: i18n.t('app_initialGreeting') };
         if (isGuestMode) {
-            const newChat: Chat = { id: `guest_${Date.now()}`, title: i18n.t('app_newChat'), messages: [initialMessage] };
+            const newChat: Chat = { id: `guest_${Date.now()}`, title: i18n.t('app_newChat'), messages: [initialMessage], createdAt: new Date().toISOString() };
             appState.chats.unshift(newChat);
             await setActiveChat(newChat.id);
             localStorage.setItem(GUEST_STORAGE_KEY, JSON.stringify(appState));
@@ -446,7 +507,7 @@ export async function renderAppPage(container: HTMLElement) {
             if (!user) return;
             const { data, error } = await supabase.from('chats').insert({ user_id: user.id, title: i18n.t('app_newChat') }).select().single();
             if (error) { console.error("Error creating chat:", error); return; }
-            const newChat: Chat = { ...data, messages: [initialMessage] };
+            const newChat: Chat = { ...data, createdAt: data.created_at, messages: [initialMessage] };
             appState.chats.unshift(newChat);
             await setActiveChat(newChat.id);
         }
@@ -506,17 +567,6 @@ export async function renderAppPage(container: HTMLElement) {
         }
     }
 
-    function shareChat(id: string, button: HTMLButtonElement) {
-        const chat = appState.chats.find(c => c.id === id);
-        if (!chat) return;
-        const formattedChat = `Chat: ${chat.title}\n\n${chat.messages.map(msg => `${msg.sender === 'user' ? 'You' : 'JustorAI'}:\n${msg.content}`).join('\n\n')}`;
-        navigator.clipboard.writeText(formattedChat).then(() => {
-            const originalContent = button.innerHTML;
-            button.innerHTML = '✅';
-            button.disabled = true;
-            setTimeout(() => { button.innerHTML = originalContent; button.disabled = false; }, 2000);
-        }).catch(err => { console.error('Failed to copy chat:', err); alert('Failed to copy chat.'); });
-    }
 
     async function sendFeedback(chatId: string, msgContent: string, rating: 'good' | 'bad') {
         // Save to database
@@ -530,11 +580,11 @@ export async function renderAppPage(container: HTMLElement) {
         if (error) {
             console.error('Error saving feedback:', error);
         }
-        
+
         // Also record in search analytics (this would need search ID in real implementation)
         // For now, we'll just log the feedback
         console.log(`📊 User feedback recorded: ${rating} for message in chat ${chatId}`);
-        
+
         // Optionally get analytics insights when negative feedback is received
         if (rating === 'bad') {
             const insights = enhancedSearch.getQualityInsights();
@@ -544,38 +594,6 @@ export async function renderAppPage(container: HTMLElement) {
         }
     }
 
-    function calculateResponseConfidence(response: string): number {
-        // Simple heuristic to calculate confidence based on response characteristics
-        let confidence = 0.5; // Base confidence
-        
-        // Check for specific legal terms and structure
-        const legalTerms = ['section', 'act', 'article', 'constitution', 'law', 'court', 'legal', 'rights'];
-        const legalTermMatches = legalTerms.filter(term => response.toLowerCase().includes(term)).length;
-        confidence += (legalTermMatches * 0.05); // Add 0.05 per legal term
-        
-        // Check for uncertainty indicators
-        const uncertaintyPhrases = ['i think', 'maybe', 'possibly', 'might be', 'not sure', 'unclear'];
-        const uncertaintyMatches = uncertaintyPhrases.filter(phrase => response.toLowerCase().includes(phrase)).length;
-        confidence -= (uncertaintyMatches * 0.1); // Subtract 0.1 per uncertainty phrase
-        
-        // Check for specific citations or references
-        if (response.includes('Section ') || response.includes('Article ')) {
-            confidence += 0.15; // Boost for specific legal citations
-        }
-        
-        // Check response length and structure
-        if (response.length > 200 && response.includes('\n')) {
-            confidence += 0.1; // Well-structured responses get boost
-        }
-        
-        // Check for generic responses
-        if (response.length < 50) {
-            confidence -= 0.2; // Very short responses are less confident
-        }
-        
-        // Ensure confidence stays within 0-1 range
-        return Math.max(0, Math.min(1, confidence));
-    }
 
     // --- Updated handleFormSubmit with AI switching and all previous features ---
 
@@ -596,11 +614,12 @@ export async function renderAppPage(container: HTMLElement) {
         // Add a typing cursor for immediate feedback
         aiMessageBubble.innerHTML = '<span class="typing-cursor"></span>';
 
-            // --- Updated handleFormSubmit with AI switching to CUSTOM BACKEND ---
+        // --- Updated handleFormSubmit with AI switching to CUSTOM BACKEND ---
 
+        try {
             // Call the custom backend endpoint instead of Dify
-            const { fullResponse } = await sendQueryToCustomBackend(userInput, activeChat.id, aiMessageWrapper);
-            aiMessageWrapper.remove(); // Remove the temp wrapper
+            await sendQueryToCustomBackend(userInput, aiMessageWrapper);
+        } catch (error) {
             aiMessageWrapper?.remove();
             const errorMessage = `${i18n.t('app_error')} ${error instanceof Error ? error.message : 'Unknown error'}`;
             await addMessageToActiveChat({ sender: 'ai', content: errorMessage });
@@ -608,7 +627,7 @@ export async function renderAppPage(container: HTMLElement) {
         }
     }
 
-    async function sendQueryToCustomBackend(query: string, conversationId: string, tempMessageWrapper: HTMLDivElement) {
+    async function sendQueryToCustomBackend(query: string, tempMessageWrapper: HTMLDivElement) {
         const userRole = (document.getElementById('role-selector') as HTMLSelectElement).value;
         const requestBody = JSON.stringify({
             message: query,
@@ -619,7 +638,7 @@ export async function renderAppPage(container: HTMLElement) {
         console.log("Custom RAG Backend request body:", requestBody);
 
         // Make sure to use the deployed Render URL if testing in production later
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:10000';
 
         const response = await fetch(`${backendUrl}/chat`, {
             method: 'POST',
@@ -638,12 +657,12 @@ export async function renderAppPage(container: HTMLElement) {
         const data = await response.json();
         const fullResponse = data.response || "No response generated.";
         const contextUsedCount = data.context_used || 0;
-        
+
         console.log(`Generated response using ${contextUsedCount} document chunks.`);
 
         const aiMessageWrapper = displayMessage("", 'ai');
         const aiMessageBubble = aiMessageWrapper.querySelector('.message-bubble') as HTMLDivElement;
-        
+
         const parsedMarkdown = marked.parse(fullResponse, { gfm: true });
         if (parsedMarkdown instanceof Promise) {
             parsedMarkdown.then(html => { aiMessageBubble.innerHTML = html; });
@@ -665,14 +684,14 @@ export async function renderAppPage(container: HTMLElement) {
         // Update user identifier when auth state changes
         userIdentifier = currentSession?.user?.id || getOrCreateGuestUserId();
     }
-    
+
     function renderGuestNotice() {
         // Remove existing guest notice
         const existingNotice = sidebar.querySelector('.guest-notice');
         if (existingNotice) {
             existingNotice.remove();
         }
-        
+
         // Add guest notice if in guest mode
         if (isGuestMode) {
             const guestNotice = document.createElement('div');
@@ -685,14 +704,36 @@ export async function renderAppPage(container: HTMLElement) {
 
     function renderUserProfileLink() {
         if (!userProfileLink) return;
-        
+
         if (isGuestMode) {
-            userProfileLink.innerHTML = `<a href="/login" class="nav-button nav-button-primary" data-link>${i18n.t('app_signUpToSave')}</a>`;
+            userProfileLink.innerHTML = `
+                <a href="/login" data-link class="footer-account-link guest-link">
+                    <div class="footer-avatar guest-avatar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                    </div>
+                    <div class="footer-user-info">
+                        <span class="footer-user-name">Sign In</span>
+                        <span class="footer-user-plan">Log in to save chats</span>
+                    </div>
+                </a>
+            `;
         } else {
             const currentSession = auth.getSession();
             const user = currentSession?.user;
-            const userInitial = user?.email?.charAt(0).toUpperCase() || 'P';
-            userProfileLink.innerHTML = `<a href="/profile" data-link><div class="avatar user-avatar">${userInitial}</div><span>${user?.email}</span></a>`;
+            const name = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+            const userInitial = name.charAt(0).toUpperCase();
+            userProfileLink.innerHTML = `
+                <a href="/profile" data-link class="footer-account-link">
+                    <div class="footer-avatar">${userInitial}</div>
+                    <div class="footer-user-info">
+                        <span class="footer-user-name">${name}</span>
+                        <span class="footer-user-plan">Pro Plan</span>
+                    </div>
+                    <div class="footer-more-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                    </div>
+                </a>
+            `;
         }
     }
 
@@ -733,6 +774,7 @@ export async function renderAppPage(container: HTMLElement) {
             overlay.classList.toggle('is-open');
         }
         document.addEventListener('toggle-sidebar', toggleSidebar);
+        document.addEventListener('navbar-new-chat', () => createNewChat());
         overlay.addEventListener('click', toggleSidebar);
         conversationList.addEventListener('click', (e) => {
             if (window.innerWidth <= 900 && (e.target as HTMLElement).closest('.conversation-item')) {
@@ -754,6 +796,39 @@ export async function renderAppPage(container: HTMLElement) {
             }
         });
         newChatBtn.addEventListener('click', createNewChat);
+
+        // ── Role chip dropdown ──
+        const roleChip = document.getElementById('role-chip') as HTMLDivElement;
+        const roleDropdown = document.getElementById('role-dropdown') as HTMLDivElement;
+        const roleChipLabel = document.getElementById('role-chip-label') as HTMLSpanElement;
+        const roleSelectEl = document.getElementById('role-selector') as HTMLSelectElement;
+
+        function setRole(role: string) {
+            roleChipLabel.textContent = role;
+            if (roleSelectEl) roleSelectEl.value = role;
+            roleDropdown.hidden = true;
+            roleDropdown.querySelectorAll('.role-option').forEach(opt => {
+                opt.classList.toggle('active', (opt as HTMLElement).dataset.role === role);
+            });
+        }
+
+        roleChip?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            roleDropdown.hidden = !roleDropdown.hidden;
+        });
+
+        roleDropdown?.addEventListener('click', (e) => {
+            const opt = (e.target as HTMLElement).closest('.role-option') as HTMLElement;
+            if (opt && opt.dataset.role) setRole(opt.dataset.role);
+        });
+
+        document.addEventListener('click', () => { if (roleDropdown) roleDropdown.hidden = true; });
+
+        // Sync welcome-screen role pills with chip
+        chatWindow.addEventListener('click', (ev) => {
+            const pill = (ev.target as HTMLElement).closest('.role-pill') as HTMLElement;
+            if (pill && pill.dataset.role) setRole(pill.dataset.role);
+        });
         darkModeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             if (themeText) themeText.textContent = document.body.classList.contains('dark-mode') ? i18n.t('app_lightMode') : i18n.t('app_darkMode');
@@ -767,7 +842,7 @@ export async function renderAppPage(container: HTMLElement) {
         }
         renderUserProfileLink();
         setupSpeechRecognition();
-        
+
         // Listen for auth state changes and update UI
         window.addEventListener('authStateChange', async () => {
             updateGuestModeState();

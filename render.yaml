@@ -11,5 +11,9 @@ services:
         sync: false
       - key: VITE_GROQ_API_KEY
         sync: false
+      - key: ALLOWED_ORIGINS
+        # Comma-separated list of allowed frontend origins
+        # e.g. "https://justorai.vercel.app,http://localhost:5173"
+        sync: false
       - key: PYTHON_VERSION
-        value: 3.10.0
+        value: "3.11.0"

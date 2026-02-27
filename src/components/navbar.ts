@@ -4,20 +4,20 @@ import { auth } from '../auth';
 import { i18n } from '../i18n';
 
 async function handleSignOut() {
-    await supabase.auth.signOut();
+  await supabase.auth.signOut();
 }
 
 // The 'currentPath' argument is still needed to decide if the hamburger menu should be shown.
 export function renderNavbar(container: HTMLElement, currentPath: string) {
-    const session = auth.getSession();
-    
-    const hasSidebar = ['/app', '/profile'].includes(currentPath);
+  const session = auth.getSession();
 
-    let navHTML = '';
+  const hasSidebar = ['/app', '/profile'].includes(currentPath);
 
-    if (session) {
-        // Logged-in view
-        navHTML = `
+  let navHTML = '';
+
+  if (session) {
+    // Logged-in view
+    navHTML = `
           <nav class="navbar">
             <div class="navbar-left">
               ${hasSidebar ? `
@@ -33,17 +33,19 @@ export function renderNavbar(container: HTMLElement, currentPath: string) {
                 <a href="/doc-analysis" class="nav-link" data-link>Doc Analysis</a>
                 <a href="/about" class="nav-link" data-link>${i18n.t('nav_about')}</a>
               </div>
-              <!-- LANGUAGE SWITCHER REMOVED FROM HERE -->
               <div class="nav-buttons">
                 <a href="/profile" class="nav-link" data-link>${i18n.t('nav_profile')}</a>
                 <button id="sign-out-btn" class="nav-button nav-button-primary">${i18n.t('nav_signOut')}</button>
+                ${hasSidebar ? `<button id="navbar-new-chat-btn" class="navbar-new-chat-btn" title="New Chat" aria-label="New Chat">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>` : ''}
               </div>
             </div>
           </nav>
         `;
-    } else {
-        // Logged-out view
-        navHTML = `
+  } else {
+    // Logged-out view
+    navHTML = `
           <nav class="navbar">
             <div class="navbar-left">
               ${hasSidebar ? `
@@ -58,25 +60,30 @@ export function renderNavbar(container: HTMLElement, currentPath: string) {
                 <a href="/#features" class="nav-link">${i18n.t('nav_features')}</a>
                 <a href="/about" class="nav-link" data-link>${i18n.t('nav_about')}</a>
               </div>
-              <!-- LANGUAGE SWITCHER REMOVED FROM HERE -->
               <div class="nav-buttons">
                 <a href="/login" class="nav-link" data-link>${i18n.t('nav_signIn')}</a>
                 <a href="/login" class="nav-button nav-button-primary" data-link>${i18n.t('nav_signUp')}</a>
+                ${hasSidebar ? `<button id="navbar-new-chat-btn" class="navbar-new-chat-btn" title="New Chat" aria-label="New Chat">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>` : ''}
               </div>
             </div>
           </nav>
         `;
-    }
-    
-    container.innerHTML = navHTML;
-    
-    // The hamburger menu listener is still needed
-    document.getElementById('hamburger-menu')?.addEventListener('click', () => {
-        document.dispatchEvent(new CustomEvent('toggle-sidebar'));
-    });
-    
-    // The sign-out listener is still needed
-    document.getElementById('sign-out-btn')?.addEventListener('click', handleSignOut);
-    
-    // REMOVED the event listeners for the navbar's language switcher
+  }
+
+  container.innerHTML = navHTML;
+
+  // Hamburger menu listener
+  document.getElementById('hamburger-menu')?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('toggle-sidebar'));
+  });
+
+  // + New Chat button in navbar — dispatches event that app.ts listens to
+  document.getElementById('navbar-new-chat-btn')?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('navbar-new-chat'));
+  });
+
+  // Sign-out listener
+  document.getElementById('sign-out-btn')?.addEventListener('click', handleSignOut);
 }
