@@ -638,7 +638,9 @@ export async function renderAppPage(container: HTMLElement) {
         console.log("Custom RAG Backend request body:", requestBody);
 
         // Make sure to use the deployed Render URL if testing in production later
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:10000';
+        let backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:10000';
+        // Remove trailing slash if it exists to prevent //chat errors
+        backendUrl = backendUrl.replace(/\/$/, "");
 
         const response = await fetch(`${backendUrl}/chat`, {
             method: 'POST',
