@@ -663,13 +663,27 @@ export async function renderAppPage(container: HTMLElement) {
         const aiMessageWrapper = displayMessage("", 'ai');
         const aiMessageBubble = aiMessageWrapper.querySelector('.message-bubble') as HTMLDivElement;
 
-        const parsedMarkdown = marked.parse(fullResponse, { gfm: true });
-        if (parsedMarkdown instanceof Promise) {
-            parsedMarkdown.then(html => { aiMessageBubble.innerHTML = html; });
-        } else {
-            aiMessageBubble.innerHTML = parsedMarkdown as string;
+        // Simulate a streaming AI typewriter effect
+        const tokens = fullResponse.split(/( |\n)/); // Split by space and newline while keeping them
+        let currentText = "";
+
+        for (let i = 0; i < tokens.length; i++) {
+            currentText += tokens[i];
+            // Only update UI every few tokens or on newlines to improve performance, but keep the streaming feel
+            if (i % 2 === 0 || tokens[i] === '\n' || i === tokens.length - 1) {
+                const parsedMarkdown = marked.parse(currentText + (i < tokens.length - 1 ? ' ▍' : ''), { gfm: true });
+                if (parsedMarkdown instanceof Promise) {
+                    await parsedMarkdown.then(html => { aiMessageBubble.innerHTML = html; });
+                } else {
+                    aiMessageBubble.innerHTML = parsedMarkdown as string;
+                }
+                // Auto-scroll to bottom as new content appears
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+            // Small delay to simulate typing (randomized slightly for realism)
+            const delay = tokens[i] === '\n' ? 30 : (Math.random() * 10 + 5);
+            await new Promise(resolve => setTimeout(resolve, delay));
         }
-        chatWindow.scrollTop = chatWindow.scrollHeight;
 
         return { fullResponse };
     }
