@@ -629,10 +629,24 @@ export async function renderAppPage(container: HTMLElement) {
 
     async function sendQueryToCustomBackend(query: string, tempMessageWrapper: HTMLDivElement) {
         const userRole = (document.getElementById('role-selector') as HTMLSelectElement).value;
+        const activeChat = getActiveChat();
+
+        // Gather the last 10 messages for context, excluding the current one we just pushed
+        let chatHistory: { role: string, content: string }[] = [];
+        if (activeChat && activeChat.messages.length > 1) {
+            // we slice -11 to -1 to get the 10 messages before the query we just added
+            const priorMessages = activeChat.messages.slice(-11, -1);
+            chatHistory = priorMessages.map(msg => ({
+                role: msg.sender === 'ai' ? 'assistant' : 'user',
+                content: msg.content
+            }));
+        }
+
         const requestBody = JSON.stringify({
             message: query,
             user_id: userIdentifier,
-            role: userRole
+            role: userRole,
+            history: chatHistory
         });
 
         console.log("Custom RAG Backend request body:", requestBody);
@@ -686,6 +700,11 @@ export async function renderAppPage(container: HTMLElement) {
             const delay = tokens[i] === '\n' ? 30 : (Math.random() * 10 + 5);
             await new Promise(resolve => setTimeout(resolve, delay));
         }
+
+        // IMPORTANT: Save the full response to the chat state to prevent it from disappearing
+        // We remove the temporary wrapper first so it doesn't duplicate when state re-renders
+        aiMessageWrapper.remove();
+        await addMessageToActiveChat({ sender: 'ai', content: fullResponse });
 
         return { fullResponse };
     }

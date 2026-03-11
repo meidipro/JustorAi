@@ -81,10 +81,16 @@ except Exception as e:
 
 # ─── Pydantic Models ──────────────────────────────────────────────────────────
 
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
 class ChatRequest(BaseModel):
     message: str
     user_id: Optional[str] = None
     role: Optional[str] = "General Public"   # e.g. "Law Student", "Legal Professional"
+    history: Optional[List[ChatMessage]] = []
+
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -365,13 +371,21 @@ RETRIEVED DATABASE CONTEXT:
 {context_text}
 """
 
-        # 4. Groq — Llama 3.1 8B Instant
+        # 4. Build message payload for Groq
+        messages_payload = [{"role": "system", "content": system_prompt}]
+        
+        # Inject recent chat history if provided
+        if request.history:
+            for msg in request.history:
+                messages_payload.append({"role": msg.role, "content": msg.content})
+                
+        # Append the new user question
+        messages_payload.append({"role": "user", "content": request.message})
+
+        # 5. Groq — Llama 3.1 8B Instant
         completion = llm.chat.completions.create(
             model="llama-3.1-8b-instant",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": request.message},
-            ],
+            messages=messages_payload,
             temperature=0.2,
             max_tokens=1500,
         )
