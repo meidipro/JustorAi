@@ -67,6 +67,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     await mountIntroOverlay();
   }
 
+  // Keep-alive ping for the Render backend (runs every 14 minutes)
+  // Prevents the free tier from spinning down while the user has the tab open
+  setInterval(async () => {
+    try {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      if (backendUrl) {
+        // Remove trailing slash if present
+        const cleanUrl = backendUrl.endsWith('/') ? backendUrl.slice(0, -1) : backendUrl;
+        await fetch(`${cleanUrl}/`);
+      }
+    } catch (e) {
+      // Intentionally ignore: the goal is just to send the network request to keep the server awake
+    }
+  }, 14 * 60 * 1000);
+
   const { data: { session } } = await supabase.auth.getSession();
   auth.setSession(session);
 
