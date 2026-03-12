@@ -1,5 +1,5 @@
-// src/main.ts
 import './style.css'
+import { shouldShowIntro, mountIntroOverlay } from './components/introOverlay';
 import { supabase } from './supabaseClient';
 import { auth } from './auth';
 import { renderNavbar } from './components/navbar';
@@ -23,48 +23,53 @@ const routes: { [key: string]: (container: HTMLElement) => void } = {
 };
 
 const router = () => {
-    const session = auth.getSession();
-    let path = window.location.pathname;
-    if (path === "" || path === "/index.html") { path = "/"; }
-    const protectedRoutes = ['/profile'];
-    if (!session && protectedRoutes.includes(path)) {
-        history.pushState(null, '', '/login');
-        path = '/login';
-    }
-    const renderPage = routes[path] || routes['/'];
-    renderPage(appContainer);
+  const session = auth.getSession();
+  let path = window.location.pathname;
+  if (path === "" || path === "/index.html") { path = "/"; }
+  const protectedRoutes = ['/profile'];
+  if (!session && protectedRoutes.includes(path)) {
+    history.pushState(null, '', '/login');
+    path = '/login';
+  }
+  const renderPage = routes[path] || routes['/'];
+  renderPage(appContainer);
 };
 
 supabase.auth.onAuthStateChange((_event, session) => {
-    auth.setSession(session);
-    // CHANGE 1: Pass the current path
-    renderNavbar(navbarContainer, window.location.pathname);
-    
-    // Dispatch custom event for app page to update user profile link
-    window.dispatchEvent(new CustomEvent('authStateChange'));
+  auth.setSession(session);
+  // CHANGE 1: Pass the current path
+  renderNavbar(navbarContainer, window.location.pathname);
 
-    const currentPath = window.location.pathname;
-    if (!session) {
-        if (currentPath === '/app' || currentPath === '/profile') {
-            history.pushState(null, '', '/');
-            router(); 
-        } else {
-            router();
-        }
+  // Dispatch custom event for app page to update user profile link
+  window.dispatchEvent(new CustomEvent('authStateChange'));
+
+  const currentPath = window.location.pathname;
+  if (!session) {
+    if (currentPath === '/app' || currentPath === '/profile') {
+      history.pushState(null, '', '/');
+      router();
     } else {
-        if (currentPath === '/login') {
-            history.pushState(null, '', '/app');
-            router();
-        } else {
-            router();
-        }
+      router();
     }
+  } else {
+    if (currentPath === '/login') {
+      history.pushState(null, '', '/app');
+      router();
+    } else {
+      router();
+    }
+  }
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Show intro overlay once per session
+  if (shouldShowIntro()) {
+    await mountIntroOverlay();
+  }
+
   const { data: { session } } = await supabase.auth.getSession();
   auth.setSession(session);
-  
+
   // CHANGE 2: Pass the current path
   renderNavbar(navbarContainer, window.location.pathname);
   router();
@@ -76,17 +81,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
       history.pushState(null, '', link.href);
       // We also need to update the navbar on navigation
-      renderNavbar(navbarContainer, link.pathname); 
+      renderNavbar(navbarContainer, link.pathname);
       router();
     }
   });
 
   window.addEventListener('popstate', () => {
-      // And here
-      renderNavbar(navbarContainer, window.location.pathname);
-      router();
+    // And here
+    renderNavbar(navbarContainer, window.location.pathname);
+    router();
   });
-  
+
   window.addEventListener('languageChange', () => {
     // And finally here
     renderNavbar(navbarContainer, window.location.pathname);
