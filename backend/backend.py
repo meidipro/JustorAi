@@ -41,6 +41,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ─── Health / Keep-Alive ──────────────────────────────────────────────────────
+@app.get("/ping")
+async def ping():
+    """Lightweight health check — used by cron-job.org to keep Render awake."""
+    return {"status": "ok", "message": "JustorAI backend is alive 🟢"}
+
+
 # ─── Supabase ─────────────────────────────────────────────────────────────────
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL", "").strip()
 SUPABASE_KEY = (
