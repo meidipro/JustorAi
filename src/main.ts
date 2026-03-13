@@ -67,20 +67,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     await mountIntroOverlay();
   }
 
-  // Keep-alive ping for the Render backend (runs every 14 minutes)
-  // Prevents the free tier from spinning down while the user has the tab open
-  setInterval(async () => {
+  // ── Backend Wake-Up & Keep-Alive ──────────────────────────────────────────
+  // Pings the Render backend immediately on load, then every 14 min,
+  // so the free-tier server never sleeps while a user has the tab open.
+  const pingBackend = async () => {
     try {
       const backendUrl = import.meta.env.VITE_BACKEND_URL;
       if (backendUrl) {
-        // Remove trailing slash if present
-        const cleanUrl = backendUrl.endsWith('/') ? backendUrl.slice(0, -1) : backendUrl;
-        await fetch(`${cleanUrl}/`);
+        const cleanUrl = backendUrl.replace(/\/$/, '');
+        await fetch(`${cleanUrl}/ping`, { method: 'GET', mode: 'no-cors' });
       }
-    } catch (e) {
-      // Intentionally ignore: the goal is just to send the network request to keep the server awake
+    } catch (_) {
+      // Silently ignore — it's a best-effort wake-up call
     }
-  }, 14 * 60 * 1000);
+  };
+  pingBackend(); // Fire immediately on page load
+  setInterval(pingBackend, 14 * 60 * 1000); // Then every 14 minutes
+
 
   const { data: { session } } = await supabase.auth.getSession();
   auth.setSession(session);
