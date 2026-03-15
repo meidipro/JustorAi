@@ -380,7 +380,8 @@ RETRIEVED DATABASE CONTEXT:
         
         # Inject recent chat history if provided
         if request.history:
-            for msg in request.history:
+            history_list = cast(List[ChatMessage], request.history)
+            for msg in history_list:
                 messages_payload.append({"role": msg.role, "content": msg.content})
                 
         # Append the new user question

@@ -12,6 +12,7 @@ export const translations = {
     landing_heroTitle_1: { en: 'Your AI Partner in Navigating', bn: 'বাংলাদেশী আইন কানুন বুঝতে' },
     landing_heroTitle_2: { en: 'Bangladeshi Law', bn: 'আপনার এআই সহযোগী' },
     landing_heroSubtitle: { en: `Get instant, clear answers to your legal questions. Whether you're a citizen, a law student, or a legal professional, JustorAI simplifies complexity.`, bn: 'আপনার আইনি জিজ্ঞাসার তাৎক্ষণিক ও সুস্পষ্ট উত্তর পান। নাগরিক, আইনের ছাত্র বা আইন পেশাজীবী, সকলের জন্য JustorAI আইনি জটিলতাকে সহজ করে তোলে।' },
+    landing_heroDescription: { en: 'Trusted by citizens, law students, and legal professionals across Bangladesh.', bn: 'বাংলাদেশ জুড়ে নাগরিক, আইনের শিক্ষার্থী এবং আইন পেশাজীবীদের বিশ্বস্ত সহযোগী।' },
     landing_cta_guest: { en: 'Try as Guest', bn: 'অতিথি হিসেবে দেখুন' },
     landing_cta_signup: { en: 'Sign Up for Full Features', bn: 'সম্পূর্ণ সুবিধা পেতে সাইন আপ করুন' },
     landing_cta_goToApp: { en: 'Go to App', bn: 'অ্যাপে যান' },
@@ -22,8 +23,17 @@ export const translations = {
     landing_feature2_title: { en: 'For Law Students', bn: 'আইনের শিক্ষার্থীদের জন্য' },
     landing_feature2_text: { en: 'Accelerate your learning with detailed case summaries, statutory definitions, and explanations of complex legal doctrines. Your perfect study partner.', bn: 'বিস্তারিত কেস-সারাংশ, আইনগত সংজ্ঞা এবং জটিল আইনি মতবাদের ব্যাখ্যাসহ আপনার পড়াশোনাকে আরও গতিশীল করুন। আপনার আদর্শ অধ্যয়ন সঙ্গী।' },
     landing_feature3_title: { en: 'For Legal Professionals', bn: 'আইন পেশাজীবীদের জন্য' },
-    landing_feature3_text: { en: 'Boost your productivity with rapid case law research, citation cross-referencing, and initial drafts for clauses and arguments. Find what you need, faster.', bn: 'দ্রুত মামলার রায় গবেষণা, রেফারেন্স যাচাই এবং বিভিন্ন যুক্তি ও ধারার খসড়া তৈরির মাধ্যমে আপনার কর্মদক্ষতা বৃদ্ধি করুন। প্রয়োজনীয় তথ্য খুঁজুন আরও দ্রুত।' },
+    landing_feature3_text: { en: 'Boost your productivity with rapid case law research, citation cross-referencing, and initial drafts for clauses and arguments. Find what you need, faster.', bn: 'দ্রুত মামলার রায় গবেষণা, রেফারেন্স যাচাই এবং বিভিন্ন যুক্তি ও ধারার খসড়া তৈরির মাধ্যমে আপনার কর্মদক্ষতা বৃদ্ধি করুন। প্রয়োজনীয় তথ্য খুঁজুন আরও দ্রুত।' },
+
+    // --- Landing Page — Example Questions & Final CTA ---
+    landing_tryTheseBtn: { en: '✨ Try These Questions', bn: '✨ এই প্রশ্নগুলো চেষ্টা করুন' },
+    landing_exampleQuestionsTitle: { en: 'Real Questions, Real Answers', bn: 'বাস্তব প্রশ্ন, বাস্তব উত্তর' },
+    landing_exampleQuestionsSubtitle: { en: 'See how JustorAI handles everyday legal questions with clarity and precision.', bn: 'দেখুন JustorAI কীভাবে দৈনন্দিন আইনি প্রশ্নের স্পষ্ট ও নির্ভুল উত্তর দেয়।' },
+    landing_finalCtaTitle: { en: 'Ready to Understand Your Rights?', bn: 'আপনার অধিকার জানতে প্রস্তুত?' },
+    landing_finalCtaSubtitle: { en: 'Join thousands of Bangladeshis who use JustorAI to navigate the law with confidence.', bn: 'হাজার হাজার বাংলাদেশির সাথে যোগ দিন যারা JustorAI ব্যবহার করে আত্মবিশ্বাসের সাথে আইন বুঝছেন।' },
+
     footer_about: { en: 'About', bn: 'আমাদের সম্পর্কে' },
+    footer_contact: { en: 'Contact', bn: 'যোগাযোগ' },
     footer_privacy: { en: 'Privacy Policy', bn: 'গোপনীয়তা নীতি' },
     footer_terms: { en: 'Terms of Service', bn: 'সেবার শর্তাবলী' },
 
@@ -83,7 +93,7 @@ export const translations = {
     profile_alert_notLoggedInUpdate: { en: 'You must be logged in to update your profile.', bn: 'প্রোফাইল আপডেট করার জন্য আপনাকে অবশ্যই লগইন করতে হবে।' },
     profile_alert_error: { en: 'Error updating profile:', bn: 'প্রোফাইল আপডেট করতে ত্রুটি হয়েছে:' },
     profile_alert_success: { en: 'Profile updated successfully!', bn: 'প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' },
-    
+
     // --- Login / Sign Up Page ---
     login_page_signInTitle: { en: 'Sign In to JustorAI', bn: 'JustorAI-তে সাইন ইন করুন' },
     login_page_signUpTitle: { en: 'Create Your Account', bn: 'আপনার অ্যাকাউন্ট তৈরি করুন' },

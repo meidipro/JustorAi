@@ -1,7 +1,7 @@
 // src/components/introOverlay.ts
-// Fullscreen WEBP frame‑sequence intro overlay.
-// Auto‑discovers frames via Vite import.meta.glob, sorts by index.
-// Plays FAST (~1.4 s total), shows Enter button, then fades out.
+// Fullscreen WEBP frame-sequence intro overlay.
+// Auto-discovers frames via Vite import.meta.glob, sorts by index.
+// Plays FAST, auto-dismisses when done. Fully responsive.
 // Runs once per browser session (sessionStorage flag).
 
 // Dynamically discover all .webp frames in public/intro/sequence/ at build time
@@ -23,6 +23,11 @@ const TOTAL_FRAMES = FRAME_URLS.length;
 
 const SESSION_KEY = 'justor_intro_seen';
 
+/** Detect if we're on a mobile/low-power device */
+function isMobileDevice(): boolean {
+  return window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 /** If the intro was already viewed this session, returns false immediately. */
 export function shouldShowIntro(): boolean {
   return !sessionStorage.getItem(SESSION_KEY);
@@ -30,10 +35,15 @@ export function shouldShowIntro(): boolean {
 
 /**
  * Mount the intro overlay to document.body.
- * Resolves once the user clicks Enter and the fade‑out finishes.
+ * Resolves once the animation finishes or the user skips.
  */
 export function mountIntroOverlay(): Promise<void> {
   return new Promise((resolve) => {
+    const mobile = isMobileDevice();
+    // On mobile: skip every other frame for faster playback & less memory
+    const frameStep = mobile ? 2 : 1;
+    const effectiveFrames = Math.ceil(TOTAL_FRAMES / frameStep);
+
     /* ── DOM skeleton ─────────────────────────────────── */
     const overlay = document.createElement('div');
     overlay.id = 'intro-overlay';
@@ -48,9 +58,7 @@ export function mountIntroOverlay(): Promise<void> {
     loader.innerHTML = '<div class="intro-spinner"></div>';
     overlay.appendChild(loader);
 
-    // No manual enter button needed, it will auto-dismiss
-
-    // Skip button (top‑right, always visible)
+    // Skip button (top-right, touch-friendly)
     const skipBtn = document.createElement('button');
     skipBtn.id = 'intro-skip-btn';
     skipBtn.textContent = 'Skip';
@@ -58,14 +66,16 @@ export function mountIntroOverlay(): Promise<void> {
 
     document.body.appendChild(overlay);
 
-    // Lock scroll
+    // Lock scroll & prevent pull-to-refresh on mobile
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
+    overlay.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 
     /* ── Frame loading ────────────────────────────────── */
     const frames: HTMLImageElement[] = new Array(TOTAL_FRAMES);
     let loadedCount = 0;
-    const PRELOAD_BATCH = 12; // load first 12 before starting playback
+    // Smaller preload batch on mobile to start playback faster
+    const PRELOAD_BATCH = mobile ? 4 : 6;
 
     const loadFrame = (i: number): Promise<void> =>
       new Promise((res) => {
@@ -78,111 +88,141 @@ export function mountIntroOverlay(): Promise<void> {
           res();
         };
         img.onerror = () => {
-          // Create a blank placeholder so playback doesn't break
           frames[i] = img;
           loadedCount++;
           res();
         };
       });
 
-    /* ── Canvas rendering ─────────────────────────────── */
+    /* ── Canvas rendering (DPR-aware) ─────────────────── */
     const ctx = canvas.getContext('2d')!;
     let currentFrame = 0;
     let playing = false;
+    let dismissed = false;
+
+    // Use a capped DPR to avoid oversized canvas on high-DPI mobile
+    const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 2 : 3);
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // Re‑draw current frame after resize
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Re-draw current frame after resize
       if (frames[currentFrame]) drawFrame(frames[currentFrame]);
     };
+
     window.addEventListener('resize', resize);
+    // Also handle orientation change on mobile
+    window.addEventListener('orientationchange', () => {
+      setTimeout(resize, 100);
+    });
     resize();
 
     function drawFrame(img: HTMLImageElement) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+
       // Strict Cover-fit: ensuring no black bars are ever visible,
       // regardless of device orientation or background colors.
       const imgRatio = img.naturalWidth / img.naturalHeight;
-      const canvasRatio = canvas.width / canvas.height;
+      const canvasRatio = w / h;
       let dw: number, dh: number, dx: number, dy: number;
 
       if (canvasRatio > imgRatio) {
         // Monitor/Desktop (Wider than video)
         // Stretch width to match screen, crop top and bottom
-        dw = canvas.width;
-        dh = canvas.width / imgRatio;
+        dw = w;
+        dh = w / imgRatio;
         dx = 0;
-        dy = (canvas.height - dh) / 2;
+        dy = (h - dh) / 2;
       } else {
         // Mobile (Taller than video)
         // Stretch height to match screen, crop left and right
-        dh = canvas.height;
-        dw = canvas.height * imgRatio;
+        dh = h;
+        dw = h * imgRatio;
         dy = 0;
-        dx = (canvas.width - dw) / 2; // dx becomes negative, centering the crop
+        dx = (w - dw) / 2; // dx becomes negative, centering the crop
       }
       ctx.drawImage(img, dx, dy, dw, dh);
     }
 
-    /* ── Playback loop (VERY FAST — target ≈2.2s total, not limited to 60fps) */
-    const TARGET_DURATION = 2200; // ms total playback
-    const FRAME_DELAY = TARGET_DURATION / TOTAL_FRAMES; // no 16ms clamp anymore
+    /* ── Playback loop (adaptive duration) ─────────────── */
+    // Mobile gets slightly shorter duration since we skip frames
+    const TARGET_DURATION = mobile ? 600 : 700;
+    const FRAME_DELAY = Math.max(16, Math.round(TARGET_DURATION / effectiveFrames));
 
     function play() {
       playing = true;
       loader.style.display = 'none';
-      let startTime = performance.now();
+      let lastTime = 0;
 
       const tick = (timestamp: number) => {
-        if (!playing) return;
+        if (!playing || dismissed) return;
+        if (!lastTime) lastTime = timestamp;
+        const elapsed = timestamp - lastTime;
 
-        const elapsed = timestamp - startTime;
-        // Calculate which frame we SHOULD be on based purely on elapsed time
-        const targetFrame = Math.floor(elapsed / FRAME_DELAY);
-
-        // If we are behind, jump ahead but ensure we draw the latest one
-        if (targetFrame > currentFrame) {
-          currentFrame = Math.min(targetFrame, TOTAL_FRAMES - 1);
+        if (elapsed >= FRAME_DELAY) {
+          lastTime = timestamp;
           if (frames[currentFrame]) drawFrame(frames[currentFrame]);
+          currentFrame += frameStep;
 
-          if (currentFrame >= TOTAL_FRAMES - 1) {
+          if (currentFrame >= TOTAL_FRAMES) {
             playing = false;
             dismiss();
             return;
           }
         }
-
         requestAnimationFrame(tick);
       };
-
       requestAnimationFrame(tick);
     }
 
     /* ── Dismiss logic ────────────────────────────────── */
     function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      playing = false;
       sessionStorage.setItem(SESSION_KEY, '1');
       overlay.classList.add('intro-fade-out');
-      overlay.addEventListener('transitionend', () => {
+
+      const cleanup = () => {
         overlay.remove();
         window.removeEventListener('resize', resize);
-        // Restore scroll
         document.documentElement.style.overflow = '';
         document.body.style.overflow = '';
         resolve();
-      });
+      };
+
+      overlay.addEventListener('transitionend', cleanup);
+      // Fallback in case transitionend doesn't fire (some mobile browsers)
+      setTimeout(cleanup, 400);
     }
 
     skipBtn.addEventListener('click', dismiss);
+    // Also allow tap anywhere on overlay to skip
+    overlay.addEventListener('click', (e) => {
+      if (e.target === skipBtn) return; // already handled
+      if (playing) dismiss();
+    });
 
     /* ── Kick off loading ─────────────────────────────── */
-    // Phase 1 — preload first batch
-    const firstBatch = Array.from({ length: PRELOAD_BATCH }, (_, i) => loadFrame(i));
+    // Phase 1 — preload first batch (only frames we'll actually use)
+    const batchIndices: number[] = [];
+    for (let i = 0; i < TOTAL_FRAMES && batchIndices.length < PRELOAD_BATCH; i += frameStep) {
+      batchIndices.push(i);
+    }
+    const firstBatch = batchIndices.map((i) => loadFrame(i));
+
     Promise.all(firstBatch).then(() => {
       play();
-      // Phase 2 — load the rest in the background
-      for (let i = PRELOAD_BATCH; i < TOTAL_FRAMES; i++) {
-        loadFrame(i);
+      // Phase 2 — load remaining frames in the background
+      for (let i = 0; i < TOTAL_FRAMES; i += frameStep) {
+        if (!frames[i]) loadFrame(i);
       }
     });
   });
