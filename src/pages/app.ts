@@ -672,7 +672,7 @@ export async function renderAppPage(container: HTMLElement) {
         // The FastAPI backend returns a structured JSONResponse now, not a stream (can be updated to stream later if needed)
         const data = await response.json();
         const fullResponse = data.response || "No response generated.";
-        const contextUsedCount = data.context_used || 0;
+        const contextUsedCount = data.sources_used || 0;
 
         console.log(`Generated response using ${contextUsedCount} document chunks.`);
 
