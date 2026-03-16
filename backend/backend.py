@@ -44,8 +44,8 @@ app.add_middleware(
 # ─── Health / Keep-Alive ──────────────────────────────────────────────────────
 @app.get("/ping")
 async def ping():
-    """Lightweight health check — used by cron-job.org to keep Render awake."""
-    return {"status": "ok", "message": "JustorAI backend is alive 🟢"}
+    """Ultra-lightweight health check for heartbeat monitors."""
+    return "ok"
 
 
 # ─── Supabase ─────────────────────────────────────────────────────────────────
@@ -162,12 +162,7 @@ import uuid
 
 @app.get("/", tags=["Health"])
 async def root():
-    return {
-        "service": "JustorAI RAG Brain",
-        "status": "running",
-        "embedding_model": EMBEDDING_MODEL_NAME,
-        "vector_dim": VECTOR_DIM,
-    }
+    return {"status": "ok"}
 
 
 @app.get("/health", tags=["Health"])
