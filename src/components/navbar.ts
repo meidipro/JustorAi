@@ -7,10 +7,8 @@ async function handleSignOut() {
   await supabase.auth.signOut();
 }
 
-// The 'currentPath' argument is still needed to decide if the hamburger menu should be shown.
 export function renderNavbar(container: HTMLElement, currentPath: string) {
   const session = auth.getSession();
-
   const hasSidebar = ['/app', '/profile'].includes(currentPath);
 
   let navHTML = '';
@@ -74,16 +72,14 @@ export function renderNavbar(container: HTMLElement, currentPath: string) {
 
   container.innerHTML = navHTML;
 
-  // Hamburger menu listener
+  // Listeners
   document.getElementById('hamburger-menu')?.addEventListener('click', () => {
     document.dispatchEvent(new CustomEvent('toggle-sidebar'));
   });
 
-  // + New Chat button in navbar — dispatches event that app.ts listens to
   document.getElementById('navbar-new-chat-btn')?.addEventListener('click', () => {
     document.dispatchEvent(new CustomEvent('navbar-new-chat'));
   });
 
-  // Sign-out listener
   document.getElementById('sign-out-btn')?.addEventListener('click', handleSignOut);
 }

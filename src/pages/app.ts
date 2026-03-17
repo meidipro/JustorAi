@@ -145,6 +145,17 @@ export async function renderAppPage(container: HTMLElement) {
     const micButton = document.getElementById('mic-button') as HTMLButtonElement;
     const sidebarLangSwitcher = document.getElementById('sidebar-lang-switcher');
 
+    // MOBILE SIDEBAR TOGGLE
+    document.addEventListener('toggle-sidebar', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
     function speakText(text: string) {
         if (synthesis.speaking) synthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);

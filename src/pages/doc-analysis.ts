@@ -12,8 +12,8 @@ const docAnalysisHTML = `
         <span class="badge-icon">📄</span>
         <span class="badge-text">AI-Powered Document Analysis</span>
       </div>
-      <h1 class="doc-title fade-in-up">Legal Document Analysis</h1>
-      <p class="doc-subtitle fade-in-up">Upload, analyze, and understand complex legal documents with the power of artificial intelligence. Get instant insights, summaries, and key information extraction.</p>
+      <h1 class="doc-title hero-title fade-in-up">Legal Document Analysis</h1>
+      <p class="doc-subtitle hero-subtitle fade-in-up">Upload, analyze, and understand complex legal documents with the power of artificial intelligence. Get instant insights, summaries, and key information extraction.</p>
     </div>
   </section>
 
@@ -397,77 +397,77 @@ const docAnalysisHTML = `
 `;
 
 export function renderDocAnalysisPage(container: HTMLElement) {
-    // Add animate.css for animations
-    const animateCSSLinkId = 'animate-css-cdn';
-    if (!document.getElementById(animateCSSLinkId)) {
-        const link = document.createElement('link');
-        link.id = animateCSSLinkId;
-        link.rel = 'stylesheet';
-        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css';
-        document.head.appendChild(link);
-    }
+  // Add animate.css for animations
+  const animateCSSLinkId = 'animate-css-cdn';
+  if (!document.getElementById(animateCSSLinkId)) {
+    const link = document.createElement('link');
+    link.id = animateCSSLinkId;
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css';
+    document.head.appendChild(link);
+  }
 
-    container.innerHTML = docAnalysisHTML;
+  container.innerHTML = docAnalysisHTML;
 
-    // Setup fade-in animations for sections
-    const sections = container.querySelectorAll('.fade-in-section');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    sections.forEach(section => {
-        observer.observe(section);
+  // Setup fade-in animations for sections
+  const sections = container.querySelectorAll('.fade-in-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
     });
+  }, { threshold: 0.1 });
 
-    // Add click handler for upload demo (placeholder functionality)
-    const uploadArea = container.querySelector('.upload-area');
-    const browseButton = container.querySelector('.browse-button');
-    
-    const handleUploadClick = () => {
-        // Create file input element
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = '.pdf,.doc,.docx,.txt';
-        fileInput.multiple = false;
-        fileInput.style.display = 'none';
-        
-        fileInput.onchange = (event) => {
-            const files = (event.target as HTMLInputElement).files;
-            if (files && files.length > 0) {
-                // Show coming soon message
-                alert('Document analysis feature is coming soon! This is a preview of the interface.');
-            }
-        };
-        
-        document.body.appendChild(fileInput);
-        fileInput.click();
-        document.body.removeChild(fileInput);
-    };
-    
-    uploadArea?.addEventListener('click', handleUploadClick);
-    browseButton?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        handleUploadClick();
-    });
+  sections.forEach(section => {
+    observer.observe(section);
+  });
 
-    // Add drag and drop handlers
-    uploadArea?.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('drag-over');
-    });
-    
-    uploadArea?.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('drag-over');
-    });
-    
-    uploadArea?.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('drag-over');
+  // Add click handler for upload demo (placeholder functionality)
+  const uploadArea = container.querySelector('.upload-area');
+  const browseButton = container.querySelector('.browse-button');
+
+  const handleUploadClick = () => {
+    // Create file input element
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.doc,.docx,.txt';
+    fileInput.multiple = false;
+    fileInput.style.display = 'none';
+
+    fileInput.onchange = (event) => {
+      const files = (event.target as HTMLInputElement).files;
+      if (files && files.length > 0) {
+        // Show coming soon message
         alert('Document analysis feature is coming soon! This is a preview of the interface.');
-    });
+      }
+    };
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    document.body.removeChild(fileInput);
+  };
+
+  uploadArea?.addEventListener('click', handleUploadClick);
+  browseButton?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    handleUploadClick();
+  });
+
+  // Add drag and drop handlers
+  uploadArea?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+  });
+
+  uploadArea?.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+  });
+
+  uploadArea?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    alert('Document analysis feature is coming soon! This is a preview of the interface.');
+  });
 }

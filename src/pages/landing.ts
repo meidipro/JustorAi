@@ -6,31 +6,31 @@ declare const particlesJS: any;
 
 // --- Main render function for the landing page ---
 export function renderLandingPage(container: HTMLElement) {
-    // --- NEW: Check the user's session state ---
-    const session = auth.getSession();
+  // --- NEW: Check the user's session state ---
+  const session = auth.getSession();
 
-    // --- NEW: Dynamically generate the Call-to-Action buttons ---
-    let ctaButtonsHTML = '';
-    if (session) {
-        // User is LOGGED IN: Show a single button to go to the app.
-        ctaButtonsHTML = `
+  // --- NEW: Dynamically generate the Call-to-Action buttons ---
+  let ctaButtonsHTML = '';
+  if (session) {
+    // User is LOGGED IN: Show a single button to go to the app.
+    ctaButtonsHTML = `
             <a href="/app" class="cta-button cta-primary" data-link>${i18n.t('landing_cta_goToApp')}</a>
         `;
-    } else {
-        // User is LOGGED OUT: Show the original two buttons.
-        ctaButtonsHTML = `
+  } else {
+    // User is LOGGED OUT: Show the original two buttons.
+    ctaButtonsHTML = `
             <a href="/app" class="cta-button cta-secondary" data-link>${i18n.t('landing_cta_guest')}</a>
             <a href="/login" class="cta-button cta-primary" data-link>${i18n.t('landing_cta_signup')}</a>
         `;
-    }
+  }
 
-    // --- Build the final HTML using the dynamic buttons ---
-    const landingHTML = `
+  // --- Build the final HTML using the dynamic buttons ---
+  const landingHTML = `
       <div class="landing-page-wrapper">
         <section class="hero-section">
           <div id="particles-js"></div> 
           <div class="hero-content">
-            <h1>${i18n.t('landing_heroTitle_1')} <span class="highlight">${i18n.t('landing_heroTitle_2')}</span></h1>
+            <h1 class="hero-title">${i18n.t('landing_heroTitle_1')} <span class="highlight">${i18n.t('landing_heroTitle_2')}</span></h1>
             <p class="hero-subtitle">${i18n.t('landing_heroSubtitle')}</p>
             <p class="hero-description">${i18n.t('landing_heroDescription')}</p>
             <div class="cta-buttons">
@@ -47,7 +47,7 @@ export function renderLandingPage(container: HTMLElement) {
           <div class="features-grid">
             <div class="feature-card feature-card-animated">
               <div class="feature-icon-wrapper">
-                <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.67c.625-.93.928-2.036.928-3.185V11a3 3 0 00-3-3H9.375a3 3 0 00-3 3v1.375c0 1.15.303 2.255.927 3.185z" /></svg>
+                <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.67c.625-.93.928-2.036.928-3.185V11a3 3 0 00-3-3H9.375a3 3 0 00-3-3v1.375c0 1.15.303 2.255.927 3.185z" /></svg>
               </div>
               <h3>${i18n.t('landing_feature1_title')}</h3>
               <p>${i18n.t('landing_feature1_text')}</p>
@@ -94,7 +94,7 @@ export function renderLandingPage(container: HTMLElement) {
         </section>
 
         <section class="final-cta-section fade-in-section">
-          <div class="final-cta-gradient">
+          <div class="final-cta-gradient landing-page-gradient-ctn">
             <h2>${i18n.t('landing_finalCtaTitle')}</h2>
             <p>${i18n.t('landing_finalCtaSubtitle')}</p>
           </div>
@@ -139,10 +139,10 @@ export function renderLandingPage(container: HTMLElement) {
       </div>
     `;
 
-    container.innerHTML = landingHTML;
-    initParticles(); 
-    setupFadeInAnimations();
-    setupInteractiveBackground();
+  container.innerHTML = landingHTML;
+  initParticles();
+  setupFadeInAnimations();
+  setupInteractiveBackground();
 }
 
 
@@ -174,7 +174,7 @@ function setupInteractiveBackground() {
     const rect = heroSection.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
+
     heroSection.style.setProperty('--mouse-x', `${x}%`);
     heroSection.style.setProperty('--mouse-y', `${y}%`);
   });
