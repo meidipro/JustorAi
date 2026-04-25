@@ -104,7 +104,82 @@ class ChatRequest(BaseModel):
 def _embed(text: str) -> List[float]:
     """Generate a 384-dim embedding. Caller must ensure embedding_model is not None."""
     model = cast(SentenceTransformer, embedding_model)
-    return model.encode(text, show_progress_bar=False).tolist()  # type: ignore[union-attr]
+    # Strip null bytes — PostgreSQL cannot store \u0000
+    clean_text = text.replace('\x00', '').replace('\u0000', '')
+    return model.encode(clean_text, show_progress_bar=False).tolist()  # type: ignore[union-attr]
+
+
+def classify_query(query: str):
+    """
+    Classifies legal intent of the query and extracts section numbers.
+    """
+    # Regex to find sections (e.g., "Section 302", "Dhara 302", "Sec 302")
+    section_pattern = r"(?:section|sec|dhara|ধারা)\s*(\d+[A-Z]?)"
+    sections = re.findall(section_pattern, query, re.IGNORECASE)
+    
+    # Detect intent
+    intent = {
+        "is_dlr_request": any(curr in query.lower() for curr in ["dlr", "case law", "judgment", "নজীর"]),
+        "is_repealed_request": any(curr in query.lower() for curr in ["repealed", "বাতil", "বাতিল", "omitted"]),
+        "sections": sections,
+        "primary_section": sections[0] if sections else None
+    }
+    return intent
+
+
+async def retrieve_context(query_vec: list, intent: dict):
+    """
+    Multi-lane retrieval for statutory law and case law.
+    """
+    db = cast(Client, supabase)
+    
+    # Acts Lane
+    acts_search = db.rpc("match_acts_v2", {
+        "query_embedding": query_vec,
+        "match_count": 6,
+        "match_threshold": 0.4,
+        "query_section": intent['primary_section'],
+        "prefer_dead_law": intent['is_repealed_request']
+    }).execute()
+    
+    # DLR Lane
+    dlrs_search = db.rpc("match_dlrs_v2", {
+        "query_embedding": query_vec,
+        "match_threshold": 0.4,
+        "match_count": 3
+    }).execute()
+    
+    return acts_search.data or [], dlrs_search.data or []
+
+
+def format_retrieved_context(acts: list, dlrs: list):
+    """
+    Formats the context into a rigid, structured prompt block.
+    """
+    context_block = "=== STATUTORY LAW (ACTS) ===\n"
+    if not acts:
+        context_block += "No matching Acts found.\n"
+    for i, act in enumerate(acts):
+        status_suffix = f" [STATUS: {act['status']}]" if act['status'].lower() != 'active' else ""
+        context_block += f"[{i+1}] {act['act_name']} - Section {act['section_number']}: {act['section_title']}{status_suffix}\n"
+        context_block += f"Content: {act['content']}\n"
+        if act['repealed_clauses'] and act['repealed_clauses'] != []:
+            context_block += f"Note: The following clauses are Repealed: {act['repealed_clauses']}\n"
+        if act['amendment_notes'] and act['amendment_notes'] != []:
+            context_block += f"Amendments: {act['amendment_notes']}\n"
+        context_block += "---\n"
+
+    context_block += "\n=== CASE LAW (DLR) ===\n"
+    if not dlrs:
+        context_block += "No matching Case Law found.\n"
+    for i, dlr in enumerate(dlrs):
+        context_block += f"[{i+1}] Case: {dlr['case_title']} ({dlr['year']})\n"
+        context_block += f"Subject: {dlr['subject_law']}\n"
+        context_block += f"Ratio Decidendi: {dlr['ratio_decidendi']}\n"
+        context_block += f"Reference Context: {dlr['judgment_content'][:1000]}...\n"
+        context_block += "---\n"
+        
+    return context_block
 
 
 def extract_pdf_text(file_obj) -> str:
@@ -120,8 +195,7 @@ def extract_pdf_text(file_obj) -> str:
 
 def chunk_text(text: str, chunk_size: int = 800, overlap: int = 150) -> List[str]:
     """
-    Naive but effective recursive chunker — no external dependencies.
-    Splits on paragraph breaks first, then sentences, then words.
+    Naive recursive chunker.
     """
     # Normalise whitespace
     text = re.sub(r"\n{3,}", "\n\n", text).strip()
@@ -133,14 +207,10 @@ def chunk_text(text: str, chunk_size: int = 800, overlap: int = 150) -> List[str
     start = 0
     while start < len(text):
         end = min(start + chunk_size, len(text))
-
-        # Try to break at a paragraph boundary
         break_at = text.rfind("\n\n", start, end)
         if break_at == -1 or break_at <= start:
-            # Fall back to sentence boundary
             break_at = text.rfind(". ", start, end)
         if break_at == -1 or break_at <= start:
-            # Fall back to word boundary
             break_at = text.rfind(" ", start, end)
         if break_at == -1 or break_at <= start:
             break_at = end  # hard cut
@@ -293,88 +363,78 @@ async def chat(request: ChatRequest):
     llm = cast(Groq, groq_client)
 
     try:
-        # 1. Embed the user question
+        # 1. Classify Query Intent
+        intent = classify_query(request.message)
+        
+        # 2. Embed the user question
         query_vec = _embed(request.message)
 
-        # 2. Vector similarity search
-        search = db.rpc(
-            "match_document_chunks",
-            {
-                "query_embedding": query_vec,
-                "match_threshold": 0.5,
-                "match_count": 5,
-            },
-        ).execute()
+        # 3. Multi-lane Retrieval
+        acts, dlrs = await retrieve_context(query_vec, intent)
+        
+        # 4. Format Structured Context
+        context_text = format_retrieved_context(acts, dlrs)
 
-        retrieved = search.data or []
-        if retrieved:
-            context_text = "\n\n---\n\n".join(c["content"] for c in retrieved)
-        else:
-            context_text = "No relevant legal documents found in the knowledge base."
-
-        # 3. Build system prompt
+        # 5. Build System Prompt (Zero Hallucination)
         system_prompt = f"""# ROLE AND IDENTITY
-You are Justor AI, the premier bilingual (Bangla and English) legal intelligence ecosystem specifically for BANGLADESH. You are a strictly Retrieval-Augmented Generation (RAG) assistant.
+You are Justor AI, a bilingual (Bangla and English) legal intelligence assistant for BANGLADESH.
+You are a STRICT Retrieval-Augmented Generation (RAG) system.
+You are NOT a general legal chatbot.
+You are NOT allowed to answer from pretraining memory.
+You must answer ONLY from the retrieved Bangladesh-law database context.
 
 # THE SUPREME DIRECTIVE: ZERO HALLUCINATION
-1. USE ONLY the [RETRIEVED DATABASE CONTEXT] provided below.
-2. NEVER use outside knowledge, general training data, or laws from other countries (especially India).
-3. If the [RETRIEVED DATABASE CONTEXT] does not contain the specific Section, Act, or DLR requested, you MUST return the exact Fallback Response for the persona. DO NOT attempt to "help" by guessing or using general knowledge.
+1. USE ONLY the [RETRIEVED DATABASE CONTEXT].
+2. NEVER use outside knowledge, general training data, web memory, or laws from other countries.
+3. NEVER guess a Section, Article, Rule, Act name.
+4. If you cannot find the answer in the provided context, you MUST use the exact fallback response provided below.
 
-# STRICT BANGLADESHI LAW CONSTRAINTS (CRITICAL)
-- DO NOT cite Section 438 of the CrPC for Anticipatory Bail. (In Bangladesh, use Section 498 context).
-- DO NOT cite Article 47 of the Limitation Act for Specific Performance. (In Bangladesh, it is Article 113 with 1-year limit).
-- DO NOT cite Section 8 of the Muslim Family Laws Ordinance for grandchildren's inheritance. (In Bangladesh, it is Section 4 - Doctrine of Representation).
-- Executive Magistrates (UNOs/ADCs) in Bangladesh CANNOT conduct regular criminal trials or award 7-year sentences.
-- Defamation (Sec 500 Penal Code) is NON-COGNIZABLE in Bangladesh (Police cannot arrest without a warrant).
-- Agricultural land ceiling in Bangladesh is 60 standard bighas per family (Land Reforms Ordinance 1984/2023).
-- Specific Performance cases for land require a REGISTERED contract and full payment (2004 Amendment).
-- Bangladesh has no "Wealth Tax" under ITA 2023; it is a "Surcharge on Net Wealth".
-- If you find yourself citing "Indian Penal Code" or "Indian CrPC", STOP. You have failed. You must only cite Bangladeshi laws.
+# THE LANGUAGE RULE
+1. Answer in the language the user asked in (Bangla or English).
+2. If the user asks in "Banglish" (Bangla in Roman script), you MUST reply in pure Bangla script (Bengali).
 
-# AUDIENCE AND PERSONA
-Current Audience Role: {request.role}
+# BANGLADESH-SPECIFIC LEGAL CONSTRAINTS (MANDATORY)
+- Bangladesh CrPC 498 is for bail/anticipatory bail (NOT 438).
+- Specific Performance (Limitation Act) for Bangladesh is 1 year (Article 113).
+- Punishment for Murder in Bangladesh is Section 302 of the Penal Code.
+- Citing "Indian" or "Pakistani" cases is a failure unless they are specifically mentioned in my database.
 
-# PERSONA CLASSIFICATION & RESPONSE TEMPLATES
-Always reply in the language the user used (Bangla or English).
+# AUDIENCE AND PERSONA (Context: {request.role})
+Current Persona: {request.role}
 
 ---
-## 🎓 PERSONA 1: THE LAW STUDENT (Role: Law Student)
-*Response Format:*
-*Section Title:* [Exact name of the Act and Section FROM CONTEXT ONLY]
-*Explanation:* [Plain language explanation BASED ONLY ON CONTEXT]
-*Real-Life Example:* [Relatable scenario based on context]
-*DLR Example:* [DLR reference FROM CONTEXT ONLY. If none, write "No relevant DLR in current context."]
-
-*Student Fallback:* "This law is not in my database." (Use this if the specific section is missing from context).
-
----
-## 🛡️ PERSONA 2: THE CONSUMER (Role: General Public)
-*Response Format:*
-*Section Title:* [Exact name of the Act and Section FROM CONTEXT ONLY]
-*Explanation and Penalty:* [Punishment details BASED ONLY ON CONTEXT]
-*Where and Who to Reach:* [Authorities specified in context]
-*What Evidence to Keep:* [Evidence types specified in context]
-*Estimate Amount and Working Days:* [Costs/Time FROM CONTEXT. If unknown, state "Not specified in current law."]
-
-*Consumer Fallback:* "This law is not in my database, and I cannot provide unverified information." (Use this if context is missing).
+## 🎓 PERSONA 1: THE LAW STUDENT
+- Output Format:
+  Section Title: [Act and Section Name]
+  Explanation: [Plain language summary]
+  Real-Life Example: [Relatable scenario]
+  DLR Reference: [Reference case if present, else "No DLR found"]
+- Fallback: "This law is not in my database, and I cannot provide unverified information."
 
 ---
-## ⚖️ PERSONA 3: THE LAWYER (Role: Legal Professional)
-*Response Format:*
-*The Sections Under Which:* [List Sections FROM CONTEXT ONLY]
-*The DLR Under:* [List DLR FROM CONTEXT ONLY]
-*Detailed Report Draft:* [Professional summary based EXCLUSIVELY on Context]
-*References:* [Specific details retrieved from the database]
+## 🛡️ PERSONA 2: THE CONSUMER (General Public)
+- Output Format:
+  Section Title: [Act and Section Name]
+  Explanation and Penalty: [Simple summary of law and punishment]
+  Where to Reach: [Authorities mentioned]
+  Evidence to Keep: [List evidence types]
+  Estimate Cost/Time: [From context, else "Not specified"]
+- Fallback: "আমি দুঃখিত, এই আইনটি আমার ডাটাবেসে নেই। ভুল তথ্য দেওয়া আইনত দণ্ডনীয় হতে পারে।"
 
-*Lawyer Fallback:* "This law is not in my database." (Use this if context is missing).
+---
+## ⚖️ PERSONA 3: THE LAWYER (Legal Professional)
+- Output Format: 
+  Sections: [Exact section references]
+  Case Law Highlights: [Important DLR point]
+  Legal Drafting Summary: [Professional advice fragment]
+- Fallback: "Query out of database bounds. Cannot provide legal guidance without source."
 
 ---
 RETRIEVED DATABASE CONTEXT:
 {context_text}
 """
 
-        # 4. Build message payload for Groq
+        # 6. Build message payload for Groq
         messages_payload = [{"role": "system", "content": system_prompt}]
         
         # Inject recent chat history if provided
@@ -386,20 +446,24 @@ RETRIEVED DATABASE CONTEXT:
         # Append the new user question
         messages_payload.append({"role": "user", "content": request.message})
 
-        # 5. Groq — Llama 3.1 8B Instant
+        # 7. Groq — Llama 3.1 8B Instant
         completion = llm.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=messages_payload,
-            temperature=0.2,
-            max_tokens=1500,
+            temperature=0.1, # Focused/deterministic
+            max_tokens=2000,
         )
 
         answer = completion.choices[0].message.content
 
         return JSONResponse(content={
             "response": answer,
-            "sources_used": len(retrieved),
+            "sources_used": len(acts) + len(dlrs),
             "user_id": request.user_id,
+            "metadata": {
+                "sections_found": intent['sections'],
+                "is_dlr": intent['is_dlr_request']
+            }
         })
 
     except HTTPException:
