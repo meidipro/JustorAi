@@ -52,7 +52,10 @@ create table if not exists public.document_chunks (
     judgment_content  text,
     
     -- Ranking field
-    status_rank       integer default 1 -- Active=3, Amended=2, Dead=1
+    status_rank       integer default 1, -- Active=3, Amended=2, Dead=1
+    
+    -- Backward compatibility
+    metadata          jsonb default '{}'::jsonb
 );
 
 -- 4. HNSW index for fast cosine similarity search
