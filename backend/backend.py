@@ -446,9 +446,17 @@ RETRIEVED DATABASE CONTEXT:
         # Append the new user question
         messages_payload.append({"role": "user", "content": request.message})
 
-        # 7. Groq — Llama 3.1 8B Instant
+        # 7. Model Routing based on Role (All available on Groq's free tier)
+        model_router = {
+            "General Public": "llama-3.1-8b-instant",
+            "Law Student": "llama-3.3-70b-versatile",
+            "Legal Professional": "llama-3.3-70b-versatile"
+        }
+        # Default to 8b-instant if role is missing or unknown
+        selected_model = model_router.get(request.role, "llama-3.1-8b-instant")
+
         completion = llm.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model=selected_model,
             messages=messages_payload,
             temperature=0.1, # Focused/deterministic
             max_tokens=2000,
