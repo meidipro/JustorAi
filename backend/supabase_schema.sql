@@ -25,9 +25,8 @@ create table if not exists public.document_chunks (
     id                uuid primary key default gen_random_uuid(),
     document_id       uuid references public.documents(id) on delete cascade not null,
     
-    -- Core fields
     content           text not null,
-    embedding         vector(384), -- Keeping 384 for MiniLM compatibility
+    embedding         vector(768), -- Changed to 768 for Gemini text-embedding-004
     chunk_index       integer not null,
     created_at        timestamp with time zone default timezone('utc', now()) not null,
     
@@ -65,7 +64,7 @@ create index if not exists document_chunks_embedding_idx
 
 -- 5. RPC for Statutory Law (Acts)
 create or replace function match_acts_v2(
-  query_embedding vector(384),
+  query_embedding vector(768),
   match_count int default 6,
   match_threshold float default 0.45,
   query_section text default null,
@@ -124,6 +123,7 @@ as $$
     where dc.document_type = 'Act'
       and lower(coalesce(dc.jurisdiction,'')) = 'bangladesh'
       and (1 - (dc.embedding <=> query_embedding)) >= match_threshold
+      and (query_section is null or lower(coalesce(dc.section_number,'')) = lower(query_section))
   )
   select
     id,
@@ -145,7 +145,7 @@ $$;
 
 -- 6. RPC for Case Law (DLRs)
 create or replace function match_dlrs_v2(
-  query_embedding vector(384),
+  query_embedding vector(768),
   match_count int default 3,
   match_threshold float default 0.45
 )

@@ -61,7 +61,7 @@ logger = logging.getLogger(__name__)
 # ─── Load services ────────────────────────────────────────────────────────────
 
 from supabase import create_client, Client
-from sentence_transformers import SentenceTransformer
+from openai import OpenAI
 
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL", "").strip()
 SUPABASE_KEY = (
@@ -75,8 +75,13 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 logger.info("Connecting to Supabase...")
 db: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-logger.info("Loading embedding model (all-MiniLM-L6-v2)...")
-model = SentenceTransformer("all-MiniLM-L6-v2")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
+if not OPENROUTER_API_KEY:
+    logger.error("Missing OPENROUTER_API_KEY in .env")
+    sys.exit(1)
+
+logger.info("Initializing OpenRouter client for embeddings...")
+client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY)
 logger.info("Ready.\n")
 
 
@@ -85,7 +90,8 @@ logger.info("Ready.\n")
 def embed(text: str) -> List[float]:
     # Strip null bytes — PostgreSQL cannot store \u0000
     text = text.replace('\x00', '').replace('\u0000', '')
-    return model.encode(text, normalize_embeddings=True).tolist()
+    res = client.embeddings.create(model="qwen/qwen3-embedding-0.6b", input=[text])
+    return res.data[0].embedding
 
 
 def parse_json_file(path: Path) -> List[Dict[str, Any]]:

@@ -30,10 +30,10 @@ except ImportError:
 
 try:
     from supabase import create_client, Client
-    from sentence_transformers import SentenceTransformer
+    from openai import OpenAI
 except ImportError as e:
     print(f"Missing dependency: {e}")
-    print("Run: .venv\\Scripts\\pip install supabase sentence-transformers")
+    print("Run: .venv\\Scripts\\pip install supabase openai")
     sys.exit(1)
 
 # ─── Config ───────────────────────────────────────────────────────────────────
@@ -48,19 +48,22 @@ if not SUPABASE_URL or not SUPABASE_KEY:
     print("ERROR: VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env")
     sys.exit(1)
 
-MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
-DOCUMENT_TITLE = "Dhaka Law Reports (DLR) Part 1"
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
+if not OPENROUTER_API_KEY:
+    print("ERROR: OPENROUTER_API_KEY must be set in .env")
+    sys.exit(1)
 
 # ─── Embedding ────────────────────────────────────────────────────────────────
-print("INFO: Loading embedding model...")
-model = SentenceTransformer(MODEL_NAME)
+print("INFO: Initializing OpenRouter client...")
+client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY)
 print("INFO: Ready.\n")
 
 
 def embed(text: str) -> List[float]:
     """Embed text, stripping null bytes that PostgreSQL cannot store."""
     text = text.replace('\x00', '').replace('\u0000', '')
-    return model.encode(text, normalize_embeddings=True).tolist()
+    res = client.embeddings.create(model="qwen/qwen3-embedding-0.6b", input=[text])
+    return res.data[0].embedding
 
 
 # ─── DLR Parser ───────────────────────────────────────────────────────────────
