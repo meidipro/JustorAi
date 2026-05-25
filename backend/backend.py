@@ -776,6 +776,27 @@ async def chat(request: ChatRequest):
         # 3. Multi-lane Retrieval
         acts, dlrs = await retrieve_context(query_vec, intent)
         
+        # Programmatic zero-hallucination refusal:
+        # If the database has no matching information, bypass the LLM and refuse immediately.
+        # This completely prevents smaller fallback models (like Llama 8B) from hallucinating from training memory.
+        if not acts and not dlrs:
+            if request.role == "Legal Professional":
+                refusal_text = "VERIFIED SOURCES returned no results for this query. This analysis cannot proceed without verified Bangladeshi legal authority. Please consult the official Bangladesh Code and relevant DLR volumes."
+            elif request.role == "Law Student":
+                refusal_text = "I don't have verified database entries on this topic yet. Please check the Bangladesh Code directly."
+            else: # General Public
+                refusal_text = "I don't have verified information on this topic yet. Please consult the Bangladesh Code or a licensed lawyer."
+                
+            return JSONResponse(content={
+                "response": refusal_text,
+                "sources_used": 0,
+                "user_id": request.user_id,
+                "metadata": {
+                    "sections_found": intent['sections'],
+                    "is_dlr": intent['is_dlr_request']
+                }
+            })
+        
         # 4. Format Structured Context
         context_text = format_retrieved_context(acts, dlrs)
 
