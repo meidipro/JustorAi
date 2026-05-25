@@ -536,20 +536,20 @@ async def retrieve_context(query_vec: list, intent: dict):
     """
     db = cast(Client, supabase)
     
-    # Acts Lane
+    # Acts Lane (Reduced to 4 to save tokens and stay within Groq TPM limits)
     acts_search = db.rpc("match_acts_v2", {
         "query_embedding": query_vec,
-        "match_count": 6,
+        "match_count": 4,
         "match_threshold": 0.4,
         "query_section": intent['primary_section'],
         "prefer_dead_law": intent['is_repealed_request']
     }).execute()
     
-    # DLR Lane
+    # DLR Lane (Reduced to 2 to save tokens and stay within Groq TPM limits)
     dlrs_search = db.rpc("match_dlrs_v2", {
         "query_embedding": query_vec,
         "match_threshold": 0.4,
-        "match_count": 3
+        "match_count": 2
     }).execute()
     
     return acts_search.data or [], dlrs_search.data or []
@@ -579,7 +579,8 @@ def format_retrieved_context(acts: list, dlrs: list):
         context_block += f"[DLR-{i+1}] Case: {dlr['case_title']} ({dlr['year']})\n"
         context_block += f"Subject: {dlr['subject_law']}\n"
         context_block += f"Ratio Decidendi: {dlr['ratio_decidendi']}\n"
-        context_block += f"Reference Context: {dlr['judgment_content'][:1000]}...\n"
+        # Reduced judgment preview from 1000 to 300 to prevent rate limits / token overflow
+        context_block += f"Reference Context: {dlr['judgment_content'][:300]}...\n"
         context_block += "---\n"
         
     return context_block
