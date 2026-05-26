@@ -99,6 +99,18 @@ if OPENROUTER_API_KEY and OpenAI:
 else:
     logger.warning("OPENROUTER_API_KEY missing or 'openai' package not installed.")
 
+# ─── Alibaba DashScope ──────────────────────────────────────────────────────
+DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "").strip()
+dashscope_client = None
+if DASHSCOPE_API_KEY and OpenAI:
+    dashscope_client = OpenAI(
+        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        api_key=DASHSCOPE_API_KEY
+    )
+    logger.info("Alibaba DashScope client initialized.")
+else:
+    logger.warning("DASHSCOPE_API_KEY missing or 'openai' package not installed.")
+
 # ─── Pydantic Models ──────────────────────────────────────────────────────────
 
 class ChatMessage(BaseModel):
@@ -140,6 +152,45 @@ def _embed(text: str) -> List[float]:
     with urllib.request.urlopen(req) as response:
         resp_data = json.loads(response.read().decode("utf-8"))
         return resp_data["embedding"]["values"]
+
+
+def _call_gemini_native(messages, temperature=0.1) -> str:
+    """Helper to query Gemini 2.5 Flash directly via native Google REST API."""
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY missing.")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+    
+    contents = []
+    system_instruction = None
+    for msg in messages:
+        if msg["role"] == "system":
+            system_instruction = {"parts": [{"text": msg["content"]}]}
+        else:
+            role = "user" if msg["role"] == "user" else "model"
+            contents.append({
+                "role": role,
+                "parts": [{"text": msg["content"]}]
+            })
+            
+    payload = {
+        "contents": contents,
+        "generationConfig": {
+            "temperature": temperature,
+            "maxOutputTokens": 2000
+        }
+    }
+    if system_instruction:
+        payload["systemInstruction"] = system_instruction
+
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={"Content-Type": "application/json"}
+    )
+    with urllib.request.urlopen(req) as response:
+        resp_data = json.loads(response.read().decode("utf-8"))
+        return resp_data["candidates"][0]["content"]["parts"][0]["text"]
 
 
 def prompt_general_public(context: str) -> str:
@@ -819,7 +870,14 @@ async def chat(request: ChatRequest):
         def call_llm_with_fallbacks(models: List[tuple], messages) -> str:
             for provider, model in models:
                 try:
-                    if provider == "groq" and groq_client:
+                    if provider == "alibaba" and dashscope_client:
+                        completion = dashscope_client.chat.completions.create(
+                            model=model, messages=messages, temperature=0.1, max_tokens=2000
+                        )
+                        return completion.choices[0].message.content
+                    elif provider == "gemini" and GEMINI_API_KEY:
+                        return _call_gemini_native(messages, temperature=0.1)
+                    elif provider == "groq" and groq_client:
                         completion = groq_client.chat.completions.create(
                             model=model, messages=messages, temperature=0.1, max_tokens=2000
                         )
@@ -836,22 +894,20 @@ async def chat(request: ChatRequest):
 
         if request.role == "Legal Professional":
             models = [
-                ("openrouter", "deepseek/deepseek-v4-flash:free"),
-                ("openrouter", "openai/gpt-oss-120b:free"),
-                ("openrouter", "minimax/minimax-m2.5:free"),
+                ("alibaba", "qwen-max"),
+                ("gemini", "gemini-2.5-flash"),
                 ("groq", "llama-3.3-70b-versatile")
             ]
         elif request.role == "Law Student":
             models = [
-                ("openrouter", "google/gemma-4-31b-it:free"),
-                ("openrouter", "google/gemma-4-26b-a4b-it:free"),
-                ("openrouter", "qwen/qwen3-next-80b-a3b-instruct:free"),
+                ("alibaba", "qwen-plus"),
+                ("gemini", "gemini-2.5-flash"),
                 ("groq", "llama-3.3-70b-versatile")
             ]
         else: # General Public
             models = [
-                ("openrouter", "google/gemma-4-31b-it:free"),
-                ("openrouter", "google/gemma-4-26b-a4b-it:free"),
+                ("gemini", "gemini-2.5-flash"),
+                ("alibaba", "qwen-plus"),
                 ("groq", "llama-3.1-8b-instant")
             ]
 
