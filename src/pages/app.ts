@@ -46,6 +46,7 @@ export async function renderAppPage(container: HTMLElement) {
     const recognition = SpeechRecognitionAPI ? new SpeechRecognitionAPI() : null;
     const synthesis = window.speechSynthesis;
     let isListening = false;
+    let activeSpeakButton: HTMLButtonElement | null = null;
 
     function getOrCreateGuestUserId(): string {
         let guestId = localStorage.getItem(GUEST_USER_ID_KEY);
@@ -121,7 +122,7 @@ export async function renderAppPage(container: HTMLElement) {
                       <button type="button" id="mic-button" class="mic-btn" title="Ask with voice">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
                       </button>
-                      <input type="text" id="message-input" placeholder="${i18n.t('app_askAnything')}" autocomplete="off" required>
+                      <textarea id="message-input" placeholder="${i18n.t('app_askAnything')}" rows="1" autocomplete="off" required></textarea>
                       <button type="submit" id="send-button">
                           <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                       </button>
@@ -136,7 +137,12 @@ export async function renderAppPage(container: HTMLElement) {
     const overlay = document.getElementById('overlay') as HTMLDivElement;
     const chatWindow = document.getElementById('chat-window') as HTMLDivElement;
     const messageForm = document.getElementById('message-form') as HTMLFormElement;
-    const messageInput = document.getElementById('message-input') as HTMLInputElement;
+    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
+    const adjustInputHeight = () => {
+        messageInput.style.height = 'auto';
+        const newHeight = Math.min(messageInput.scrollHeight, 180);
+        messageInput.style.height = `${newHeight}px`;
+    };
     const newChatBtn = document.querySelector('.new-chat-btn') as HTMLButtonElement;
     const conversationList = document.querySelector('.conversation-list') as HTMLDivElement;
     const darkModeToggle = document.getElementById('dark-mode-toggle') as HTMLDivElement;
@@ -156,17 +162,62 @@ export async function renderAppPage(container: HTMLElement) {
         overlay.classList.remove('active');
     });
 
-    function speakText(text: string) {
-        if (synthesis.speaking) synthesis.cancel();
+    function setButtonSpeakingState(button: HTMLButtonElement, isSpeaking: boolean) {
+        if (isSpeaking) {
+            button.classList.add('is-speaking');
+            button.title = 'Stop reading';
+            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="22" y1="9" x2="16" y2="15"></line><line x1="16" y1="9" x2="22" y2="15"></line></svg>`;
+        } else {
+            button.classList.remove('is-speaking');
+            button.title = 'Read this message aloud';
+            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
+        }
+    }
+
+    function speakText(text: string, button?: HTMLButtonElement) {
+        if (synthesis.speaking) {
+            synthesis.cancel();
+            if (button && activeSpeakButton === button) {
+                setButtonSpeakingState(button, false);
+                activeSpeakButton = null;
+                return;
+            }
+        }
+
+        if (button && activeSpeakButton && activeSpeakButton !== button) {
+            setButtonSpeakingState(activeSpeakButton, false);
+        }
+
         const utterance = new SpeechSynthesisUtterance(text);
         const voices = synthesis.getVoices();
         const langCode = i18n.getLanguage();
         const preferredVoice = voices.find(voice => voice.lang.startsWith(langCode) && voice.name.includes('Google'));
         utterance.voice = preferredVoice || voices.find(voice => voice.lang.startsWith(langCode)) || voices[0];
-        const lastMessageAvatar = chatWindow.querySelector('.message-wrapper:last-child .ai-avatar');
-        utterance.onstart = () => { lastMessageAvatar?.classList.add('is-speaking'); };
-        utterance.onend = () => { lastMessageAvatar?.classList.remove('is-speaking'); };
-        utterance.onerror = () => { lastMessageAvatar?.classList.remove('is-speaking'); };
+        
+        const parentWrapper = button ? button.closest('.message-wrapper') : null;
+        const lastMessageAvatar = parentWrapper ? parentWrapper.querySelector('.ai-avatar') : null;
+        
+        utterance.onstart = () => { 
+            lastMessageAvatar?.classList.add('is-speaking'); 
+            if (button) {
+                setButtonSpeakingState(button, true);
+                activeSpeakButton = button;
+            }
+        };
+        utterance.onend = () => { 
+            lastMessageAvatar?.classList.remove('is-speaking'); 
+            if (button) {
+                setButtonSpeakingState(button, false);
+                if (activeSpeakButton === button) activeSpeakButton = null;
+            }
+        };
+        utterance.onerror = () => { 
+            lastMessageAvatar?.classList.remove('is-speaking'); 
+            if (button) {
+                setButtonSpeakingState(button, false);
+                if (activeSpeakButton === button) activeSpeakButton = null;
+            }
+        };
         utterance.rate = 1;
         utterance.pitch = 1;
         synthesis.speak(utterance);
@@ -425,16 +476,38 @@ export async function renderAppPage(container: HTMLElement) {
             feedbackControls.appendChild(thumbUp);
             feedbackControls.appendChild(thumbDown);
 
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-btn';
+            copyButton.title = 'Copy response to clipboard';
+            copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+            copyButton.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                try {
+                    await navigator.clipboard.writeText(mainContent);
+                    copyButton.classList.add('copied');
+                    copyButton.title = 'Copied!';
+                    copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                    setTimeout(() => {
+                        copyButton.classList.remove('copied');
+                        copyButton.title = 'Copy response to clipboard';
+                        copyButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+            });
+
             const speakButton = document.createElement('button');
             speakButton.className = 'speak-btn';
             speakButton.title = 'Read this message aloud';
             speakButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
             speakButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                speakText(mainContent); // Speak only the main content
+                speakText(mainContent, speakButton); // Speak only the main content
             });
 
             controlsWrapper.appendChild(feedbackControls);
+            controlsWrapper.appendChild(copyButton);
             controlsWrapper.appendChild(speakButton);
             messageContent.appendChild(controlsWrapper);
         }
@@ -618,6 +691,7 @@ export async function renderAppPage(container: HTMLElement) {
 
         await addMessageToActiveChat({ sender: 'user', content: userInput });
         messageInput.value = '';
+        adjustInputHeight();
 
         // Create a new, empty AI message bubble that we will stream into.
         const aiMessageWrapper = displayMessage("", 'ai');
@@ -804,6 +878,7 @@ export async function renderAppPage(container: HTMLElement) {
             recognition.onresult = (event: SpeechRecognitionEvent) => {
                 const transcript = event.results[0][0].transcript;
                 messageInput.value = transcript;
+                adjustInputHeight();
                 handleFormSubmit();
             };
             micButton.addEventListener('click', () => {
@@ -828,6 +903,13 @@ export async function renderAppPage(container: HTMLElement) {
             }
         });
         messageForm.addEventListener('submit', (e) => { e.preventDefault(); handleFormSubmit(); });
+        messageInput.addEventListener('input', adjustInputHeight);
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleFormSubmit();
+            }
+        });
         chatWindow.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             const queryItem = target.closest('.suggested-query-item');
@@ -835,9 +917,11 @@ export async function renderAppPage(container: HTMLElement) {
 
             if (queryItem && queryItem.textContent) {
                 messageInput.value = queryItem.textContent;
+                adjustInputHeight();
                 handleFormSubmit();
             } else if (followUpItem && followUpItem.textContent) {
                 messageInput.value = followUpItem.textContent;
+                adjustInputHeight();
                 handleFormSubmit();
             }
         });

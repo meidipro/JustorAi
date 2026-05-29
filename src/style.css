@@ -2353,7 +2353,7 @@ body {
     margin-left: 4px;
 }
 
-.speak-btn {
+.speak-btn, .copy-btn {
     position: static;
     /* Remove absolute positioning */
     background: none;
@@ -2369,12 +2369,24 @@ body {
     opacity: 1;
     /* Always visible */
     margin-left: 4px;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s, border-color 0.2s;
 }
 
-.speak-btn:hover {
+.speak-btn:hover, .copy-btn:hover {
     background-color: var(--bg-soft);
     color: var(--text-primary);
+}
+
+.copy-btn.copied {
+    color: #10B981 !important; /* Premium Emerald green */
+    border-color: #10B981 !important;
+}
+
+.speak-btn.is-speaking {
+    color: var(--accent-color-start) !important;
+    border-color: var(--accent-color-start) !important;
+    background-color: var(--bg-soft) !important;
+    animation: pulse 2s infinite;
 }
 
 /* ADD THIS TO style.css */
@@ -7493,9 +7505,16 @@ body {
     color: var(--chat-text) !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 15px !important;
-    padding: 16px 52px 16px 90px !important;
+    padding: 15px 52px 15px 90px !important;
     width: 100% !important;
     caret-color: var(--chat-text) !important;
+    resize: none !important;
+    overflow-y: hidden !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    max-height: 180px !important;
+    line-height: 1.5 !important;
+    box-sizing: border-box !important;
 }
 
 #message-input:focus {
@@ -7524,10 +7543,14 @@ body {
 
 .mic-btn {
     left: 8px !important;
+    bottom: 8px !important;
+    position: absolute !important;
 }
 
 .upload-btn {
     left: 48px !important;
+    bottom: 8px !important;
+    position: absolute !important;
 }
 
 .mic-btn:hover,
@@ -7558,6 +7581,7 @@ body {
 #send-button {
     position: absolute !important;
     right: 9px !important;
+    bottom: 8px !important;
     width: 36px !important;
     height: 36px !important;
     border-radius: 9px !important;

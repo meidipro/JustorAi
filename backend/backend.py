@@ -102,14 +102,14 @@ else:
 # ─── Alibaba DashScope ──────────────────────────────────────────────────────
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "").strip()
 dashscope_client = None
-if DASHSCOPE_API_KEY and OpenAI:
+if DASHSCOPE_API_KEY and not DASHSCOPE_API_KEY.startswith("your_") and OpenAI:
     dashscope_client = OpenAI(
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
         api_key=DASHSCOPE_API_KEY
     )
     logger.info("Alibaba DashScope client initialized.")
 else:
-    logger.warning("DASHSCOPE_API_KEY missing or 'openai' package not installed.")
+    logger.warning("DASHSCOPE_API_KEY missing, is placeholder, or 'openai' package not installed.")
 
 # ─── Pydantic Models ──────────────────────────────────────────────────────────
 
