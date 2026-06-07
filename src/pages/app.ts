@@ -86,7 +86,7 @@ export async function renderAppPage(container: HTMLElement) {
           <aside class="sidebar">
               <div class="sidebar-top">
                 <div class="sidebar-brand-wrapper">
-                    <img src="/justor_ai_logo.jpg" alt="Justor AI" class="sidebar-logo">
+                    <img src="/favicon.png" alt="Justor AI Logo" class="sidebar-logo">
                     <span class="sidebar-brand-title">Justor AI</span>
                 </div>
                 
@@ -394,7 +394,7 @@ export async function renderAppPage(container: HTMLElement) {
                 <div class="empty-chat-container">
                     <div class="welcome-hero">
                         <div class="welcome-logo-wrapper">
-                            <img src="/justor_ai_logo.jpg" alt="Justor AI Logo" class="welcome-logo-img">
+                            <img src="/favicon.png" alt="Justor AI Logo" class="welcome-logo-img">
                         </div>
                         <p class="welcome-tagline">LEGAL INTELLIGENCE &middot; BANGLADESH</p>
                         <h2 class="welcome-heading">How may I <em>counsel you</em> today?</h2>

@@ -148,8 +148,8 @@ export function renderLoginPage(container: HTMLElement) {
           <div class="login-card">
             <div class="login-header">
               <div class="brand-logo">
-                <div class="logo-icon">⚖️</div>
-                <span class="brand-name">JustorAI</span>
+                <img src="/favicon.png" alt="JustorAI Logo" class="login-logo-img">
+                <span class="brand-name">Justor AI</span>
               </div>
               <h1 class="login-title">${title}</h1>
               <p class="login-subtitle">${i18n.t('login_page_subtitle')}</p>

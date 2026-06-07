@@ -9839,3 +9839,16 @@ body.app-route .navbar {
         top: 60px !important;
     }
 }
+
+.sidebar-logo, .landing-logo-img, .nav-logo-img, .login-logo-img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+.welcome-logo-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
