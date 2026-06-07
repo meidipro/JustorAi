@@ -92,6 +92,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderNavbar(navbarContainer, window.location.pathname);
   router();
 
+  // Re-render navbar on window resize to support responsive layout switching without refresh
+  window.addEventListener('resize', () => {
+    renderNavbar(navbarContainer, window.location.pathname);
+  });
+
   document.body.addEventListener('click', e => {
     const target = e.target as HTMLElement;
     const link = target.closest('[data-link]') as HTMLAnchorElement;

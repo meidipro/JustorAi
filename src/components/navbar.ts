@@ -8,6 +8,16 @@ async function handleSignOut() {
 }
 
 export function renderNavbar(container: HTMLElement, currentPath: string) {
+  if (currentPath === '/app') {
+    document.body.classList.add('app-route');
+    if (window.innerWidth > 900) {
+      container.innerHTML = '';
+      return;
+    }
+  } else {
+    document.body.classList.remove('app-route');
+  }
+
   const session = auth.getSession();
   const hasSidebar = ['/app', '/profile'].includes(currentPath);
 

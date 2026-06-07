@@ -253,6 +253,10 @@ RULE 9: Never say "typically", "generally", "usually",
 
 RULE 10: Never predict outcomes. Never say someone will 
          win or lose. Never give strategic legal advice.
+
+RULE 11: CITATION INTEGRITY: Never write an [ACT-N] or [DLR-N] tag that does not appear
+         in VERIFIED SOURCES above. State every section number exactly as it appears in
+         VERIFIED SOURCES — never copy a section number from the user's question.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 VERIFIED SOURCES — USE ONLY THESE. NOTHING ELSE:
@@ -350,6 +354,10 @@ RULE 8: Never invent doctrines, section numbers, case
 RULE 9: If VERIFIED SOURCES is empty, say:
         "I don't have verified database entries on this 
         topic yet. Please check the Bangladesh Code directly."
+
+RULE 10: CITATION INTEGRITY: Never write an [ACT-N] or [DLR-N] tag that does not appear
+         in VERIFIED SOURCES above. State every section number exactly as it appears in
+         VERIFIED SOURCES — never copy a section number from the user's question.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 VERIFIED SOURCES — USE ONLY THESE. NOTHING ELSE:
@@ -476,6 +484,10 @@ RULE 10: If VERIFIED SOURCES is empty, write:
          This analysis cannot proceed without verified 
          Bangladeshi legal authority. Please consult the 
          official Bangladesh Code and relevant DLR volumes."
+
+RULE 11: CITATION INTEGRITY: Never write an [ACT-N] or [DLR-N] tag that does not appear
+         in VERIFIED SOURCES above. State every section number exactly as it appears in
+         VERIFIED SOURCES — never copy a section number from the user's question.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 VERIFIED SOURCES — USE ONLY THESE. NOTHING ELSE:
@@ -511,6 +523,13 @@ RESPONSE FORMAT — IRAC — follow this structure exactly:
 
 **APPLICATION**
 [Apply rules to facts. This is the analytical core.
+ STRICT APPLICATION RULE: Reason ONLY from rules quoted in RULE above. Do not
+ introduce any doctrine, principle, or statutory language not quoted there —
+ even from the same Act, even if you believe it applies. If you reach for
+ anything not in RULE, stop and write: "[X] may be relevant but is not in my
+ verified sources; independent verification required." Do not mix language from
+ different sections unless both are quoted in RULE.
+
  Address each of the following:
  
  — Statutory analysis: which elements of each cited 
@@ -555,86 +574,238 @@ complete official Bangladesh Code and all relevant DLR volumes
 is required before reliance in court proceedings or formal 
 legal advice.*"""
 
-def get_system_prompt(role: str, context: str) -> str:
-    if role == "Legal Professional":
-        return prompt_lawyer(context)
-    elif role == "Law Student":
-        return prompt_law_student(context)
-    else:
-        return prompt_general_public(context)
+# Add a line ONLY for acts confirmed present in STEP 0b.
+ACT_NAME_MAP = {
+    r'nat act|non.?agricultural tenancy act': 'The Non-Agricultural Tenancy Act, 1949',
+    r'land reforms act|bhumi sanskar|land reform 2023': 'The Land Reforms Act, 2023',
+    r'\bsat act\b|state acquisition.*tenancy|sat 1950': 'The State Acquisition and Tenancy Act, 1950',
+    r'transfer of property act|\btpa\b': 'The Transfer of Property Act, 1882',
+    r'trademarks? act|trademark 2009': 'The Trademarks Act, 2009',
+}
 
-def classify_query(query: str):
-    """
-    Classifies legal intent of the query and extracts section numbers.
-    """
-    # Regex to find sections (e.g., "Section 302", "Dhara 302", "Sec 302")
-    section_pattern = r"(?:section|sec|dhara|ধারা)\s*(\d+[A-Z]?)"
+def classify_query(query: str) -> dict:
+    section_pattern = (
+        r"(?:section|sec\.?|dhara|\u09a7\u09be\u09b0\u09be|article|\u0985\u09a8\u09c1\u099a\u09cd\u099b\u09c7\u09a6|rule)"
+        r"\s*(\d+[A-Za-z]?)"
+    )
     sections = re.findall(section_pattern, query, re.IGNORECASE)
-    
-    # Detect intent
-    intent = {
-        "is_dlr_request": any(curr in query.lower() for curr in ["dlr", "case law", "judgment", "নজীর"]),
-        "is_repealed_request": any(curr in query.lower() for curr in ["repealed", "বাতil", "বাতিল", "omitted"]),
-        "sections": sections,
-        "primary_section": sections[0] if sections else None
-    }
-    return intent
 
+    detected_act = None
+    for pattern, act_name in ACT_NAME_MAP.items():
+        if re.search(pattern, query, re.IGNORECASE):
+            detected_act = act_name
+            break
+
+    return {
+        "is_dlr_request": any(k in query.lower() for k in
+            ["dlr", "case law", "judgment", "\u09a8\u099c\u09c0\u09b0", "precedent", "court held"]),
+        "is_repealed_request": any(k in query.lower() for k in
+            ["repealed", "\u09ac\u09be\u09a4\u09bf\u09b2", "omitted", "old law", "previously", "was it ever"]),
+        "sections": sections,
+        "primary_section": sections[0] if sections else None,
+        "detected_act": detected_act,
+    }
+
+def _act_matches(chunk_act: str, detected: str) -> bool:
+    a, b = (chunk_act or "").lower(), (detected or "").lower()
+    return bool(a) and bool(b) and (a in b or b in a)
 
 async def retrieve_context(query_vec: list, intent: dict):
-    """
-    Multi-lane retrieval for statutory law and case law.
-    """
     db = cast(Client, supabase)
-    
-    # Acts Lane (Reduced to 4 to save tokens and stay within Groq TPM limits)
+
     acts_search = db.rpc("match_acts_v2", {
         "query_embedding": query_vec,
-        "match_count": 4,
-        "match_threshold": 0.4,
-        "query_section": intent['primary_section'],
-        "prefer_dead_law": intent['is_repealed_request']
+        "match_count": 8,                       # over-fetch; trimmed below
+        "match_threshold": 0.40,
+        "query_section": intent.get("primary_section"),
+        "prefer_dead_law": intent.get("is_repealed_request", False),
+        "prefer_amended": False,
+        "filter_act_name": intent.get("detected_act"),
     }).execute()
-    
-    # DLR Lane (Reduced to 2 to save tokens and stay within Groq TPM limits)
+    acts = acts_search.data or []
+
+    # Cross-act post-filter: if a specific act was named AND we found chunks
+    # from it, keep ONLY those. If none matched, leave as-is (validate_retrieval
+    # will refuse, which is correct). This avoids false refusals on misdetection.
+    detected = intent.get("detected_act")
+    if detected:
+        same = [a for a in acts if _act_matches(a.get("act_name", ""), detected)]
+        acts = (same or acts)[:6]
+    else:
+        acts = acts[:6]
+
     dlrs_search = db.rpc("match_dlrs_v2", {
         "query_embedding": query_vec,
-        "match_threshold": 0.4,
-        "match_count": 2
+        "match_count": 2,
+        "match_threshold": 0.40,
     }).execute()
-    
-    return acts_search.data or [], dlrs_search.data or []
 
+    return acts, dlrs_search.data or []
+
+def validate_retrieval(intent: dict, acts: list, dlrs: list):
+    """Returns (is_valid, status_code)."""
+    if not acts and not dlrs:
+        return False, "no_results"
+    if intent.get("detected_act") and acts:
+        if not any(_act_matches(a.get("act_name", ""), intent["detected_act"]) for a in acts):
+            return False, "wrong_act_retrieved"
+    if intent.get("primary_section") and acts:
+        secs = [str(a.get("section_number", "")).lower() for a in acts]
+        if str(intent["primary_section"]).lower() not in secs:
+            return True, "section_not_exact"   # soft: section may be inside related chunk
+    return True, "ok"
+
+def clean_act_name(raw: str) -> str:
+    cleaned = re.sub(r'\s*\([^)]*\)', '', raw or '').strip().rstrip('.,;:').strip()
+    return cleaned or (raw or 'Unknown Act')
 
 def format_retrieved_context(acts: list, dlrs: list):
-    """
-    Formats the context into a rigid, structured prompt block.
-    """
-    context_block = "=== STATUTORY LAW (ACTS) ===\n"
-    if not acts:
-        context_block += "No matching Acts found.\n"
-    for i, act in enumerate(acts):
-        status_suffix = f" [STATUS: {act['status']}]" if act['status'].lower() != 'active' else ""
-        context_block += f"[ACT-{i+1}] {act['act_name']} - Section {act['section_number']}: {act['section_title']}{status_suffix}\n"
-        context_block += f"Content: {act['content']}\n"
-        if act['repealed_clauses'] and act['repealed_clauses'] != []:
-            context_block += f"Note: The following clauses are Repealed: {act['repealed_clauses']}\n"
-        if act['amendment_notes'] and act['amendment_notes'] != []:
-            context_block += f"Amendments: {act['amendment_notes']}\n"
-        context_block += "---\n"
+    """Returns (context_block, sources_list)."""
+    if not acts and not dlrs:
+        return "NO_VERIFIED_SOURCES_FOUND", []
 
-    context_block += "\n=== CASE LAW (DLR) ===\n"
+    sources = []
+    block = "=== STATUTORY LAW (ACTS) ===\n"
+    if not acts:
+        block += "No matching Acts found for this query.\n"
+    for i, act in enumerate(acts):
+        sid = f"ACT-{i+1}"
+        name = clean_act_name(act.get('act_name', ''))
+        num, title = act.get('section_number', ''), act.get('section_title', '')
+        status = act.get('status') or 'Active'
+        sl = status.lower()
+        if sl == 'omitted':
+            tag = " ⚠️ [STATUS: OMITTED — NO LONGER EXISTS IN BANGLADESH LAW]"
+        elif sl == 'repealed':
+            tag = " ⚠️ [STATUS: REPEALED — NO LONGER IN FORCE]"
+        elif sl == 'amended':
+            tag = " [STATUS: AMENDED — current law; see amendment notes]"
+        elif sl == 'active':
+            tag = ""
+        else:
+            tag = f" [STATUS: {status.upper()}]"
+        block += f"[{sid}] {name} — Section {num}: {title}{tag}\n"
+        block += f"Content: {act.get('content','')}\n"
+        if act.get('repealed_clauses'):
+            block += f"Omission/Repeal Authority: {act['repealed_clauses']}\n"
+        if act.get('amendment_notes'):
+            block += f"Amendment Notes: {act['amendment_notes']}\n"
+        block += "---\n"
+        sources.append({"id": sid, "type": "statute", "act": name,
+                        "section": num, "title": title, "status": status})
+
+    block += "\n=== CASE LAW (DLR) ===\n"
     if not dlrs:
-        context_block += "No matching Case Law found.\n"
+        block += "No matching Case Law found for this query.\n"
     for i, dlr in enumerate(dlrs):
-        context_block += f"[DLR-{i+1}] Case: {dlr['case_title']} ({dlr['year']})\n"
-        context_block += f"Subject: {dlr['subject_law']}\n"
-        context_block += f"Ratio Decidendi: {dlr['ratio_decidendi']}\n"
-        # Reduced judgment preview from 1000 to 300 to prevent rate limits / token overflow
-        context_block += f"Reference Context: {dlr['judgment_content'][:300]}...\n"
-        context_block += "---\n"
-        
-    return context_block
+        sid = f"DLR-{i+1}"
+        title = dlr.get('case_title', 'Unknown Case')
+        year, court = dlr.get('year', ''), dlr.get('court_division', '')
+        cite = dlr.get('dlr_citation') or \
+            f"{dlr.get('dlr_volume','')} DLR ({dlr.get('dlr_series','AD')}) {year}".strip()
+        block += (f"[{sid}] Case: {title} ({year})\nCitation: {cite}\nCourt: {court}\n"
+                  f"Subject: {dlr.get('subject_law','')}\n"
+                  f"Ratio Decidendi: {dlr.get('ratio_decidendi','')}\n"
+                  f"Reference Context: {(dlr.get('judgment_content','') or '')[:300]}...\n---\n")
+        sources.append({"id": sid, "type": "case_law", "case": title,
+                        "court": court, "year": year, "citation": cite})
+
+    return block, sources
+
+def build_citation_footer(answer: str, sources: list) -> str:
+    if "REFERENCES" in answer or not sources:   # lawyer IRAC builds its own
+        return answer
+    used = {u.strip('[]') for u in re.findall(r'\[(?:ACT|DLR)-\d+\]', answer)}
+    cited = [s for s in sources if s['id'] in used] or sources
+    lines = ["\n\n---\n**Sources**"]
+    for s in cited:
+        if s['type'] == 'statute':
+            lines.append(f"- **[{s['id']}]** {s['act']}, Section {s['section']}: "
+                         f"{s['title']} *(Status: {s['status']})*")
+        else:
+            lines.append(f"- **[{s['id']}]** {s['case']} — {s.get('citation','')} "
+                         f"| {s.get('court','')} | {s.get('year','')}")
+    return answer + "\n".join(lines)
+
+def log_query(**row):
+    try:
+        row["query"] = (row.get("query") or "")[:500]
+        row["response_preview"] = (row.get("response_preview") or "")[:300]
+        cast(Client, supabase).table("pilot_query_log").insert(row).execute()
+    except Exception as e:
+        logger.warning(f"pilot log failed (non-critical): {e}")
+
+def get_system_prompt(role: str, context: str) -> str:
+    if context == "NO_VERIFIED_SOURCES_FOUND":
+        return ("You are Justor AI. The verified database returned no results. "
+                "Reply with EXACTLY: \"I don't have verified information on this "
+                "in my database yet. Please consult the Bangladesh Code at "
+                "bdlaws.minlaw.gov.bd or a licensed lawyer.\" Do not use training memory.")
+    if role == "Legal Professional": return prompt_lawyer(context)
+    if role == "Law Student":        return prompt_law_student(context)
+    return prompt_general_public(context)
+
+
+SMALL_MODELS = {"llama-3.1-8b-instant"}
+
+FALLBACK_PROMPT = """You are Justor AI, a Bangladesh legal information assistant.
+Answer ONLY from VERIFIED SOURCES below. Never use training memory.
+Tag every legal claim with its source: [ACT-1], [ACT-2], [DLR-1].
+Never write a tag that is not in the sources. Use section numbers exactly as
+they appear in the sources, never from the question.
+If VERIFIED SOURCES is empty: reply exactly "Not in my verified database.
+Please consult the Bangladesh Code or a licensed lawyer." and nothing else.
+Never cite Indian law. If a source is Omitted/Repealed, say it is not current law.
+
+VERIFIED SOURCES:
+{context}
+
+End with: "⚠️ Verify with a licensed Bangladeshi lawyer before acting."
+"""
+
+def _extract_context(messages: list) -> str:
+    sys = messages[0]["content"] if messages and messages[0]["role"] == "system" else ""
+    i = sys.find("VERIFIED SOURCES")
+    return sys[i:] if i != -1 else "No verified sources."
+
+def compress_for_small_model(messages: list) -> list:
+    ctx = _extract_context(messages)
+    return [{"role": "system", "content": FALLBACK_PROMPT.format(context=ctx)}] + messages[1:]
+
+# Provider strings match your code: "alibaba", "gemini", "groq".
+# Lawyer chain intentionally ends at the 70B — never route IRAC to the 8B.
+MODEL_CHAINS = {
+    "Legal Professional": [("alibaba","qwen-max"), ("gemini","gemini-2.5-flash"),
+                           ("groq","llama-3.3-70b-versatile")],
+    "Law Student":        [("alibaba","qwen-plus"), ("gemini","gemini-2.5-flash"),
+                           ("groq","llama-3.3-70b-versatile"), ("groq","llama-3.1-8b-instant")],
+    "General Public":     [("gemini","gemini-2.5-flash"), ("alibaba","qwen-plus"),
+                           ("groq","llama-3.3-70b-versatile"), ("groq","llama-3.1-8b-instant")],
+}
+
+def call_llm_with_fallbacks(models: list, messages) -> tuple:
+    """Returns (text, 'provider/model'). Compresses the prompt for small models."""
+    for provider, model in models:
+        try:
+            payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
+            if provider == "alibaba" and dashscope_client:
+                c = dashscope_client.chat.completions.create(
+                    model=model, messages=payload, temperature=0.1, max_tokens=2000)
+                return c.choices[0].message.content, f"{provider}/{model}"
+            elif provider == "gemini" and GEMINI_API_KEY:
+                return _call_gemini_native(payload, temperature=0.1), f"{provider}/{model}"
+            elif provider == "groq" and groq_client:
+                c = groq_client.chat.completions.create(
+                    model=model, messages=payload, temperature=0.1, max_tokens=2000)
+                return c.choices[0].message.content, f"{provider}/{model}"
+            elif provider == "openrouter" and openrouter_client:
+                c = openrouter_client.chat.completions.create(
+                    model=model, messages=payload, temperature=0.1, max_tokens=2000)
+                return c.choices[0].message.content, f"{provider}/{model}"
+        except Exception as e:
+            logger.warning(f"[LLM] {provider}/{model} failed: {e}")
+            continue
+    raise HTTPException(status_code=503, detail="AI service busy. Please try again in a moment.")
 
 
 def extract_pdf_text(file_obj) -> str:
@@ -810,118 +981,58 @@ async def upload_status(job_id: str):
 async def chat(request: ChatRequest):
     """
     User question → embed → retrieve context from Supabase →
-    build prompt → generate answer with Llama 3.1 8B Instant via Groq.
+    build prompt → generate answer with LLM routing chains and fallbacks.
     """
-    if supabase is None or openrouter_client is None:
-        raise HTTPException(503, "One or more backend services are not ready.")
-
-    db = cast(Client, supabase)
+    if supabase is None:
+        raise HTTPException(503, "Supabase database client is not ready.")
 
     try:
-        # 1. Classify Query Intent
         intent = classify_query(request.message)
-        
-        # 2. Embed the user question
         query_vec = _embed(request.message)
-
-        # 3. Multi-lane Retrieval
         acts, dlrs = await retrieve_context(query_vec, intent)
-        
-        # Programmatic zero-hallucination refusal:
-        # If the database has no matching information, bypass the LLM and refuse immediately.
-        # This completely prevents smaller fallback models (like Llama 8B) from hallucinating from training memory.
-        if not acts and not dlrs:
-            if request.role == "Legal Professional":
-                refusal_text = "VERIFIED SOURCES returned no results for this query. This analysis cannot proceed without verified Bangladeshi legal authority. Please consult the official Bangladesh Code and relevant DLR volumes."
-            elif request.role == "Law Student":
-                refusal_text = "I don't have verified database entries on this topic yet. Please check the Bangladesh Code directly."
-            else: # General Public
-                refusal_text = "I don't have verified information on this topic yet. Please consult the Bangladesh Code or a licensed lawyer."
-                
+        ok, status = validate_retrieval(intent, acts, dlrs)
+
+        if not ok:
+            msg = {
+                "no_results": ("I don't have verified information on this specific topic "
+                               "in my database yet. Please consult the Bangladesh Code at "
+                               "bdlaws.minlaw.gov.bd or call Legal Aid at 16430."),
+                "wrong_act_retrieved": ("I could not locate the specific Act you asked about "
+                               "in my verified database. Please consult the Bangladesh Code "
+                               "or a licensed lawyer for this question."),
+            }.get(status, "Not found in verified database.")
+            log_query(user_id=request.user_id, persona=request.role, query=request.message,
+                      act_detected=intent.get("detected_act"),
+                      section_detected=intent.get("primary_section"),
+                      sources_found=0, retrieval_status=status,
+                      model_used="none-refused", response_preview=msg)
             return JSONResponse(content={
-                "response": refusal_text,
-                "sources_used": 0,
-                "user_id": request.user_id,
-                "metadata": {
-                    "sections_found": intent['sections'],
-                    "is_dlr": intent['is_dlr_request']
-                }
-            })
-        
-        # 4. Format Structured Context
-        context_text = format_retrieved_context(acts, dlrs)
+                "response": msg, "sources_used": 0, "sources": [], "retrieval_status": status,
+                "metadata": {"detected_act": intent.get("detected_act"),
+                             "sections_found": intent["sections"]}})
 
-        # 5. Build System Prompt (Zero Hallucination)
-        system_prompt = get_system_prompt(request.role, context_text)
+        context, sources = format_retrieved_context(acts, dlrs)
+        messages = [{"role": "system", "content": get_system_prompt(request.role, context)}]
+        messages += [{"role": m.role, "content": m.content} for m in (request.history or [])[-6:]]
+        messages.append({"role": "user", "content": request.message})
 
-        # 6. Build message payload for Groq
-        messages_payload = [{"role": "system", "content": system_prompt}]
-        
-        # Inject recent chat history if provided
-        if request.history:
-            history_list = cast(List[ChatMessage], request.history)
-            for msg in history_list:
-                messages_payload.append({"role": msg.role, "content": msg.content})
-                
-        # Append the new user question
-        messages_payload.append({"role": "user", "content": request.message})
+        models = MODEL_CHAINS.get(request.role, MODEL_CHAINS["General Public"])
+        answer, model_used = call_llm_with_fallbacks(models, messages)
+        final = answer if request.role == "Legal Professional" else build_citation_footer(answer, sources)
 
-        # 7. Multi-Model Routing & Fallbacks
-        def call_llm_with_fallbacks(models: List[tuple], messages) -> str:
-            for provider, model in models:
-                try:
-                    if provider == "alibaba" and dashscope_client:
-                        completion = dashscope_client.chat.completions.create(
-                            model=model, messages=messages, temperature=0.1, max_tokens=2000
-                        )
-                        return completion.choices[0].message.content
-                    elif provider == "gemini" and GEMINI_API_KEY:
-                        return _call_gemini_native(messages, temperature=0.1)
-                    elif provider == "groq" and groq_client:
-                        completion = groq_client.chat.completions.create(
-                            model=model, messages=messages, temperature=0.1, max_tokens=2000
-                        )
-                        return completion.choices[0].message.content
-                    elif provider == "openrouter" and openrouter_client:
-                        completion = openrouter_client.chat.completions.create(
-                            model=model, messages=messages, temperature=0.1, max_tokens=2000
-                        )
-                        return completion.choices[0].message.content
-                except Exception as e:
-                    logger.warning(f"Fallback failed for {provider}/{model}: {e}")
-                    continue
-            raise Exception("All LLM fallbacks failed.")
-
-        if request.role == "Legal Professional":
-            models = [
-                ("alibaba", "qwen-max"),
-                ("gemini", "gemini-2.5-flash"),
-                ("groq", "llama-3.3-70b-versatile")
-            ]
-        elif request.role == "Law Student":
-            models = [
-                ("alibaba", "qwen-plus"),
-                ("gemini", "gemini-2.5-flash"),
-                ("groq", "llama-3.3-70b-versatile")
-            ]
-        else: # General Public
-            models = [
-                ("gemini", "gemini-2.5-flash"),
-                ("alibaba", "qwen-plus"),
-                ("groq", "llama-3.1-8b-instant")
-            ]
-
-        answer = call_llm_with_fallbacks(models, messages_payload)
+        log_query(user_id=request.user_id, persona=request.role, query=request.message,
+                  act_detected=intent.get("detected_act"),
+                  section_detected=intent.get("primary_section"),
+                  sources_found=len(acts) + len(dlrs), retrieval_status=status,
+                  model_used=model_used, response_preview=final)
 
         return JSONResponse(content={
-            "response": answer,
-            "sources_used": len(acts) + len(dlrs),
-            "user_id": request.user_id,
-            "metadata": {
-                "sections_found": intent['sections'],
-                "is_dlr": intent['is_dlr_request']
-            }
-        })
+            "response": final, "sources_used": len(acts) + len(dlrs), "sources": sources,
+            "retrieval_status": status, "model_used": model_used,
+            "metadata": {"detected_act": intent.get("detected_act"),
+                         "sections_found": intent["sections"],
+                         "section_detected": intent.get("primary_section"),
+                         "is_dlr": intent["is_dlr_request"]}})
 
     except HTTPException:
         raise

@@ -36,7 +36,7 @@ export async function renderAppPage(container: HTMLElement) {
 
     const enhancedSearch = new EnhancedSearchService();
 
-    let appState: AppState;
+    let appState: AppState = { chats: [], activeChatId: null };
     const session = auth.getSession();
     let isGuestMode = session === null;
 
@@ -47,6 +47,28 @@ export async function renderAppPage(container: HTMLElement) {
     const synthesis = window.speechSynthesis;
     let isListening = false;
     let activeSpeakButton: HTMLButtonElement | null = null;
+
+    let currentGlowChatId: string | null = 'none';
+
+    function generateDynamicGlowColor() {
+        const palettes = [
+            { min: 190, max: 220, s: 70, l: 82 }, // Light blue
+            { min: 250, max: 280, s: 65, l: 83 }, // Soft purple
+            { min: 130, max: 160, s: 50, l: 80 }, // Muted emerald
+            { min: 18, max: 40,   s: 75, l: 83 }, // Warm peach/coral
+            { min: 325, max: 345, s: 65, l: 82 }  // Elegant rose
+        ];
+        
+        const palette = palettes[Math.floor(Math.random() * palettes.length)];
+        const h = Math.floor(Math.random() * (palette.max - palette.min + 1)) + palette.min;
+        const s = palette.s;
+        const l = palette.l;
+        
+        const root = document.documentElement;
+        root.style.setProperty('--dynamic-glow-h', `${h}`);
+        root.style.setProperty('--dynamic-glow-s', `${s}%`);
+        root.style.setProperty('--dynamic-glow-l', `${l}%`);
+    }
 
     function getOrCreateGuestUserId(): string {
         let guestId = localStorage.getItem(GUEST_USER_ID_KEY);
@@ -63,12 +85,35 @@ export async function renderAppPage(container: HTMLElement) {
       <div class="app-layout">
           <aside class="sidebar">
               <div class="sidebar-top">
+                <div class="sidebar-brand-wrapper">
+                    <img src="/justor_ai_logo.jpg" alt="Justor AI" class="sidebar-logo">
+                    <span class="sidebar-brand-title">Justor AI</span>
+                </div>
+                
                 <button class="new-chat-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    ${i18n.t('app_newChat')}
+                    <span>${i18n.t('app_newChat')}</span>
                 </button>
-                <div class="sidebar-role-selector">
-                    <label for="role-selector">${i18n.t('app_iAmA')}</label>
+                
+                <div class="sidebar-search-box">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="chat-search-input" placeholder="Search chats..." autocomplete="off" spellcheck="false">
+                </div>
+
+                <div class="sidebar-nav-menu">
+                    <a href="#" class="sidebar-menu-item active" id="sidebar-menu-chat">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Chat Workspace</span>
+                    </a>
+                    <a href="#" class="sidebar-menu-item" id="sidebar-menu-case-study" title="Case Study Analysis feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                        <span>Case Study Analysis</span>
+                        <span class="badge-new">New</span>
+                    </a>
+                </div>
+
+                <!-- Hidden select element to maintain absolute compatibility with core JS events -->
+                <div class="sidebar-role-selector" style="display: none;">
                     <select id="role-selector">
                         <option value="General Public" selected>${i18n.t('app_role_general')}</option>
                         <option value="Law Student">${i18n.t('app_role_student')}</option>
@@ -76,56 +121,76 @@ export async function renderAppPage(container: HTMLElement) {
                     </select>
                 </div>
               </div>
-              <div class="conversation-list"><h2>${i18n.t('app_history')}</h2></div>
+              <div class="conversation-list"></div>
               <div class="sidebar-footer">
                   <div id="dark-mode-toggle">
                        <svg class="icon" id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
                        <span id="theme-text">${document.body.classList.contains('dark-mode') ? i18n.t('app_lightMode') : i18n.t('app_darkMode')}</span>
                   </div>
                   <div id="sidebar-lang-switcher" class="language-switcher-sidebar">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                      <span class="lang-en ${i18n.getLanguage() === 'en' ? 'lang-active' : ''}">EN</span>
-                      <span>/</span>
-                      <span class="lang-bn ${i18n.getLanguage() === 'bn' ? 'lang-active' : ''}">বাং</span>
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                       <span class="lang-en ${i18n.getLanguage() === 'en' ? 'lang-active' : ''}">EN</span>
+                       <span>/</span>
+                       <span class="lang-bn ${i18n.getLanguage() === 'bn' ? 'lang-active' : ''}">বাং</span>
                   </div>
                   <div id="user-profile-link" class="user-profile-link"></div>
               </div>
           </aside>
           <main class="main-content">
                <div class="chat-header-bar">
-                   <div id="role-chip" class="role-chip">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                       <span id="role-chip-label">General Public</span>
-                       <svg class="role-chip-caret" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                   <div class="chat-header-left">
+                       <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle-btn" title="Toggle Sidebar">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                       </button>
+                       <div id="role-chip" class="role-chip">
+                           <span id="role-chip-brand">Justor AI</span>
+                           <span class="role-chip-divider">·</span>
+                           <span id="role-chip-label">General Public</span>
+                           <svg class="role-chip-caret" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                       </div>
+                       <div id="role-dropdown" class="role-dropdown" hidden>
+                           <div class="role-option" data-role="General Public">
+                               <span class="role-option-name">General Public</span>
+                               <span class="role-option-desc">Plain language, practical advice</span>
+                           </div>
+                           <div class="role-option" data-role="Law Student">
+                               <span class="role-option-name">Law Student</span>
+                               <span class="role-option-desc">Case law, theory & academic context</span>
+                           </div>
+                           <div class="role-option" data-role="Legal Professional">
+                               <span class="role-option-name">Legal Professional</span>
+                               <span class="role-option-desc">Precise statutory & procedural guidance</span>
+                           </div>
+                       </div>
                    </div>
-                   <div id="role-dropdown" class="role-dropdown" hidden>
-                       <div class="role-option" data-role="General Public">
-                           <span class="role-option-name">General Public</span>
-                           <span class="role-option-desc">Plain language, practical advice</span>
-                       </div>
-                       <div class="role-option" data-role="Law Student">
-                           <span class="role-option-name">Law Student</span>
-                           <span class="role-option-desc">Case law, theory & academic context</span>
-                       </div>
-                       <div class="role-option" data-role="Legal Professional">
-                           <span class="role-option-name">Legal Professional</span>
-                           <span class="role-option-desc">Precise statutory & procedural guidance</span>
-                       </div>
+                   <div class="chat-header-right">
+                       <button class="upgrade-btn" title="Upgrade to Pro version">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="upgrade-icon"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                           <span>Upgrade</span>
+                       </button>
                    </div>
                </div>
               <div id="chat-window"></div>
               <div class="message-form-container">
-                  <form id="message-form">
-                      <button type="button" id="upload-doc-btn" class="upload-btn" title="Document upload feature">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-                      </button>
-                      <button type="button" id="mic-button" class="mic-btn" title="Ask with voice">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
-                      </button>
-                      <textarea id="message-input" placeholder="${i18n.t('app_askAnything')}" rows="1" autocomplete="off" required></textarea>
-                      <button type="submit" id="send-button">
-                          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                      </button>
+                  <form id="message-form" class="gemini-pill-input empty">
+                      <div class="pill-left-area">
+                          <button type="button" id="upload-doc-btn" class="upload-btn" title="Upload Document Attachment">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                          </button>
+                      </div>
+                      <textarea id="message-input" placeholder="Ask Justor AI..." rows="1" autocomplete="off" required></textarea>
+                      <div class="pill-right-area">
+                          <div id="inline-role-dropdown-btn" class="inline-role-btn" title="Select Chat Model / Role">
+                              <span id="inline-role-label">General Public</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="caret"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                          </div>
+                          <button type="button" id="mic-button" class="mic-btn" title="Ask with voice">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
+                          </button>
+                          <button type="submit" id="send-button" title="Send Question">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                          </button>
+                      </div>
                   </form>
               </div>
           </main>
@@ -230,27 +295,37 @@ export async function renderAppPage(container: HTMLElement) {
 
     function renderSidebar() {
         if (!conversationList) return;
-        conversationList.innerHTML = ''; // removed the h2 app_history
+        conversationList.innerHTML = ''; 
 
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
+        const lastWeek = new Date(today);
+        lastWeek.setDate(lastWeek.getDate() - 7);
 
         const groups = {
-            today: [] as Chat[],
+            recent: [] as Chat[],
             yesterday: [] as Chat[],
             previous: [] as Chat[]
         };
 
-        (appState.chats || []).forEach(chat => {
+        const searchInput = document.getElementById('chat-search-input') as HTMLInputElement;
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        let filteredChats = appState.chats || [];
+        if (query) {
+            filteredChats = filteredChats.filter(chat => chat.title.toLowerCase().includes(query));
+        }
+
+        filteredChats.forEach(chat => {
             if (!chat.createdAt) {
                 groups.previous.push(chat);
                 return;
             }
             const chatDate = new Date(chat.createdAt);
             if (chatDate >= today) {
-                groups.today.push(chat);
+                groups.recent.push(chat);
             } else if (chatDate >= yesterday) {
                 groups.yesterday.push(chat);
             } else {
@@ -273,7 +348,10 @@ export async function renderAppPage(container: HTMLElement) {
 
                 const titleArea = document.createElement('div');
                 titleArea.className = 'conversation-title-area';
-                titleArea.innerHTML = `<span class="bullet">•</span><span class="chat-title-text">${chat.title}</span>`;
+                titleArea.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-chat-icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span class="chat-title-text">${chat.title}</span>
+                `;
                 titleArea.addEventListener('click', () => setActiveChat(chat.id));
                 convoItem.appendChild(titleArea);
 
@@ -295,22 +373,28 @@ export async function renderAppPage(container: HTMLElement) {
             });
         }
 
-        renderGroup('TODAY', groups.today);
-        renderGroup('YESTERDAY', groups.yesterday);
-        renderGroup('PREVIOUS', groups.previous);
+        renderGroup('Recent', groups.recent);
+        renderGroup('Yesterday', groups.yesterday);
+        renderGroup('Last Week', groups.previous);
     }
 
     function renderChatWindow() {
         if (!chatWindow) return;
         const activeChat = getActiveChat();
-        const showWelcomeScreen = !activeChat || (activeChat.messages.length === 1 && activeChat.messages[0].sender === 'ai');
+        const showWelcomeScreen = !activeChat || activeChat.messages.length === 0 || (activeChat.messages.length === 1 && activeChat.messages[0].sender === 'ai');
         if (showWelcomeScreen) {
+            const activeChatId = activeChat ? activeChat.id : 'new-guest';
+            if (currentGlowChatId !== activeChatId) {
+                generateDynamicGlowColor();
+                currentGlowChatId = activeChatId;
+            }
+
             const suggestedQueriesHTML = SUGGESTED_QUERIES.map(key => `<div class="suggested-query-item">${i18n.t(key as any)}</div>`).join('');
             chatWindow.innerHTML = `
                 <div class="empty-chat-container">
                     <div class="welcome-hero">
-                        <div class="welcome-icon-ring">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.153.34c-1.325 0-2.59-.523-3.536-1.465l-2.62-2.62m5.156 0l-2.62 2.62m-5.156 0l-2.62-2.62m6.75-10.726C12 4.5 11.25 4.5 10.5 4.5c-1.01 0-2.01.143-3 .52m3-.52l-2.62 10.726" /></svg>
+                        <div class="welcome-logo-wrapper">
+                            <img src="/justor_ai_logo.jpg" alt="Justor AI Logo" class="welcome-logo-img">
                         </div>
                         <p class="welcome-tagline">LEGAL INTELLIGENCE &middot; BANGLADESH</p>
                         <h2 class="welcome-heading">How may I <em>counsel you</em> today?</h2>
@@ -344,7 +428,7 @@ export async function renderAppPage(container: HTMLElement) {
             avatar.textContent = user?.email?.charAt(0).toUpperCase() || 'G';
         } else {
             avatar.classList.add('ai-avatar');
-            avatar.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.153.34c-1.325 0-2.59-.523-3.536-1.465l-2.62-2.62m5.156 0l-2.62 2.62m-5.156 0l-2.62-2.62m6.75-10.726C12 4.5 11.25 4.5 10.5 4.5c-1.01 0-2.01.143-3 .52m3-.52l-2.62 10.726" /></svg>`;
+            avatar.innerHTML = `<img src="/justor_ai_logo.jpg" alt="Justor AI" class="ai-avatar-img">`;
         }
         const messageContent = document.createElement('div');
         messageContent.className = 'message-content';
@@ -559,28 +643,65 @@ export async function renderAppPage(container: HTMLElement) {
 
     async function loadState() {
         if (isGuestMode) {
-            const savedState = localStorage.getItem(GUEST_STORAGE_KEY);
-            appState = savedState ? JSON.parse(savedState) : { chats: [], activeChatId: null };
-            // Ensure guest chats have a createdAt since they might have been created before this feature
-            appState.chats.forEach(chat => { if (!chat.createdAt) chat.createdAt = new Date().toISOString(); });
-        } else {
-            const { data, error } = await supabase
-                .from('chats')
-                .select('id, title, has_document, created_at')
-                .order('created_at', { ascending: false });
+            try {
+                const savedState = localStorage.getItem(GUEST_STORAGE_KEY);
+                if (savedState) {
+                    const parsed = JSON.parse(savedState);
+                    if (Array.isArray(parsed)) {
+                        // Legacy format: guest chats was stored directly as an array of Chat objects
+                        appState = { chats: parsed, activeChatId: parsed.length > 0 ? parsed[0].id : null };
+                    } else if (parsed && Array.isArray(parsed.chats)) {
+                        appState = parsed;
+                    } else {
+                        appState = { chats: [], activeChatId: null };
+                    }
+                } else {
+                    appState = { chats: [], activeChatId: null };
+                }
 
-            if (error) {
-                console.error("Error fetching chats:", error);
+                // Ensure all chats in the array are valid objects and have correct fields
+                if (appState && Array.isArray(appState.chats)) {
+                    appState.chats = appState.chats.filter(c => c && typeof c === 'object');
+                    appState.chats.forEach(chat => {
+                        if (!chat.createdAt) chat.createdAt = new Date().toISOString();
+                        if (!chat.messages) chat.messages = [];
+                    });
+                } else {
+                    appState = { chats: [], activeChatId: null };
+                }
+            } catch (err) {
+                console.error("Error loading guest state from localStorage:", err);
                 appState = { chats: [], activeChatId: null };
-                return;
             }
+        } else {
+            try {
+                const { data, error } = await supabase
+                    .from('chats')
+                    .select('id, title, has_document, created_at')
+                    .order('created_at', { ascending: false });
 
-            appState = { chats: data.map((c: any) => ({ ...c, createdAt: c.created_at, messages: [] })), activeChatId: null };
+                if (error) {
+                    console.error("Error fetching chats:", error);
+                    appState = { chats: [], activeChatId: null };
+                    return;
+                }
+
+                appState = { chats: data.map((c: any) => ({ ...c, createdAt: c.created_at, messages: [] })), activeChatId: null };
+            } catch (err) {
+                console.error("Error loading user state from DB:", err);
+                appState = { chats: [], activeChatId: null };
+            }
         }
     }
 
     async function createNewChat() {
         const initialMessage = { sender: 'ai' as Sender, content: i18n.t('app_initialGreeting') };
+        if (!appState) {
+            appState = { chats: [], activeChatId: null };
+        }
+        if (!Array.isArray(appState.chats)) {
+            appState.chats = [];
+        }
         if (isGuestMode) {
             const newChat: Chat = { id: `guest_${Date.now()}`, title: i18n.t('app_newChat'), messages: [initialMessage], createdAt: new Date().toISOString() };
             appState.chats.unshift(newChat);
@@ -692,6 +813,10 @@ export async function renderAppPage(container: HTMLElement) {
         await addMessageToActiveChat({ sender: 'user', content: userInput });
         messageInput.value = '';
         adjustInputHeight();
+        if (messageForm) {
+            messageForm.classList.add('empty');
+            messageForm.classList.remove('active');
+        }
 
         // Create a new, empty AI message bubble that we will stream into.
         const aiMessageWrapper = displayMessage("", 'ai');
@@ -903,7 +1028,12 @@ export async function renderAppPage(container: HTMLElement) {
             }
         });
         messageForm.addEventListener('submit', (e) => { e.preventDefault(); handleFormSubmit(); });
-        messageInput.addEventListener('input', adjustInputHeight);
+        messageInput.addEventListener('input', () => {
+            adjustInputHeight();
+            const hasText = messageInput.value.trim().length > 0;
+            messageForm.classList.toggle('empty', !hasText);
+            messageForm.classList.toggle('active', hasText);
+        });
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -927,6 +1057,23 @@ export async function renderAppPage(container: HTMLElement) {
         });
         newChatBtn.addEventListener('click', createNewChat);
 
+        const chatSearchInput = document.getElementById('chat-search-input') as HTMLInputElement;
+        chatSearchInput?.addEventListener('input', () => {
+            renderSidebar();
+        });
+
+        const mobileSidebarBtn = document.getElementById('mobile-sidebar-toggle-btn');
+        mobileSidebarBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleSidebar();
+        });
+
+        const caseStudyMenu = document.getElementById('sidebar-menu-case-study');
+        caseStudyMenu?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("Case Study Analysis: Law professionals will be able to analyze their custom law cases here soon. This feature is currently under active development!");
+        });
+
         // ── Role chip dropdown ──
         const roleChip = document.getElementById('role-chip') as HTMLDivElement;
         const roleDropdown = document.getElementById('role-dropdown') as HTMLDivElement;
@@ -935,6 +1082,8 @@ export async function renderAppPage(container: HTMLElement) {
 
         function setRole(role: string) {
             roleChipLabel.textContent = role;
+            const inlineLabel = document.getElementById('inline-role-label');
+            if (inlineLabel) inlineLabel.textContent = role;
             if (roleSelectEl) roleSelectEl.value = role;
             roleDropdown.hidden = true;
             roleDropdown.querySelectorAll('.role-option').forEach(opt => {
@@ -945,6 +1094,25 @@ export async function renderAppPage(container: HTMLElement) {
         roleChip?.addEventListener('click', (e) => {
             e.stopPropagation();
             roleDropdown.hidden = !roleDropdown.hidden;
+            if (!roleDropdown.hidden) {
+                roleDropdown.style.position = 'absolute';
+                roleDropdown.style.top = 'calc(100% + 4px)';
+                roleDropdown.style.left = '50%';
+                roleDropdown.style.transform = 'translateX(-50%)';
+            }
+        });
+
+        const inlineRoleBtn = document.getElementById('inline-role-dropdown-btn');
+        inlineRoleBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            roleDropdown.hidden = !roleDropdown.hidden;
+            if (!roleDropdown.hidden) {
+                const rect = inlineRoleBtn.getBoundingClientRect();
+                roleDropdown.style.position = 'fixed';
+                roleDropdown.style.top = `${rect.top - roleDropdown.offsetHeight - 8}px`;
+                roleDropdown.style.left = `${rect.left + rect.width / 2 - roleDropdown.offsetWidth / 2}px`;
+                roleDropdown.style.transform = 'none';
+            }
         });
 
         roleDropdown?.addEventListener('click', (e) => {
@@ -965,10 +1133,13 @@ export async function renderAppPage(container: HTMLElement) {
         });
         renderGuestNotice();
         await loadState();
+        const initialActiveId = appState.activeChatId;
+        appState.activeChatId = null; // Force setActiveChat to perform full rendering cycle
         if (appState.chats.length === 0) {
             await createNewChat();
         } else {
-            await setActiveChat(appState.chats[0].id);
+            const targetId = appState.chats.some(c => c.id === initialActiveId) ? initialActiveId : appState.chats[0].id;
+            await setActiveChat(targetId);
         }
         renderUserProfileLink();
         setupSpeechRecognition();
