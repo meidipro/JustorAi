@@ -9852,3 +9852,57 @@ body.app-route .navbar {
     width: auto;
     object-fit: contain;
 }
+
+/* ======================================================= */
+/* === PURE WHITE WELCOME SCREEN BACKGROUND (LIGHT MODE) === */
+/* ======================================================= */
+body:not(.dark-mode) .app-layout,
+body:not(.dark-mode) .chat-main,
+body:not(.dark-mode) #chat-window,
+body:not(.dark-mode) .empty-chat-container {
+    background: #ffffff !important;
+}
+
+/* Remove colored glowing halo / blob behind welcome hero in light mode */
+body:not(.dark-mode) .welcome-hero::before {
+    display: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+body:not(.dark-mode) .welcome-hero {
+    background: #ffffff !important;
+    box-shadow: none !important;
+}
+
+/* Ensure crisp typography on pure white background */
+body:not(.dark-mode) .welcome-heading {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+}
+
+body:not(.dark-mode) .welcome-heading em {
+    color: #2563eb !important;
+    -webkit-text-fill-color: #2563eb !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+}
+
+body:not(.dark-mode) .welcome-subtitle {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+}
+
+/* Clean, crisp off-white suggested query prompt cards on white */
+body:not(.dark-mode) .suggested-query-item {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #1e293b !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+}
+
+body:not(.dark-mode) .suggested-query-item:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
