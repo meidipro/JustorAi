@@ -8941,11 +8941,13 @@ body {
         background: var(--chat-sidebar-bg) !important;
     }
 
-    .sidebar.active {
+    .sidebar.active,
+    .sidebar.is-open {
         transform: translateX(0) !important;
     }
 
-    #overlay.active {
+    #overlay.active,
+    #overlay.is-open {
         display: block !important;
         position: fixed;
         inset: 0;
@@ -9835,7 +9837,8 @@ body.app-route .navbar {
         top: 60px !important;
     }
 
-    body.app-route #overlay.active {
+    body.app-route #overlay.active,
+    body.app-route #overlay.is-open {
         top: 60px !important;
     }
 }

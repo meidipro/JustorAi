@@ -216,15 +216,30 @@ export async function renderAppPage(container: HTMLElement) {
     const micButton = document.getElementById('mic-button') as HTMLButtonElement;
     const sidebarLangSwitcher = document.getElementById('sidebar-lang-switcher');
 
-    // MOBILE SIDEBAR TOGGLE
-    document.addEventListener('toggle-sidebar', () => {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    });
+    // PROFESSIONAL UNIFIED MOBILE SIDEBAR MANAGER
+    function closeMobileSidebar() {
+        sidebar.classList.remove('active', 'is-open');
+        overlay.classList.remove('active', 'is-open');
+    }
 
-    overlay.addEventListener('click', () => {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
+    function openMobileSidebar() {
+        sidebar.classList.add('active', 'is-open');
+        overlay.classList.add('active', 'is-open');
+    }
+
+    function toggleMobileSidebar() {
+        const isOpen = sidebar.classList.contains('active') || sidebar.classList.contains('is-open');
+        if (isOpen) {
+            closeMobileSidebar();
+        } else {
+            openMobileSidebar();
+        }
+    }
+
+    document.addEventListener('toggle-sidebar', toggleMobileSidebar);
+    overlay.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeMobileSidebar();
     });
 
     function setButtonSpeakingState(button: HTMLButtonElement, isSpeaking: boolean) {
@@ -636,7 +651,7 @@ export async function renderAppPage(container: HTMLElement) {
         }
         renderSidebar();
         renderChatWindow();
-        if (window.innerWidth <= 900) { sidebar.classList.remove('is-open'); overlay.classList.remove('is-open'); }
+        if (window.innerWidth <= 900) { closeMobileSidebar(); }
     }
 
     // --- FINAL, CORRECTED loadState FUNCTION ---
@@ -1015,16 +1030,13 @@ export async function renderAppPage(container: HTMLElement) {
                 }
             });
         }
-        function toggleSidebar() {
-            sidebar.classList.toggle('is-open');
-            overlay.classList.toggle('is-open');
-        }
-        document.addEventListener('toggle-sidebar', toggleSidebar);
-        document.addEventListener('navbar-new-chat', () => createNewChat());
-        overlay.addEventListener('click', toggleSidebar);
+        document.addEventListener('navbar-new-chat', () => {
+            if (window.innerWidth <= 900) closeMobileSidebar();
+            createNewChat();
+        });
         conversationList.addEventListener('click', (e) => {
             if (window.innerWidth <= 900 && (e.target as HTMLElement).closest('.conversation-item')) {
-                toggleSidebar();
+                closeMobileSidebar();
             }
         });
         messageForm.addEventListener('submit', (e) => { e.preventDefault(); handleFormSubmit(); });
@@ -1055,7 +1067,11 @@ export async function renderAppPage(container: HTMLElement) {
                 handleFormSubmit();
             }
         });
-        newChatBtn.addEventListener('click', createNewChat);
+        newChatBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (window.innerWidth <= 900) closeMobileSidebar();
+            createNewChat();
+        });
 
         const chatSearchInput = document.getElementById('chat-search-input') as HTMLInputElement;
         chatSearchInput?.addEventListener('input', () => {
@@ -1065,7 +1081,7 @@ export async function renderAppPage(container: HTMLElement) {
         const mobileSidebarBtn = document.getElementById('mobile-sidebar-toggle-btn');
         mobileSidebarBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
-            toggleSidebar();
+            toggleMobileSidebar();
         });
 
         const caseStudyMenu = document.getElementById('sidebar-menu-case-study');
