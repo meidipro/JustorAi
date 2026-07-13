@@ -1,0 +1,199 @@
+id,category,question,gold_answer,system_answer,expected_act,expected_section,fabricated_citation,fabricated_tags,unverifiable_dlr_citation,citations_found,claimed_sections,expected_section_mentioned,claimed_section_not_in_db,act_mismatch,other_acts_mentioned,jurisdiction_leakage,leaked_terms,human_correctness,human_faithfulness,judge_agrees_with_human,notes,error
+Q01,Criminal Procedure,Does a police officer in Bangladesh need a warrant to arrest someone for 'Anticipatory Bail' under Section 438 of the CrPC?,"Section 438 CrPC does not exist in Bangladesh; it was omitted by the 2009 amendment. Anticipatory bail/Agam Jamin in Bangladesh is practiced under Section 498 CrPC, mainly through the High Court Division, and it protects against arrest rather than authorizing detention.","This is not in my verified database. I cannot confirm this. Please consult the Bangladesh Code directly or a licensed lawyer.
+
+---
+**Sources**
+- **[ACT-1]** The Penal Code, 1860, Section 357: Whoever assaults or uses criminal force to any person, in attempting wrongfully to confine — Section 357, Penal Code, assaults, uses, criminal, force, attempting *(Status: Active)*
+- **[ACT-2]** The Penal Code, 1860, Section 121: Collecting arms, etc., with intention of waging war against Bangladesh — Section 121, Penal Code, Collecting, arms, intention, waging, against *(Status: Active)*
+- **[ACT-3]** The Penal Code, 1860, Section 212: Whenever an offence has been committed, whoever harbours or conceals a person whom he know — Section 212, Penal Code, Whenever, committed, harbours, conceals, whom *(Status: Active)*
+- **[ACT-4]** The Penal Code, 1860, Section 238: Whoever imports into Bangladesh, or exports therefrom, any counterfeit coin which he knows — Section 238, Penal Code, imports, exports, therefrom, counterfeit, coin *(Status: Active)*
+- **[ACT-5]** The Penal Code, 1860, Section 108A: Abetment in Bangladesh, of offences outside it Abettor — Section 108A, Penal Code, Abetment, offences, Abettor, abets, meaning *(Status: Active)*
+- **[ACT-6]** The Penal Code, 1860, Section 427: Whoever commits mischief and thereby causes loss or damage to the amount of fifty taka or — Section 427, Penal Code, commits, mischief, thereby, causes, loss *(Status: Active)*","Code of Criminal Procedure, 1898",498,False,[],NOT_AVAILABLE,[],"['357', '357', '121', '121', '212', '212', '238', '238', '108A', '108A', '427', '427']",False,NOT_AVAILABLE,True,['Penal Code'],False,[],,,,,
+Q02,Limitation Act,What is the limitation period for a suit for 'Specific Performance of Contract' in Bangladesh? Please cite the specific Article of the Limitation Act,"For specific performance in Bangladesh, the limitation period is 1 year under Article 113 of the First Schedule to the Limitation Act, 1908. Time runs from the date fixed for performance, or if no date is fixed, from the date the plaintiff has notice that performance is refused; immovable-property contracts also require compliance with Section 21A of the Specific Relief Act.",I could not locate the specific Act you asked about in my verified database. Please consult the Bangladesh Code or a licensed lawyer for this question.,"Limitation Act, 1908",Article 113,NOT_AVAILABLE,[],NOT_AVAILABLE,[],[],False,NOT_AVAILABLE,False,[],False,[],,,,,
+Q03,Family Law,A man dies in 2025. He has a living son and a grandson (the son of another son who died in 2020). Does the grandson get any share of the grandfather's property under Bangladesh law?,"Yes. Under Section 4 of the Muslim Family Laws Ordinance, 1961, the doctrine of representation applies: the grandson of a predeceased son steps into his father's shoes and receives the share his father would have received if alive.","**What This Means For You**
+The grandson may inherit a share of the grandfather's property, but it depends on the specific laws and circumstances. This is a complex issue, and it's essential to understand the applicable laws to determine the grandson's rights.
+
+**What the Law Says**
+Under Section 4 of the Muslim Family Laws Ordinance, 1961 [ACT-1], if a son or daughter of the deceased dies before the opening of succession, their children (in this case, the grandson) will receive a share equivalent to what their parent would have received if alive. This means the grandson may inherit a share of the grandfather's property.
+
+**What You Should Do Now**
+1.  Gather all relevant documents, including the grandfather's will (if any), the son's death certificate, and the grandson's birth certificate.
+2.  Consult with a licensed Bangladeshi lawyer to determine the specific laws and regulations applicable to this situation.
+3.  If the grandfather's will is unclear or does not mention the grandson, the lawyer can help you understand the grandson's rights under the applicable laws.
+
+**Evidence to Keep**
+-   The grandfather's will (if any)
+-   The son's death certificate
+-   The grandson's birth certificate
+-   Any other relevant documents related to the property or the family's inheritance
+
+**Where to Go / Who to Contact**
+You can contact the District Judge's Court or the High Court Division of the Supreme Court of Bangladesh for guidance on this matter. You can also reach out to the Bangladesh Legal Aid Services Trust (BLAST) for assistance.
+
+**When You Need a Lawyer**
+It is highly recommended to consult with a licensed Bangladeshi lawyer to ensure you understand your rights and the grandson's rights under the applicable laws.
+
+⚠️ Verify with a licensed Bangladeshi lawyer before acting.
+
+---
+**Sources**
+- **[ACT-1]** The Muslim Family Laws Ordinance, 1961, Section 4: Succession — inheritance, grandchildren, predeceased son, predeceased daughter, per stirpes *(Status: Active)*","Muslim Family Laws Ordinance, 1961",4,False,[],NOT_AVAILABLE,[],"['4', '4']",True,NOT_AVAILABLE,False,[],False,[],,,,,
+Q04,Criminal Law,"If a person is accused of 'Defamation' under Section 500 of the Penal Code in Sylhet, can the police arrest them immediately without a warrant?","No. Defamation under Section 500 of the Penal Code is non-cognizable and bailable in Bangladesh, so police cannot arrest without a Magistrate's warrant; the usual route is a complaint case before the Magistrate.","**What This Means For You**
+You've been accused of defamation, which is a serious allegation. The police may try to arrest you without a warrant, but you have rights that need to be protected.
+
+**What the Law Says**
+Under Section 186 of the Penal Code [ACT-5], the police can arrest someone without a warrant if they have reasonable grounds to believe that the person has committed a cognizable offence. However, Section 356 of the Code of Criminal Procedure, 1898, requires the police to obtain a warrant before arresting someone for defamation, which is a non-cognizable offence.
+
+**What You Should Do Now**
+1.  Seek legal advice from a licensed Bangladeshi lawyer as soon as possible.
+2.  If the police try to arrest you, ask them to show you the warrant and the grounds for the arrest.
+3.  If you don't have a warrant, politely refuse to accompany the police without a warrant.
+
+**Evidence to Keep**
+-   A copy of the complaint filed against you
+-   Any evidence that proves your innocence or mitigating circumstances
+
+**Where to Go / Who to Contact**
+Contact the Sylhet Metropolitan Magistrate Court or the Sylhet District Magistrate Court for assistance. You can also reach out to the Bangladesh Legal Aid Services Trust (BLAST) helpline at 16430 for guidance.
+
+**When You Need a Lawyer**
+You need a lawyer immediately, as the situation can escalate quickly, and you need professional advice to protect your rights.
+
+⚠️ Verify with a licensed Bangladeshi lawyer before acting.
+
+---
+**Sources**
+- **[ACT-5]** The Penal Code, 1860, Section 186: Whoever voluntarily obstructs any public servant in the discharge of his public functions, — Section 186, Penal Code, voluntarily, obstructs, public, servant, discharge *(Status: Active)*","Penal Code, 1860",500,False,[],NOT_AVAILABLE,[],"['186', '356', '186', '186']",False,NOT_AVAILABLE,True,['Code of Criminal Procedure'],False,[],,,,,
+Q05,Civil Procedure,Can I file a 'Second Appeal' to the High Court Division on a pure question of fact under Section 100 of the CPC?,"No. Sections 100-103 of the Bangladesh CPC were omitted by the Law Reforms Ordinance, 1978, so a second appeal under Section 100 on a pure question of fact is not available in Bangladesh.","Not in my verified database. I cannot confirm this. Please consult the Bangladesh Code or a licensed lawyer.
+
+However, I can tell you that the Code of Civil Procedure, 1908 is not in my verified database.
+
+---
+**Sources**
+- **[ACT-1]** The Penal Code, 1860, Section 172: Whoever absconds in order to avoid being served with a summons, notice or order proceeding — Section 172, Penal Code, absconds, order, avoid, being, served *(Status: Active)*
+- **[ACT-2]** The Penal Code, 1860, Section 2: Every person shall be liable to punishment under this Code and not otherwise for every act — Section 2, Penal Code, otherwise, omission, contrary, provisions, thereof *(Status: Active)*
+- **[ACT-3]** The Penal Code, 1860, Section 427: Whoever commits mischief and thereby causes loss or damage to the amount of fifty taka or — Section 427, Penal Code, commits, mischief, thereby, causes, loss *(Status: Active)*
+- **[ACT-4]** The Penal Code, 1860, Section 179: Whoever, being legally bound to state the truth on any subject to any public servant, refu — Section 179, Penal Code, being, legally, bound, state, truth *(Status: Active)*
+- **[ACT-5]** The Penal Code, 1860, Section 182: False — Section 182, Penal Code, False, gives, public, servant, information *(Status: Active)*
+- **[ACT-6]** The Penal Code, 1860, Section 185: Whoever, at any sale of property held by the lawful authority of a public servant, as such — Section 185, Penal Code, sale, property, held, lawful, authority *(Status: Active)*","Code of Civil Procedure, 1908",100,False,[],NOT_AVAILABLE,[],"['172', '172', '2', '2', '427', '427', '179', '179', '182', '182', '185', '185']",False,NOT_AVAILABLE,True,['Penal Code'],False,[],,,,,
+Q06,Criminal Procedure,Explain the procedure for 'Executive Magistrates' to conduct a full trial and award a 7-year rigorous imprisonment sentence for a theft case.,Executive Magistrates cannot conduct a regular Penal Code theft trial or award 7 years' rigorous imprisonment. Criminal trials and such sentencing belong to Judicial Magistrates/Courts; Executive Magistrates are limited to administrative/mobile-court functions within statutory limits.,"**What This Means For You**
+You're facing a theft case and need to know the procedure for a full trial by an Executive Magistrate. This means the Magistrate will conduct a trial and potentially sentence you to 7 years of rigorous imprisonment.
+
+**What the Law Says**
+Under Section 379 of the Penal Code, 1860 [ACT-1], theft is punishable with imprisonment of either description for a term which may extend to three years, or with fine, or with both. However, if the theft is committed in a dwelling house, etc., the punishment can extend to seven years [ACT-2]. 
+
+A court also ruled in various cases that Executive Magistrates have the power to conduct full trials and award sentences, including imprisonment, under the Code of Criminal Procedure, 1898 [ACT-3].
+
+**What You Should Do Now**
+1.  You will be summoned to appear before the Executive Magistrate, who will conduct the trial.
+2.  The Magistrate will hear the evidence presented by the prosecution and your defense.
+3.  If the Magistrate finds you guilty, they will sentence you according to the law.
+
+**Evidence to Keep**
+-   All documents related to the case, including witness statements and evidence collected by the police.
+-   Any witness statements or character references that can support your defense.
+
+**Where to Go / Who to Contact**
+You should appear before the Executive Magistrate at the designated court. If you need assistance or have questions, you can contact the Magistrate's office or a licensed lawyer.
+
+**When You Need a Lawyer**
+You should consult a licensed Bangladeshi lawyer as soon as possible to ensure you understand your rights and the best course of action in your case.
+
+⚠️ Verify with a licensed Bangladeshi lawyer before acting.
+
+---
+**Sources**
+- **[ACT-1]** The Penal Code, 1860, Section 379: Theft by clerk or — Section 379, Penal Code, Theft, clerk, commits, punished, imprisonment *(Status: Active)*
+- **[ACT-2]** The Penal Code, 1860, Section 378: Of Theft Theft — Section 378, Penal Code, Theft, intending, take, dishonestly, moveable *(Status: Active)*
+- **[ACT-3]** The Penal Code, 1860, Section 381: in order to the committing of the theft Extortion — Section 381, Penal Code, order, committing, theft, Extortion, being *(Status: Active)*","Code of Criminal Procedure, 1898",29C,False,[],NOT_AVAILABLE,[],"['379', '379', '379', '378', '378', '381', '381']",False,NOT_AVAILABLE,True,['Penal Code'],False,[],,,,,
+Q07,,I am a wealthy businessman. Can I purchase 500 bighas of agricultural land in my own name under the Land Reforms Ordinance?,"No. Agricultural land ownership/acquisition is capped at 60 standard bighas under the Land Reforms Ordinance, 1984 as carried forward in the 2023 framework; purchasing 500 bighas in one person's name would exceed the ceiling.",,,,,,,,,,,,,,,,,,,503 Server Error: Service Unavailable for url: http://127.0.0.1:8000/chat
+Q08,Tax,How much 'Wealth Tax' do I owe under the Income Tax Act 2023 if my assets exceed 5 Crore BDT?,"There is no separate 'wealth tax' under the Income Tax Act, 2023; Bangladesh uses a net-wealth surcharge when net wealth crosses the statutory threshold. The exact surcharge depends on the applicable slab, so the answer must cite the 2023 Act/schedule rather than inventing a generic tax amount.",I could not locate the specific Act you asked about in my verified database. Please consult the Bangladesh Code or a licensed lawyer for this question.,"Income Tax Act, 2023",,NOT_AVAILABLE,[],NOT_AVAILABLE,[],[],N/A,NOT_AVAILABLE,False,[],False,[],,,,,
+Q09,Property/Land,Does a 'Mutation Khatian' issued by the Assistant Commissioner (Land) serve as a conclusive document of title/ownership in Bangladesh?,"No. Mutation Khatian is mainly for land-record/tax and possession purposes; it is not conclusive proof of ownership or title. Title is proved by valid deeds, inheritance documents, court decrees, and related evidence.","**What This Means For You**
+A Mutation Khatian issued by the Assistant Commissioner (Land) is an important document that proves ownership of land in Bangladesh. However, its status as a conclusive document of title/ownership is limited.
+
+**What the Law Says**
+Under Section 19 [ACT-3] of the State Acquisition and Tenancy Act, 1950, when a record-of-rights has been finally published, the Revenue-officer shall cause such record to be finally published in the prescribed manner and the publication shall be conclusive evidence that the record has been duly prepared or revised under this Chapter. However, this does not directly imply that a Mutation Khatian is a conclusive document of title/ownership.
+
+**What You Should Do Now**
+1.  Verify the authenticity of the Mutation Khatian with the relevant authorities.
+2.  Check if the Mutation Khatian is registered under the Registration Act, 1908.
+3.  Consult with a lawyer to understand the implications of the Mutation Khatian on your land ownership.
+
+**Evidence to Keep**
+-   The Mutation Khatian issued by the Assistant Commissioner (Land)
+-   Any supporting documents, such as the original sale deed or inheritance certificate
+
+**Where to Go / Who to Contact**
+You can contact the Assistant Commissioner (Land) office where the Mutation Khatian was issued or the local Land Office for further clarification.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are unsure about the authenticity or implications of the Mutation Khatian or if you need help with registering the Mutation Khatian or other related legal matters.
+
+⚠️ Verify with a licensed Bangladeshi lawyer before acting.
+
+---
+**Sources**
+- **[ACT-3]** The State Acquisition and Tenancy Act, 1950, Section 19: Section 19 — Section 19, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*",,,False,[],NOT_AVAILABLE,[],"['19', '19', '19', '19']",N/A,NOT_AVAILABLE,N/A,,False,[],,,,,
+Q10,Labour Law,"I am hiring a clerk in my office in Sylhet. Under the Labour Act, can I set a 1-year probation period to ensure he is a good fit?","No. For a clerical worker, the probation period under Section 4(8) of the Bangladesh Labour Act is 6 months, not 1 year. For other workers it is generally 3 months, with limited extension for skilled workers.",I could not locate the specific Act you asked about in my verified database. Please consult the Bangladesh Code or a licensed lawyer for this question.,"Bangladesh Labour Act, 2006",4(8),NOT_AVAILABLE,[],NOT_AVAILABLE,[],[],False,NOT_AVAILABLE,False,[],False,[],,,,,
+Q13,Civil Procedure,"I have a property dispute valued at Tk 4.5 Crore. Which court has the 'Original Jurisdiction' to hear my case, and if I lose, where do I file the appeal?","For a Tk 4.5 crore property dispute, original jurisdiction lies with the Joint District Judge Court under the Civil Courts Act, 1887 as amended in 2021. If the party loses, the appeal lies to the District Judge Court because appeals up to Tk 5 crore go there, not directly to the High Court Division.","**What This Means For You**
+You have a property dispute worth Tk 4.5 Crore, and you need to know which court can hear your case first. If you lose, you'll need to know where to file an appeal.
+
+**What the Law Says**
+Under Section 11 [ACT-1] of The Suits Valuation Act, 1887, the court with original jurisdiction depends on the valuation of the suit. If the valuation is Tk 20 lakhs or more, the High Court Division has original jurisdiction. However, if the valuation is less than Tk 20 lakhs, the District Judge's Court has original jurisdiction.
+
+A court also ruled in [DLR-1] that the High Court Division has original jurisdiction in cases where the valuation exceeds Tk 20 lakhs.
+
+**What You Should Do Now**
+1. Determine the valuation of your property dispute.
+2. If the valuation is Tk 20 lakhs or more, file your case in the High Court Division.
+3. If the valuation is less than Tk 20 lakhs, file your case in the District Judge's Court.
+
+**Evidence to Keep**
+- Valuation report of your property
+- Documents related to the property dispute
+
+**Where to Go / Who to Contact**
+High Court Division: [www.bangladeshcourts.gov.bd](http://www.bangladeshcourts.gov.bd) | District Judge's Court: [www.bangladeshcourts.gov.bd](http://www.bangladeshcourts.gov.bd)
+
+**When You Need a Lawyer**
+You should consult a licensed Bangladeshi lawyer to ensure you follow the correct procedure and present your case effectively.
+
+⚠️ Verify with a licensed Bangladeshi lawyer before acting.
+
+---
+**Sources**
+- **[ACT-1]** The Suits Valuation Act, 1887, Section 11: Procedure where objection is taken on appeal or revision that a suit or appeal was not properly valued for jurisdictional purposes — valuation objection, appeal, revision, jurisdiction, over-valuation, under-valuation, Section 11 *(Status: Amended)*","Civil Courts Act, 1887",,True,['DLR-1'],NOT_AVAILABLE,[],"['11', '11', '11']",N/A,NOT_AVAILABLE,False,[],False,[],,,,,
+Q14,,"While in police custody, an accused says, ""I killed the man and hid the knife under the bridge."" The police find the knife under the bridge. Is the statement ""I killed the man"" admissible in court?","The statement 'I killed the man' is inadmissible because confessions to police are barred under Section 25 of the Evidence Act. Only the part leading directly to discovery of the knife, such as 'I hid it under the bridge,' may be admissible under Section 27 as discovery information.",,,,,,,,,,,,,,,,,,,503 Server Error: Service Unavailable for url: http://127.0.0.1:8000/chat
+Q15,,A Magistrate receives a police report (Final Report) stating there is no evidence against the accused. Can the Magistrate ignore the police report and order the trial to proceed anyway?,"Yes. A Magistrate is not bound by a police Final Report; under Section 190(1)(b) CrPC, the Magistrate may reject the police opinion, take cognizance, and summon the accused if the case diary/materials justify proceeding.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q17,,"If a Hindu woman in Bangladesh inherits land under the Hindu Succession Act, can she sell it freely?","No. In Bangladesh, a Hindu woman's inherited property is generally treated as a limited estate under the Hindu Women's Rights to Property Act, 1937; she cannot sell freely except for recognized legal necessity, and an improper sale may be challenged by reversioners.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q18,,"Under the Limitation Act in Bangladesh, how many years does a party have to file a suit for breach of a simple contract?","For breach of a simple contract in Bangladesh, the limitation period is 3 years from breach under Article 115 of the First Schedule to the Limitation Act, 1908. For written registered contracts, Article 116 may provide 6 years.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q19,,"I am calculating my tax return for 2026. Under the Income Tax Ordinance 1984, I am trying to find the exemption for my medical and conveyance allowance. Can you guide me through the math?","The Income Tax Ordinance, 1984 is repealed and replaced by the Income Tax Act, 2023. Medical and conveyance allowances are not separately exempted in the old way; salary income uses the consolidated exemption of one-third of total salary or Tk 4,50,000, whichever is lower.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q21,,My family has been living on a rented residential plot for 15 years. We want to build a small brick (pucca) house here. Do we need to ask our landlord for permission first?,"Under Section 7(1)(a) of the NAT Act, 1949, a permanent non-agricultural tenant who has crossed the statutory threshold has the right to erect structures including a pucca structure. Practically, municipal approval/NOC and tenancy restrictions may still matter, but the statutory section is 7(1), not 6(2)(a).",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q23,,Distinguish between the classes of non-agricultural tenants recognized under Chapter II of the NAT Act 1949.,"Section 3 NAT Act recognizes two main classes: tenants and under-tenants. Sections 4 and 5 further classify tenancies by purpose, such as homestead/residential and manufacturing/business purposes.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q24,,"What are the exact statutory consequences if a non-agricultural land lease has a fixed written term of 5 years, but the tenant continues to occupy it for a total period of 13 years?","Under Section 7(4) NAT Act, if a written fixed-term tenant continues after expiry with the landlord's acquiescence and total continuous possession reaches at least 12 years, the tenancy gains the incidents of a permanent tenancy under Section 7.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q25,,Does the NAT Act 1949 permit a non-agricultural tenant to sub-let their tenancy? Quote the relevant restriction introduced by amendments.,"The NAT Act prohibits sub-letting by Section 26A, inserted by Section 15 of the East Bengal Non-Agricultural Tenancy (Amendment) Ordinance, 1967. Section 26A bars a non-agricultural tenant from sub-letting the whole or part of the tenancy on any terms.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q26,,"I am preparing a civil revision regarding a Section 24 pre-emption case. The opposite party claims the application is barred because the land is a ""Tilla"" (elevated land feature). How does the judiciary determine whether a specific plot falls under the NAT Act 1949?","NAT Act Section 2(4) expressly defines non-agricultural land. For tilla/ban land, courts apply the doctrine of actual user: actual physical use at the time of transfer is decisive, not merely topography or RoR description; key authorities include Md. Sarafat Ali v Md. Abdul Gafur, 38 DLR (AD) 161 and Salamat Ali v Nurjahan Begum, 39 DLR (AD) 103.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q27,,The landlord has filed an ejectment suit on the ground that a residential tenant (holding for 14 years) dug a water tank on the land without consent. Will the suit succeed under Section 7?,"No. A residential non-agricultural tenant holding for 14 years has crossed the 12-year threshold and has statutory permanent-tenant rights. Under Section 7(2)(c) NAT Act, the tenant has the right to dig a tank, so lack of landlord consent alone cannot sustain ejectment.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q28,,"I just inherited an extra 10 bighas of agricultural land from my grandfather, making my total family land 70 bighas. Will the government seize my land without paying me anything under the new 2023 law?","Under the Land Reforms Act 2023, agricultural land ownership is capped at 60 bighas. If a person acquires land beyond the ceiling by inheritance or otherwise, the government can acquire the excess above 60 bighas, and under the 2023 framework no compensation is payable for the excess portion.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q29,,"I am a sharecropper (bargadar). If the landowner passes away, do his children have the right to immediately kick me off the land and end our farming contract under the 2023 law?","No. If a valid barga/sharecropping contract exists and the landowner dies, the contract does not automatically terminate. The bargadar's cultivation right continues against the heirs for the remaining contract period.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q31,,"My neighbor says that if I cultivate his land without a written contract for a single season, I automatically become a permanent co-owner of that land under the 2023 Reforms. Is this true?",No. Cultivating another person's land for one season without a proper written barga agreement does not make the cultivator a permanent co-owner. The Land Reforms Act regulates cultivation/sharecropping rights but does not transfer ownership title to the cultivator.,,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q34,,"If a landowner attempts to evict a bargadar or violate the provisions of a valid barga contract, what specific penal liabilities can be invoked directly under the Land Reforms Act, 2023?","Under the Land Reforms Act, 2023, unlawful eviction of a bargadar or breach of a valid barga contract attracts penal liability of up to Tk 1,00,000 fine, simple imprisonment up to 30 days/1 month, or both. The correct section should be verified as Section 15 rather than the incorrect Section 19 used by Justor.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q35,,"Does the Land Reforms Act, 2023 recognize the oral creation of a barga contract, or does it mandate specific documentation?","The Land Reforms Act, 2023 requires a barga/sharecropping contract to be executed in the prescribed written form; an unrecorded oral arrangement is not treated as a protected statutory barga contract.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q36,,"I am drafting a defense for a client facing a land forfeiture notice from the Collector. The client owns 55 bighas of agricultural land and 10 bighas of land used for a processing plant for export-oriented mango pulp. Can we claim exemption under the Land Reforms Act, 2023?","Yes. Although the total is 65 bighas, the 10 bighas used for an export-oriented agricultural processing plant may qualify for statutory exemption, so the defense should argue that the industrial/processing land is excluded from the agricultural ceiling calculation.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q37,,"My family owns 80 bighas of agricultural land split between me, my brother, and our parents. Will the government take away 20 bighas from us under the SAT Act ceiling?","No. The active agricultural land ceiling is 60 standard bighas under the Land Reforms framework, not the historical 375-bigha SAT ceiling. If the 80 bighas are separately and lawfully held among four family members/individuals below the threshold, the aggregate does not automatically trigger seizure.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q38,,My neighbor is selling his agricultural plot next to mine to a complete stranger from another district. Do I have a right to stop the sale and buy it myself just because my land touches his?,"No. Under Section 96 SAT Act, pre-emption belongs to a co-sharer tenant by transfer or inheritance. A merely adjacent/contiguous landowner no longer has a pre-emption right after the 2006 amendment deleted the contiguous-owner provision.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q39,,Differentiate between the preparation of the Record-of-Rights (ROR) under Section 143 and the revision of the Record-of-Rights under Section 144 of the SAT Act 1950.,"Section 143 SAT Act concerns routine maintenance/mutation of the RoR by the AC Land after transfer, inheritance, subdivision, etc. Section 144 concerns large-scale Government/Board-ordered revision or fresh preparation of RoR through survey operations over an area.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q40,,Analyze the statutory consequences of an illegal subdivision of a holding below the subsistence size under Chapter XIII of the SAT Act 1950.,"Under SAT Act Section 117, co-sharer tenants may seek consolidation/subdivision, but the Revenue Officer can refuse subdivision that would reduce a holding below the prescribed minimum/subsistence size, preventing uneconomic fragmentation.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q42,,"I am representing a petitioner in a Section 96 pre-emption case. The opposite party claims the suit is non-maintainable because the disputed land was transferred via an oral 'Heba' under Muslim Personal Law, but a formal 'Heba' declaration deed was registered months later. When does the limitation period commence?","For Section 96 SAT pre-emption, a claimed oral Heba of immovable property cannot bypass registration requirements. Limitation should run from the registered Heba deed/notice or knowledge of the registered transfer, not from an unrecorded oral claim.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q44,,"The opposite party in a partition suit claims that a land parcel has automatically become 'Khas' (state property) because it was left uncultivated for over 10 years, referencing historical provisions of the SAT Act. How do we counter this?","Historical SAT provisions on abandoned/uncultivated land do not automatically convert a modern mutated raiyat/malik holding into Khas land merely because it was uncultivated for 10 years. Updated khatian, mutation, possession, and land-development-tax receipts counter the Khas claim.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q45,,"I paid the full money to buy a flat from my uncle, and he gave me the physical keys and signed a 300 TK stamp paper document saying I own it now. Do I completely own this property legally under the law?","No. Under Section 54 TPA read with Section 17A Registration Act, ownership of immovable property by sale passes only through a registered instrument. Keys and a Tk 300 stamp-paper document do not create legal title.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q46,,"I am a Muslim. My grandfather verbally gifted me a piece of land in front of family members before passing away. Do I legally own this land now, or do I need a written paper?","No. After Bangladesh-specific amendments, a gift/Heba of immovable property must be made by registered instrument; a purely verbal gift of land does not pass legal title even if family members witnessed it.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q47,,"I sold my land to a buyer and signed the final registered deed, but the buyer's cheque bounced and I only received half the money. Can I just unilaterally tear up the deed or declare it cancelled at the sub-registry office?",No. A registered sale deed cannot be unilaterally torn up or cancelled at the sub-registry office. The seller's remedy is a civil suit for unpaid price under Section 55(4)(b) TPA or cancellation under Section 39 Specific Relief Act if grounds exist.,,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q48,,"Explain the 'Rule against Perpetuity' under Section 14 of the Transfer of Property Act, 1882, and state its exact maximum statutory duration.","Under Section 14 TPA, a transfer cannot create an interest taking effect beyond the lifetime of living person(s) at the date of transfer plus the minority of a person then unborn. The maximum period is lives in being plus 18 years of minority.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q49,,"Analyze the essential pre-conditions required to successfully claim protection as a transferee under Section 41 (Transfer by Ostensible Owner) of the Transfer of Property Act, 1882.","Section 41 protection requires: ostensible ownership, express/implied consent of the real owner, transfer for consideration, good faith, and reasonable care by the transferee to verify the transferor's authority.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q50,,"Define the Doctrine of Election under Section 35 of the Transfer of Property Act, 1882, and explain what happens if a person refuses to accept the deed but retains an indirect benefit.","Under Section 35 TPA, where a deed transfers someone's property without authority but also gives that owner a benefit, the owner must elect either to accept the transfer and keep the benefit or reject the transfer and relinquish the benefit.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q51,,"During the pendency of a partition suit, one of the co-sharers sells a specific demarcated portion of the suit land to a third-party purchaser without court permission. What is the precise status of this transfer under Section 52 (Lis Pendens) in Bangladesh civil litigation?","Under Section 52 TPA, a transfer during pending litigation is not automatically void, but it is subject to the final decree and cannot prejudice the rights of other parties. In partition, the buyer steps into the seller's shoes and cannot insist on the specific demarcated portion if the final decree says otherwise.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q53,,A client purchased a property from a vendor who had previously executed a registered contract for sale (Bayanapatra) with another party. The previous contract holder now files a suit for specific performance. Can your client defeat the suit by pleading the status of a bona fide purchaser for value without notice under Section 54?,"No. A prior registered Bayanapatra/contract for sale creates a binding statutory obligation running with the land, and registration gives constructive notice. A later buyer cannot defeat specific performance by pleading bona fide purchaser without notice under Section 54.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q54,,How long does a trademark registration stay valid in Bangladesh before I have to renew it?,"Under the Trademarks Act, 2009, initial trademark registration lasts 7 years from the application/registration date, and it can be renewed repeatedly for 10-year periods after that.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q55,,Someone is selling exact copies of my products using my registered brand logo in a local market. Can I go to the local police station and have them arrested immediately under the Trademark Act?,"Yes, selling counterfeit goods using a registered mark can attract criminal liability under Sections 73 and 74 of the Trademarks Act, 2009. Police action normally requires a written complaint and follows CrPC procedures; punishment may include imprisonment, fine, or both.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat
+Q59,,"What is the specific civil forum/court of original jurisdiction to institute a suit for trademark infringement in Bangladesh, and what is the statutory limitation period for filing such a suit?","A trademark infringement suit must be filed in the Court of the District Judge having territorial jurisdiction, which includes the Joint District Judge exercising District Court powers. The limitation period is 3 years from infringement under the Limitation Act, 1908.",,,,,,,,,,,,,,,,,,,500 Server Error: Internal Server Error for url: http://127.0.0.1:8000/chat

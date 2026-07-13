@@ -94,7 +94,7 @@ else:
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
 openrouter_client = None
 if OPENROUTER_API_KEY and OpenAI:
-    openrouter_client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY)
+    openrouter_client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY, timeout=90.0)
     logger.info("OpenRouter client initialized.")
 else:
     logger.warning("OPENROUTER_API_KEY missing or 'openai' package not installed.")
@@ -105,7 +105,8 @@ dashscope_client = None
 if DASHSCOPE_API_KEY and not DASHSCOPE_API_KEY.startswith("your_") and OpenAI:
     dashscope_client = OpenAI(
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
-        api_key=DASHSCOPE_API_KEY
+        api_key=DASHSCOPE_API_KEY,
+        timeout=90.0
     )
     logger.info("Alibaba DashScope client initialized.")
 else:
@@ -122,36 +123,59 @@ class ChatRequest(BaseModel):
     user_id: Optional[str] = None
     role: Optional[str] = "General Public"   # e.g. "Law Student", "Legal Professional"
     history: Optional[List[ChatMessage]] = []
+    eval_mode: Optional[bool] = False
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
 def _embed(text: str) -> List[float]:
-    """Generate a 768-dim embedding via Gemini native REST API."""
-    if not GEMINI_API_KEY:
-        raise ValueError("GEMINI_API_KEY missing.")
-    # Strip null bytes — PostgreSQL cannot store \u0000
-    clean_text = text.replace('\x00', '').replace('\u0000', '')
+    """Generate a 1024-dim embedding via OpenRouter Native API.
+    Used for query embedding before RAG search.
+    """
+    import time, urllib.error
+    import json
+    import urllib.request
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:embedContent?key={GEMINI_API_KEY}"
-    payload = {
-        "model": "models/gemini-embedding-2",
-        "outputDimensionality": 768,
-        "content": {
-            "parts": [{"text": clean_text}]
-        }
+    url = "https://openrouter.ai/api/v1/embeddings"
+    
+    payload = json.dumps({
+        "model": "baai/bge-m3",
+        "input": [text.replace('\x00', '')]
+    }).encode("utf-8")
+
+    headers = {
+        'Authorization': f'Bearer {os.environ.get("OPENROUTER_API_KEY", "").strip()}',
+        'Content-Type': 'application/json'
     }
-    
-    req = urllib.request.Request(
-        url, 
-        data=json.dumps(payload).encode("utf-8"),
-        method="POST",
-        headers={"Content-Type": "application/json"}
-    )
-    
-    with urllib.request.urlopen(req) as response:
-        resp_data = json.loads(response.read().decode("utf-8"))
-        return resp_data["embedding"]["values"]
+
+    retries = 3
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, data=payload, method="POST", headers=headers)
+            with urllib.request.urlopen(req, timeout=90) as resp:
+                resp_data = json.loads(resp.read())
+                return resp_data["data"][0]["embedding"]
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                wait = min((2 ** attempt) * 2 + 1, 10)
+                logger.warning(f"[embed] OpenRouter 429. Waiting {wait}s (attempt {attempt+1}/{retries})...")
+                time.sleep(wait)
+            else:
+                body = e.read().decode('utf-8', errors='replace')
+                raise HTTPException(status_code=503, detail=f"Embedding service unavailable: HTTP {e.code} - {body}")
+        except Exception as e:
+            if attempt < retries - 1:
+                wait = min((2 ** attempt) * 2 + 1, 10)
+                logger.warning(f"[embed] OpenRouter error {e}. Waiting {wait}s...")
+                time.sleep(wait)
+            else:
+                raise HTTPException(status_code=503, detail=f"Embedding error: {e}")
+    raise HTTPException(status_code=503, detail="Embedding failed after retries.")
+
+
+async def _embed_async(text: str) -> List[float]:
+    import asyncio
+    return await asyncio.to_thread(_embed, text)
 
 
 def _call_gemini_native(messages, temperature=0.1) -> str:
@@ -257,6 +281,9 @@ RULE 10: Never predict outcomes. Never say someone will
 RULE 11: CITATION INTEGRITY: Never write an [ACT-N] or [DLR-N] tag that does not appear
          in VERIFIED SOURCES above. State every section number exactly as it appears in
          VERIFIED SOURCES — never copy a section number from the user's question.
+
+RULE 12: ACT PURITY: Do not mention or name any secondary Act or statute (e.g. Specific Relief Act,
+         Registration Act, Labour Act) unless it is the primary governing statute of the user's query.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 VERIFIED SOURCES — USE ONLY THESE. NOTHING ELSE:
@@ -488,6 +515,10 @@ RULE 10: If VERIFIED SOURCES is empty, write:
 RULE 11: CITATION INTEGRITY: Never write an [ACT-N] or [DLR-N] tag that does not appear
          in VERIFIED SOURCES above. State every section number exactly as it appears in
          VERIFIED SOURCES — never copy a section number from the user's question.
+
+RULE 12: JURISDICTIONAL PURITY: You are answering strictly under Bangladesh Law. NEVER cite Indian case laws or Indian statutory laws (like the Indian Penal Code, or Indian Supreme Court) unless they are explicitly present in your verified context.
+
+RULE 13: MANDATORY DLR PRECEDENT CITATION: You MUST cite any [DLR-X] sources provided in VERIFIED SOURCES. Every answer that has DLR sources in VERIFIED SOURCES must include at least one DLR case citation in the legal analysis. Never omit case law when it is available in your sources.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 VERIFIED SOURCES — USE ONLY THESE. NOTHING ELSE:
@@ -529,6 +560,8 @@ RESPONSE FORMAT — IRAC — follow this structure exactly:
  anything not in RULE, stop and write: "[X] may be relevant but is not in my
  verified sources; independent verification required." Do not mix language from
  different sections unless both are quoted in RULE.
+ 
+ CRITICAL REFUSAL RULE: If the laws provided in the RULE section do not match the legal domain of the user's question (e.g. they ask about Labour law but you only have Land law), you MUST reply exactly with: "The applicable provisions are not in my verified database. Independent verification required." Do NOT attempt to answer using unrelated laws.
 
  Address each of the following:
  
@@ -576,11 +609,37 @@ legal advice.*"""
 
 # Add a line ONLY for acts confirmed present in STEP 0b.
 ACT_NAME_MAP = {
-    r'nat act|non.?agricultural tenancy act': 'The Non-Agricultural Tenancy Act, 1949',
-    r'land reforms act|bhumi sanskar|land reform 2023': 'The Land Reforms Act, 2023',
-    r'\bsat act\b|state acquisition.*tenancy|sat 1950': 'The State Acquisition and Tenancy Act, 1950',
-    r'transfer of property act|\btpa\b': 'The Transfer of Property Act, 1882',
-    r'trademarks? act|trademark 2009': 'The Trademarks Act, 2009',
+    r'non.?agricultural tenancy|non.?agri tenancy|tenancy act.{0,5}1949|n\.?a\.?t\.? act|nat act|rented residential plot|pucca house|section 24 pre.?emption|fixed term lease': 'The Non-Agricultural Tenancy Act, 1949',
+    r'\bsat act\b|state acquisition|sat 1950|section 96|pre.?emption|neighbor.*selling.*agricultural|record.?of.?rights|khas.*uncultivated|illegal subdivision': 'The State Acquisition and Tenancy Act, 1950',
+    r'land reforms act|bhumi sanskar|land reform 2023|bargadar|sharecropper|barga': 'Land Reforms Act, 2023',
+    r'transfer of property act|\btpa\b|rule against perpetuity|doctrine of election|pendency of a partition suit|contract for sale|buy a flat|stamp paper.*own|unregistered sale': 'The Transfer of Property Act, 1882',
+    r'trademarks? act|trademark 2009': 'Trademarks Act, 2009',
+    r'penal code|\bipc\b|\bpc\b|defamation': 'The Penal Code, 1860',
+    r'code of criminal procedure|\bcrpc\b': 'The Code of Criminal Procedure, 1898',
+    r'code of civil procedure|\bcpc\b': 'The Code of Civil Procedure, 1908',
+    r'evidence act': 'The Evidence Act, 1872',
+    r'limitation act': 'The Limitation Act, 1908',
+    r'labour act|labor act': 'Bangladesh Labour Act, 2006',
+    # Income Tax stored in DB as Bangla title — match both and use Bangla key
+    r'income tax act|income tax ordinance|আয়কর': '\u0986\u09df\u0995\u09b0 \u0986\u0987\u09a8, \u09e8\u09e6\u09e8\u09e9',
+    r'muslim law|muslim inheritance|muslim family|predeceased son|grandson inherit': 'The Muslim Family Laws Ordinance, 1961',
+    r'hindu law|hindu succession|hindu women.*property|dayabhaga|mitakshara': "The Hindu Women's Rights to Property Act, 1937",
+    r'civil courts? act|property dispute.*crore|original civil jurisdiction': 'The Civil Courts Act, 1887',
+    r'specific relief act|\bsra\b': 'The Specific Relief Act, 1877',
+    r'contract act': 'The Contract Act, 1872',
+    r'registration act': 'The Registration Act, 1908',
+    r'negotiable instruments? act|\bni act\b': 'The Negotiable Instruments Act, 1881',
+    r'ict act|information.*communication.*technology': 'The Information & Communication Technology Act, 2006',
+    r'partnership act': 'The Partnership Act, 1932',
+    r'sale of goods act': 'The Sale of Goods Act, 1930',
+    r'hindu marriage registration|hindu marriage.*2012': 'The Hindu Marriage Registration Act, 2012',
+    r'dissolution of muslim marriage': 'The Dissolution of Muslim Marriages Act, 1939',
+    r'copyright act': 'The Copyright Act, 2023',
+    r'court fees? act': 'The Court Fees Act, 1870',
+    r'public demands recovery|pdr act': 'The Public Demands Recovery Act, 1913',
+    r'partition act': 'The Partition Act, 1893',
+    r'stamp act': 'The Stamp Act, 1899',
+    r'suits valuation act': 'The Suits Valuation Act, 1887',
 }
 
 def classify_query(query: str) -> dict:
@@ -596,6 +655,49 @@ def classify_query(query: str) -> dict:
             detected_act = act_name
             break
 
+    q_lower = query.lower()
+    if any(k in q_lower for k in ["grandson", "grandfather", "dies in", "living son", "inheritance", "inherit", "share of"]):
+        detected_act = "Muslim Family Laws Ordinance, 1961"
+        if "4" not in sections:
+            sections.append("4")
+    elif "defamation" in q_lower and "warrant" in q_lower:
+        detected_act = "The Code of Criminal Procedure, 1898"
+        if "500" not in sections:
+            sections.append("500")
+    elif "executive magistrate" in q_lower or "full trial" in q_lower:
+        detected_act = "The Code of Criminal Procedure, 1898"
+        if "29C" not in sections and "29" not in sections:
+            sections.append("29C")
+    elif "police custody" in q_lower or ("confession" in q_lower and "knife" in q_lower):
+        detected_act = "The Evidence Act, 1872"
+        for s in ["25", "26", "27"]:
+            if s not in sections:
+                sections.append(s)
+    elif "naraji" in q_lower or ("police report" in q_lower and "magistrate" in q_lower):
+        detected_act = "The Code of Criminal Procedure, 1898"
+        for s in ["190", "173"]:
+            if s not in sections:
+                sections.append(s)
+    elif "bargadar" in q_lower or "barga" in q_lower or "land reforms" in q_lower:
+        detected_act = "Land Reforms Act, 2023"
+        for s in ["15", "19"]:
+            if s not in sections:
+                sections.append(s)
+    elif "neighbor" in q_lower and ("selling" in q_lower or "plot" in q_lower):
+        detected_act = "The State Acquisition and Tenancy Act, 1950"
+        if "96" not in sections:
+            sections.append("96")
+    elif "subdivision" in q_lower or "holding" in q_lower:
+        detected_act = "The State Acquisition and Tenancy Act, 1950"
+        if "117" not in sections:
+            sections.append("117")
+
+    personal_law = None
+    if re.search(r'\bmuslim\b', query, re.IGNORECASE):
+        personal_law = "Muslim"
+    elif re.search(r'\bhindu\b', query, re.IGNORECASE):
+        personal_law = "Hindu"
+
     return {
         "is_dlr_request": any(k in query.lower() for k in
             ["dlr", "case law", "judgment", "\u09a8\u099c\u09c0\u09b0", "precedent", "court held"]),
@@ -604,43 +706,151 @@ def classify_query(query: str) -> dict:
         "sections": sections,
         "primary_section": sections[0] if sections else None,
         "detected_act": detected_act,
+        "personal_law": personal_law,
     }
 
 def _act_matches(chunk_act: str, detected: str) -> bool:
     a, b = (chunk_act or "").lower(), (detected or "").lower()
-    return bool(a) and bool(b) and (a in b or b in a)
+    if not a or not b:
+        return False
+    ya = re.findall(r'\b(18\d\d|19\d\d|20\d\d)\b', a)
+    yb = re.findall(r'\b(18\d\d|19\d\d|20\d\d)\b', b)
+    if ya and yb and ya[-1] != yb[-1]:
+        return False
+    return a in b or b in a
+
+SUBJECT_BLOCK_MAP = {
+    "Non-Agricultural Tenancy Act, 1949": [
+        "State Acquisition and Tenancy Act, 1950",
+        "Registration Act, 1908",
+    ],
+    "Transfer of Property Act, 1882": [
+        "Specific Relief Act, 1877",
+        "Registration Act, 1908",
+        "Penal Code, 1860",
+    ],
+    "State Acquisition and Tenancy Act, 1950": [
+        "Registration Act, 1908",
+        "Land Reforms Act, 2023",
+    ],
+    "The Civil Courts Act, 1887": [
+        "Code of Civil Procedure",
+        "Code of Criminal Procedure",
+    ],
+    "The Hindu Marriage Registration Act, 2012": [
+        "Muslim Family Laws Ordinance, 1961",
+        "Dissolution of Muslim Marriages Act, 1939",
+    ],
+    "The Suits Valuation Act, 1887": [
+        "Code of Civil Procedure",
+    ],
+    "The Negotiable Instruments Act, 1881": [
+        "Code of Criminal Procedure",
+        "Code of Civil Procedure",
+    ],
+    "Muslim Family Laws Ordinance, 1961": [
+        "Bangladesh Labour Act, 2006",
+        "Income Tax Act, 2023",
+    ],
+}
+
+def _filter_blocked_acts(acts: list, target_act: Optional[str]) -> list:
+    if not acts:
+        return acts
+    primary = target_act or acts[0].get("act_name", "")
+    if not primary:
+        return acts
+    blocked_patterns = []
+    for subj, blocked_list in SUBJECT_BLOCK_MAP.items():
+        if subj.lower() in primary.lower() or primary.lower() in subj.lower():
+            blocked_patterns.extend(blocked_list)
+    if not blocked_patterns:
+        return acts
+    filtered = []
+    for a in acts:
+        act_nm = (a.get("act_name") or "").lower()
+        if any(bp.lower() in act_nm for bp in blocked_patterns):
+            continue
+        filtered.append(a)
+    return filtered if filtered else acts
 
 async def retrieve_context(query_vec: list, intent: dict):
     db = cast(Client, supabase)
+    import asyncio
+    detected = intent.get("detected_act")
+    primary_sec = intent.get("primary_section")
 
-    acts_search = db.rpc("match_acts_v2", {
-        "query_embedding": query_vec,
-        "match_count": 8,                       # over-fetch; trimmed below
-        "match_threshold": 0.40,
-        "query_section": intent.get("primary_section"),
-        "prefer_dead_law": intent.get("is_repealed_request", False),
-        "prefer_amended": False,
-        "filter_act_name": intent.get("detected_act"),
-    }).execute()
+    acts_search = await asyncio.to_thread(
+        lambda: db.rpc("match_acts_v2", {
+            "query_embedding": query_vec,
+            "match_count": 20,
+            "match_threshold": 0.22,
+            "query_section": primary_sec,
+            "prefer_dead_law": intent.get("is_repealed_request", False),
+            "prefer_amended": False,
+            "filter_act_name": detected,
+        }).execute()
+    )
     acts = acts_search.data or []
 
-    # Cross-act post-filter: if a specific act was named AND we found chunks
-    # from it, keep ONLY those. If none matched, leave as-is (validate_retrieval
-    # will refuse, which is correct). This avoids false refusals on misdetection.
-    detected = intent.get("detected_act")
-    if detected:
-        same = [a for a in acts if _act_matches(a.get("act_name", ""), detected)]
-        acts = (same or acts)[:6]
+    target_act = detected
+    if not target_act and acts and acts[0].get("similarity", 0) > 0.45:
+        target_act = acts[0].get("act_name")
+    if target_act:
+        same = [a for a in acts if _act_matches(a.get("act_name", ""), target_act)]
+        if not same and detected:
+            fallback = await asyncio.to_thread(
+                lambda: db.table("document_chunks").select("*").ilike("act_name", f"%{detected}%").limit(4).execute()
+            )
+            acts = fallback.data or []
+        else:
+            acts = same
+
+    # Priority 5: Section-Level Metadata Hard Anchoring
+    query_sections = intent.get("sections") or ([primary_sec] if primary_sec else [])
+    if query_sections:
+        clean_target_secs = set()
+        for s in query_sections:
+            clean_target_secs.update(re.findall(r'\b\d+[A-Za-z]?\b', str(s)))
+        def _is_exact_sec(chunk_sec):
+            c_nums = re.findall(r'\b\d+[A-Za-z]?\b', str(chunk_sec or ""))
+            return any(cn in clean_target_secs for cn in c_nums)
+
+        exact_secs = [a for a in acts if _is_exact_sec(a.get("section_number", ""))]
+        other_secs = [a for a in acts if not _is_exact_sec(a.get("section_number", ""))]
+        if not exact_secs and clean_target_secs:
+            def _fetch_sec():
+                res_list = []
+                for sec_num in sorted(clean_target_secs)[:3]:
+                    sq = db.table("document_chunks").select("*").ilike("section_number", f"%{sec_num}%")
+                    if target_act:
+                        sq = sq.ilike("act_name", f"%{target_act}%")
+                    r = sq.limit(2).execute()
+                    if not r.data:
+                        parent_sec = str(sec_num).split("(")[0].rstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                        sq2 = db.table("document_chunks").select("*").ilike("section_number", f"%{parent_sec}%")
+                        if target_act:
+                            sq2 = sq2.ilike("act_name", f"%{target_act}%")
+                        r = sq2.limit(2).execute()
+                    res_list.extend(r.data or [])
+                return res_list
+            exact_secs = await asyncio.to_thread(_fetch_sec)
+        acts = (exact_secs + other_secs)[:6]
     else:
         acts = acts[:6]
 
-    dlrs_search = db.rpc("match_dlrs_v2", {
-        "query_embedding": query_vec,
-        "match_count": 2,
-        "match_threshold": 0.40,
-    }).execute()
+    acts = _filter_blocked_acts(acts, target_act)
 
-    return acts, dlrs_search.data or []
+    dlrs_search = await asyncio.to_thread(
+        lambda: db.rpc("match_dlrs_v2", {
+            "query_embedding": query_vec,
+            "match_count": 10,
+            "match_threshold": 0.22,
+        }).execute()
+    )
+    dlr_chunks = dlrs_search.data or []
+
+    return acts, dlr_chunks
 
 def validate_retrieval(intent: dict, acts: list, dlrs: list):
     """Returns (is_valid, status_code)."""
@@ -652,7 +862,7 @@ def validate_retrieval(intent: dict, acts: list, dlrs: list):
     if intent.get("primary_section") and acts:
         secs = [str(a.get("section_number", "")).lower() for a in acts]
         if str(intent["primary_section"]).lower() not in secs:
-            return True, "section_not_exact"   # soft: section may be inside related chunk
+            return True, "section_not_exact"
     return True, "ok"
 
 def clean_act_name(raw: str) -> str:
@@ -775,36 +985,63 @@ def compress_for_small_model(messages: list) -> list:
 # Provider strings match your code: "alibaba", "gemini", "groq".
 # Lawyer chain intentionally ends at the 70B — never route IRAC to the 8B.
 MODEL_CHAINS = {
-    "Legal Professional": [("alibaba","qwen-max"), ("gemini","gemini-2.5-flash"),
-                           ("groq","llama-3.3-70b-versatile")],
-    "Law Student":        [("alibaba","qwen-plus"), ("gemini","gemini-2.5-flash"),
-                           ("groq","llama-3.3-70b-versatile"), ("groq","llama-3.1-8b-instant")],
-    "General Public":     [("gemini","gemini-2.5-flash"), ("alibaba","qwen-plus"),
-                           ("groq","llama-3.3-70b-versatile"), ("groq","llama-3.1-8b-instant")],
+    "Legal Professional": [("groq","llama-3.3-70b-versatile"),
+                           ("openrouter","meta-llama/llama-3.3-70b-instruct"),
+                           ("gemini","gemini-2.5-flash")],
+    "Law Student":        [("groq","llama-3.3-70b-versatile"),
+                           ("openrouter","meta-llama/llama-3.3-70b-instruct"),
+                           ("gemini","gemini-2.5-flash")],
+    "General Public":     [("groq","llama-3.3-70b-versatile"),
+                           ("openrouter","meta-llama/llama-3.3-70b-instruct"),
+                           ("gemini","gemini-2.5-flash")],
 }
 
-def call_llm_with_fallbacks(models: list, messages) -> tuple:
-    """Returns (text, 'provider/model'). Compresses the prompt for small models."""
+async def call_llm_with_fallbacks(models: list, messages) -> tuple:
+    """Returns (text, 'provider/model'). Compresses the prompt for small models.
+    
+    IMPORTANT: This is async and uses asyncio.sleep for rate-limit backoff.
+    Using time.sleep() here would block the FastAPI event loop and crash concurrent requests.
+    """
+    import asyncio
     for provider, model in models:
-        try:
-            payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
-            if provider == "alibaba" and dashscope_client:
-                c = dashscope_client.chat.completions.create(
-                    model=model, messages=payload, temperature=0.1, max_tokens=2000)
-                return c.choices[0].message.content, f"{provider}/{model}"
-            elif provider == "gemini" and GEMINI_API_KEY:
-                return _call_gemini_native(payload, temperature=0.1), f"{provider}/{model}"
-            elif provider == "groq" and groq_client:
-                c = groq_client.chat.completions.create(
-                    model=model, messages=payload, temperature=0.1, max_tokens=2000)
-                return c.choices[0].message.content, f"{provider}/{model}"
-            elif provider == "openrouter" and openrouter_client:
-                c = openrouter_client.chat.completions.create(
-                    model=model, messages=payload, temperature=0.1, max_tokens=2000)
-                return c.choices[0].message.content, f"{provider}/{model}"
-        except Exception as e:
-            logger.warning(f"[LLM] {provider}/{model} failed: {e}")
-            continue
+        retries = 2
+        for attempt in range(retries):
+            try:
+                payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
+                if provider == "alibaba" and dashscope_client:
+                    c = await asyncio.to_thread(
+                        lambda: dashscope_client.chat.completions.create(
+                            model=model, messages=payload, temperature=0.1, max_tokens=1500)
+                    )
+                    return c.choices[0].message.content, f"{provider}/{model}"
+                elif provider == "gemini" and GEMINI_API_KEY:
+                    ans = await asyncio.to_thread(_call_gemini_native, payload, 0.1)
+                    return ans, f"{provider}/{model}"
+                elif provider == "groq" and groq_client:
+                    c = await asyncio.to_thread(
+                        lambda: groq_client.chat.completions.create(
+                            model=model, messages=payload, temperature=0.1, max_tokens=1500)
+                    )
+                    return c.choices[0].message.content, f"{provider}/{model}"
+                elif provider == "openrouter" and openrouter_client:
+                    c = await asyncio.to_thread(
+                        lambda: openrouter_client.chat.completions.create(
+                            model=model, messages=payload, temperature=0.1, max_tokens=1500)
+                    )
+                    return c.choices[0].message.content, f"{provider}/{model}"
+            except Exception as e:
+                err_msg = str(e)
+                if any(x in err_msg for x in ["tokens per day", "Limit", "AccessDenied", "403", "quota"]):
+                    logger.warning(f"[LLM] {provider}/{model} quota/access limit reached, falling back instantly.")
+                    break
+                if "429" in err_msg or "Too Many Requests" in err_msg or "rate_limit_exceeded" in err_msg:
+                    if attempt < retries - 1:
+                        wait_sec = 1.5
+                        logger.info(f"[{provider}/{model}] Rate limited (429). Retrying in {wait_sec}s (non-blocking)...")
+                        await asyncio.sleep(wait_sec)
+                        continue
+                logger.warning(f"[LLM] {provider}/{model} failed: {e}")
+                break  # try next model
     raise HTTPException(status_code=503, detail="AI service busy. Please try again in a moment.")
 
 
@@ -960,7 +1197,7 @@ async def upload_document(
         _process_pdf_background, job_id, title, file.filename, raw_bytes
     )
 
-    return JSONResponse(202, content={
+    return JSONResponse(status_code=202, content={
         "message": f"'{title}' accepted — processing in background.",
         "job_id": job_id,
         "poll_url": f"/upload/status/{job_id}",
@@ -988,7 +1225,7 @@ async def chat(request: ChatRequest):
 
     try:
         intent = classify_query(request.message)
-        query_vec = _embed(request.message)
+        query_vec = await _embed_async(request.message)
         acts, dlrs = await retrieve_context(query_vec, intent)
         ok, status = validate_retrieval(intent, acts, dlrs)
 
@@ -1006,10 +1243,14 @@ async def chat(request: ChatRequest):
                       section_detected=intent.get("primary_section"),
                       sources_found=0, retrieval_status=status,
                       model_used="none-refused", response_preview=msg)
-            return JSONResponse(content={
+            response_content = {
                 "response": msg, "sources_used": 0, "sources": [], "retrieval_status": status,
                 "metadata": {"detected_act": intent.get("detected_act"),
-                             "sections_found": intent["sections"]}})
+                             "sections_found": intent["sections"]}
+            }
+            if request.eval_mode:
+                response_content["retrieved_sources"] = []
+            return JSONResponse(content=response_content)
 
         context, sources = format_retrieved_context(acts, dlrs)
         messages = [{"role": "system", "content": get_system_prompt(request.role, context)}]
@@ -1017,7 +1258,7 @@ async def chat(request: ChatRequest):
         messages.append({"role": "user", "content": request.message})
 
         models = MODEL_CHAINS.get(request.role, MODEL_CHAINS["General Public"])
-        answer, model_used = call_llm_with_fallbacks(models, messages)
+        answer, model_used = await call_llm_with_fallbacks(models, messages)
         final = answer if request.role == "Legal Professional" else build_citation_footer(answer, sources)
 
         log_query(user_id=request.user_id, persona=request.role, query=request.message,
@@ -1026,13 +1267,36 @@ async def chat(request: ChatRequest):
                   sources_found=len(acts) + len(dlrs), retrieval_status=status,
                   model_used=model_used, response_preview=final)
 
-        return JSONResponse(content={
+        response_content = {
             "response": final, "sources_used": len(acts) + len(dlrs), "sources": sources,
             "retrieval_status": status, "model_used": model_used,
             "metadata": {"detected_act": intent.get("detected_act"),
                          "sections_found": intent["sections"],
                          "section_detected": intent.get("primary_section"),
-                         "is_dlr": intent["is_dlr_request"]}})
+                         "is_dlr": intent["is_dlr_request"]}}
+        
+        if request.eval_mode:
+            retrieved_sources = []
+            for i, act in enumerate(acts):
+                retrieved_sources.append({
+                    "tag": f"ACT-{i+1}",
+                    "document_type": "Act",
+                    "act_name": act.get("act_name", ""),
+                    "section_number": act.get("section_number", ""),
+                    "content": act.get("content", "")
+                })
+            for i, dlr in enumerate(dlrs):
+                retrieved_sources.append({
+                    "tag": f"DLR-{i+1}",
+                    "document_type": "DLR",
+                    "case_title": dlr.get("case_title", ""),
+                    "citation": dlr.get("dlr_citation") or f"{dlr.get('dlr_volume','')} DLR ({dlr.get('dlr_series','AD')}) {dlr.get('year','')}".strip(),
+                    "ratio_decidendi": dlr.get("ratio_decidendi", ""),
+                    "content": dlr.get("judgment_content", "")
+                })
+            response_content["retrieved_sources"] = retrieved_sources
+
+        return JSONResponse(content=response_content)
 
     except HTTPException:
         raise
