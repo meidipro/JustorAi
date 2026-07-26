@@ -181,7 +181,8 @@ def ingest_v2(entries: List[Dict[str, Any]], filename: str, replace: bool = Fals
         document_id = doc_resp.data[0]["id"]
 
         # 2. Batch Process Chunks (Up to 100 per API Call)
-        BATCH_SIZE = 100
+        import time
+        BATCH_SIZE = 20
         total_batches = (len(doc_entries) + BATCH_SIZE - 1) // BATCH_SIZE
         
         for batch_idx in range(total_batches):
@@ -231,6 +232,7 @@ def ingest_v2(entries: List[Dict[str, Any]], filename: str, replace: bool = Fals
                 
             db.table("document_chunks").insert(records).execute()
             print(f"\r    Embedded and Stored {end_idx}/{len(doc_entries)}...", end="", flush=True)
+            time.sleep(10) # Strict delay to prevent TPM rate limiting
         
         print(f"\r    Stored {len(doc_entries)} chunks for '{title}'.          ")
         total_stored += len(doc_entries)

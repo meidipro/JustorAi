@@ -105,7 +105,7 @@ import requests
 
 CITATION_TAG_RE = re.compile(r"\[(ACT-\d+|DLR-\d+)\]")
 SECTION_CLAIM_RE = re.compile(
-    r"[Ss]ection\s+(\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?)"
+    r"(?:[Ss]ections?|[Aa]rticles?)\s+((?:\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?(?:\s*(?:,|and|to|-)\s*)?)+)"
 )
 DLR_CITATION_RE = re.compile(r"\d+\s*DLR\s*\(?[A-Za-z]*\)?\s*\d+", re.IGNORECASE)
 
@@ -162,13 +162,18 @@ def check_wrong_section(answer_text: str, expected_act: str, expected_section: s
     confirm the expected section is mentioned, and optionally (if
     db_lookup_fn is provided) confirm any claimed section actually exists
     in document_chunks for the claimed Act."""
-    claimed_sections = SECTION_CLAIM_RE.findall(answer_text)
+    claimed_raw = SECTION_CLAIM_RE.findall(answer_text)
+    claimed_sections = []
+    for raw in claimed_raw:
+        claimed_sections.extend(re.findall(r'\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?', raw))
     exp_mentioned = "N/A"
     if expected_section and str(expected_section).strip() and str(expected_section).strip().lower() != "nan":
-        exp_nums = re.findall(r'\b\d+[A-Za-z]?\b', str(expected_section))
+        exp_nums = re.findall(r'\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?', str(expected_section))
+        base_nums = [re.match(r'^(\d+[A-Za-z]?)', e).group(1) for e in exp_nums if re.match(r'^(\d+[A-Za-z]?)', e)]
+        
         exp_mentioned = any(
             str(num).lower() in [str(c).lower() for c in claimed_sections]
-            for num in exp_nums
+            for num in exp_nums + base_nums
         ) if exp_nums else (str(expected_section) in claimed_sections)
 
     result = {
@@ -410,6 +415,8 @@ def main():
     ap.add_argument("--skip-ragas", action="store_true",
                      help="Skip RAGAS entirely, only run deterministic checks "
                           "(fast, no extra API cost).")
+    ap.add_argument("--resume", action="store_true",
+                     help="Resume from existing output CSV without deleting it or re-running completed IDs.")
     args = ap.parse_args()
 
     backend_url = os.environ.get("JUSTOR_BACKEND_URL")
@@ -425,12 +432,26 @@ def main():
     if args.limit:
         rows = rows[: args.limit]
 
-    if os.path.exists(args.output):
+    completed_ids = set()
+    if args.resume and os.path.exists(args.output) and os.path.getsize(args.output) > 0:
+        try:
+            with open(args.output, newline="", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for r in reader:
+                    if r.get("id"):
+                        completed_ids.add(r["id"])
+            print(f"Resuming: found {len(completed_ids)} completed questions in {args.output}")
+        except Exception as e:
+            print(f"Warning: could not read existing output for resume ({e}). Starting fresh.")
+    elif os.path.exists(args.output):
         os.remove(args.output)
 
     out_rows = []
     for i, row in enumerate(rows, 1):
         qid = row["id"]
+        if args.resume and qid in completed_ids:
+            print(f"[{i}/{len(rows)}] {qid}: ALREADY COMPLETED (skipping)")
+            continue
         question = row["question"]
         gold = row["gold_answer"]
         expected_act = row.get("expected_act", "")
