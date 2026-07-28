@@ -188,11 +188,28 @@ def check_wrong_section(answer_text: str, expected_act: str, expected_section: s
     return result
 
 
+ACT_ADJACENCY_WHITELIST = {
+    ('State Acquisition and Tenancy Act, 1950', 'Registration Act, 1908'),
+    ('Transfer of Property Act, 1882', 'Registration Act, 1908'),
+    ('Transfer of Property Act, 1882', 'Specific Relief Act, 1877'),
+    ('Non-Agricultural Tenancy Act, 1949', 'State Acquisition and Tenancy Act, 1950'),
+    ('Land Reforms Act, 2023', 'State Acquisition and Tenancy Act, 1950'),
+    ('Civil Courts Act, 1887', 'Code of Civil Procedure, 1908'),
+    ('Penal Code, 1860', 'Code of Criminal Procedure, 1898'),
+}
+
+def is_whitelisted_adjacency(expected_act, other_act):
+    for (a, b) in ACT_ADJACENCY_WHITELIST:
+        a_key, b_key = a.split(',')[0], b.split(',')[0]
+        if (a_key in expected_act and b_key in other_act) or \
+           (b_key in expected_act and a_key in other_act):
+            return True
+    return False
+
 def check_act_mismatch(answer_text: str, expected_act: str) -> dict:
     """Loose heuristic: if expected_act is known and a *different*,
-    well-known Act name appears in the answer instead, flag it. This is
-    intentionally conservative (string containment) to avoid false
-    positives — a human should still eyeball any flagged row."""
+    well-known Act name appears in the answer instead, flag it.
+    Accounts for compound expected Acts ('A / B') and adjacency whitelists."""
     if not expected_act:
         return {"act_mismatch": "N/A"}
     other_well_known_acts = [
@@ -205,11 +222,18 @@ def check_act_mismatch(answer_text: str, expected_act: str) -> dict:
         "Civil Courts Act", "Bangladesh Labour Act", "Registration Act",
         "Specific Relief Act",
     ]
-    expected_key = expected_act.split(",")[0].split("/")[0].strip()
-    mentioned_other = [
-        a for a in other_well_known_acts
-        if a in answer_text and a not in expected_key and expected_key not in a
-    ]
+    
+    expected_options = [a.strip() for a in expected_act.split('/')]
+    mentioned_other = []
+    
+    for a in other_well_known_acts:
+        if a in answer_text:
+            is_expected = any(exp.split(",")[0].strip() in a or a in exp.split(",")[0].strip() for exp in expected_options)
+            if not is_expected:
+                is_whitelisted = any(is_whitelisted_adjacency(exp, a) for exp in expected_options)
+                if not is_whitelisted:
+                    mentioned_other.append(a)
+                    
     return {"act_mismatch": bool(mentioned_other), "other_acts_mentioned": mentioned_other}
 
 

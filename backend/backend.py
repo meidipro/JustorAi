@@ -642,71 +642,69 @@ ACT_NAME_MAP = {
     r'suits valuation act': 'The Suits Valuation Act, 1887',
 }
 
-def classify_query(query: str) -> dict:
+import json
+
+async def classify_query(query: str) -> dict:
     section_pattern = (
         r"(?:section|sec\.?|dhara|\u09a7\u09be\u09b0\u09be|article|\u0985\u09a8\u09c1\u099a\u09cd\u099b\u09c7\u09a6|rule)"
         r"\s*(\d+[A-Za-z]?)"
     )
     sections = re.findall(section_pattern, query, re.IGNORECASE)
 
+    prompt = f"""Return ONLY JSON, no other text.
+{{
+  "is_personal_law_question": true|false,
+  "personal_law": "Muslim"|"Hindu"|"Christian"|"General"|null,
+  "legal_domain": "Inheritance"|"Tenancy"|"Property"|"Criminal Procedure"|"Tax"|"Other",
+  "candidate_acts": ["Act names actually relevant to answering this"]
+}}
+A question is NOT a personal-law question just because it mentions a
+relationship (grandfather, wife) or a religion in passing. "I am Muslim,
+my grandfather gifted me land" is a property/registration question -
+the legal issue is gift formality, not religious inheritance.
+Question: {query}"""
+
+    classification = {}
+    try:
+        completion = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"},
+            temperature=0.0
+        )
+        llm_response = completion.choices[0].message.content
+        classification = json.loads(llm_response)
+    except Exception as e:
+        print(f"Classifier error: {e}")
+
     detected_act = None
     for pattern, act_name in ACT_NAME_MAP.items():
         if re.search(pattern, query, re.IGNORECASE):
             detected_act = act_name
             break
+            
+    if not detected_act and classification.get("candidate_acts"):
+        detected_act = classification["candidate_acts"][0]
 
     q_lower = query.lower()
-    if any(k in q_lower for k in ["grandson", "grandfather", "dies in", "living son", "inheritance", "inherit", "share of"]):
-        detected_act = "Muslim Family Laws Ordinance, 1961"
-        if "4" not in sections:
-            sections.append("4")
-    elif "defamation" in q_lower and "warrant" in q_lower:
-        detected_act = "The Code of Criminal Procedure, 1898"
-        if "500" not in sections:
-            sections.append("500")
-    elif "executive magistrate" in q_lower or "full trial" in q_lower:
-        detected_act = "The Code of Criminal Procedure, 1898"
-        if "29C" not in sections and "29" not in sections:
-            sections.append("29C")
-    elif "police custody" in q_lower or ("confession" in q_lower and "knife" in q_lower):
-        detected_act = "The Evidence Act, 1872"
-        for s in ["25", "26", "27"]:
-            if s not in sections:
-                sections.append(s)
-    elif "naraji" in q_lower or ("police report" in q_lower and "magistrate" in q_lower):
-        detected_act = "The Code of Criminal Procedure, 1898"
+    if "naraji" in q_lower or ("police report" in q_lower and "magistrate" in q_lower):
+        if not detected_act:
+            detected_act = "The Code of Criminal Procedure, 1898"
         for s in ["190", "173"]:
             if s not in sections:
                 sections.append(s)
-    elif "bargadar" in q_lower or "barga" in q_lower or "land reforms" in q_lower:
-        detected_act = "Land Reforms Act, 2023"
-        for s in ["15", "19"]:
-            if s not in sections:
-                sections.append(s)
-    elif "neighbor" in q_lower and ("selling" in q_lower or "plot" in q_lower):
-        detected_act = "The State Acquisition and Tenancy Act, 1950"
-        if "96" not in sections:
-            sections.append("96")
-    elif "subdivision" in q_lower or "holding" in q_lower:
-        detected_act = "The State Acquisition and Tenancy Act, 1950"
-        if "117" not in sections:
-            sections.append("117")
-
-    personal_law = None
-    if re.search(r'\bmuslim\b', query, re.IGNORECASE):
-        personal_law = "Muslim"
-    elif re.search(r'\bhindu\b', query, re.IGNORECASE):
-        personal_law = "Hindu"
 
     return {
         "is_dlr_request": any(k in query.lower() for k in
             ["dlr", "case law", "judgment", "\u09a8\u099c\u09c0\u09b0", "precedent", "court held"]),
         "is_repealed_request": any(k in query.lower() for k in
-            ["repealed", "\u09ac\u09be\u09a4\u09bf\u09b2", "omitted", "old law", "previously", "was it ever"]),
+            ["repealed", "\u09ac\u09be\u09a4\u09bf\u09b2", "omitted"]),
         "sections": sections,
         "primary_section": sections[0] if sections else None,
         "detected_act": detected_act,
-        "personal_law": personal_law,
+        "personal_law": classification.get("personal_law"),
+        "is_personal_law_question": classification.get("is_personal_law_question", False),
+        "legal_domain": classification.get("legal_domain", "Other")
     }
 
 def _act_matches(chunk_act: str, detected: str) -> bool:
@@ -754,10 +752,39 @@ SUBJECT_BLOCK_MAP = {
     ],
 }
 
-def _filter_blocked_acts(acts: list, target_act: Optional[str]) -> list:
+PERSONAL_LAW_RESTRICTED_ACTS = [
+    "Muslim Family Laws Ordinance, 1961",
+    "The Dissolution of Muslim Marriages Act, 1939",
+    "The Hindu Marriage Registration Act, 2012",
+    "Hindu Women's Rights to Property Act, 1937"
+]
+
+def _filter_blocked_acts(acts: list, target_act: Optional[str], intent: dict) -> list:
     if not acts:
         return acts
-    primary = target_act or acts[0].get("act_name", "")
+        
+    # Domain-first filtering
+    is_personal = intent.get("is_personal_law_question", False)
+    pl = (intent.get("personal_law") or "").lower()
+    
+    domain_filtered = []
+    for a in acts:
+        act_nm = a.get("act_name", "")
+        # If not personal law, exclude restricted acts
+        if not is_personal:
+            if act_nm in PERSONAL_LAW_RESTRICTED_ACTS:
+                continue
+        # If personal law, exclude acts of wrong religion
+        elif is_personal and pl:
+            if pl == "hindu" and "muslim" in act_nm.lower():
+                continue
+            if pl == "muslim" and "hindu" in act_nm.lower():
+                continue
+        domain_filtered.append(a)
+        
+    acts = domain_filtered if domain_filtered else acts
+
+    primary = target_act or (acts[0].get("act_name", "") if acts else "")
     if not primary:
         return acts
     blocked_patterns = []
@@ -839,7 +866,7 @@ async def retrieve_context(query_vec: list, intent: dict):
     else:
         acts = acts[:6]
 
-    acts = _filter_blocked_acts(acts, target_act)
+    acts = _filter_blocked_acts(acts, target_act, intent)
 
     dlrs_search = await asyncio.to_thread(
         lambda: db.rpc("match_dlrs_v2", {
@@ -1214,6 +1241,69 @@ async def upload_status(job_id: str):
 
 
 
+async def verify_citations(answer: str, sources: list) -> str:
+    """
+    Scans the answer for patterns like "Section 54 [ACT-1]".
+    Extracts the section number ("54") and the Act index (1).
+    Looks up sources[0] to get the act_name.
+    Queries the database to verify if Section 54 exists for that act_name.
+    If it does not exist, strips the [ACT-1] tag from that sentence.
+    """
+    import re
+    from supabase import Client
+    db = cast(Client, supabase)
+    
+    if not sources:
+        return answer
+
+    # Find patterns like "Section 123... [ACT-1]"
+    # This regex is a simple heuristic to find nearby sections before an ACT tag
+    # Actually, simpler: we just extract all [ACT-X] tags. Wait, how do we know which section it's citing?
+    # We can use the SECTION_CLAIM_RE logic.
+    SECTION_CLAIM_RE = re.compile(
+        r"(?:section|sec\.?|dhara|ধারা)\s*"
+        r"(\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?)"
+        r"(?:[^.!?\n]{0,100}?)"
+        r"\[(ACT-\d+)\]", re.IGNORECASE
+    )
+    
+    matches = SECTION_CLAIM_RE.findall(answer)
+    invalid_tags = set()
+    
+    for sec_num, tag in matches:
+        try:
+            idx = int(tag.split("-")[1]) - 1
+            if 0 <= idx < len(sources):
+                act_name = sources[idx].get("act_name")
+                if not act_name:
+                    continue
+                
+                # Check DB directly!
+                import asyncio
+                def check_db():
+                    # Check if section_number matches or exists in chunk
+                    r = db.table("document_chunks").select("id").eq("act_name", act_name).ilike("section_number", f"%{sec_num}%").limit(1).execute()
+                    if r.data:
+                        return True
+                    # Check if parent section exists
+                    parent = sec_num.split("(")[0].rstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                    r = db.table("document_chunks").select("id").eq("act_name", act_name).ilike("section_number", f"%{parent}%").limit(1).execute()
+                    return bool(r.data)
+                    
+                exists = await asyncio.to_thread(check_db)
+                if not exists:
+                    print(f"CITATION BACKSTOP TRIPPED: {act_name} Section {sec_num} does not exist in DB!")
+                    invalid_tags.add(tag)
+        except Exception as e:
+            print(f"Verification error: {e}")
+            
+    # Strip invalid tags from the answer
+    for tag in invalid_tags:
+        answer = answer.replace(f" [{tag}]", "")
+        answer = answer.replace(f"[{tag}]", "")
+        
+    return answer
+
 @app.post("/chat", tags=["Chat"])
 async def chat(request: ChatRequest):
     """
@@ -1224,7 +1314,7 @@ async def chat(request: ChatRequest):
         raise HTTPException(503, "Supabase database client is not ready.")
 
     try:
-        intent = classify_query(request.message)
+        intent = await classify_query(request.message)
         query_vec = await _embed_async(request.message)
         acts, dlrs = await retrieve_context(query_vec, intent)
         ok, status = validate_retrieval(intent, acts, dlrs)
@@ -1259,6 +1349,10 @@ async def chat(request: ChatRequest):
 
         models = MODEL_CHAINS.get(request.role, MODEL_CHAINS["General Public"])
         answer, model_used = await call_llm_with_fallbacks(models, messages)
+        
+        # Step 4: Citation Verification Gate
+        answer = await verify_citations(answer, sources)
+        
         final = answer if request.role == "Legal Professional" else build_citation_footer(answer, sources)
 
         log_query(user_id=request.user_id, persona=request.role, query=request.message,
