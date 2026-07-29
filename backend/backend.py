@@ -665,17 +665,47 @@ the legal issue is gift formality, not religious inheritance.
 Question: {query}"""
 
     classification = {}
-    try:
-        completion = groq_client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"},
-            temperature=0.0
-        )
-        llm_response = completion.choices[0].message.content
-        classification = json.loads(llm_response)
-    except Exception as e:
-        print(f"Classifier error: {e}")
+    providers = [
+        ("groq", "llama-3.1-8b-instant"),
+        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
+        ("gemini", "gemini-2.5-flash")
+    ]
+    for provider, model in providers:
+        for attempt in range(2):
+            try:
+                if provider == "groq" and groq_client:
+                    completion = await asyncio.to_thread(
+                        lambda: groq_client.chat.completions.create(
+                            model=model,
+                            messages=[{"role": "user", "content": prompt}],
+                            response_format={"type": "json_object"},
+                            temperature=0.0
+                        )
+                    )
+                    llm_response = completion.choices[0].message.content
+                elif provider == "openrouter" and openrouter_client:
+                    completion = await asyncio.to_thread(
+                        lambda: openrouter_client.chat.completions.create(
+                            model=model,
+                            messages=[{"role": "user", "content": prompt}],
+                            response_format={"type": "json_object"},
+                            temperature=0.0
+                        )
+                    )
+                    llm_response = completion.choices[0].message.content
+                elif provider == "gemini" and GEMINI_API_KEY:
+                    llm_response = await asyncio.to_thread(_call_gemini_native, [{"role": "user", "content": prompt}], 0.0)
+                else:
+                    break
+                
+                classification = json.loads(llm_response)
+                if classification:
+                    break
+            except Exception as e:
+                logger.warning(f"Classifier {provider}/{model} error (attempt {attempt+1}): {e}")
+                await asyncio.sleep(1.0)
+        if classification:
+            break
 
     detected_act = None
     for pattern, act_name in ACT_NAME_MAP.items():
@@ -1071,12 +1101,15 @@ def compress_for_small_model(messages: list) -> list:
 MODEL_CHAINS = {
     "Legal Professional": [("groq","llama-3.3-70b-versatile"),
                            ("openrouter","meta-llama/llama-3.3-70b-instruct"),
+                           ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
                            ("gemini","gemini-2.5-flash")],
     "Law Student":        [("groq","llama-3.3-70b-versatile"),
                            ("openrouter","meta-llama/llama-3.3-70b-instruct"),
+                           ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
                            ("gemini","gemini-2.5-flash")],
     "General Public":     [("groq","llama-3.3-70b-versatile"),
                            ("openrouter","meta-llama/llama-3.3-70b-instruct"),
+                           ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
                            ("gemini","gemini-2.5-flash")],
 }
 
@@ -1087,45 +1120,61 @@ async def call_llm_with_fallbacks(models: list, messages) -> tuple:
     Using time.sleep() here would block the FastAPI event loop and crash concurrent requests.
     """
     import asyncio
-    for provider, model in models:
-        retries = 2
-        for attempt in range(retries):
-            try:
-                payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
-                if provider == "alibaba" and dashscope_client:
-                    c = await asyncio.to_thread(
-                        lambda: dashscope_client.chat.completions.create(
-                            model=model, messages=payload, temperature=0.1, max_tokens=1500)
-                    )
-                    return c.choices[0].message.content, f"{provider}/{model}"
-                elif provider == "gemini" and GEMINI_API_KEY:
-                    ans = await asyncio.to_thread(_call_gemini_native, payload, 0.1)
-                    return ans, f"{provider}/{model}"
-                elif provider == "groq" and groq_client:
-                    c = await asyncio.to_thread(
-                        lambda: groq_client.chat.completions.create(
-                            model=model, messages=payload, temperature=0.1, max_tokens=1500)
-                    )
-                    return c.choices[0].message.content, f"{provider}/{model}"
-                elif provider == "openrouter" and openrouter_client:
-                    c = await asyncio.to_thread(
-                        lambda: openrouter_client.chat.completions.create(
-                            model=model, messages=payload, temperature=0.1, max_tokens=1500)
-                    )
-                    return c.choices[0].message.content, f"{provider}/{model}"
-            except Exception as e:
-                err_msg = str(e)
-                if any(x in err_msg for x in ["tokens per day", "Limit", "AccessDenied", "403", "quota"]):
-                    logger.warning(f"[LLM] {provider}/{model} quota/access limit reached, falling back instantly.")
-                    break
-                if "429" in err_msg or "Too Many Requests" in err_msg or "rate_limit_exceeded" in err_msg:
-                    if attempt < retries - 1:
-                        wait_sec = 1.5
-                        logger.info(f"[{provider}/{model}] Rate limited (429). Retrying in {wait_sec}s (non-blocking)...")
+    
+    # Outer retry loop across model chain to recover from temporary multi-provider outages/rate-limits
+    for chain_pass in range(3):
+        for provider, model in models:
+            retries = 3
+            for attempt in range(retries):
+                try:
+                    payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
+                    if provider == "alibaba" and dashscope_client:
+                        c = await asyncio.to_thread(
+                            lambda: dashscope_client.chat.completions.create(
+                                model=model, messages=payload, temperature=0.1, max_tokens=1500)
+                        )
+                        return c.choices[0].message.content, f"{provider}/{model}"
+                    elif provider == "gemini" and GEMINI_API_KEY:
+                        ans = await asyncio.to_thread(_call_gemini_native, payload, 0.1)
+                        return ans, f"{provider}/{model}"
+                    elif provider == "groq" and groq_client:
+                        c = await asyncio.to_thread(
+                            lambda: groq_client.chat.completions.create(
+                                model=model, messages=payload, temperature=0.1, max_tokens=1500)
+                        )
+                        return c.choices[0].message.content, f"{provider}/{model}"
+                    elif provider == "openrouter" and openrouter_client:
+                        c = await asyncio.to_thread(
+                            lambda: openrouter_client.chat.completions.create(
+                                model=model, messages=payload, temperature=0.1, max_tokens=1500)
+                        )
+                        return c.choices[0].message.content, f"{provider}/{model}"
+                except Exception as e:
+                    err_msg = str(e)
+                    if any(x in err_msg for x in ["tokens per day", "Limit", "AccessDenied", "403", "quota"]):
+                        logger.warning(f"[LLM] {provider}/{model} quota/access limit reached, falling back instantly.")
+                        break
+                    
+                    is_transient = any(x in err_msg for x in [
+                        "429", "Too Many Requests", "rate_limit", "ConnectionTerminated", 
+                        "connection", "Connection", "500", "502", "503", "504", 
+                        "Timeout", "timeout", "Reset", "Closed", "http2"
+                    ]) or isinstance(e, (ConnectionError, TimeoutError))
+
+                    if is_transient and attempt < retries - 1:
+                        wait_sec = (attempt + 1) * 2.5
+                        logger.info(f"[{provider}/{model}] Transient error ({err_msg[:60]}). Retrying in {wait_sec}s...")
                         await asyncio.sleep(wait_sec)
                         continue
-                logger.warning(f"[LLM] {provider}/{model} failed: {e}")
-                break  # try next model
+
+                    logger.warning(f"[LLM] {provider}/{model} failed (attempt {attempt+1}/{retries}): {e}")
+                    break  # try next provider/model
+                    
+        if chain_pass < 2:
+            wait_pass = (chain_pass + 1) * 3.0
+            logger.warning(f"[LLM] All providers failed on chain pass {chain_pass+1}. Retrying whole chain in {wait_pass}s...")
+            await asyncio.sleep(wait_pass)
+
     raise HTTPException(status_code=503, detail="AI service busy. Please try again in a moment.")
 
 
