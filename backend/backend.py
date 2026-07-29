@@ -868,17 +868,24 @@ async def retrieve_context(query_vec: list, intent: dict):
     if query_sections:
         clean_target_secs = set()
         for s in query_sections:
-            clean_target_secs.update(re.findall(r'\b\d+[A-Za-z]?\b', str(s)))
+            base_s = str(s).split("(")[0].strip()
+            if base_s:
+                clean_target_secs.add(base_s)
+            for token in re.findall(r'\b\d+[A-Za-z]?\b', str(s)):
+                clean_target_secs.add(token)
+
         def _is_exact_sec(chunk_sec):
-            c_nums = re.findall(r'\b\d+[A-Za-z]?\b', str(chunk_sec or ""))
-            return any(cn in clean_target_secs for cn in c_nums)
+            c_raw = str(chunk_sec or "").strip()
+            c_base = c_raw.split("(")[0].strip()
+            c_nums = set(re.findall(r'\b\d+[A-Za-z]?\b', c_raw))
+            return (c_raw in clean_target_secs) or (c_base in clean_target_secs) or any(cn in clean_target_secs for cn in c_nums if len(cn) > 1 or cn == c_base)
 
         exact_secs = [a for a in acts if _is_exact_sec(a.get("section_number", ""))]
         other_secs = [a for a in acts if not _is_exact_sec(a.get("section_number", ""))]
         if not exact_secs and clean_target_secs:
             def _fetch_sec():
                 res_list = []
-                for sec_num in sorted(clean_target_secs)[:3]:
+                for sec_num in sorted(clean_target_secs, key=lambda x: len(x), reverse=True)[:3]:
                     sq = db.table("document_chunks").select("*").ilike("section_number", f"%{sec_num}%")
                     if target_act:
                         sq = sq.ilike("act_name", f"%{target_act}%")
