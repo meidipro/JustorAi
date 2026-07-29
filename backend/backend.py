@@ -609,10 +609,10 @@ legal advice.*"""
 
 # Add a line ONLY for acts confirmed present in STEP 0b.
 ACT_NAME_MAP = {
-    r'non.?agricultural tenancy|non.?agri tenancy|tenancy act.{0,5}1949|n\.?a\.?t\.? act|nat act|rented residential plot|pucca house|section 24 pre.?emption|fixed term lease': 'The Non-Agricultural Tenancy Act, 1949',
+    r'non.?agricultural tenancy|non.?agri tenancy|non.?agricultural land|tenancy act.{0,5}1949|n\.?a\.?t\.? act|nat act|rented residential plot|pucca house|section 24 pre.?emption|fixed term lease': 'The Non-Agricultural Tenancy Act, 1949',
     r'\bsat act\b|state acquisition|sat 1950|section 96|pre.?emption|neighbor.*selling.*agricultural|record.?of.?rights|khas.*uncultivated|illegal subdivision': 'The State Acquisition and Tenancy Act, 1950',
     r'land reforms act|bhumi sanskar|land reform 2023|bargadar|sharecropper|barga': 'Land Reforms Act, 2023',
-    r'transfer of property act|\btpa\b|rule against perpetuity|doctrine of election|pendency of a partition suit|contract for sale|buy a flat|stamp paper.*own|unregistered sale': 'The Transfer of Property Act, 1882',
+    r'transfer of property act|\btpa\b|rule against perpetuity|doctrine of election|pendency of a partition suit|contract for sale|buy a flat|stamp paper.*own|unregistered sale|registered deed.*not paid|sold my land': 'The Transfer of Property Act, 1882',
     r'trademarks? act|trademark 2009': 'Trademarks Act, 2009',
     r'penal code|\bipc\b|\bpc\b|defamation': 'The Penal Code, 1860',
     r'code of criminal procedure|\bcrpc\b': 'The Code of Criminal Procedure, 1898',
@@ -876,6 +876,63 @@ async def retrieve_context(query_vec: list, intent: dict):
         }).execute()
     )
     dlr_chunks = dlrs_search.data or []
+
+    # === CONFIDENCE GUARD ===
+    if acts:
+        conf = acts[0].get("similarity", 0)
+        if conf < 0.25 and not intent.get("detected_act") and intent.get("is_personal_law_question"):
+            print("CONFIDENCE GUARD: Suppressing low-confidence acts for personal law query.")
+            acts = []
+
+    # === NEIGHBOR WINDOWING (v17) ===
+    if acts:
+        top_ids = [a["id"] for a in acts[:5] if "id" in a]
+        if top_ids:
+            try:
+                idx_res = await asyncio.to_thread(
+                    lambda: db.table("document_chunks").select("id, document_id, chunk_index").in_("id", top_ids).execute()
+                )
+                if idx_res.data:
+                    id_to_meta = {r["id"]: r for r in idx_res.data if r.get("chunk_index") is not None}
+                    
+                    neighbor_conds = []
+                    for meta in id_to_meta.values():
+                        doc_id = meta["document_id"]
+                        c_idx = meta["chunk_index"]
+                        neighbor_conds.append(f"and(document_id.eq.{doc_id},chunk_index.eq.{c_idx - 1})")
+                        neighbor_conds.append(f"and(document_id.eq.{doc_id},chunk_index.eq.{c_idx + 1})")
+                    
+                    if neighbor_conds:
+                        or_clause = ",".join(neighbor_conds)
+                        neighbors_res = await asyncio.to_thread(
+                            lambda: db.table("document_chunks").select("id, document_id, chunk_index, act_name, section_number, section_title, content, status").or_(or_clause).execute()
+                        )
+                        
+                        if neighbors_res.data:
+                            existing_ids = {a["id"] for a in acts if "id" in a}
+                            new_neighbors = [nc for nc in neighbors_res.data if nc["id"] not in existing_ids]
+                            
+                            for act in acts:
+                                if act.get("id") in id_to_meta:
+                                    act["chunk_index"] = id_to_meta[act["id"]]["chunk_index"]
+                            
+                            acts.extend(new_neighbors)
+                            
+                            doc_groups = {}
+                            doc_order = []
+                            for act in acts:
+                                did = act.get("document_id") or act.get("id")
+                                if did not in doc_groups:
+                                    doc_groups[did] = []
+                                    doc_order.append(did)
+                                doc_groups[did].append(act)
+                            
+                            for did, group in doc_groups.items():
+                                group.sort(key=lambda x: x.get("chunk_index", 999999))
+                            
+                            acts = [act for did in doc_order for act in doc_groups[did]]
+            except Exception as e:
+                print(f"Neighbor windowing error: {e}")
 
     return acts, dlr_chunks
 
