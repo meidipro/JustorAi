@@ -880,6 +880,27 @@ async def retrieve_context(query_vec: list, intent: dict):
     import asyncio
     detected = intent.get("detected_act")
     primary_sec = intent.get("primary_section")
+    is_repealed_req = intent.get("is_repealed_request", False)
+
+    # Item 3: Exact Act + Section Lookup First (before vector search)
+    if detected and primary_sec:
+        try:
+            exact_res = await asyncio.to_thread(
+                lambda: db.table("document_chunks")
+                    .select("*")
+                    .ilike("act_name", f"%{detected}%")
+                    .ilike("section_number", f"%{primary_sec}%")
+                    .limit(4)
+                    .execute()
+            )
+            if exact_res.data:
+                exact_acts = exact_res.data
+                if not is_repealed_req:
+                    exact_acts = [a for a in exact_acts if str(a.get("status", "Active")).strip().lower() not in {"omitted", "repealed", "deleted"}]
+                if exact_acts:
+                    return exact_acts, []
+        except Exception as e:
+            logger.warning(f"Exact lookup warning: {e}")
 
     acts_search = await asyncio.to_thread(
         lambda: db.rpc("match_acts_v2", {
@@ -887,12 +908,16 @@ async def retrieve_context(query_vec: list, intent: dict):
             "match_count": 20,
             "match_threshold": 0.22,
             "query_section": primary_sec,
-            "prefer_dead_law": intent.get("is_repealed_request", False),
+            "prefer_dead_law": is_repealed_req,
             "prefer_amended": False,
             "filter_act_name": detected,
         }).execute()
     )
     acts = acts_search.data or []
+
+    # Item 2: Current-Law Gate (Filter dead law before context format)
+    if not is_repealed_req and acts:
+        acts = [a for a in acts if str(a.get("status", "Active")).strip().lower() not in {"omitted", "repealed", "deleted"}]
 
     target_act = detected
     if not target_act and acts and acts[0].get("similarity", 0) > 0.45:
@@ -1091,31 +1116,12 @@ def build_citation_footer(answer: str, sources: list) -> str:
     if "REFERENCES" in answer or not sources:   # lawyer IRAC builds its own
         return answer
 
-    # Deterministic section-to-tag binding map
-    sec_to_source = {}
-    for s in sources:
-        if s.get("type") == "statute" and s.get("section"):
-            sec_clean = str(s["section"]).strip().lower()
-            sec_base = re.match(r'^(\d+[A-Za-z]?)', sec_clean).group(1) if re.match(r'^(\d+[A-Za-z]?)', sec_clean) else sec_clean
-            sec_to_source[sec_clean] = s
-            sec_to_source[sec_base] = s
-
-    # Correct mismatched tags in prose based on section numbers mentioned nearby
-    def fix_tag_match(match):
-        sec_num = match.group(1).lower()
-        if sec_num in sec_to_source:
-            correct_tag = f"[{sec_to_source[sec_num]['id']}]"
-            return f"Section {match.group(1)} {correct_tag}"
-        return match.group(0)
-
-    # Pattern matching "Section 498 [ACT-2]" or "Section 498"
-    answer = re.sub(r'Section\s+(\d+[A-Za-z]?(?:\(\d+\))?)\s+(\[(?:ACT|DLR)-\d+\])', fix_tag_match, answer, flags=re.IGNORECASE)
-
-    used = {u.strip('[]') for u in re.findall(r'\[(?:ACT|DLR)-\d+\]', answer)}
-    if not used:
+    # Validate citations: Only include sources explicitly referenced with matching tags
+    used_tags = {u.strip('[]') for u in re.findall(r'\[(?:ACT|DLR)-\d+\]', answer)}
+    if not used_tags:
         return answer
 
-    cited = [s for s in sources if s['id'] in used]
+    cited = [s for s in sources if s['id'] in used_tags]
     if not cited:
         return answer
 
