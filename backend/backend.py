@@ -1066,7 +1066,7 @@ def format_retrieved_context(acts: list, dlrs: list):
         if act.get('amendment_notes'):
             block += f"Amendment Notes: {act['amendment_notes']}\n"
         block += "---\n"
-        sources.append({"id": sid, "type": "statute", "act": name,
+        sources.append({"id": sid, "tag": f"[{sid}]", "type": "statute", "act": name,
                         "section": num, "title": title, "status": status})
 
     block += "\n=== CASE LAW (DLR) ===\n"
@@ -1082,7 +1082,7 @@ def format_retrieved_context(acts: list, dlrs: list):
                   f"Subject: {dlr.get('subject_law','')}\n"
                   f"Ratio Decidendi: {dlr.get('ratio_decidendi','')}\n"
                   f"Reference Context: {(dlr.get('judgment_content','') or '')[:300]}...\n---\n")
-        sources.append({"id": sid, "type": "case_law", "case": title,
+        sources.append({"id": sid, "tag": f"[{sid}]", "type": "case_law", "case": title,
                         "court": court, "year": year, "citation": cite})
 
     return block, sources
@@ -1090,12 +1090,35 @@ def format_retrieved_context(acts: list, dlrs: list):
 def build_citation_footer(answer: str, sources: list) -> str:
     if "REFERENCES" in answer or not sources:   # lawyer IRAC builds its own
         return answer
+
+    # Deterministic section-to-tag binding map
+    sec_to_source = {}
+    for s in sources:
+        if s.get("type") == "statute" and s.get("section"):
+            sec_clean = str(s["section"]).strip().lower()
+            sec_base = re.match(r'^(\d+[A-Za-z]?)', sec_clean).group(1) if re.match(r'^(\d+[A-Za-z]?)', sec_clean) else sec_clean
+            sec_to_source[sec_clean] = s
+            sec_to_source[sec_base] = s
+
+    # Correct mismatched tags in prose based on section numbers mentioned nearby
+    def fix_tag_match(match):
+        sec_num = match.group(1).lower()
+        if sec_num in sec_to_source:
+            correct_tag = f"[{sec_to_source[sec_num]['id']}]"
+            return f"Section {match.group(1)} {correct_tag}"
+        return match.group(0)
+
+    # Pattern matching "Section 498 [ACT-2]" or "Section 498"
+    answer = re.sub(r'Section\s+(\d+[A-Za-z]?(?:\(\d+\))?)\s+(\[(?:ACT|DLR)-\d+\])', fix_tag_match, answer, flags=re.IGNORECASE)
+
     used = {u.strip('[]') for u in re.findall(r'\[(?:ACT|DLR)-\d+\]', answer)}
     if not used:
         return answer
+
     cited = [s for s in sources if s['id'] in used]
     if not cited:
         return answer
+
     lines = ["\n\n---\n**Sources**"]
     for s in cited:
         if s['type'] == 'statute':

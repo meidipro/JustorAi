@@ -103,7 +103,7 @@ import requests
 # Deterministic checks — no LLM involved, pure pattern/lookup logic
 # ---------------------------------------------------------------------------
 
-CITATION_TAG_RE = re.compile(r"\[(ACT-\d+|DLR-\d+)\]")
+CITATION_TAG_RE = re.compile(r"\[(?:ACT|DLR)-\d+\]")
 SECTION_CLAIM_RE = re.compile(
     r"(?:[Ss]ections?|[Aa]rticles?)\s+((?:\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?(?:\s*(?:,|and|to|-)\s*)?)+)"
 )
@@ -130,51 +130,52 @@ def check_fabricated_citation(answer_text: str, retrieved_tags: set[str]) -> dic
     if not retrieved_tags:
         return {"fabricated_citation": "NOT_AVAILABLE", "fabricated_tags": []}
     cited = set(CITATION_TAG_RE.findall(answer_text))
-    fabricated = cited - retrieved_tags
+    norm_retrieved = {t if t.startswith("[") else f"[{t}]" for t in retrieved_tags}
+    fabricated = cited - norm_retrieved
     return {
         "fabricated_citation": bool(fabricated),
-        "fabricated_tags": sorted(fabricated),
+        "fabricated_tags": sorted(list(fabricated)),
     }
 
 
 def check_dlr_case_exists(answer_text: str, known_dlr_citations: set[str]) -> dict:
     """Flags a DLR-style citation (e.g. '38 DLR (AD) 161') appearing in the
     answer text that doesn't match anything in the known DLR citation set
-    pulled from document_chunks. Independent of the [DLR-n] tag check above
-    — catches cases where the model writes out a citation in prose without
-    using the tag format at all."""
+    pulled from document_chunks."""
     found = set(m.group(0).strip() for m in DLR_CITATION_RE.finditer(answer_text))
     if not known_dlr_citations:
-        return {"unverifiable_dlr_citation": "NOT_AVAILABLE", "citations_found": sorted(found)}
+        return {"unverifiable_dlr_citation": "NOT_AVAILABLE", "dlr_citations_found": sorted(list(found))}
     unverifiable = {c for c in found if c not in known_dlr_citations}
     return {
         "unverifiable_dlr_citation": bool(unverifiable),
-        "citations_found": sorted(found),
-        "unverifiable_citations": sorted(unverifiable),
+        "dlr_citations_found": sorted(list(found)),
+        "unverifiable_citations": sorted(list(unverifiable)),
     }
 
 
 def check_wrong_section(answer_text: str, expected_act: str, expected_section: str,
                          db_lookup_fn=None) -> dict:
     """Compares section numbers claimed in the answer against the expected
-    section for this question. This is a *weak* check on its own (the
-    answer may legitimately cite other sections too) — its real job is to
-    confirm the expected section is mentioned, and optionally (if
-    db_lookup_fn is provided) confirm any claimed section actually exists
-    in document_chunks for the claimed Act."""
+    section for this question, handling subsection normalization (e.g., 96(1) matches 96)."""
     claimed_raw = SECTION_CLAIM_RE.findall(answer_text)
     claimed_sections = []
     for raw in claimed_raw:
         claimed_sections.extend(re.findall(r'\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?', raw))
     exp_mentioned = "N/A"
     if expected_section and str(expected_section).strip() and str(expected_section).strip().lower() != "nan":
-        exp_nums = re.findall(r'\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?', str(expected_section))
-        base_nums = [re.match(r'^(\d+[A-Za-z]?)', e).group(1) for e in exp_nums if re.match(r'^(\d+[A-Za-z]?)', e)]
-        
-        exp_mentioned = any(
-            str(num).lower() in [str(c).lower() for c in claimed_sections]
-            for num in exp_nums + base_nums
-        ) if exp_nums else (str(expected_section) in claimed_sections)
+        exp_str = str(expected_section).strip()
+        exp_m = re.match(r'^(\d+[A-Za-z]?)', exp_str)
+        exp_base = exp_m.group(1) if exp_m else exp_str
+
+        claimed_bases = []
+        for c in claimed_sections:
+            cm = re.match(r'^(\d+[A-Za-z]?)', str(c))
+            claimed_bases.append(cm.group(1) if cm else str(c))
+
+        exp_mentioned = (
+            any(exp_str.lower() == str(c).lower() for c in claimed_sections) or
+            any(exp_base.lower() == str(cb).lower() for cb in claimed_bases)
+        )
 
     result = {
         "claimed_sections": claimed_sections,
@@ -184,8 +185,7 @@ def check_wrong_section(answer_text: str, expected_act: str, expected_section: s
         nonexistent = [s for s in claimed_sections if not db_lookup_fn(expected_act, s)]
         result["claimed_section_not_in_db"] = nonexistent
     else:
-        result["claimed_section_not_in_db"] = "NOT_AVAILABLE"
-    return result
+        return result
 
 
 ACT_ADJACENCY_WHITELIST = {
@@ -251,6 +251,9 @@ def run_all_checks(answer_text: str, expected_act: str, expected_section: str,
     out.update(check_wrong_section(answer_text, expected_act, expected_section))
     out.update(check_act_mismatch(answer_text, expected_act))
     out.update(check_jurisdiction_leakage(answer_text))
+    tags_found = CITATION_TAG_RE.findall(answer_text)
+    dlr_found = [m.group(0).strip() for m in DLR_CITATION_RE.finditer(answer_text)]
+    out["citations_found"] = sorted(list(set(tags_found + dlr_found)))
     return out
 
 
@@ -284,7 +287,7 @@ def call_chat_endpoint(backend_url: str, question: str, timeout: int = 240) -> C
             data = resp.json()
             answer_text = data.get("response", "")
             sources = data.get("retrieved_sources", [])  # only present if backend supports eval_mode
-            tags = {s.get("tag") for s in sources if s.get("tag")}
+            tags = {s.get("tag") or f"[{s.get('id')}]" for s in sources if s.get("tag") or s.get("id")}
             contexts = [s.get("content") or s.get("ratio_decidendi") or "" for s in sources]
             return ChatResult(
                 answer_text=answer_text,
