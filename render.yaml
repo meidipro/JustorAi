@@ -9,7 +9,7 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
-      - key: VITE_GROQ_API_KEY
+      - key: GROQ_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
         # Comma-separated list of allowed frontend origins

@@ -193,9 +193,12 @@ ACT_ADJACENCY_WHITELIST = {
     ('Transfer of Property Act, 1882', 'Registration Act, 1908'),
     ('Transfer of Property Act, 1882', 'Specific Relief Act, 1877'),
     ('Non-Agricultural Tenancy Act, 1949', 'State Acquisition and Tenancy Act, 1950'),
+    ('Non-Agricultural Tenancy Act, 1949', 'Transfer of Property Act, 1882'),
     ('Land Reforms Act, 2023', 'State Acquisition and Tenancy Act, 1950'),
+    ('Land Reforms Act, 2023', 'Registration Act, 1908'),
     ('Civil Courts Act, 1887', 'Code of Civil Procedure, 1908'),
     ('Penal Code, 1860', 'Code of Criminal Procedure, 1898'),
+    ('Contract Act, 1872', 'Code of Civil Procedure, 1908'),
 }
 
 def is_whitelisted_adjacency(expected_act, other_act):
@@ -207,28 +210,25 @@ def is_whitelisted_adjacency(expected_act, other_act):
     return False
 
 def check_act_mismatch(answer_text: str, expected_act: str) -> dict:
-    """Loose heuristic: if expected_act is known and a *different*,
-    well-known Act name appears in the answer instead, flag it.
-    Accounts for compound expected Acts ('A / B') and adjacency whitelists."""
     if not expected_act:
         return {"act_mismatch": "N/A"}
+    exp_clean = re.sub(r'^(?:the\s+)', '', expected_act.strip(), flags=re.I)
+    expected_options = [re.sub(r'^(?:the\s+)', '', opt.strip(), flags=re.I) for opt in exp_clean.split('/')]
     other_well_known_acts = [
         "Transfer of Property Act", "Code of Criminal Procedure",
         "Code of Civil Procedure", "Penal Code", "Limitation Act",
         "State Acquisition and Tenancy Act", "Non-Agricultural Tenancy Act",
         "Land Reforms Act", "Land Reforms Ordinance", "Income Tax Act",
         "Trademarks Act", "Muslim Family Laws Ordinance",
-        "Hindu Women's Rights to Property Act", "Evidence Act",
-        "Civil Courts Act", "Bangladesh Labour Act", "Registration Act",
-        "Specific Relief Act",
+        "Hindu Women's Rights to Property Act", "Civil Courts Act",
+        "Evidence Act", "Bangladesh Labour Act", "Registration Act",
+        "Specific Relief Act"
     ]
-    
-    expected_options = [a.strip() for a in expected_act.split('/')]
     mentioned_other = []
     
     for a in other_well_known_acts:
-        if a in answer_text:
-            is_expected = any(exp.split(",")[0].strip() in a or a in exp.split(",")[0].strip() for exp in expected_options)
+        if a.lower() in answer_text.lower():
+            is_expected = any(exp.split(",")[0].strip().lower() in a.lower() or a.lower() in exp.split(",")[0].strip().lower() for exp in expected_options)
             if not is_expected:
                 is_whitelisted = any(is_whitelisted_adjacency(exp, a) for exp in expected_options)
                 if not is_whitelisted:
@@ -267,7 +267,7 @@ class ChatResult:
     error: Optional[str] = None
 
 
-def call_chat_endpoint(backend_url: str, question: str, timeout: int = 60) -> ChatResult:
+def call_chat_endpoint(backend_url: str, question: str, timeout: int = 240) -> ChatResult:
     url = backend_url.rstrip("/") + "/chat"
     payload = {
         "message": question,
