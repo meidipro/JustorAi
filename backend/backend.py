@@ -41,20 +41,30 @@ app = FastAPI(
 # Configurable CORS for environment security
 raw_origins = os.getenv("ALLOWED_ORIGINS", "").strip()
 if raw_origins:
-    origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+    if raw_origins == "*":
+        origins = ["*"]
+    else:
+        origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
 else:
     origins = [
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
+        "https://justorai.com",
+        "https://www.justorai.com",
+        "http://justorai.com",
+        "http://www.justorai.com",
         "https://justor.ai",
+        "https://www.justor.ai",
+        "https://justorai.vercel.app",
         "https://justor-ai.vercel.app"
     ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https?://.*(justorai\.com|justor\.ai|vercel\.app|localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
