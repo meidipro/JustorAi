@@ -977,18 +977,30 @@ async def retrieve_context(query_vec: list, intent: dict):
         except Exception as e:
             logger.warning(f"Exact lookup warning: {e}")
 
-    acts_search = await asyncio.to_thread(
-        lambda: db.rpc("match_acts_v2", {
-            "query_embedding": query_vec,
-            "match_count": 20,
-            "match_threshold": 0.22,
-            "query_section": primary_sec,
-            "prefer_dead_law": is_repealed_req,
-            "prefer_amended": False,
-            "filter_act_name": detected,
-        }).execute()
-    )
-    acts = acts_search.data or []
+    acts = []
+    try:
+        acts_search = await asyncio.to_thread(
+            lambda: db.rpc("match_acts_v2", {
+                "query_embedding": query_vec,
+                "match_count": 8,
+                "match_threshold": 0.30,
+                "query_section": primary_sec,
+                "prefer_dead_law": is_repealed_req,
+                "prefer_amended": False,
+                "filter_act_name": detected,
+            }).execute()
+        )
+        acts = acts_search.data or []
+    except Exception as e:
+        logger.warning(f"match_acts_v2 RPC execution warning: {e}")
+        if detected:
+            try:
+                fallback = await asyncio.to_thread(
+                    lambda: db.table("document_chunks").select("*").ilike("act_name", f"%{detected}%").limit(4).execute()
+                )
+                acts = fallback.data or []
+            except Exception as fe:
+                logger.warning(f"Direct act lookup fallback error: {fe}")
 
     # Item 2: Current-Law Gate (Filter dead law before context format)
     if not is_repealed_req and acts:
@@ -1000,10 +1012,13 @@ async def retrieve_context(query_vec: list, intent: dict):
     if target_act:
         same = [a for a in acts if _act_matches(a.get("act_name", ""), target_act)]
         if not same and detected:
-            fallback = await asyncio.to_thread(
-                lambda: db.table("document_chunks").select("*").ilike("act_name", f"%{detected}%").limit(4).execute()
-            )
-            acts = fallback.data or []
+            try:
+                fallback = await asyncio.to_thread(
+                    lambda: db.table("document_chunks").select("*").ilike("act_name", f"%{detected}%").limit(4).execute()
+                )
+                acts = fallback.data or []
+            except Exception as fe:
+                logger.warning(f"Fallback query warning: {fe}")
         else:
             acts = same
 
@@ -1583,6 +1598,21 @@ async def verify_citations(answer: str, sources: list) -> str:
     return answer
 
 
+def is_smalltalk(text: str) -> bool:
+    clean = text.strip().lower()
+    clean = re.sub(r'[^\w\s]', '', clean)
+    greetings = {
+        "hi", "hello", "hey", "salam", "assalam", "assalamualaikum", "assalamu alaikum",
+        "good morning", "good afternoon", "good evening", "how are you", "who are you",
+        "what can you do", "help", "thanks", "thank you", "dhonnobad",
+        "কে আপনি", "হ্যালো", "হাই", "সালাম", "আসসালামু আলাইকুম", "ধন্যবাদ", "কেমন আছেন"
+    }
+    if clean in greetings or (len(clean.split()) <= 2 and any(clean.startswith(g) for g in ["hi", "hello", "hey", "salam", "আসসালামু", "সালাম"])):
+        if not re.search(r'\b(section|sec|act|law|court|suit|case|dhara|ধারা|আইন|মামলা)\b', text, re.IGNORECASE):
+            return True
+    return False
+
+
 @app.post("/chat", tags=["Chat"])
 async def chat(request: ChatRequest, req: Request):
     """
@@ -1601,6 +1631,26 @@ async def chat(request: ChatRequest, req: Request):
 
     # Gap 1 Fix: Derive user_role server-side from JWT profile if logged in
     user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else (request.role or "General Public")
+
+    # Fast Smalltalk / Greeting Handler
+    if is_smalltalk(request.message):
+        greeting_text = (
+            "Peace be upon you! I am **Justor AI**, your Bangladeshi Legal Intelligence Assistant.\n\n"
+            "I can help you with:\n"
+            "- **Citizen Authority Guides**: Land registration, e-Namjari (Mutation), Khatians, DNCRP consumer compensation, divorce & denmohor procedures, and labour severance.\n"
+            "- **Statutory Law Research**: Verbatim sections and provisions from the Laws of Bangladesh (`bdlaws.minlaw.gov.bd`).\n"
+            "- **Landmark Case Ratios**: Supreme Court Appellate and High Court Division principles.\n\n"
+            "How can I assist your legal inquiry today?"
+        )
+        return JSONResponse(content={
+            "query_run_id": query_run_id,
+            "response": greeting_text,
+            "sources_used": 0,
+            "sources": [],
+            "retrieval_status": "greeting",
+            "model_used": "direct-assistant",
+            "metadata": {"detected_act": None, "sections_found": [], "is_greeting": True}
+        })
 
     try:
         intent = await classify_query(request.message)
