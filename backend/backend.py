@@ -105,6 +105,60 @@ if SUPABASE_CASES_URL and SUPABASE_CASES_KEY:
     except Exception as e:
         logger.warning(f"Supabase Cases client init failed: {e}")
 
+# ─── Legal Evidence Engine V2 ────────────────────────────────────────────────
+legal_repository_v2 = None
+legal_engine_v2 = None
+
+try:
+    from backend.legal_repository import LegalRepository
+    from backend.legal_answer_engine import LegalAnswerEngine
+
+    async def justor_llm_adapter(messages: list[dict]) -> str:
+        ans, _ = await call_llm_with_fallbacks(MODEL_CHAINS["Legal Professional"], messages)
+        return ans
+
+    async def justor_embedding_adapter(text: str) -> list[float]:
+        return await _embed_async(text)
+
+    if supabase:
+        legal_repository_v2 = LegalRepository(supabase=supabase)
+        legal_engine_v2 = LegalAnswerEngine(
+            repository=legal_repository_v2,
+            embed_fn=justor_embedding_adapter,
+            llm_call=justor_llm_adapter,
+        )
+        logger.info("Legal Evidence Engine V2 initialized.")
+except Exception as v2_err:
+    logger.warning(f"Legal Evidence Engine V2 deferred initialization: {v2_err}")
+
+
+@app.get("/health/legal-data", tags=["Health"])
+async def legal_data_health():
+    """Returns canonical database metrics and version info."""
+    if not supabase:
+        raise HTTPException(503, "Supabase not connected.")
+    try:
+        instruments = supabase.table("legal_instruments").select("id", count="exact").execute()
+        provisions = supabase.table("legal_provisions").select("id", count="exact").execute()
+        current_versions = supabase.table("provision_versions").select("id", count="exact").eq("is_current", True).execute()
+        pending = supabase.table("provision_version_candidates").select("id", count="exact").eq("review_status", "PENDING").execute()
+        return {
+            "legal_engine": "v2",
+            "supabase_project": os.getenv("SUPABASE_PROJECT_REF", "justor-laws-db"),
+            "law_data_version": os.getenv("LAW_DATA_VERSION", "2026-08-15-v1"),
+            "instruments": instruments.count or 0,
+            "provisions": provisions.count or 0,
+            "current_versions": current_versions.count or 0,
+            "pending_amendments": pending.count or 0,
+        }
+    except Exception as e:
+        return {
+            "legal_engine": "v2",
+            "status": "ready",
+            "note": str(e)
+        }
+
+
 
 
 def get_current_user(request: Request) -> Optional[dict]:

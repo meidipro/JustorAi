@@ -1,0 +1,651 @@
+{
+  "database_overview": {
+    "total_document_chunks_in_supabase": 46773,
+    "total_statutory_act_chunks": 46757,
+    "total_unique_statutes": 29,
+    "total_live_supreme_court_dlr_chunks": 14,
+    "total_staged_supreme_court_benchmark_cases": 25
+  },
+  "statutory_acts_stored": [
+    {
+      "act_name": "The Insurance Act, 1938",
+      "sections_ingested": 178,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Khulna City Corporation Ordinance, 1984",
+      "sections_ingested": 167,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Irrigation Act, 1876",
+      "sections_ingested": 122,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Inland Shipping Ordinance, 1976",
+      "sections_ingested": 74,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Jahangirnagar University Act, 1973",
+      "sections_ingested": 56,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Intermediate and Secondary Education Ordinance, 1961 (East Pakistan Ordinance)",
+      "sections_ingested": 46,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Investment Corporation of Bangladesh Ordinance, 1976",
+      "sections_ingested": 38,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Insurance Corporations Act, 1973",
+      "sections_ingested": 36,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The International Crimes (Tribunals) Act, 1973",
+      "sections_ingested": 36,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The International Centre for Diarrhoeal Disease Research, Bangladesh, Ordinance, 1978",
+      "sections_ingested": 32,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Inland Water Transport Authority Ordinance, 1958 (East Pakistan Ordinance)",
+      "sections_ingested": 29,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Jute Ordinance, 1962",
+      "sections_ingested": 29,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Islamic Foundation Act, 1975",
+      "sections_ingested": 26,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Jute Regulation Act, 1940 (Bengal Act)",
+      "sections_ingested": 25,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The International Financial Organisations Order, 1972 (President's Order)",
+      "sections_ingested": 13,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Junior Cadet Corps Act, 1953",
+      "sections_ingested": 13,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Industrial Statistics Act, 1942",
+      "sections_ingested": 12,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Khulna Metropolitan Police Ordinance, 1985",
+      "sections_ingested": 12,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Industrial Development Corporation Ordinance, 1962",
+      "sections_ingested": 10,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Jute Companies (Acquisition of Shares) Ordinance, 1975",
+      "sections_ingested": 8,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Jatiya Rakkhi Bahini (Absorption in the Army) Ordinance, 1975",
+      "sections_ingested": 8,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Islamic Development Bank Act, 1975",
+      "sections_ingested": 7,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Juvenile Smoking Act, 1919",
+      "sections_ingested": 6,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The International Finance Corporation Ordinance, 1976",
+      "sections_ingested": 5,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Kazis Act, 1880",
+      "sections_ingested": 5,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Industrial Relations (Regulation) (Repeal) Ordinance, 1984",
+      "sections_ingested": 2,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Institute of Islamic Education and Research (Repeal) Ordinance, 1982",
+      "sections_ingested": 2,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Khulna Development Authority Ordinance, 1961 (East Pakistan Ordinance)",
+      "sections_ingested": 2,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    },
+    {
+      "act_name": "The Judicial Officer's Protection Act, 1850",
+      "sections_ingested": 1,
+      "status": "Active / Amended",
+      "jurisdiction": "Bangladesh"
+    }
+  ],
+  "live_supreme_court_dlrs_stored": [
+    {
+      "id": "0f2e9744-a05e-4078-81e9-6ab8e5a20f8f",
+      "case_title": "AHS Rahman vs State",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Code of Criminal Procedure section 561A — quashing criminal proceedings where FIR and charge-sheet disclose prima facie case",
+      "ratio_decidendi": "Since the first information report discloses a prima facie case against the petitioner and to that effect the charge-sheet has been submitted, there is no substance in the submission made on behalf of the petitioner for quashing the proceedings.",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "a6df2e87-881f-4725-ab83-a53f3cb32d06",
+      "case_title": "State VS Abdur Rahim",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Code of Criminal Procedure sections 498 and 517 — bail application and release/disposal of seized articles",
+      "ratio_decidendi": "An application for disposal of seized articles can be filed under section 517 of the Code before High Court Division acted illegally and without the proper Court after conclusion of trial. The jurisdiction in releasing the seized goods at the time of issuance of Rule in an application under section 498 of the Code…..(10 & 11)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "60f1fad1-39d5-48b4-907a-49ac7c60f020",
+      "case_title": "Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Constitution Articles 102 and 103 — writ direction to act in accordance with law regarding allotment of plot",
+      "ratio_decidendi": "The High Court Division directed the respondent Nos. 1-3 to act \"in accordance with law\" and no direction was given to them for allotment of a plot to the writ petitioner. So, there is no cogent reason to interfere with the decision of the High Court Division. (4 & 5)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "d81a20b9-fc90-4167-aa0d-0cd157367d8b",
+      "case_title": "Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Code of Civil Procedure section 80 — suit against Government without notice and mandatory time for written statement",
+      "ratio_decidendi": "There is nothing in the plaint to indicate that any notice as required under section 80 of the Code was issued. It appears mandatory period of three months has not been allowed to the appellant to submit written statement. In this view there is substance in the submissions made by the Additional Attorney-General and on this score alone the suit is required to be sent back to the trial Court on remand, directing to give reasonable time to the defendant to submit written statement and the trial Court to proceed in accordance with law. (1)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "b7918942-dae0-4b32-bf00-5c55cf114ad1",
+      "case_title": "Abdul Kader VS Secretary, Election Commission and others",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Local Government (Union Parishads) Ordinance section 7(2)(g) — whether loan rescheduling saves candidate from defaulter disqualification",
+      "ratio_decidendi": "Section 7(2)(g) defaulter by the Bank did not find place in the section The question of rescheduling of loan of a rescheduling so as to save the defaulter from the mischief.Had it been the case that rescheduling would save a loanee from being a defaulter the legislature would have made the provision for the same in the section itself.                                                 …..(6)\n\nInterpretation of Statutes\n\nThe Court is to interpret the law as it stands giving the section its natural and ordinary meaning unless it admits of any other meaning.\n\n(6)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "68bc0271-d4fe-409c-9ab2-18d586051636",
+      "case_title": "Yogeshwar Gope vs State",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Evidence Act section 3 — evidentiary value of related witnesses in criminal trial",
+      "ratio_decidendi": "Only because of relationship witnesses evidence cannot be thrown away unless the evidence is found to be untrue or tainted with motive. ......(15)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "4668e847-b29e-424c-a23f-688a00d0aaa6",
+      "case_title": "Anarul Islam (Md) and others vs. State and another",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Code of Criminal Procedure section 561A and Penal Code sections 406/420 — prosecution between directors of private limited company for alleged misappropriation",
+      "ratio_decidendi": "Relationship between the complainant and the accused being of Directors of a private Limited Company, principles of partnership shall apply. As such spending of money by petitioner No.1 as Managing Director cannot be termed misappropriation or breach of trust of the fund of the company. Remedy of the complainant, if any, is by way of suit for acco unts.\n\nSimilar view has been taken in the case Md Yameen and another vs KA Bashar and others reported in 1986 BLD (AD) 305 and the issue was, as to whether the Managing Director and Chairman of a company, the trustees of the fund of the company, could be prosecuted for misappropriation of the fund of the company and as to whether the principle of law applicable to the members of the partnership shall apply to the private limited company for the proposition that the directors of the company are trustees of the money of the business in their hands and control and they could not be prosecuted for misappropriation of fund and cheating the other directors and accordingly, the prosecution against one director by another for alleged misappropriation and cheating was quashed.       \t\t\t\t…..(6 & 10)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "554350e2-f447-417f-a953-9d1e7c4b69ac",
+      "case_title": "Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "State Acquisition and Tenancy Act sections 95(4)(5) and 95A — enjoyment of usufructs and right to get back property; non-application of Transfer of Property Act",
+      "ratio_decidendi": "After enjoyment of usufructs for a maximum period of 7 years under section 95A of the State Acquisition and Tenancy Act the right to get back the property accrues. In that event the provision of Transfer of Property Act shall not apply to such kind of transaction except those which were not alive when PO No. 88 of 1972 was promulgated being transaction past and closed.            \t\t\t\t\t                                                       .....(16)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "ff416b69-37d5-434c-91c6-3baa92808734",
+      "case_title": "Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Review under Appellate Division Rules Order XXIV and CPC Order XLVII rule 1 — review is not a substitute for appeal absent error apparent on the face of record",
+      "ratio_decidendi": "'Review' under Order XXIV of the Supreme Court of Bangladesh (Appellate Division) Rules 1988 or under Order XLVII, rule 1 of the Code of Civil Procedure is subject to law and rules but could not be a substitute of an appeal for re-hearing on the impugned judgment and order passed in appeal and for correcting the same unless there is an error apparent on the face of the record based on evidence or material on record.\n\n......(30)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "07249c49-e156-4054-bb7b-4162a319d3ac",
+      "case_title": "Government of Bangladesh and another VS Md Afsar Ali and others",
+      "court_division": "Appellate Division",
+      "year": "2003",
+      "subject_law": "Constitution Article 102 — limited scope of writ of certiorari to interfere with findings of fact of inferior tribunal",
+      "ratio_decidendi": "The scope of a writ of certiorari is very limited. The High Court Division can interfere with the findings of fact arrived at by the inferior tribunal only when it can be shown that the findings are based on no evidence or non-consideration of material evidence.......(12)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "11e1a8f5-8991-431a-9977-06c44065d62d",
+      "case_title": "Fatema Khatun and others VS Abdul Quddus",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "State Acquisition and Tenancy Act sections 89(4) and 96(1) — limitation and competency for pre-emption by non-notified co-sharer; effect of subsequent co-sharership",
+      "ratio_decidendi": "Non-notified co-sharer's right of pre-emption -Counting of limitation-Right of non-notified co-sharer to exercise the right of preemption as provided in section 96(1) of the Act would arise from the date of registration of the document under section 60 of the Registration Act and the period of limitation in a case filed by a non-notified cosharer seeking pre-emption of the transaction would be counted from the date of registration of the document since the same would be considered a notice to the person interested to seek preemption under section 9%(1) of the State Acquisition and Tenancy Act. 2\n\nThe language of sections 89(4) and 96(1) of the State Acquisition and Tenancy Act is explicit that notice is to be served on the co-sharer(s) of the holding on the date of presentation of the deed for registration and only such co-shareris) is competent or entitled to seek pre-emption………(27)\n\nOne who acquires co-sharership subsequent to the date of notice of transfer or one who becomes a co-sharer in the holding on a date later to the date of presentation of the deed of transfer for registration and sought to be preempted is not competent to oppose pre-emption………….(28)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "644aea40-5512-4973-be0e-4723ac7f5383",
+      "case_title": "Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others",
+      "court_division": "Appellate Division",
+      "year": "2005",
+      "subject_law": "Acquisition and Requisition of Immovable Property Ordinance section 31 — effect of later amendment limiting Arbitrator's award and remand to Arbitration Appellate Tribunal",
+      "ratio_decidendi": "No material was placed on record from the side of the appellants before the Arbitrator to show that the award made in the arbitration revision cases fixing value of the nal land was revised on appeal by the Arbitration Appellate Tribunal or by the superior Court. This being the position no error was committed by the High Court Division in not sending back the appeal to the Arbitration Appellate Tribunal while making the Rule absolute. ......(11)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "9c554cc1-fc59-47f5-a157-4490b235ef91",
+      "case_title": "Abdul Mannan VS Tayeb Ali and others",
+      "court_division": "Appellate Division",
+      "year": "2006",
+      "subject_law": "Code of Civil Procedure section 100 (repealed) — High Court Division's limited jurisdiction in second appeal over findings of fact by lower appellate Court",
+      "ratio_decidendi": "There is nothing in the judgment that the findings arrived at by the lower appellate Court were not based on proper evidence or legal evidence or that such findings were based on misconception of evidence or misreading or non-consideration or misunderstanding of the evidence or findings on material points or were made on omission to consider materials on record. Above being the position the High Court Division was in error in setting aside the Judgment of the lower appellate Court decreeing the suit. ....(14)",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-07-10T16:04:24.397172+00:00"
+    },
+    {
+      "id": "2a1de65e-d69f-4352-b049-92cf38c1f56b",
+      "case_title": "52 DLR (AD) 112",
+      "court_division": "Supreme Court of Bangladesh (Appellate Division)",
+      "year": "2000",
+      "subject_law": "",
+      "ratio_decidendi": "We hold that the appellant is entitled to bail.",
+      "act_name": null,
+      "section_number": null,
+      "created_at": "2026-08-04T22:24:47.437326+00:00"
+    }
+  ],
+  "staged_landmark_cases_ready_for_promotion": [
+    {
+      "case_id": "SCBD-AD-2015-001",
+      "case_title": "Abdul Jalil and others vs Md. Joynal Abedin and others",
+      "citation": "67 DLR (AD) 142",
+      "court_division": "Appellate Division",
+      "year": 2015,
+      "subject_area": "Property & Land Law",
+      "governing_statutes": [
+        "The Transfer of Property Act, 1882",
+        "The Registration Act, 1908",
+        "The Specific Relief Act, 1877"
+      ],
+      "ratio_decidendi": "An agreement for sale of immovable property executed after the 2004 amendment must be compulsorily registered. An unregistered contract for sale is completely barred from being specifically enforced in civil court under Section 21A of the Specific Relief Act, 1877."
+    },
+    {
+      "case_id": "SCBD-AD-2008-002",
+      "case_title": "Md. Mozibur Rahman vs Government of Bangladesh and others",
+      "citation": "60 DLR (AD) 89",
+      "court_division": "Appellate Division",
+      "year": 2008,
+      "subject_area": "Property & Land Law",
+      "governing_statutes": [
+        "The State Acquisition and Tenancy Act, 1950",
+        "The Evidence Act, 1872"
+      ],
+      "ratio_decidendi": "A Khatian or Record of Rights (Porcha) does not create nor extinguish title to immovable property. It only raises a rebuttable presumption of possession and tenancy for revenue collection purposes under Section 144(4) of the SAT Act."
+    },
+    {
+      "case_id": "SCBD-AD-2018-003",
+      "case_title": "Md. Nurul Islam vs S.M. Shahjahan and others",
+      "citation": "70 DLR (AD) 215",
+      "court_division": "Appellate Division",
+      "year": 2018,
+      "subject_area": "Civil Procedure & Injunctions",
+      "governing_statutes": [
+        "The Code of Civil Procedure, 1908"
+      ],
+      "ratio_decidendi": "To obtain a temporary injunction under Order 39, Rules 1 and 2 of the CPC, the applicant must establish all three conditions cumulatively: (1) a strong prima facie case, (2) irreparable loss and injury that cannot be compensated in money, and (3) balance of convenience in applicant's favour."
+    },
+    {
+      "case_id": "SCBD-AD-2012-004",
+      "case_title": "Abdul Gafur vs Md. Shamsul Haque",
+      "citation": "64 DLR (AD) 54",
+      "court_division": "Appellate Division",
+      "year": 2012,
+      "subject_area": "Property & Land Law",
+      "governing_statutes": [
+        "The State Acquisition and Tenancy Act, 1950"
+      ],
+      "ratio_decidendi": "Following the State Acquisition and Tenancy (Amendment) Act, 2006 (Act No. 34 of 2006), the right of pre-emption under Section 96 is restricted strictly to a co-sharer by inheritance of the holding. A co-sharer by purchase or contiguous tenant has no right of pre-emption under Section 96."
+    },
+    {
+      "case_id": "SCBD-HCD-2016-005",
+      "case_title": "The State vs Md. Mofazzal Hossain",
+      "citation": "68 DLR (HCD) 341",
+      "court_division": "High Court Division",
+      "year": 2016,
+      "subject_area": "Criminal Procedure & Bail",
+      "governing_statutes": [
+        "The Code of Criminal Procedure, 1898"
+      ],
+      "ratio_decidendi": "Anticipatory bail under Section 498 CrPC is an extraordinary prerogative remedy granted only when there is reasonable apprehension of arrest with mala fide intent or where civil disputes are dressed up as criminal offences to cause harassment."
+    },
+    {
+      "case_id": "SCBD-AD-2004-006",
+      "case_title": "Government of Bangladesh vs Ayesha Khatun",
+      "citation": "56 DLR (AD) 130",
+      "court_division": "Appellate Division",
+      "year": 2004,
+      "subject_area": "Family & Succession Law",
+      "governing_statutes": [
+        "The Muslim Family Laws Ordinance, 1961"
+      ],
+      "ratio_decidendi": "Under Section 4 of the Muslim Family Laws Ordinance, 1961, the children of any predeceased son or daughter inherit the exact per stirpes share which their parent would have received if alive at the time of the grandfather's death."
+    },
+    {
+      "case_id": "SCBD-AD-2010-007",
+      "case_title": "Khaleda Akter vs Md. Tariqul Islam",
+      "citation": "62 DLR (AD) 201",
+      "court_division": "Appellate Division",
+      "year": 2010,
+      "subject_area": "Family & Succession Law",
+      "governing_statutes": [
+        "The Family Courts Act, 2023",
+        "The Limitation Act, 1908"
+      ],
+      "ratio_decidendi": "Prompt dower is payable on demand; limitation of 3 years runs from the date of demand and refusal under Article 103 of Limitation Act. Deferred dower becomes payable on dissolution of marriage by death or divorce; limitation runs 3 years from dissolution under Article 104."
+    },
+    {
+      "case_id": "SCBD-HCD-2017-008",
+      "case_title": "Md. Altaf Hossain vs The State and another",
+      "citation": "69 DLR (HCD) 512",
+      "court_division": "High Court Division",
+      "year": 2017,
+      "subject_area": "Criminal Procedure & Bail",
+      "governing_statutes": [
+        "The Code of Criminal Procedure, 1898",
+        "The Penal Code, 1860"
+      ],
+      "ratio_decidendi": "Mere breach of contract does not give rise to criminal prosecution for cheating or criminal breach of trust under Sections 406/420 of Penal Code unless fraudulent intention is shown at the inception of the transaction. Criminal proceedings used as a tool of coercion for civil debt recovery must be quashed under Section 561A CrPC to prevent abuse of the process of the court."
+    },
+    {
+      "case_id": "SCBD-AD-2014-009",
+      "case_title": "Md. Sirajul Islam vs Begum Feroza Sultana",
+      "citation": "66 DLR (AD) 81",
+      "court_division": "Appellate Division",
+      "year": 2014,
+      "subject_area": "Specific Performance & Contracts",
+      "governing_statutes": [
+        "The Specific Relief Act, 1877"
+      ],
+      "ratio_decidendi": "Specific performance is a discretionary relief under Section 22 of the Specific Relief Act, 1877. The plaintiff must prove readiness and willingness to perform their part of the contract from the date of the contract continuously up to the date of hearing."
+    },
+    {
+      "case_id": "SCBD-AD-2009-010",
+      "case_title": "Haji Md. Nurul Islam vs Bangladesh and others",
+      "citation": "61 DLR (AD) 115",
+      "court_division": "Appellate Division",
+      "year": 2009,
+      "subject_area": "Specific Performance & Contracts",
+      "governing_statutes": [
+        "The Specific Relief Act, 1877"
+      ],
+      "ratio_decidendi": "Under the proviso to Section 42 of the Specific Relief Act, 1877, no court shall make a declaration where the plaintiff, being able to seek further relief such as recovery of possession, omits to do so. A suit for bare declaration by a plaintiff out of possession is barred."
+    },
+    {
+      "case_id": "SCBD-HCD-2019-011",
+      "case_title": "Md. Shahidul Islam vs Md. Anowar Hossain",
+      "citation": "71 DLR (HCD) 244",
+      "court_division": "High Court Division",
+      "year": 2019,
+      "subject_area": "Civil Procedure & Injunctions",
+      "governing_statutes": [
+        "The Code of Civil Procedure, 1908"
+      ],
+      "ratio_decidendi": "For deciding an application under Order 7 Rule 11 CPC, the court must look strictly and exclusively at the averments in the plaint. The defense set up in the written statement or annexures cannot be considered at that stage."
+    },
+    {
+      "case_id": "SCBD-AD-2007-012",
+      "case_title": "Md. Lokman vs State",
+      "citation": "59 DLR (AD) 160",
+      "court_division": "Appellate Division",
+      "year": 2007,
+      "subject_area": "Criminal Procedure & Bail",
+      "governing_statutes": [
+        "The Code of Criminal Procedure, 1898"
+      ],
+      "ratio_decidendi": "An FIR is not a substantive piece of evidence; it can only be used to corroborate or contradict its maker under the Evidence Act. An FIR is not required to be an encyclopedia of the entire incident."
+    },
+    {
+      "case_id": "SCBD-AD-2016-013",
+      "case_title": "Dr. Kamal Hossain and others vs Bangladesh",
+      "citation": "68 DLR (AD) 298",
+      "court_division": "Appellate Division",
+      "year": 2016,
+      "subject_area": "Constitutional & Writ Law",
+      "governing_statutes": [
+        "The Constitution of the People's Republic of Bangladesh"
+      ],
+      "ratio_decidendi": "To enjoy the protection of law and to be treated in accordance with law is the inalienable right of every citizen under Article 31. Any arbitrary executive action lacking statutory authority is unconstitutional and subject to judicial review under Article 102."
+    },
+    {
+      "case_id": "SCBD-HCD-2015-014",
+      "case_title": "Md. Harun-or-Rashid vs Monowara Begum and others",
+      "citation": "67 DLR (HCD) 412",
+      "court_division": "High Court Division",
+      "year": 2015,
+      "subject_area": "Family & Succession Law",
+      "governing_statutes": [
+        "The Transfer of Property Act, 1882",
+        "The Registration Act, 1908"
+      ],
+      "ratio_decidendi": "Following the 2004 amendment to Section 17(1) of the Registration Act, 1908, a declaration of Hiba (gift) under Muslim law regarding immovable property must be made through a registered instrument. An unregistered oral Hiba confers no legal title."
+    },
+    {
+      "case_id": "SCBD-AD-2006-015",
+      "case_title": "Md. Abul Hossain vs Md. Habibur Rahman",
+      "citation": "58 DLR (AD) 211",
+      "court_division": "Appellate Division",
+      "year": 2006,
+      "subject_area": "Civil Procedure & Injunctions",
+      "governing_statutes": [
+        "The Code of Civil Procedure, 1908"
+      ],
+      "ratio_decidendi": "Amendments under Order 6 Rule 17 CPC should be allowed liberally for determining real questions in controversy, provided the amendment does not introduce a completely new inconsistent cause of action or alter the fundamental character of the suit."
+    },
+    {
+      "case_id": "SCBD-AD-2011-016",
+      "case_title": "Abdul Khaleque vs Mrs. Feroza Begum",
+      "citation": "63 DLR (AD) 175",
+      "court_division": "Appellate Division",
+      "year": 2011,
+      "subject_area": "Specific Performance & Contracts",
+      "governing_statutes": [
+        "The Specific Relief Act, 1877",
+        "The Limitation Act, 1908"
+      ],
+      "ratio_decidendi": "In a suit for cancellation of a fraudulent deed under Section 39 of the Specific Relief Act, the 3-year limitation period under Article 91 of the Limitation Act begins to run from the date the plaintiff discovers the facts entitling them to have the instrument cancelled."
+    },
+    {
+      "case_id": "SCBD-HCD-2018-017",
+      "case_title": "Md. Rashedul Islam vs The State",
+      "citation": "70 DLR (HCD) 480",
+      "court_division": "High Court Division",
+      "year": 2018,
+      "subject_area": "Criminal Procedure & Bail",
+      "governing_statutes": [
+        "The Code of Criminal Procedure, 1898"
+      ],
+      "ratio_decidendi": "Inordinate and unexplained delay in trial resulting in prolonged pre-trial detention violates the constitutional right to speedy trial under Article 35(3) and constitutes a valid and compelling ground for granting bail under Section 498 CrPC."
+    },
+    {
+      "case_id": "SCBD-AD-2013-018",
+      "case_title": "Fazlul Haque vs Md. Enamul Haque",
+      "citation": "65 DLR (AD) 190",
+      "court_division": "Appellate Division",
+      "year": 2013,
+      "subject_area": "Civil Procedure & Injunctions",
+      "governing_statutes": [
+        "The Code of Civil Procedure, 1908"
+      ],
+      "ratio_decidendi": "To attract Section 11 CPC, the matter directly and substantially in issue in the subsequent suit must have been directly and substantially in issue in a former suit between the same parties, heard and finally decided by a court of competent jurisdiction."
+    },
+    {
+      "case_id": "SCBD-AD-2005-019",
+      "case_title": "Yaor Mia (Md) and another vs Haji Shah Dhanai Ali and others",
+      "citation": "57 DLR (AD) 178",
+      "court_division": "Appellate Division",
+      "year": 2005,
+      "subject_area": "Property & Land Law",
+      "governing_statutes": [
+        "The State Acquisition and Tenancy Act, 1950"
+      ],
+      "ratio_decidendi": "Mutation of a holding in revenue records does not determine title to immovable property. Title passes upon execution and registration of the deed; mutation is an administrative recording of the taxpayer liable for rent."
+    },
+    {
+      "case_id": "SCBD-HCD-2020-020",
+      "case_title": "Mrs. Nasreen Akhter vs Bangladesh and others",
+      "citation": "72 DLR (HCD) 310",
+      "court_division": "High Court Division",
+      "year": 2020,
+      "subject_area": "Family & Succession Law",
+      "governing_statutes": [
+        "The Guardians and Wards Act, 1890"
+      ],
+      "ratio_decidendi": "In child custody disputes under Section 17 of the Guardians and Wards Act, 1890, the welfare of the minor is the paramount consideration, which overrides rigid traditional age thresholds of maternal custody (Hizanat)."
+    },
+    {
+      "case_id": "SCBD-AD-2017-021",
+      "case_title": "Md. Mokhlesur Rahman vs Md. Habibur Rahman and others",
+      "citation": "69 DLR (AD) 102",
+      "court_division": "Appellate Division",
+      "year": 2017,
+      "subject_area": "Registration & Stamp Duty",
+      "governing_statutes": [
+        "The Registration Act, 1908",
+        "The Transfer of Property Act, 1882"
+      ],
+      "ratio_decidendi": "Under Section 52A of the Registration Act, 1908, the Sub-Registrar is legally mandated to refuse registration of a sale deed unless the seller presents an updated mutation Khatian and proof of land development tax payment in the seller's name."
+    },
+    {
+      "case_id": "SCBD-AD-2003-022",
+      "case_title": "Haji Md. Aslam vs Md. Shafiqul Islam",
+      "citation": "55 DLR (AD) 84",
+      "court_division": "Appellate Division",
+      "year": 2003,
+      "subject_area": "Specific Performance & Contracts",
+      "governing_statutes": [
+        "The Contract Act, 1872"
+      ],
+      "ratio_decidendi": "In contracts for the sale of immovable property, time is presumed not to be of the essence unless there is an express contractual stipulation or surrounding circumstances showing an intention to make time strictly essential."
+    },
+    {
+      "case_id": "SCBD-HCD-2014-023",
+      "case_title": "Mrs. Shima Rani Das vs Narayan Chandra Das and others",
+      "citation": "66 DLR (HCD) 388",
+      "court_division": "High Court Division",
+      "year": 2014,
+      "subject_area": "Family & Succession Law",
+      "governing_statutes": [
+        "The Hindu Women's Rights to Property Act, 1937"
+      ],
+      "ratio_decidendi": "Under Section 3 of the Hindu Women's Rights to Property Act, 1937, a Hindu widow inherits the same share as her deceased husband in joint family property, holding a limited life estate with the right to claim partition during her lifetime."
+    },
+    {
+      "case_id": "SCBD-AD-2015-024",
+      "case_title": "Md. Rafiqul Islam vs Government of Bangladesh",
+      "citation": "67 DLR (AD) 250",
+      "court_division": "Appellate Division",
+      "year": 2015,
+      "subject_area": "Civil Procedure & Injunctions",
+      "governing_statutes": [
+        "The Code of Civil Procedure, 1908"
+      ],
+      "ratio_decidendi": "Revisional jurisdiction under Section 115 CPC is restricted to jurisdictional errors, illegal exercise, or material irregularity. The High Court Division cannot sit as a court of second appeal to re-appreciate concurrent findings of fact."
+    },
+    {
+      "case_id": "SCBD-AD-2009-025",
+      "case_title": "Eastern Bank Limited vs Md. Shafiuddin and others",
+      "citation": "61 DLR (AD) 88",
+      "court_division": "Appellate Division",
+      "year": 2009,
+      "subject_area": "Company & Commercial Law",
+      "governing_statutes": [
+        "The Artha Rin Adalat Ain, 2003"
+      ],
+      "ratio_decidendi": "The requirement of attempting sale of mortgaged property under Section 12 of the Artha Rin Adalat Ain, 2003 prior to filing a money claim is mandatory. Any deviation renders subsequent recovery proceedings defective."
+    }
+  ]
+}
