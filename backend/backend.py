@@ -77,7 +77,7 @@ async def ping():
     return "ok"
 
 
-# ─── Supabase ─────────────────────────────────────────────────────────────────
+# ─── Supabase (Project 1: Laws & Auth, Project 2: Cases & DLR) ───────────────
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL", "").strip()
 SUPABASE_KEY = (
     os.getenv("SUPABASE_SERVICE_ROLE_KEY")
@@ -88,11 +88,23 @@ supabase: Optional[Client] = None
 if SUPABASE_URL and SUPABASE_KEY:
     try:
         supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-        logger.info("Supabase client initialized.")
+        logger.info("Supabase client initialized (Project 1: Laws & Auth).")
     except Exception as e:
         logger.error(f"Supabase init failed: {e}")
 else:
     logger.warning("Supabase credentials missing.")
+
+SUPABASE_CASES_URL = os.getenv("SUPABASE_CASES_URL", "").strip()
+SUPABASE_CASES_KEY = os.getenv("SUPABASE_CASES_KEY", "").strip()
+
+supabase_cases: Optional[Client] = None
+if SUPABASE_CASES_URL and SUPABASE_CASES_KEY:
+    try:
+        supabase_cases = create_client(SUPABASE_CASES_URL, SUPABASE_CASES_KEY)
+        logger.info("Supabase Cases client initialized (Project 2: Cases & DLR).")
+    except Exception as e:
+        logger.warning(f"Supabase Cases client init failed: {e}")
+
 
 
 def get_current_user(request: Request) -> Optional[dict]:
@@ -1061,19 +1073,23 @@ async def retrieve_context(query_vec: list, intent: dict):
 
     acts = _filter_blocked_acts(acts, target_act, intent)
 
-    # Selective Case Law Search Gate: Run DLR vector search ONLY when explicitly required
+    # Selective Case Law Search Gate: Run DLR vector search from Project 2 (Cases DB)
     dlr_chunks = []
     is_dlr_req = intent.get("is_dlr_request", False)
     user_role = intent.get("role", "")
-    if is_dlr_req or user_role == "Legal Professional":
-        dlrs_search = await asyncio.to_thread(
-            lambda: db.rpc("match_dlrs_v2", {
-                "query_embedding": query_vec,
-                "match_count": 10,
-                "match_threshold": 0.22,
-            }).execute()
-        )
-        dlr_chunks = dlrs_search.data or []
+    cases_client = supabase_cases or db
+    if (is_dlr_req or user_role in {"Legal Professional", "Law Student"}) and cases_client:
+        try:
+            dlrs_search = await asyncio.to_thread(
+                lambda: cases_client.rpc("match_dlrs_v2", {
+                    "query_embedding": query_vec,
+                    "match_count": 4,
+                    "match_threshold": 0.25,
+                }).execute()
+            )
+            dlr_chunks = dlrs_search.data or []
+        except Exception as e:
+            logger.warning(f"Project 2 match_dlrs_v2 RPC execution warning: {e}")
 
     # === CONFIDENCE GUARD ===
     if acts:
@@ -1200,18 +1216,24 @@ def format_retrieved_context(acts: list, dlrs: list):
         sources.append({"id": sid, "tag": f"[{sid}]", "type": "statute", "act": name,
                         "section": num, "title": title, "status": status})
 
-    block += "\n=== CASE LAW (DLR) ===\n"
+    block += "\n=== CASE LAW (DLR & SUPREME COURT) ===\n"
     if not dlrs:
         block += "No matching Case Law found for this query.\n"
     for i, dlr in enumerate(dlrs):
         sid = f"DLR-{i+1}"
         title = dlr.get('case_title', 'Unknown Case')
-        year, court = dlr.get('year', ''), dlr.get('court_division', '')
-        cite = dlr.get('dlr_citation') or \
-            f"{dlr.get('dlr_volume','')} DLR ({dlr.get('dlr_series','AD')}) {year}".strip()
+        year = dlr.get('year', '')
+        court = dlr.get('court_division', '')
+        cite = dlr.get('citation') or dlr.get('dlr_citation') or f"{title} ({year})"
+        subject = dlr.get('subject_area') or dlr.get('subject_law', '')
+        ratio = dlr.get('ratio_decidendi', '')
+        passages = ""
+        if dlr.get('exact_key_passages'):
+            passages = "\n".join([f"  Key Quote: \"{p.get('quote_text', '')}\"" for p in dlr.get('exact_key_passages', []) if isinstance(p, dict)])
         block += (f"[{sid}] Case: {title} ({year})\nCitation: {cite}\nCourt: {court}\n"
-                  f"Subject: {dlr.get('subject_law','')}\n"
-                  f"Ratio Decidendi: {dlr.get('ratio_decidendi','')}\n"
+                  f"Subject: {subject}\n"
+                  f"Ratio Decidendi: {ratio}\n"
+                  f"{passages}\n"
                   f"Reference Context: {(dlr.get('judgment_content','') or '')[:300]}...\n---\n")
         sources.append({"id": sid, "tag": f"[{sid}]", "type": "case_law", "case": title,
                         "court": court, "year": year, "citation": cite})
