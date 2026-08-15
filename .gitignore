@@ -112,6 +112,8 @@ scrapped laws/
 *.txt
 backend_benchmark.log
 .venv/
+.venv*/
+.claude/
 
 # Vercel
 .vercel

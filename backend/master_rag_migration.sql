@@ -87,6 +87,19 @@ create index if not exists pilot_log_status_idx  on pilot_query_log (retrieval_s
 -- 4. Enable Row Level Security and add access policy
 alter table pilot_query_log enable row level security;
 
+-- Add query_run_id column if not exists
+do $$
+begin
+  if not exists (
+    select 1 from information_schema.columns 
+    where table_name = 'pilot_query_log' and column_name = 'query_run_id'
+  ) then
+    alter table pilot_query_log add column query_run_id uuid default gen_random_uuid();
+    create unique index pilot_log_run_id_idx on pilot_query_log (query_run_id);
+  end if;
+end
+$$;
+
 -- Create policy allowing full read/write access under service role
 do $$
 begin
@@ -98,3 +111,30 @@ begin
   end if;
 end
 $$;
+
+-- 5. Create Blocked Provisions Table
+create table if not exists blocked_provisions (
+  id uuid default gen_random_uuid() primary key,
+  act_name text not null,
+  section_number text,
+  reason text not null, -- 'OMITTED_1978', 'REPEALED_2023', 'NOT_BD_LAW'
+  replaced_by text,
+  created_at timestamptz default now()
+);
+
+-- Seed Known Blocked Provisions
+insert into blocked_provisions (act_name, section_number, reason, replaced_by) values
+('The Code of Civil Procedure, 1908', '100', 'OMITTED_1978', null),
+('The Code of Criminal Procedure, 1898', '438', 'NOT_BD_LAW', 'Section 498'),
+('Income Tax Ordinance, 1984', null, 'REPEALED_2023', 'Income Tax Act 2023')
+on conflict do nothing;
+
+-- 6. Create Pilot Provision Registry Table (Citizen Approved Scope)
+create table if not exists pilot_provision_registry (
+  id uuid default gen_random_uuid() primary key,
+  act_name text not null,
+  section_number text not null,
+  domain text not null, -- 'property', 'tax'
+  approved_for_citizen boolean default true,
+  verified_at timestamptz default now()
+);

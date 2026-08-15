@@ -80,6 +80,42 @@ export async function renderAppPage(container: HTMLElement) {
     }
     let userIdentifier = session?.user?.id || getOrCreateGuestUserId();
 
+    function getDailyQueryCount(): number {
+        const today = new Date().toISOString().split('T')[0];
+        const stored = localStorage.getItem(`justor_queries_${today}`);
+        return stored ? parseInt(stored, 10) : 0;
+    }
+
+    function incrementDailyQueryCount(): number {
+        const today = new Date().toISOString().split('T')[0];
+        const current = getDailyQueryCount() + 1;
+        localStorage.setItem(`justor_queries_${today}`, current.toString());
+        updateQueryMeterUI();
+        return current;
+    }
+
+    function updateQueryMeterUI() {
+        const meterDot = document.getElementById('meter-dot');
+        const meterText = document.getElementById('meter-text');
+        const userRole = (document.getElementById('role-selector') as HTMLSelectElement)?.value || 'General Public';
+        const meterContainer = document.getElementById('query-meter-container');
+        if (!meterContainer) return;
+        
+        if (userRole === 'Legal Professional' || userRole === 'Law Student') {
+            meterContainer.style.display = 'none';
+            return;
+        }
+        meterContainer.style.display = 'inline-flex';
+        const count = getDailyQueryCount();
+        const remaining = Math.max(0, 3 - count);
+        if (meterText) meterText.textContent = `${remaining}/3 free today`;
+        if (meterDot) {
+            meterDot.className = 'meter-dot';
+            if (remaining === 1) meterDot.classList.add('low');
+            else if (remaining === 0) meterDot.classList.add('empty');
+        }
+    }
+
     // --- HTML Structure ---
     container.innerHTML = `
       <div class="app-layout">
@@ -142,31 +178,35 @@ export async function renderAppPage(container: HTMLElement) {
                        <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle-btn" title="Toggle Sidebar">
                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                        </button>
-                       <div id="role-chip" class="role-chip">
-                           <span id="role-chip-brand">Justor AI</span>
-                           <span class="role-chip-divider">·</span>
-                           <span id="role-chip-label">General Public</span>
-                           <svg class="role-chip-caret" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                       </div>
-                       <div id="role-dropdown" class="role-dropdown" hidden>
-                           <div class="role-option" data-role="General Public">
-                               <span class="role-option-name">General Public</span>
-                               <span class="role-option-desc">Plain language, practical advice</span>
-                           </div>
-                           <div class="role-option" data-role="Law Student">
-                               <span class="role-option-name">Law Student</span>
-                               <span class="role-option-desc">Case law, theory & academic context</span>
-                           </div>
-                           <div class="role-option" data-role="Legal Professional">
-                               <span class="role-option-name">Legal Professional</span>
-                               <span class="role-option-desc">Precise statutory & procedural guidance</span>
-                           </div>
-                       </div>
+                        <div id="role-chip" class="role-chip">
+                            <span id="role-chip-brand">Justor AI</span>
+                            <span class="role-chip-divider">·</span>
+                            <span id="role-chip-label">General Public</span>
+                            <svg class="role-chip-caret" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                        <div id="query-meter-container" class="query-meter-pill" title="Daily free AI queries for General Public">
+                            <span class="meter-dot" id="meter-dot"></span>
+                            <span id="meter-text">3/3 free today</span>
+                        </div>
+                        <div id="role-dropdown" class="role-dropdown" hidden>
+                            <div class="role-option" data-role="Legal Professional">
+                                <span class="role-option-name">👨‍⚖️ Legal Professional (Lawyer)</span>
+                                <span class="role-option-desc">Full IRAC, Statutes, Amendments, DLR Case Law & Source-Traceable Authorities</span>
+                            </div>
+                            <div class="role-option" data-role="Law Student">
+                                <span class="role-option-name">🎓 Law Student</span>
+                                <span class="role-option-desc">Academic theory, statutory definitions & moot court case ratios</span>
+                            </div>
+                            <div class="role-option active" data-role="General Public">
+                                <span class="role-option-name">👤 General Public</span>
+                                <span class="role-option-desc">Plain language, step-by-step guidance & document checklists (3 daily queries)</span>
+                            </div>
+                        </div>
                    </div>
                    <div class="chat-header-right">
-                       <button class="upgrade-btn" title="Upgrade to Pro version">
+                       <button class="upgrade-btn" title="Upgrade to Founding Pilot / Unlimited Access">
                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="upgrade-icon"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                           <span>Upgrade</span>
+                           <span>Founding Pilot (৳200)</span>
                        </button>
                    </div>
                </div>
@@ -820,6 +860,13 @@ export async function renderAppPage(container: HTMLElement) {
     async function handleFormSubmit() {
         const userInput = messageInput.value.trim();
         if (!userInput) return;
+
+        const userRole = (document.getElementById('role-selector') as HTMLSelectElement)?.value || 'General Public';
+        if (userRole === 'General Public' && getDailyQueryCount() >= 3) {
+            alert("You have reached your daily limit of 3 free AI queries for the General Public tier.\n\nPlease read our free source-verified Legal Guides at /guides or upgrade to the Founding Lawyer Pilot (৳200) for unlimited research access.");
+            return;
+        }
+
         if (!appState.activeChatId) await createNewChat();
 
         const activeChat = getActiveChat();
@@ -831,6 +878,10 @@ export async function renderAppPage(container: HTMLElement) {
         if (messageForm) {
             messageForm.classList.add('empty');
             messageForm.classList.remove('active');
+        }
+
+        if (userRole === 'General Public') {
+            incrementDailyQueryCount();
         }
 
         // Create a new, empty AI message bubble that we will stream into.
@@ -1105,6 +1156,18 @@ export async function renderAppPage(container: HTMLElement) {
             roleDropdown.querySelectorAll('.role-option').forEach(opt => {
                 opt.classList.toggle('active', (opt as HTMLElement).dataset.role === role);
             });
+            updateQueryMeterUI();
+        }
+
+        updateQueryMeterUI();
+
+        // Check sessionStorage for prefill query from Legal Guides
+        const prefill = sessionStorage.getItem('justor_prefill_query');
+        if (prefill && messageInput) {
+            messageInput.value = prefill;
+            adjustInputHeight();
+            messageInput.focus();
+            sessionStorage.removeItem('justor_prefill_query');
         }
 
         roleChip?.addEventListener('click', (e) => {

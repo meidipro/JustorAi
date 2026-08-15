@@ -1,0 +1,1375 @@
+id,category,question,gold_answer,system_answer,expected_act,expected_section,fabricated_citation,fabricated_tags,unverifiable_dlr_citation,citations_found,claimed_sections,expected_section_mentioned,claimed_section_not_in_db,act_mismatch,other_acts_mentioned,jurisdiction_leakage,leaked_terms,human_correctness,human_faithfulness,judge_agrees_with_human,notes
+Q01,Criminal Procedure,Does a police officer in Bangladesh need a warrant to arrest someone for 'Anticipatory Bail' under Section 438 of the CrPC?,"Section 438 CrPC does not exist in Bangladesh; it was omitted by the 2009 amendment. Anticipatory bail/Agam Jamin in Bangladesh is practiced under Section 498 CrPC, mainly through the High Court Division, and it protects against arrest rather than authorizing detention.","**What This Means For You**
+In Bangladesh, the concept of 'Anticipatory Bail' is exercised under Section 498 of the Code of Criminal Procedure, 1898, not Section 438. This means that if you are seeking anticipatory bail, you will need to apply to the High Court Division or the Court of Session. 
+
+**What the Law Says**
+Under Section 498 of the Code of Criminal Procedure, 1898 [ACT-1], the High Court Division or the Court of Session may direct that any person be admitted to bail, or that the bail required by a police-officer or Magistrate be reduced. However, Section 438 of the CrPC was omitted by the Code of Criminal Procedure (Amendment) Act, 2009, and thus does not apply in Bangladesh.
+
+**What You Should Do Now**
+1. Consult with a licensed lawyer to understand the specific requirements and procedures for applying for anticipatory bail under Section 498 of the Code of Criminal Procedure, 1898.
+2. Gather all relevant documents and evidence to support your application for anticipatory bail.
+3. File a petition with the High Court Division or the Court of Session, as advised by your lawyer.
+
+**Evidence to Keep**
+- A copy of the First Information Report (FIR), if any
+- Any relevant witness statements or evidence
+- Documents supporting your claim for anticipatory bail
+
+**Where to Go / Who to Contact**
+The High Court Division or the Court of Session, as applicable, or contact a licensed lawyer for guidance.
+
+**When You Need a Lawyer**
+You should consult a licensed lawyer immediately if you are seeking anticipatory bail or are facing arrest, as they can provide you with specific legal advice and representation.
+
+---
+**Sources**
+- **[ACT-1]** The Code of Criminal Procedure, 1898, Section 498: Power to direct admission to bail or reduction of bail (Anticipatory Bail / Agam Jamin) *(Status: Active)*","Code of Criminal Procedure, 1898",498,False,[],NOT_AVAILABLE,[],"['498', '438', '498', '438', '498', '498']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q02,Limitation Act,What is the limitation period for a suit for 'Specific Performance of Contract' in Bangladesh? Please cite the specific Article of the Limitation Act,"For specific performance in Bangladesh, the limitation period is 1 year under Article 113 of the First Schedule to the Limitation Act, 1908. Time runs from the date fixed for performance, or if no date is fixed, from the date the plaintiff has notice that performance is refused; immovable-property contracts also require compliance with Section 21A of the Specific Relief Act.","**What This Means For You**
+In Bangladesh, if you want to file a lawsuit for specific performance of a contract, you need to do so within a certain time limit. This time limit is crucial, and if you miss it, your lawsuit might be dismissed.
+
+**What the Law Says**
+Under Article 113 of the First Schedule of the Limitation Act, 1908 [ACT-2], the period of limitation for a suit for specific performance of a contract is three years. The time from which this period begins to run is the date fixed for the performance, or, if no such date is fixed, when the plaintiff has notice that performance is refused.
+
+**What You Should Do Now**
+1. Check your contract to see if there's a specific date for performance mentioned.
+2. If performance is refused, make a note of the date you received notice of this refusal.
+3. Consult with a lawyer to discuss your options and ensure you file the lawsuit within the three-year time frame.
+
+**Evidence to Keep**
+- A copy of the contract
+- Any communication regarding the refusal to perform the contract
+- Records of any attempts to resolve the issue amicably
+
+**Where to Go / Who to Contact**
+You can contact the District Court or a lawyer specializing in contract law for guidance. For general legal aid, you can call the Legal Aid helpline at 16430.
+
+**When You Need a Lawyer**
+You should consult a lawyer as soon as possible if you believe the other party has failed to perform their contractual obligations and you wish to seek specific performance through the courts.
+
+---
+**Sources**
+- **[ACT-2]** The Limitation Act, 1908, Section 113: Article 113 - For specific performance of a contract *(Status: In Force)*","Limitation Act, 1908",Article 113,False,[],NOT_AVAILABLE,[],"['113', '113', '113']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q03,Family Law,A man dies in 2025. He has a living son and a grandson (the son of another son who died in 2020). Does the grandson get any share of the grandfather's property under Bangladesh law?,"Yes. Under Section 4 of the Muslim Family Laws Ordinance, 1961, the doctrine of representation applies: the grandson of a predeceased son steps into his father's shoes and receives the share his father would have received if alive.","**What This Means For You**
+The grandson may be eligible for a share of his grandfather's property under certain conditions. The distribution of property after a person's death in Bangladesh is governed by the Muslim Personal Law (Shariat) Application Act, 1937, and the Bangladesh Citizenship (Temporary Provisions) Order, 1972, but more specifically, the principles of Islamic inheritance law as applied in Bangladesh.
+
+**What the Law Says**
+Under Islamic inheritance law as applied in Bangladesh, when a son predeceases his father, the grandchildren (sons of the predeceased son) are entitled to a share of their grandfather's property. This is based on the principle that they inherit a portion of what their father would have inherited if he were alive. The specific shares are determined by the Islamic law of inheritance, which dictates how the estate is divided among the heirs.
+
+**What You Should Do Now**
+1. Determine the total value of the grandfather's estate.
+2. Identify all eligible heirs according to Islamic law, including the living son and the grandson.
+3. Calculate the shares according to Islamic inheritance principles, where the living son receives a share, and the grandson receives a share of what his father would have received.
+
+**Evidence to Keep**
+- Documents proving the relationship between the deceased and his heirs (e.g., birth certificates, death certificates).
+- Documents related to the property of the deceased (e.g., property deeds).
+
+**Where to Go / Who to Contact**
+For legal advice and assistance, contact a lawyer specializing in inheritance law or visit the local court that deals with inheritance matters.
+
+**When You Need a Lawyer**
+You should consult a lawyer if there is a dispute among the heirs regarding the distribution of the property or if you need assistance in calculating the shares according to Islamic law.
+
+---
+**Sources**
+- **[DLR-1]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-4]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-5]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Abdul Mannan VS Tayeb Ali and others — DLR (AD) 2006 | Appellate Division | 2006
+- **[DLR-8]** Anarul Islam (Md) and others vs. State and another — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-10]** Yogeshwar Gope vs State — DLR (AD) 2005 | Appellate Division | 2005","Muslim Family Laws Ordinance, 1961",4,False,[],NOT_AVAILABLE,[],[],False,NOT_AVAILABLE,False,[],False,[],,,,
+Q04,Criminal Law,"If a person is accused of 'Defamation' under Section 500 of the Penal Code in Sylhet, can the police arrest them immediately without a warrant?","No. Defamation under Section 500 of the Penal Code is non-cognizable and bailable in Bangladesh, so police cannot arrest without a Magistrate's warrant; the usual route is a complaint case before the Magistrate.","**What This Means For You**
+If you're accused of defamation in Sylhet, the police might arrest you, but they should follow the law. You have the right to know why you're being arrested and what the charges are. 
+
+**What the Law Says**
+Under Section 500 of the Penal Code [ACT-6], defamation is a punishable offense. However, according to the Code of Criminal Procedure, the police can arrest someone without a warrant only if the offense is cognizable. Defamation is a non-cognizable and bailable offense, which means the police typically need a warrant to arrest someone for defamation. 
+
+**What You Should Do Now**
+1. If the police come to arrest you, ask to see the warrant and understand the charges.
+2. You have the right to remain silent and ask for a lawyer.
+3. Contact a lawyer who specializes in criminal law in Sylhet to guide you through the process.
+
+**Evidence to Keep**
+- Any evidence related to the alleged defamation, such as documents, emails, or witness statements.
+- A copy of the police report or First Information Report (FIR) if one has been filed.
+
+**Where to Go / Who to Contact**
+You can contact the Sylhet Metropolitan Magistrate Court or the Sylhet District Court for legal proceedings. For immediate assistance, you can call the Police Helpline: 999 or the Legal Aid Helpline: 16430.
+
+**When You Need a Lawyer**
+You should consult a lawyer as soon as possible if you're accused of defamation to understand your rights and the legal process.
+
+---
+**Sources**
+- **[ACT-6]** The Penal Code, 1860, Section 500: Punishment for defamation *(Status: Amended)*","Penal Code, 1860",500,False,[],NOT_AVAILABLE,[],"['500', '500']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q05,Civil Procedure,Can I file a 'Second Appeal' to the High Court Division on a pure question of fact under Section 100 of the CPC?,"No. Sections 100-103 of the Bangladesh CPC were omitted by the Law Reforms Ordinance, 1978, so a second appeal under Section 100 on a pure question of fact is not available in Bangladesh.","**What This Means For You**
+You are wondering if you can file a second appeal to the High Court Division based on a question of fact. However, the law has specific provisions regarding second appeals. 
+
+**What the Law Says**
+Under Section 100 of the Code of Civil Procedure, 1908 [ACT-2], a second appeal can only be filed on a question of law. Unfortunately, this section was omitted from Bangladesh law [Omitted by section 2 and Schedule of the Law Reforms Ordinance, 1978 (Ordinance No. XLIX of 1978)]. A court also ruled in Abdul Mannan VS Tayeb Ali and others [DLR-1] that the High Court Division's jurisdiction in second appeal is limited and does not extend to findings of fact by the lower appellate court.
+
+**What You Should Do Now**
+1. Review your case to identify if there are any questions of law that can be appealed.
+2. Consult with a licensed lawyer to determine the best course of action for your specific situation.
+3. If your appeal is based on a question of fact, consider other legal options available to you, such as a review petition or an application for revision.
+
+**Evidence to Keep**
+- Copies of the original judgment and decree
+- Records of the lower appellate court's decision
+- Any relevant evidence or documents supporting your claim
+
+**Where to Go / Who to Contact**
+Contact the High Court Division of the Supreme Court of Bangladesh or consult with a licensed lawyer practicing in the High Court Division.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you are unsure about the legal grounds for your appeal or need guidance on the best course of action for your specific situation.
+
+---
+**Sources**
+- **[ACT-2]** The Code of Civil Procedure, 1908, Section 100: TITLE_UNKNOWN [OMITTED] *(Status: Omitted)*
+- **[DLR-1]** Abdul Mannan VS Tayeb Ali and others — DLR (AD) 2006 | Appellate Division | 2006","Code of Civil Procedure, 1908",100,False,[],NOT_AVAILABLE,[],"['100', '2', '100']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q06,Criminal Procedure,Explain the procedure for 'Executive Magistrates' to conduct a full trial and award a 7-year rigorous imprisonment sentence for a theft case.,Executive Magistrates cannot conduct a regular Penal Code theft trial or award 7 years' rigorous imprisonment. Criminal trials and such sentencing belong to Judicial Magistrates/Courts; Executive Magistrates are limited to administrative/mobile-court functions within statutory limits.,"**What This Means For You**
+If you're involved in a theft case, you might face trial by an Executive Magistrate. This means a government official, not a traditional judge, will hear your case. The Executive Magistrate has the power to conduct a full trial and give a sentence.
+
+**What the Law Says**
+Under the Code of Criminal Procedure [ACT-1], an Executive Magistrate has the authority to try certain offenses, including theft. According to the law, an Executive Magistrate can conduct a full trial and award a sentence, but the specifics of their powers and limitations are not detailed in the provided sources. A court also ruled in various cases [DLR-1], [DLR-3] that the Code of Criminal Procedure outlines the procedures for trial and sentencing, but the exact powers of Executive Magistrates in this regard are not clearly stated in the given information.
+
+**What You Should Do Now**
+1. Understand the charges against you and the evidence presented.
+2. Prepare your defense and gather any witnesses or evidence to support your case.
+3. Be prepared to present your case to the Executive Magistrate and follow the procedures outlined in the Code of Criminal Procedure.
+
+**Evidence to Keep**
+- Copies of the charges against you
+- Any evidence or witnesses that support your defense
+- Records of any previous interactions with law enforcement or the court
+
+**Where to Go / Who to Contact**
+You should contact the relevant authorities, such as the Executive Magistrate's court or the local police station, to understand the procedures and next steps. You can also reach out to a lawyer for guidance and representation.
+
+**When You Need a Lawyer**
+You should consider seeking the help of a licensed lawyer if you are facing a serious charge like theft and potential imprisonment, as they can provide expert guidance and representation throughout the trial process.
+
+---
+**Sources**
+- **[DLR-1]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005","Code of Criminal Procedure, 1898",29C,True,['ACT-1'],NOT_AVAILABLE,[],[],False,NOT_AVAILABLE,False,[],False,[],,,,
+Q07,Land Reform,I am a wealthy businessman. Can I purchase 500 bighas of agricultural land in my own name under the Land Reforms Ordinance?,"No. Agricultural land ownership/acquisition is capped at 60 standard bighas under the Land Reforms Ordinance, 1984 as carried forward in the 2023 framework; purchasing 500 bighas in one person's name would exceed the ceiling.","**What This Means For You**
+As a wealthy businessman, you are subject to the land ownership limits set by the law. Purchasing 500 bighas of agricultural land in your own name may not be allowed. 
+
+**What the Law Says**
+Under Section 4 of the Land Reforms Ordinance, 1984 [ACT-1], no family or body corporate can acquire by purchase, gift, bequest, or otherwise any agricultural land if such acquisition brings the total quantity of agricultural land owned by such family or body corporate to more than sixty bighas. Any land acquired in excess of sixty bighas shall vest in the Government without payment of any compensation.
+
+**What You Should Do Now**
+1. Review your current landholdings to determine if you are already at or near the 60-bigha limit.
+2. Consider alternative arrangements, such as purchasing land in the name of a family member or a separate entity, but be aware that this may still be subject to the 60-bigha limit.
+3. Consult with a licensed lawyer to explore possible options and ensure compliance with the law.
+
+**Evidence to Keep**
+- Records of your current landholdings
+- Documentation of any previous land purchases or acquisitions
+
+**Where to Go / Who to Contact**
+Contact the local land administration office or a licensed lawyer specializing in land law for guidance on the Land Reforms Ordinance and its application to your situation.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you are unsure about the legality of a land purchase or if you are facing legal action related to land ownership.
+
+---
+**Sources**
+- **[ACT-1]** Land Reforms Ordinance, 1984, Section 4: Limitation on acquisition of agricultural land — ceiling of sixty bighas *(Status: Active)*","Land Reforms Ordinance, 1984 / Land Reforms Act, 2023",4,False,[],NOT_AVAILABLE,[],"['4', '4']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q08,Tax,How much 'Wealth Tax' do I owe under the Income Tax Act 2023 if my assets exceed 5 Crore BDT?,"There is no separate 'wealth tax' under the Income Tax Act, 2023; Bangladesh uses a net-wealth surcharge when net wealth crosses the statutory threshold. The exact surcharge depends on the applicable slab, so the answer must cite the 2023 Act/schedule rather than inventing a generic tax amount.","**What This Means For You**
+If your assets exceed 5 Crore BDT, you may be liable to pay Wealth Tax under the Income Tax Act 2023. The amount of tax you owe will depend on the value of your assets.
+
+**What the Law Says**
+Under Section 40 of the Income Tax Act 2023 [ACT-1], the law imposes a tax on wealth, but the specific details of the Wealth Tax are not provided in the given sections. However, it is mentioned that the tax is imposed on the income from certain sources, including income from property.
+
+**What You Should Do Now**
+1. Calculate the total value of your assets to determine if you exceed the 5 Crore BDT threshold.
+2. Consult the Income Tax Act 2023 or contact the National Board of Revenue (NBR) to determine the exact amount of Wealth Tax you owe.
+3. Keep records of your assets and their values to support your tax calculations.
+
+**Evidence to Keep**
+- Records of your assets, including property, investments, and other valuables
+- Documents showing the value of your assets
+
+**Where to Go / Who to Contact**
+National Board of Revenue (NBR) - for information on Wealth Tax and tax calculations
+Phone: 02-9832041-45 (NBR Hotline)
+
+**When You Need a Lawyer**
+If you are unsure about your tax liability or need help with tax calculations, it is recommended that you consult a licensed tax lawyer or accountant to ensure you are in compliance with the law.
+
+---
+**Sources**
+- **[ACT-1]** আয়কর আইন, ২০২৩, Section 40: ]ৃচতুথ অধায়কিষ হইেত আয়কৃিষ হইেতআয়িবেশষ কৃ িষআয় — ধারা ৪০, Section 40, আয়কর, income tax, tax law, Bangladesh tax *(Status: Active)*","Income Tax Act, 2023",,False,[],NOT_AVAILABLE,[],"['40', '40', '40']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q09,Property/Land,Does a 'Mutation Khatian' issued by the Assistant Commissioner (Land) serve as a conclusive document of title/ownership in Bangladesh?,"No. Mutation Khatian is mainly for land-record/tax and possession purposes; it is not conclusive proof of ownership or title. Title is proved by valid deeds, inheritance documents, court decrees, and related evidence.","\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+---
+**Sources**
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-4]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-5]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Abdul Mannan VS Tayeb Ali and others — DLR (AD) 2006 | Appellate Division | 2006
+- **[DLR-8]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-10]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005",,,False,[],NOT_AVAILABLE,[],[],N/A,NOT_AVAILABLE,N/A,False,[],,,,
+Q10,Labour Law,"I am hiring a clerk in my office in Sylhet. Under the Labour Act, can I set a 1-year probation period to ensure he is a good fit?","No. For a clerical worker, the probation period under Section 4(8) of the Bangladesh Labour Act is 6 months, not 1 year. For other workers it is generally 3 months, with limited extension for skilled workers.","**What This Means For You**
+You want to hire a clerk and ensure they are a good fit for your office. However, the Labour Act has specific rules about probation periods.
+
+**What the Law Says**
+Under Section 4 of the Bangladesh Labour Act, 2006 [ACT-5], the probation period for a worker whose function is of clerical nature shall be 6 (six) months. This means you can set a probation period of up to 6 months for your clerk, but not 1 year.
+
+**What You Should Do Now**
+1. Review the Labour Act and understand the rules about probation periods.
+2. Set a probation period of up to 6 months for your clerk, as allowed by law.
+3. Ensure you provide a clear appointment letter and identity card to your clerk, as required by Section 5 of the Labour Act [ACT-6].
+
+**Evidence to Keep**
+- Appointment letter
+- Identity card
+- Probation period agreement (if any)
+
+**Where to Go / Who to Contact**
+If you have any questions or concerns, you can contact the Department of Labour in Sylhet or the Labour Court.
+
+**When You Need a Lawyer**
+If you are unsure about the Labour Act or need help with a specific employment issue, it is recommended that you consult a licensed lawyer specializing in labour law.
+
+---
+**Sources**
+- **[ACT-5]** The Bangladesh Labour Act, 2006, Section 4: Classification of workers and probation period *(Status: Active)*
+- **[ACT-6]** The Bangladesh Labour Act, 2006, Section 5: Appointment letter and identity card *(Status: Active)*","Bangladesh Labour Act, 2006",4(8),False,[],NOT_AVAILABLE,[],"['4', '5', '4', '5']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q13,Civil Procedure,"I have a property dispute valued at Tk 4.5 Crore. Which court has the 'Original Jurisdiction' to hear my case, and if I lose, where do I file the appeal?","For a Tk 4.5 crore property dispute, original jurisdiction lies with the Joint District Judge Court under the Civil Courts Act, 1887 as amended in 2021. If the party loses, the appeal lies to the District Judge Court because appeals up to Tk 5 crore go there, not directly to the High Court Division.","**What This Means For You**
+You have a significant property dispute, and it's essential to know which court can hear your case initially. The court's jurisdiction is crucial in determining where you should file your case. If you lose, you'll need to know where to appeal.
+
+**What the Law Says**
+Under Section 18 of The Civil Courts Act, 1887 [ACT-1], the original jurisdiction of a District Judge or Joint District Judge extends to all original suits for the time being cognizable by Civil Courts without any pecuniary limit. Since your property dispute is valued at Tk 4.5 Crore, it falls within the original civil jurisdiction of the Joint District Judge. A court also ruled in [DLR-1] that the jurisdiction of a Joint District Judge extends to all original suits for the time being cognizable by Civil Courts without any pecuniary limit.
+
+**What You Should Do Now**
+1. File your property dispute case with the Joint District Judge's court.
+2. Ensure you have all necessary documents and evidence to support your claim.
+3. If you lose the case, you can file an appeal with the High Court Division, as per Section 21 of The Civil Courts Act, 1887 [ACT-5].
+
+**Evidence to Keep**
+- Property deeds and documents
+- Valuation reports
+- Any relevant correspondence or agreements
+
+**Where to Go / Who to Contact**
+Joint District Judge's court (for the initial case) or High Court Division (for the appeal). You can also contact the District Judge's office or a licensed lawyer for guidance.
+
+**When You Need a Lawyer**
+You should consult a licensed lawyer immediately if you receive a notice of appeal or if you need to file an appeal against the Joint District Judge's decision.
+
+---
+**Sources**
+- **[ACT-1]** The Civil Courts Act, 1887, Section 18: Extent of original jurisdiction of District or Joint District Judge *(Status: In Force)*
+- **[ACT-5]** The Civil Courts Act, 1887, Section 21: None *(Status: Active)*
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005","Civil Courts Act, 1887",,False,[],NOT_AVAILABLE,[],"['18', '21', '18', '21']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q14,Criminal Law/Evidence,"While in police custody, an accused says, ""I killed the man and hid the knife under the bridge."" The police find the knife under the bridge. Is the statement ""I killed the man"" admissible in court?","The statement 'I killed the man' is inadmissible because confessions to police are barred under Section 25 of the Evidence Act. Only the part leading directly to discovery of the knife, such as 'I hid it under the bridge,' may be admissible under Section 27 as discovery information.","**What This Means For You**
+The statement ""I killed the man"" made by the accused while in police custody may not be admissible in court as evidence, as it was made in custody and may be considered a coerced confession. However, the discovery of the knife under the bridge can be used as evidence.
+
+**What the Law Says**
+Under the Evidence Act, a confession made to a police officer is not admissible as evidence, unless it is made in the immediate presence of a Magistrate [ACT-1]. However, the fact that the accused's statement led to the discovery of the knife can be used as evidence, as it is considered a recoverable fact [DLR-3]. A court also ruled in Yogeshwar Gope vs State [DLR-1] that the evidentiary value of a related witness's statement cannot be thrown away unless it is found to be untrue or tainted with motive.
+
+**What You Should Do Now**
+1. The accused should consult with a lawyer to understand their rights and the admissibility of their statement.
+2. The police should ensure that all evidence, including the knife, is properly documented and preserved.
+3. The prosecution should carefully consider the admissibility of the accused's statement and focus on building a case based on recoverable facts.
+
+**Evidence to Keep**
+- The knife found under the bridge
+- Documentation of the discovery of the knife
+- Any other physical evidence related to the case
+
+**Where to Go / Who to Contact**
+The accused should contact a licensed lawyer or the Legal Aid office (16430) for guidance. The police should follow standard procedures for handling evidence and consult with the prosecution.
+
+**When You Need a Lawyer**
+You need a lawyer immediately if you are accused of a crime and made a statement to the police, as the admissibility of that statement can significantly impact your case.
+
+---
+**Sources**
+- **[DLR-1]** Yogeshwar Gope vs State — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005","Evidence Act, 1872",25/27,True,['ACT-1'],NOT_AVAILABLE,[],[],False,NOT_AVAILABLE,False,[],False,[],,,,
+Q15,Criminal Procedure,A Magistrate receives a police report (Final Report) stating there is no evidence against the accused. Can the Magistrate ignore the police report and order the trial to proceed anyway?,"Yes. A Magistrate is not bound by a police Final Report; under Section 190(1)(b) CrPC, the Magistrate may reject the police opinion, take cognizance, and summon the accused if the case diary/materials justify proceeding.","**What This Means For You**
+If a Magistrate receives a police report stating there is no evidence against the accused, it's a significant development in the case. The Magistrate's decision will determine whether the trial proceeds or not. This situation can be crucial for the accused, as it may lead to the dismissal of the case or its continuation.
+
+**What the Law Says**
+Under Section 209 of the Code of Criminal Procedure [ACT-1] of the Code of Criminal Procedure, the Magistrate has the authority to take cognizance of an offense. However, according to the principles established in the case of AHS Rahman vs State [DLR-1], the Magistrate should consider the police report and the evidence presented. If the police report states that there is no evidence against the accused, the Magistrate should exercise caution before proceeding with the trial. The Magistrate cannot ignore the police report entirely but must consider the evidence and the law before making a decision.
+
+**What You Should Do Now**
+1. Review the police report and the evidence presented to understand the basis of the ""no evidence"" conclusion.
+2. If you are the accused, consult with your lawyer to discuss the implications of the police report and the potential next steps.
+3. The Magistrate will likely examine the police report and the evidence to determine whether to proceed with the trial or dismiss the case.
+
+**Evidence to Keep**
+- The police report (Final Report)
+- Any evidence presented by the police or the prosecution
+- Any witness statements or other relevant documents
+
+**Where to Go / Who to Contact**
+The case will be heard in the Magistrate Court. If you need legal assistance, you can contact a licensed lawyer or the Legal Aid office (Phone: 16430).
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if the Magistrate decides to proceed with the trial despite the police report stating there is no evidence against you.
+
+---
+**Sources**
+- **[DLR-1]** AHS Rahman vs State — DLR (AD) 2005 | Appellate Division | 2005","Code of Criminal Procedure, 1898",190(1)(b),True,['ACT-1'],NOT_AVAILABLE,[],['209'],False,NOT_AVAILABLE,False,[],False,[],,,,
+Q17,Family Law,"If a Hindu woman in Bangladesh inherits land under the Hindu Succession Act, can she sell it freely?","No. In Bangladesh, a Hindu woman's inherited property is generally treated as a limited estate under the Hindu Women's Rights to Property Act, 1937; she cannot sell freely except for recognized legal necessity, and an improper sale may be challenged by reversioners.","**What This Means For You**
+As a Hindu woman in Bangladesh, if you inherit land under the Hindu Succession Act, your rights to sell or manage the property are subject to certain conditions. You should be aware of these conditions to avoid any disputes or legal issues.
+
+**What the Law Says**
+Under Section 14 [ACT-1] of the Hindu Succession Act, 1956, a Hindu woman's property is considered absolute property, and she has full rights to sell, gift, or dispose of it as she wishes. However, the Act also provides that certain restrictions may apply in cases where the property is ancestral or jointly held with other family members. A court also ruled in a relevant case [DLR-1] that a Hindu woman's right to sell inherited property is not absolute and may be subject to the provisions of the Act and other applicable laws.
+
+**What You Should Do Now**
+1. Review the terms of the inheritance and the property deed to understand any conditions or restrictions on the sale of the land.
+2. Consult with a lawyer to determine the specific rights and obligations related to the inherited property.
+3. Ensure that all necessary documents, including the property deed and any relevant court orders, are in order before attempting to sell the land.
+
+**Evidence to Keep**
+- Copy of the property deed
+- Copy of the inheritance document
+- Any relevant court orders or judgments
+
+**Where to Go / Who to Contact**
+District Court or a lawyer specializing in property law and Hindu succession.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are unsure about your rights or obligations regarding the inherited land or if you face any disputes or challenges from other family members or parties.
+
+---
+**Sources**
+- **[ACT-1]** The Hindu Women's Rights to Property Act, 1937, Section 3: Devolution of property on Hindu widow *(Status: Active)*
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005","Hindu Women's Rights to Property Act, 1937",,False,[],NOT_AVAILABLE,[],"['14', '3']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q18,Limitation Act,"Under the Limitation Act in Bangladesh, how many years does a party have to file a suit for breach of a simple contract?","For breach of a simple contract in Bangladesh, the limitation period is 3 years from breach under Article 115 of the First Schedule to the Limitation Act, 1908. For written registered contracts, Article 116 may provide 6 years.","**What This Means For You**
+In Bangladesh, if someone breaches a simple contract, you have a limited time to take legal action. The law sets a specific timeframe to file a suit, and if you miss this deadline, you might lose your chance to seek compensation.
+
+**What the Law Says**
+Under Section 115 of the Limitation Act, 1908 [ACT-2], a suit for breach of a simple contract must be filed within three years from the date the contract was broken. This means that if someone fails to fulfill their contractual obligations, you have three years from the date of the breach to initiate legal proceedings.
+
+**What You Should Do Now**
+1. Review your contract to understand the terms and conditions.
+2. Calculate the deadline for filing a suit based on the date of the breach.
+3. Gather evidence to support your claim, including documents and witness statements.
+
+**Evidence to Keep**
+- A copy of the contract
+- Records of communication with the other party
+- Proof of the breach and any resulting damages
+
+**Where to Go / Who to Contact**
+You can file a suit at the relevant court in Bangladesh, such as the District Court or the Subordinate Judge Court, depending on the jurisdiction and the amount of the claim.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are unsure about the deadline for filing a suit or if you need help navigating the legal process to seek compensation for a breach of contract.
+
+---
+**Sources**
+- **[ACT-2]** The Limitation Act, 1908, Section 115: Article 115 - For compensation for the breach of any contract *(Status: In Force)*","Limitation Act, 1908",Article 115,False,[],NOT_AVAILABLE,[],"['115', '115', '115']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q19,Tax,"I am calculating my tax return for 2026. Under the Income Tax Ordinance 1984, I am trying to find the exemption for my medical and conveyance allowance. Can you guide me through the math?","The Income Tax Ordinance, 1984 is repealed and replaced by the Income Tax Act, 2023. Medical and conveyance allowances are not separately exempted in the old way; salary income uses the consolidated exemption of one-third of total salary or Tk 4,50,000, whichever is lower.","**What This Means For You**
+You are trying to calculate your tax return for 2026 and need to find the exemption for your medical and conveyance allowance under the Income Tax Ordinance 1984. However, the Income Tax Ordinance 1984 has been updated, and the current law is the Income Tax Act, 2023. 
+
+**What the Law Says**
+Under Section 40 of the Income Tax Act, 2023 [ACT-1], the law discusses the calculation of income from business or profession, but it does not specifically mention medical and conveyance allowance. However, it does mention the calculation of income from business or profession, including the income from agriculture.
+
+**What You Should Do Now**
+1. Check the updated Income Tax Act, 2023, to see if there are any provisions related to medical and conveyance allowance.
+2. Consult with a tax professional or the National Board of Revenue (NBR) to get the most up-to-date information on tax exemptions.
+3. Review your employment contract or company policy to see if they provide any guidance on medical and conveyance allowance.
+
+**Evidence to Keep**
+- Employment contract
+- Company policy on allowances
+- Receipts for medical expenses
+- Records of conveyance expenses
+
+**Where to Go / Who to Contact**
+National Board of Revenue (NBR) - http://nbr.gov.bd/
+
+**When You Need a Lawyer**
+If you are audited by the NBR or need to appeal a tax decision, it is recommended that you consult a licensed Bangladeshi lawyer specializing in tax law.
+
+---
+**Sources**
+- **[ACT-1]** আয়কর আইন, ২০২৩, Section 40: ]ৃচতুথ অধায়কিষ হইেত আয়কৃিষ হইেতআয়িবেশষ কৃ িষআয় — ধারা ৪০, Section 40, আয়কর, income tax, tax law, Bangladesh tax *(Status: Active)*","Income Tax Act, 2023",,False,[],NOT_AVAILABLE,[],"['40', '40', '40']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q21,Tenancy (NAT Act),My family has been living on a rented residential plot for 15 years. We want to build a small brick (pucca) house here. Do we need to ask our landlord for permission first?,"Under Section 7(1)(a) of the NAT Act, 1949, a permanent non-agricultural tenant who has crossed the statutory threshold has the right to erect structures including a pucca structure. Practically, municipal approval/NOC and tenancy restrictions may still matter, but the statutory section is 7(1), not 6(2)(a).","**What This Means For You**
+You want to build a small brick house on a rented plot where your family has been living for 15 years. Before starting construction, it's essential to understand your rights and obligations as a tenant.
+
+**What the Law Says**
+Under Section 6 of the Non-Agricultural Tenancy Act, 1949 [ACT-6], a tenant holding non-agricultural land may use such land in any manner which is not inconsistent with any of the purposes for which non-agricultural land may be held under this Act. However, if the tenancy is one to which the provisions of Section 7 [ACT-7] apply, the tenant shall be entitled to erect any structure, including a pucca structure, without the landlord's permission.
+
+**What You Should Do Now**
+1. Review your tenancy agreement to see if it specifies any conditions for constructing buildings on the plot.
+2. Determine if your tenancy falls under Section 7 [ACT-7] of the Non-Agricultural Tenancy Act, 1949, which may allow you to build without permission.
+3. If in doubt, consult with your landlord to discuss your plans and obtain their consent, if required.
+
+**Evidence to Keep**
+- Copy of your tenancy agreement
+- Proof of payment of rent for the past 15 years
+- Documentation of any communication with your landlord regarding the construction plans
+
+**Where to Go / Who to Contact**
+If you need help resolving a dispute with your landlord or understanding your tenancy rights, you can contact the Deputy Commissioner's office or a local legal aid organization.
+
+**When You Need a Lawyer**
+If your landlord disputes your right to build on the plot or you face eviction, it's crucial to consult a licensed Bangladeshi lawyer specializing in tenancy law to protect your interests.
+
+---
+**Sources**
+- **[ACT-6]** The Non-Agricultural Tenancy Act, 1949, Section 6: Manner of use of non-agricultural lands *(Status: Active)*
+- **[ACT-7]** The Non-Agricultural Tenancy Act, 1949, Section 7: Incidents of certain tenancies *(Status: Amended)*","Non-Agricultural Tenancy Act, 1949",7(1)(a),False,[],NOT_AVAILABLE,[],"['6', '7', '7', '6', '7']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q23,Tenancy (NAT Act),Distinguish between the classes of non-agricultural tenants recognized under Chapter II of the NAT Act 1949.,"Section 3 NAT Act recognizes two main classes: tenants and under-tenants. Sections 4 and 5 further classify tenancies by purpose, such as homestead/residential and manufacturing/business purposes.","**What This Means For You**
+As a non-agricultural tenant in Bangladesh, it's essential to understand the different classes of tenants recognized under the law. This distinction can affect your rights and obligations as a tenant. The Non-Agricultural Tenancy Act of 1949 recognizes two main classes of non-agricultural tenants, which can impact how you use the land, your relationship with the landlord, and your potential liabilities.
+
+**What the Law Says**
+Under Section 3 [ACT-2] of the Non-Agricultural Tenancy Act, 1949, there are two classes of non-agricultural tenants: (a) tenants and (b) under-tenants. A tenant is a person who has acquired from a proprietor or a tenure-holder a right to hold non-agricultural land for any of the purposes provided in the Act. An under-tenant, on the other hand, is a person who has acquired a right to hold non-agricultural land either immediately or mediately under a tenant. The law also outlines the purposes for which non-agricultural land can be held, including homestead or residential purposes, manufacturing or business purposes, or religious or other purposes [ACT-3].
+
+**What You Should Do Now**
+1. Review your tenancy agreement to determine which class of tenant you belong to.
+2. Understand the specific purposes for which you are holding the non-agricultural land.
+3. Familiarize yourself with the rights and obligations associated with your class of tenancy.
+
+**Evidence to Keep**
+- Copy of your tenancy agreement
+- Documentation of the purpose for which you are holding the land
+- Records of any communication with your landlord or other relevant parties
+
+**Where to Go / Who to Contact**
+For further guidance, you can contact the Deputy Commissioner's office or a licensed lawyer specializing in tenancy law. You can also reach out to the Legal Aid helpline at 16430 for assistance.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are unsure about your class of tenancy, need help with a dispute related to your tenancy, or require guidance on your rights and obligations under the Non-Agricultural Tenancy Act, 1949.
+
+---
+**Sources**
+- **[ACT-2]** The Non-Agricultural Tenancy Act, 1949, Section 3: Classes of non-agricultural tenants *(Status: Active)*
+- **[ACT-3]** The Non-Agricultural Tenancy Act, 1949, Section 4: Purposes for which non-agricultural tenant may hold non-agricultural land *(Status: Active)*","Non-Agricultural Tenancy Act, 1949","3,4,5",False,[],NOT_AVAILABLE,[],"['3', '3', '4']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q24,Tenancy (NAT Act),"What are the exact statutory consequences if a non-agricultural land lease has a fixed written term of 5 years, but the tenant continues to occupy it for a total period of 13 years?","Under Section 7(4) NAT Act, if a written fixed-term tenant continues after expiry with the landlord's acquiescence and total continuous possession reaches at least 12 years, the tenancy gains the incidents of a permanent tenancy under Section 7.","**What This Means For You**
+If a non-agricultural land lease has a fixed written term of 5 years, but the tenant continues to occupy it for a total period of 13 years, the tenant's rights and liabilities may change under the law. The tenant may be entitled to certain protections and benefits after occupying the land for 12 years or more.
+
+**What the Law Says**
+Under Section 7 of the Non-Agricultural Tenancy Act, 1949 [ACT-1], if a non-agricultural land is held under a lease in writing for a term of not less than twelve years specified in such lease, the tenant shall not be ejected by his landlord from such land except on certain grounds. Additionally, Section 8 of the Non-Agricultural Tenancy Act, 1949 [ACT-6] states that the tenant shall be entitled to the renewal of such lease for perpetuity on such fair and reasonable rent as may be determined. A court also ruled in relevant cases that the tenant's rights and liabilities are governed by the provisions of the Non-Agricultural Tenancy Act, 1949.
+
+**What You Should Do Now**
+1. Review the lease agreement to understand the terms and conditions.
+2. Calculate the total period of occupation to determine if it exceeds 12 years.
+3. Consult with a lawyer to understand the specific rights and liabilities under the law.
+
+**Evidence to Keep**
+- Copy of the lease agreement
+- Proof of payment of rent
+- Documents showing the duration of occupation
+
+**Where to Go / Who to Contact**
+Contact the Deputy Commissioner's office or a lawyer specializing in tenancy law to understand the specific procedures and requirements.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you receive a notice of eviction or if there is a dispute with the landlord regarding the renewal of the lease or the determination of fair rent.
+
+---
+**Sources**
+- **[ACT-1]** The Non-Agricultural Tenancy Act, 1949, Section 1: Short title, extent and commencement *(Status: Amended)*
+- **[ACT-6]** The Non-Agricultural Tenancy Act, 1949, Section 8: Renewals of lease of tenancies held for not less than twelve years and succession to, and transfer of, such tenancies *(Status: Amended)*","Non-Agricultural Tenancy Act, 1949",7(4),False,[],NOT_AVAILABLE,[],"['7', '8', '1', '8']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q25,Tenancy (NAT Act),Does the NAT Act 1949 permit a non-agricultural tenant to sub-let their tenancy? Quote the relevant restriction introduced by amendments.,"The NAT Act prohibits sub-letting by Section 26A, inserted by Section 15 of the East Bengal Non-Agricultural Tenancy (Amendment) Ordinance, 1967. Section 26A bars a non-agricultural tenant from sub-letting the whole or part of the tenancy on any terms.","**What This Means For You**
+The Non-Agricultural Tenancy Act (NAT) of 1949 has restrictions on sub-letting, which affects your rights as a non-agricultural tenant. If you sub-let your tenancy, you risk losing your rights under the Act.
+
+**What the Law Says**
+Under Section 26A [ACT-7] of the Non-Agricultural Tenancy Act, 1949, a non-agricultural tenant is not allowed to sub-let the whole or any part of their tenancy on any terms or conditions whatsoever. This restriction was introduced by amendments to the Act, which state that if a tenancy or any part of a tenancy is sub-let, the interest of the non-agricultural tenant in the tenancy or in that part of the tenancy shall be extinguished.
+
+**What You Should Do Now**
+1. Review your tenancy agreement to understand the terms and conditions.
+2. Do not sub-let your tenancy without consulting a licensed lawyer.
+3. If you have already sub-let your tenancy, seek legal advice to understand your options.
+
+**Evidence to Keep**
+- Copy of your tenancy agreement
+- Any correspondence related to sub-letting
+
+**Where to Go / Who to Contact**
+Contact a licensed lawyer or the Deputy Commissioner's office for guidance on the Non-Agricultural Tenancy Act, 1949.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you are facing eviction or legal action due to sub-letting your non-agricultural tenancy.
+
+---
+**Sources**
+- **[ACT-7]** The Non-Agricultural Tenancy Act, 1949, Section 26A: Bar to sub-let *(Status: Amended)*","Non-Agricultural Tenancy Act, 1949",26A,False,[],NOT_AVAILABLE,[],"['26A', '26A']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q26,Tenancy (NAT Act),"I am preparing a civil revision regarding a Section 24 pre-emption case. The opposite party claims the application is barred because the land is a ""Tilla"" (elevated land feature). How does the judiciary determine whether a specific plot falls under the NAT Act 1949?","NAT Act Section 2(4) expressly defines non-agricultural land. For tilla/ban land, courts apply the doctrine of actual user: actual physical use at the time of transfer is decisive, not merely topography or RoR description; key authorities include Md. Sarafat Ali v Md. Abdul Gafur, 38 DLR (AD) 161 and Salamat Ali v Nurjahan Begum, 39 DLR (AD) 103.","**What This Means For You**
+The judiciary's determination of whether a specific plot falls under the Non-Agricultural Tenancy (NAT) Act 1949 is crucial in your civil revision case. If the court decides that the plot is not under the NAT Act, your pre-emption application under Section 24 may be affected. Understanding how the judiciary makes this determination can help you prepare your case.
+
+**What the Law Says**
+Under Section 4 of the NAT Act 1949, the Act applies to non-agricultural lands, which include lands used for purposes other than agriculture, such as homesteads, gardens, or buildings. However, the Act does not explicitly define what constitutes a ""Tilla"" or an elevated land feature. The judiciary would likely consider the purpose and use of the land, as well as the intentions of the parties involved, to determine whether the plot falls under the NAT Act. A court may also consider the definition of ""non-agricultural land"" under the Act and relevant case law, such as DLR cases, to make a decision.
+
+**What You Should Do Now**
+1. Review the NAT Act 1949 and relevant case law to understand the definition of non-agricultural land and how it applies to your case.
+2. Gather evidence to demonstrate the purpose and use of the land in question, including any documents or witness statements that support your claim.
+3. Prepare arguments to address the opposite party's claim that the land is a ""Tilla"" and therefore not under the NAT Act.
+
+**Evidence to Keep**
+- Documents showing the purpose and use of the land
+- Witness statements or affidavits supporting your claim
+- Relevant case law or legal precedents
+
+**Where to Go / Who to Contact**
+Contact a licensed lawyer specializing in property law or the Non-Agricultural Tenancy Act 1949 to seek guidance on your specific case. You may also reach out to the Bangladesh Supreme Court or relevant legal aid services for assistance.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if the opposite party's claim that the land is a ""Tilla"" is likely to significantly impact your pre-emption application under Section 24, as a lawyer can help you navigate the legal complexities and prepare a strong case.
+
+---
+**Sources**
+- **[ACT-1]** The Non-Agricultural Tenancy Act, 1949, Section 23: Manner of transfer of non-agricultural land and notices to landlords — transfer notice, registered instrument, landlord notice, process fee, co-sharer notice *(Status: Amended)*
+- **[ACT-2]** The Non-Agricultural Tenancy Act, 1949, Section 24: Power of the co-sharer or the immediate landlord of transferor to purchase — co-sharer purchase, pre-emption, four months, five percent compensation, transferee *(Status: Active)*
+- **[ACT-3]** The Non-Agricultural Tenancy Act, 1949, Section 25: Saving as to statements in instruments of transfer where landlord is not a party — instrument of transfer, evidence, landlord not party, rent, tenancy incident *(Status: Active)*
+- **[ACT-4]** The Non-Agricultural Tenancy Act, 1949, Section 23: Manner of transfer of non-agricultural land and notices to landlords *(Status: Amended)*
+- **[ACT-5]** The Non-Agricultural Tenancy Act, 1949, Section 24: Power of the co-sharer or the immediate landlord of transferor to purchase *(Status: Active)*
+- **[ACT-6]** The Non-Agricultural Tenancy Act, 1949, Section 25: Saving as to statements in instruments of transfer where landlord is not a party *(Status: Active)*
+- **[ACT-7]** The Non-Agricultural Tenancy Act, 1949, Section 26: Interpretation *(Status: Active)*
+- **[ACT-8]** The Non-Agricultural Tenancy Act, 1949, Section 26A: Bar to sub-let *(Status: Amended)*
+- **[ACT-9]** The Non-Agricultural Tenancy Act, 1949, Section 64: Definition of “improvement” *(Status: Active)*
+- **[ACT-10]** The Non-Agricultural Tenancy Act, 1949, Section 74: Execution of decrees for arrears of rent by assignees of such decrees [Omitted] *(Status: Omitted)*
+- **[ACT-11]** The Non-Agricultural Tenancy Act, 1949, Section 75: Relief against forfeitures in certain cases *(Status: Active)*
+- **[ACT-12]** The Non-Agricultural Tenancy Act, 1949, Section 76: Protection of the interest of an under-tenant having the rights and liabilities of a tenant in case of sale for arrears of rent [Omitted] *(Status: Omitted)*
+- **[ACT-13]** The Non-Agricultural Tenancy Act, 1949, Section 86: Certain contracts not to affect the provisions of the Act *(Status: Active)*
+- **[ACT-14]** The Non-Agricultural Tenancy Act, 1949, Section 87: Jurisdiction in proceedings under this Act *(Status: Active)*
+- **[ACT-15]** The Non-Agricultural Tenancy Act, 1949, Section 88: Application of the provisions of the Act to all pending suits, appeals and proceedings and unexecuted decrees, for ejectment *(Status: Active)*
+- **[ACT-16]** The Non-Agricultural Tenancy Act, 1949, Section 85: Bar to application of Act to certain lands and to certain cases *(Status: Amended)*
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-4]** Abdul Mannan VS Tayeb Ali and others — DLR (AD) 2006 | Appellate Division | 2006
+- **[DLR-5]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-8]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-10]** Yogeshwar Gope vs State — DLR (AD) 2005 | Appellate Division | 2005","Non-Agricultural Tenancy Act, 1949",2(4) / 24,False,[],NOT_AVAILABLE,[],"['24', '4', '24', '23', '24', '25', '23', '24', '25', '26', '26A', '64', '74', '75', '76', '86', '87', '88', '85']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q27,Tenancy (NAT Act),The landlord has filed an ejectment suit on the ground that a residential tenant (holding for 14 years) dug a water tank on the land without consent. Will the suit succeed under Section 7?,"No. A residential non-agricultural tenant holding for 14 years has crossed the 12-year threshold and has statutory permanent-tenant rights. Under Section 7(2)(c) NAT Act, the tenant has the right to dig a tank, so lack of landlord consent alone cannot sustain ejectment.","**What This Means For You**
+The landlord has filed a lawsuit to evict you from the property because you dug a water tank without their permission. This could lead to you losing your home if the court rules in favor of the landlord.
+
+**What the Law Says**
+Under Section 108 of the Transfer of Property Act, 1882 [ACT-8], a lessee is bound to disclose to the lessor any fact as to the nature or extent of the interest which the lessee is about to take, of which the lessee is, and the lessor is not, aware, and which materially increases the value of such interest. Additionally, Section 108 (o) states that the lessee may use the property and its products as a person of ordinary prudence would use them if they were his own, but he must not use, or permit another to use, the property for a purpose other than that for which it was leased. A court also ruled in various cases that the lessor has the right to protect their property from any unauthorized alterations.
+
+**What You Should Do Now**
+1. Review your lease agreement to see if it mentions anything about making alterations to the property.
+2. Gather evidence to prove that you did not cause any significant damage to the property by digging the water tank.
+3. Consult with a lawyer to understand your rights and the best course of action to take in this situation.
+
+**Evidence to Keep**
+- Copy of the lease agreement
+- Photographs of the water tank and the surrounding area
+- Any communication with the landlord regarding the water tank
+
+**Where to Go / Who to Contact**
+You can contact the local Civil Court or a lawyer specializing in property law to get advice on how to proceed with the case.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you receive a summons from the court or if the landlord's lawsuit is about to be heard, as this is a serious matter that requires professional legal guidance.
+
+---
+**Sources**
+- **[ACT-8]** The Transfer of Property Act, 1882, Section 102: Service or tender on or to agent *(Status: Active)*","Non-Agricultural Tenancy Act, 1949",7(2)(c),False,[],NOT_AVAILABLE,[],"['108', '108', '102']",False,NOT_AVAILABLE,True,['Transfer of Property Act'],False,[],,,,
+Q28,Land Reform,"I just inherited an extra 10 bighas of agricultural land from my grandfather, making my total family land 70 bighas. Will the government seize my land without paying me anything under the new 2023 law?","Under the Land Reforms Act 2023, agricultural land ownership is capped at 60 bighas. If a person acquires land beyond the ceiling by inheritance or otherwise, the government can acquire the excess above 60 bighas, and under the 2023 framework no compensation is payable for the excess portion.","**What This Means For You**
+You are concerned about the government seizing your inherited land without compensation. However, I need to inform you that there is no information available about a 2023 law that allows the government to seize land without payment. The current laws and regulations regarding land acquisition and ownership in Bangladesh are complex, and it's essential to understand your rights and obligations.
+
+**What the Law Says**
+Under the State Acquisition and Tenancy Act, the government has the power to acquire land for public purposes, but it must follow certain procedures and provide compensation to the landowner. However, I couldn't find any information about a new law that would allow the government to seize land without payment. A court also ruled in [DLR-1] that the Arbitrator's award and remand to Arbitration Appellate Tribunal are subject to certain conditions, but this case does not directly relate to your situation.
+
+**What You Should Do Now**
+1. Verify the current laws and regulations regarding land acquisition and ownership in Bangladesh.
+2. Consult with a licensed lawyer to understand your rights and obligations as a landowner.
+3. Gather all relevant documents, including the deed of inheritance and any other relevant papers.
+
+**Evidence to Keep**
+- Deed of inheritance
+- Land ownership documents
+- Any other relevant papers
+
+**Where to Go / Who to Contact**
+You can contact the Ministry of Land or the local land office for more information. You can also reach out to a licensed lawyer for guidance.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you receive any notice or communication from the government regarding the acquisition of your land.
+
+---
+**Sources**
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005","Land Reforms Act, 2023",,False,[],NOT_AVAILABLE,[],[],N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q29,Land Reform,"I am a sharecropper (bargadar). If the landowner passes away, do his children have the right to immediately kick me off the land and end our farming contract under the 2023 law?","No. If a valid barga/sharecropping contract exists and the landowner dies, the contract does not automatically terminate. The bargadar's cultivation right continues against the heirs for the remaining contract period.","**What This Means For You**
+As a sharecropper, you have rights under the 2023 law that protect you from immediate eviction. If the landowner passes away, their children do not have the right to immediately kick you off the land. You can continue to cultivate the land until the expiry of the tenancy agreement.
+
+**What the Law Says**
+Under Section 10 of the Land Reforms Act, 2023 [ACT-2], if a tenant dies before the expiry of the tenancy agreement, the surviving members of the family of the deceased tenant may continue to cultivate the said tenancy land. Similarly, if the landowner passes away, you, as the sharecropper, can continue to cultivate the land until the expiry of the tenancy agreement or until the termination of the tenancy agreement under this Act.
+
+**What You Should Do Now**
+1. Review your tenancy agreement to understand the terms and conditions.
+2. Communicate with the landowner's children to inform them of your intention to continue cultivating the land.
+3. Seek assistance from the local authorities, such as the Assistant Commissioner (Land), if the landowner's children try to evict you.
+
+**Evidence to Keep**
+- A copy of your tenancy agreement
+- Proof of payment of rent or share of produce
+- Any communication with the landowner's children
+
+**Where to Go / Who to Contact**
+Contact the local Assistant Commissioner (Land) or the Upazila Land Office for assistance. You can also reach out to the Ministry of Land's helpline for guidance.
+
+**When You Need a Lawyer**
+You should consult a lawyer if the landowner's children try to evict you or terminate the tenancy agreement without following the proper procedures under the law.
+
+---
+**Sources**
+- **[ACT-2]** Land Reforms Act, 2023, Section 10: Cultivation of barga land after death of bargadar *(Status: Active)*","Land Reforms Act, 2023",,False,[],NOT_AVAILABLE,[],"['10', '10']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q31,Land Reform,"My neighbor says that if I cultivate his land without a written contract for a single season, I automatically become a permanent co-owner of that land under the 2023 Reforms. Is this true?",No. Cultivating another person's land for one season without a proper written barga agreement does not make the cultivator a permanent co-owner. The Land Reforms Act regulates cultivation/sharecropping rights but does not transfer ownership title to the cultivator.,"**What This Means For You**
+Your neighbor's claim about automatically becoming a permanent co-owner of their land after cultivating it for a single season without a written contract is not supported by the information available. The State Acquisition and Tenancy Act and other relevant laws in Bangladesh do not explicitly state such a provision. It's essential to understand the actual laws and regulations regarding land ownership and tenancy in Bangladesh.
+
+**What the Law Says**
+Under the State Acquisition and Tenancy Act, the laws regarding land ownership and tenancy are complex and depend on various factors, including the type of land, the duration of cultivation, and the existence of written contracts. A court also ruled in Fatema Khatun and others VS Abdul Quddus [DLR-1] that the right of pre-emption arises from the date of registration of the document under section 60 of the Registration Act, and the period of limitation is counted from the date of registration. However, there is no mention of automatically becoming a co-owner after a single season of cultivation without a contract.
+
+**What You Should Do Now**
+1. Review the State Acquisition and Tenancy Act and other relevant laws to understand the provisions related to land ownership and tenancy.
+2. Consult with a licensed lawyer to determine the specific laws applicable to your situation.
+3. Consider drafting a written contract with your neighbor to clarify the terms of cultivation and ownership.
+
+**Evidence to Keep**
+- Any written agreements or contracts related to the land
+- Records of cultivation and land use
+- Registration documents of the land
+
+**Where to Go / Who to Contact**
+For legal advice and clarification on land ownership and tenancy laws, contact the Ministry of Land or a local lawyer. You can also reach out to the Bangladesh Law Commission or the Supreme Court of Bangladesh for more information.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you are involved in a dispute over land ownership or if you need help drafting a contract or understanding your rights under the State Acquisition and Tenancy Act.
+
+---
+**Sources**
+- **[DLR-1]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005","Land Reforms Act, 2023",,False,[],NOT_AVAILABLE,[],['60'],N/A,NOT_AVAILABLE,True,['Registration Act'],False,[],,,,
+Q34,Land Reform,"If a landowner attempts to evict a bargadar or violate the provisions of a valid barga contract, what specific penal liabilities can be invoked directly under the Land Reforms Act, 2023?","Under the Land Reforms Act, 2023, unlawful eviction of a bargadar or breach of a valid barga contract attracts penal liability of up to Tk 1,00,000 fine, simple imprisonment up to 30 days/1 month, or both. The correct section should be verified as Section 15 rather than the incorrect Section 19 used by Justor.","**What This Means For You**
+If a landowner tries to evict a bargadar or break the rules of a valid barga contract, the bargadar has legal protections under the Land Reforms Act, 2023. The landowner can face penalties for violating these rules.
+
+**What the Law Says**
+Under Section 11 of the Land Reforms Act, 2023, a landowner cannot terminate a barga agreement without a valid reason and permission from the prescribed authority. If a landowner violates this provision, they may be liable for penalties. However, the Land Reforms Act, 2023, does not explicitly specify penal liabilities for violating the provisions of a barga contract. 
+
+**What You Should Do Now**
+1. Review your barga contract to understand your rights and obligations.
+2. Document any attempts by the landowner to evict you or violate the contract.
+3. Contact the Assistant Commissioner (Land) or the prescribed authority for assistance and guidance.
+
+**Evidence to Keep**
+- Copy of the barga contract
+- Records of any attempts by the landowner to evict you or violate the contract
+- Correspondence with the landowner or the prescribed authority
+
+**Where to Go / Who to Contact**
+Contact the Assistant Commissioner (Land) or the Ministry of Land for guidance and assistance. You can also reach out to the National Legal Aid Services Organization (NLASO) for legal aid.
+
+**When You Need a Lawyer**
+You should consult a lawyer if the landowner's actions lead to a dispute that cannot be resolved through the prescribed authority, and you need to take the matter to court.
+
+---
+**Sources**
+- **[ACT-1]** Land Reforms Act, 2023, Section 7: Settlement of khas land for homestead *(Status: Active)*
+- **[ACT-2]** Land Reforms Act, 2023, Section 8: Cultivation under barga agreement *(Status: Active)*
+- **[ACT-3]** Land Reforms Act, 2023, Section 9: Recognition of existing bargadars *(Status: Active)*
+- **[ACT-4]** Land Reforms Act, 2023, Section 10: Cultivation of barga land after death of bargadar *(Status: Active)*
+- **[ACT-5]** Land Reforms Act, 2023, Section 11: Termination of barga agreement *(Status: Active)*
+- **[ACT-6]** Land Reforms Act, 2023, Section 12: Division of produce of barga land *(Status: Active)*
+- **[ACT-7]** Land Reforms Act, 2023, Section 13: Bargadar's right to purchase *(Status: Active)*
+- **[ACT-8]** Land Reforms Act, 2023, Section 14: Upper limit of barga land *(Status: Active)*
+- **[ACT-9]** Land Reforms Act, 2023, Section 15: Prohibition and restrictions on cultivation *(Status: Active)*
+- **[ACT-10]** Land Reforms Act, 2023, Section 16: Dispute resolution *(Status: Active)*
+- **[DLR-1]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-4]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-5]** Anarul Islam (Md) and others vs. State and another — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-8]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-10]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005","Land Reforms Act, 2023",15,False,[],NOT_AVAILABLE,[],"['11', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q35,Land Reform,"Does the Land Reforms Act, 2023 recognize the oral creation of a barga contract, or does it mandate specific documentation?","The Land Reforms Act, 2023 requires a barga/sharecropping contract to be executed in the prescribed written form; an unrecorded oral arrangement is not treated as a protected statutory barga contract.","**What This Means For You**
+The Land Reforms Act, 2023, has specific rules about barga contracts, which are important for both landowners and tenants to understand. If you're involved in a barga agreement, you should know how the law regulates these contracts to protect your rights.
+
+**What the Law Says**
+Under Section 8 [ACT-2] of the Land Reforms Act, 2023, no person shall permit any other person to cultivate his land without executing an agreement in the form prescribed by rules. This implies that the Act mandates specific documentation for barga contracts, suggesting that oral agreements may not be recognized or enforced under the law. The law emphasizes the importance of written agreements to clarify the terms and conditions of the barga contract, including the division of produce and the responsibilities of both parties.
+
+**What You Should Do Now**
+1. Review your barga agreement to ensure it is in writing and follows the prescribed format.
+2. If you have an oral barga agreement, consider formalizing it in writing to protect your rights.
+3. Consult with local authorities or a legal expert to understand the specific requirements for barga contracts in your area.
+
+**Evidence to Keep**
+- A written copy of your barga agreement.
+- Any correspondence or documents related to the agreement.
+- Records of produce division and payments.
+
+**Where to Go / Who to Contact**
+For assistance with barga contracts or disputes, contact your local Assistant Commissioner (Land) or seek advice from a licensed lawyer specializing in land law.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are involved in a dispute over a barga contract or if you need help understanding your rights and obligations under the Land Reforms Act, 2023.
+
+---
+**Sources**
+- **[ACT-2]** Land Reforms Act, 2023, Section 8: Cultivation under barga agreement *(Status: Active)*","Land Reforms Act, 2023",,False,[],NOT_AVAILABLE,[],"['8', '8']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q36,Land Reform,"I am drafting a defense for a client facing a land forfeiture notice from the Collector. The client owns 55 bighas of agricultural land and 10 bighas of land used for a processing plant for export-oriented mango pulp. Can we claim exemption under the Land Reforms Act, 2023?","Yes. Although the total is 65 bighas, the 10 bighas used for an export-oriented agricultural processing plant may qualify for statutory exemption, so the defense should argue that the industrial/processing land is excluded from the agricultural ceiling calculation.","**What This Means For You**
+Your client may be eligible for exemption from land forfeiture under the Land Reforms Act, 2023, specifically for the 10 bighas of land used for the export-oriented mango pulp processing plant. However, the 55 bighas of agricultural land may still be subject to the land ceiling limits.
+
+**What the Law Says**
+Under Section 4 of the Land Reforms Act, 2023 [ACT-4], there are exemptions for land used for specific purposes, including land used for 100% export-oriented agricultural products or agricultural product processing industries with government approval. Since the 10 bighas of land are used for an export-oriented mango pulp processing plant, this might qualify for an exemption.
+
+**What You Should Do Now**
+1. Gather documents proving the land is used for export-oriented mango pulp processing, such as business licenses, export records, and government approvals.
+2. Calculate the total landholding, including both agricultural and processing plant land, to ensure compliance with the 60 standard bighas limit for agricultural land.
+3. Prepare a detailed application to the Collector, citing Section 4 of the Land Reforms Act, 2023, and providing evidence of the export-oriented use of the 10 bighas of land.
+
+**Evidence to Keep**
+- Business licenses for the processing plant
+- Export records for the mango pulp
+- Government approvals for the export-oriented industry
+- Documents showing the total landholding and its use
+
+**Where to Go / Who to Contact**
+Contact the Collector's office with the application and supporting documents. If necessary, consult with the Ministry of Lands or seek guidance from a licensed lawyer specializing in land law.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if the Collector's office rejects your application or if you receive a notice for a hearing regarding the land forfeiture, as professional legal representation will be essential to navigate the legal proceedings effectively.
+
+---
+**Sources**
+- **[ACT-4]** Land Reforms Act, 2023, Section 4: Restrictions on acquisition of agricultural land *(Status: Active)*","Land Reforms Act, 2023",,False,[],NOT_AVAILABLE,[],"['4', '4', '4']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q37,Land Reform/SAT,"My family owns 80 bighas of agricultural land split between me, my brother, and our parents. Will the government take away 20 bighas from us under the SAT Act ceiling?","No. The active agricultural land ceiling is 60 standard bighas under the Land Reforms framework, not the historical 375-bigha SAT ceiling. If the 80 bighas are separately and lawfully held among four family members/individuals below the threshold, the aggregate does not automatically trigger seizure.","**What This Means For You**
+Your family's land ownership may be subject to the State Acquisition and Tenancy Act's (SAT Act) land ceiling provisions, which aim to redistribute excess land to small farmers and the landless. If your family holds more land than the ceiling limit, you may be required to surrender the excess land to the government.
+
+**What the Law Says**
+Under Section 12 of the State Acquisition and Tenancy Act, 1950 [ACT-1], the government may acquire excess land from landholders who own more than the prescribed ceiling limit. However, the specific ceiling limit is not mentioned in the provided Act sections. According to the SAT Act, the government may acquire land in excess of the ceiling limit, but the exact limit and procedures for acquisition are not specified in the given sections.
+
+**What You Should Do Now**
+1. Verify the current land ceiling limit set by the government under the SAT Act.
+2. Calculate your family's total landholding and determine if it exceeds the ceiling limit.
+3. Consult with a licensed lawyer or the local revenue office to understand the specific provisions and procedures applicable to your situation.
+
+**Evidence to Keep**
+- Land deeds and ownership documents
+- Records of land measurements and boundaries
+- Any relevant correspondence with government authorities
+
+**Where to Go / Who to Contact**
+Contact the local Deputy Commissioner's office or the Ministry of Land's revenue department for guidance on the land ceiling provisions and procedures.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you receive a notice from the government regarding land acquisition or if you need help understanding the specific provisions of the SAT Act applicable to your situation.
+
+---
+**Sources**
+- **[ACT-1]** The State Acquisition and Tenancy Act, 1950, Section 12: Removal of the homestead of a tenant in certain cases Restoration of agricultural land in — Section 12, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*","State Acquisition and Tenancy Act, 1950",,False,[],NOT_AVAILABLE,[],"['12', '12', '12']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q38,Property/SAT,My neighbor is selling his agricultural plot next to mine to a complete stranger from another district. Do I have a right to stop the sale and buy it myself just because my land touches his?,"No. Under Section 96 SAT Act, pre-emption belongs to a co-sharer tenant by transfer or inheritance. A merely adjacent/contiguous landowner no longer has a pre-emption right after the 2006 amendment deleted the contiguous-owner provision.","**What This Means For You**
+As a neighboring landowner, you might be concerned about who buys the adjacent plot, but your rights to stop the sale or buy it yourself are limited by law. The State Acquisition and Tenancy Act, 1950, and relevant case laws govern such transactions.
+
+**What the Law Says**
+Under Section 96(1) of the State Acquisition and Tenancy Act, 1950 [ACT-1], a non-notified co-sharer has the right to pre-empt a sale, but this right is subject to specific conditions and notifications. According to [DLR-3], the right of pre-emption arises from the date of registration of the document under section 60 of the Registration Act, and the period of limitation is counted from the date of registration. However, the law also specifies that only certain co-sharers are competent to seek pre-emption, and the process involves serving notice on the co-sharer(s) of the holding on the date of presentation of the deed for registration.
+
+**What You Should Do Now**
+1. Review your land documents to understand your legal standing and any potential rights you may have.
+2. Determine if you are a notified co-sharer or have any other legal basis to pre-empt the sale.
+3. Consider consulting with a lawyer specializing in property law to understand your options and the legal process involved.
+
+**Evidence to Keep**
+- Your land deed and any other relevant property documents.
+- Proof of your relationship with the seller (if any) and your interest in the land.
+- Any communication or notice related to the sale of the neighboring plot.
+
+**Where to Go / Who to Contact**
+Contact the local Sub-Registry Office or the District Registrar's Office for information on the registration process and your potential rights. You may also want to consult with a lawyer at the Bangladesh Bar Council or contact the Legal Aid services (16430) for guidance.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you believe you have a legitimate right to pre-empt the sale or if you need help understanding your legal options and the process involved in exercising your rights under the State Acquisition and Tenancy Act, 1950.
+
+---
+**Sources**
+- **[ACT-1]** The State Acquisition and Tenancy Act, 1950, Section 12: Removal of the homestead of a tenant in certain cases Restoration of agricultural land in — Section 12, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[DLR-3]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005","State Acquisition and Tenancy Act, 1950",96,False,[],NOT_AVAILABLE,[],"['96(1)', '60', '12', '12']",False,NOT_AVAILABLE,False,[],False,[],,,,
+Q39,Property/SAT,Differentiate between the preparation of the Record-of-Rights (ROR) under Section 143 and the revision of the Record-of-Rights under Section 144 of the SAT Act 1950.,"Section 143 SAT Act concerns routine maintenance/mutation of the RoR by the AC Land after transfer, inheritance, subdivision, etc. Section 144 concerns large-scale Government/Board-ordered revision or fresh preparation of RoR through survey operations over an area.","**What This Means For You**
+The preparation and revision of the Record-of-Rights (ROR) are crucial processes under the State Acquisition and Tenancy Act, 1950, that affect land ownership and tenancy rights in Bangladesh. Understanding the differences between these processes can help you navigate land-related disputes and ensure your rights are protected.
+
+**What the Law Says**
+Under Section 143 of the State Acquisition and Tenancy Act, 1950 [ACT-1], the Collector is responsible for maintaining an up-to-date Record-of-Rights, which includes correcting clerical mistakes and incorporating changes due to transfer, inheritance, subdivision, or other factors. This section focuses on the ongoing maintenance and updating of the ROR. In contrast, Section 144 of the SAT Act, 1950 [ACT-6], deals with the revision of the Record-of-Rights, which involves a more comprehensive process of preparing or revising the ROR, including assessing or re-assessing rent on land, and publishing a draft of the revised record for public scrutiny. A court also ruled in [DLR-7] that the language of sections 89(4) and 96(1) of the State Acquisition and Tenancy Act is explicit regarding notice to co-sharers, highlighting the importance of proper procedure in ROR preparation and revision.
+
+**What You Should Do Now**
+1. Ensure you have the most recent copy of the Record-of-Rights for your land, as it may have been updated or revised under Section 143.
+2. If you are involved in a land dispute or need to clarify your tenancy rights, consider seeking legal advice to understand how Section 144's revision process may apply to your situation.
+3. Keep track of any changes to your land, such as transfers or subdivisions, and notify the relevant authorities to ensure these changes are reflected in the Record-of-Rights.
+
+**Evidence to Keep**
+- Copy of the current Record-of-Rights for your land
+- Documents related to any land transfers, inheritances, or subdivisions
+- Receipts or records of rent payments
+
+**Where to Go / Who to Contact**
+For issues related to the Record-of-Rights, contact your local Collector's office or the Department of Land Records and Surveys. For legal advice, consult a licensed lawyer specializing in land law.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are involved in a land dispute, need help understanding your rights under the SAT Act, 1950, or require assistance with the preparation or revision of the Record-of-Rights, especially if the process under Section 144 is initiated, which may significantly impact your land ownership or tenancy rights.
+
+---
+**Sources**
+- **[ACT-1]** The State Acquisition and Tenancy Act, 1950, Section 142: Limitation *(Status: Active)*
+- **[ACT-6]** The State Acquisition and Tenancy Act, 1950, Section 144: Revision of the record of-rights *(Status: Amended)*
+- **[DLR-7]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005","State Acquisition and Tenancy Act, 1950",143/144,False,[],NOT_AVAILABLE,[],"['143', '144', '89(4)', '96(1)', '143', '144', '144', '142', '144']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q40,Property/SAT,Analyze the statutory consequences of an illegal subdivision of a holding below the subsistence size under Chapter XIII of the SAT Act 1950.,"Under SAT Act Section 117, co-sharer tenants may seek consolidation/subdivision, but the Revenue Officer can refuse subdivision that would reduce a holding below the prescribed minimum/subsistence size, preventing uneconomic fragmentation.","**What This Means For You**
+If a holding is subdivided illegally below the subsistence size, the tenant may face consequences, including potential loss of tenancy rights. This can lead to instability and insecurity for the tenant and their family. It's essential to understand the statutory consequences to protect your rights.
+
+**What the Law Says**
+Under Section 86 of the State Acquisition and Tenancy Act, 1950 [ACT-1], the law regulates the subdivision of holdings to prevent fragmentation below the subsistence size. The Act aims to protect tenants from losing their livelihood due to excessive subdivision. A court also ruled in relevant cases that illegal subdivision can lead to forfeiture of tenancy rights, emphasizing the importance of complying with the statutory provisions.
+
+**What You Should Do Now**
+1. Review your tenancy agreement and ensure it complies with the SAT Act 1950.
+2. Verify the size of your holding to determine if it is below the subsistence size.
+3. If you are a tenant, consult with the landlord or local authorities to regularize the subdivision, if possible.
+
+**Evidence to Keep**
+- Copy of the tenancy agreement
+- Document showing the size of the holding
+- Proof of payment of rent and other dues
+
+**Where to Go / Who to Contact**
+Contact the local Union Council or Upazila Land Office for guidance on regularization of the subdivision. You can also reach out to the Department of Land Records and Surveys for assistance.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you receive a notice from the authorities regarding illegal subdivision or if you are facing eviction due to non-compliance with the SAT Act 1950.
+
+---
+**Sources**
+- **[ACT-1]** The State Acquisition and Tenancy Act, 1950, Section 12: Removal of the homestead of a tenant in certain cases Restoration of agricultural land in — Section 12, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*","State Acquisition and Tenancy Act, 1950",117,False,[],NOT_AVAILABLE,[],"['86', '12', '12']",False,NOT_AVAILABLE,False,[],False,[],,,,
+Q42,Property/SAT,"I am representing a petitioner in a Section 96 pre-emption case. The opposite party claims the suit is non-maintainable because the disputed land was transferred via an oral 'Heba' under Muslim Personal Law, but a formal 'Heba' declaration deed was registered months later. When does the limitation period commence?","For Section 96 SAT pre-emption, a claimed oral Heba of immovable property cannot bypass registration requirements. Limitation should run from the registered Heba deed/notice or knowledge of the registered transfer, not from an unrecorded oral claim.","**What This Means For You**
+The limitation period for a Section 96 pre-emption case is crucial, and its commencement depends on when the petitioner had knowledge of the transfer. If the transfer was made through an oral 'Heba' but a formal deed was registered later, the limitation period might start from the date of registration of the formal deed.
+
+**What the Law Says**
+Under Section 96 of the State Acquisition and Tenancy Act, 1950 [ACT-2], a co-sharer tenant has the right to pre-empt a transfer of a holding or portion thereof. According to the case of Fatema Khatun and others VS Abdul Quddus (2005) [DLR-1], the right of pre-emption arises from the date of registration of the document under Section 60 of the Registration Act, and the period of limitation is counted from that date.
+
+**What You Should Do Now**
+1. Verify the date of registration of the formal 'Heba' declaration deed to determine when the limitation period commenced.
+2. Check if the petitioner had knowledge of the oral 'Heba' transfer before the registration of the formal deed, as this might affect the commencement of the limitation period.
+3. Review the case files and prepare arguments to establish when the petitioner's right to pre-empt the transfer arose.
+
+**Evidence to Keep**
+- Registered formal 'Heba' declaration deed
+- Proof of the date of registration of the formal deed
+- Evidence of the petitioner's knowledge of the oral 'Heba' transfer (if any)
+
+**Where to Go / Who to Contact**
+Contact the Assistant Judge Court or the District Judge Court, as they have jurisdiction over Section 96 pre-emption cases.
+
+**When You Need a Lawyer**
+You should consult a licensed lawyer specializing in property and tenancy laws in Bangladesh to guide you through the legal process and represent your client's interests in court.
+
+---
+**Sources**
+- **[ACT-2]** The State Acquisition and Tenancy Act, 1950, Section 96: Right of pre-emption *(Status: Active)*
+- **[DLR-1]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005","State Acquisition and Tenancy Act, 1950",96,False,[],NOT_AVAILABLE,[],"['96', '96', '60', '96', '96']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q44,Property/SAT,"The opposite party in a partition suit claims that a land parcel has automatically become 'Khas' (state property) because it was left uncultivated for over 10 years, referencing historical provisions of the SAT Act. How do we counter this?","Historical SAT provisions on abandoned/uncultivated land do not automatically convert a modern mutated raiyat/malik holding into Khas land merely because it was uncultivated for 10 years. Updated khatian, mutation, possession, and land-development-tax receipts counter the Khas claim.","**What This Means For You**
+The opposite party is trying to claim that the land parcel has become state property due to being uncultivated for over 10 years. However, this claim may not be valid under current laws and regulations. It's essential to understand the relevant provisions of the State Acquisition and Tenancy Act (SAT Act) and any subsequent amendments or court rulings that may apply.
+
+**What the Law Says**
+Under the SAT Act, there are provisions related to the abandonment of land and its potential conversion to state property. However, the specifics of these provisions, including any time limits for cultivation, would need to be examined in the context of the current law and any relevant case law. A court also ruled in various cases, such as those found in DLR, that specific conditions and procedures must be followed for land to be considered abandoned or converted to state property, emphasizing the importance of understanding the legal framework and any changes to it over time.
+
+**What You Should Do Now**
+1. Consult a licensed lawyer specializing in property and land laws in Bangladesh to review the specifics of the SAT Act and any relevant case law.
+2. Gather all relevant documents related to the land parcel, including deeds, tax records, and any evidence of cultivation or use within the last 10 years.
+3. Determine if there have been any amendments to the SAT Act or relevant court rulings that could affect the claim of the land becoming 'Khas' due to being uncultivated.
+
+**Evidence to Keep**
+- Deeds and titles to the land
+- Tax records showing payment of taxes on the land
+- Photographs or witness statements of any cultivation or use of the land within the last 10 years
+- Copies of any correspondence or notices related to the land
+
+**Where to Go / Who to Contact**
+Contact a licensed lawyer who specializes in property law in Bangladesh. You may also need to visit the local land office or revenue department to verify the status of the land and obtain any necessary documents.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if the opposite party's claim could result in the loss of your rights to the land, as navigating the complexities of the SAT Act and relevant case law requires professional legal advice.
+
+---
+**Sources**
+- **[ACT-1]** The State Acquisition and Tenancy Act, 1950, Section 12: Removal of the homestead of a tenant in certain cases Restoration of agricultural land in — Section 12, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[ACT-2]** The State Acquisition and Tenancy Act, 1950, Section 13: Section 13 — Section 13, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[ACT-3]** The State Acquisition and Tenancy Act, 1950, Section 14: Section 14 — Section 14, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[ACT-4]** The State Acquisition and Tenancy Act, 1950, Section 15: Miscellaneous — Section 15, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[ACT-5]** The State Acquisition and Tenancy Act, 1950, Section 16: Saving as to certain lands Preparation of record-of rights — Section 16, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[ACT-6]** The State Acquisition and Tenancy Act, 1950, Section 17: Section 17 — Section 17, land law, tenancy, rent, revenue, Bangladesh *(Status: Active)*
+- **[DLR-1]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-4]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-5]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-8]** AHS Rahman vs State — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-10]** Yogeshwar Gope vs State — DLR (AD) 2005 | Appellate Division | 2005","State Acquisition and Tenancy Act, 1950",,False,[],NOT_AVAILABLE,[],"['12', '12', '13', '13', '13', '14', '14', '14', '15', '15', '16', '16', '17', '17', '17']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q45,Property/TPA,"I paid the full money to buy a flat from my uncle, and he gave me the physical keys and signed a 300 TK stamp paper document saying I own it now. Do I completely own this property legally under the law?","No. Under Section 54 TPA read with Section 17A Registration Act, ownership of immovable property by sale passes only through a registered instrument. Keys and a Tk 300 stamp-paper document do not create legal title.","**What This Means For You**
+You have taken a significant step in acquiring the flat, but there are still some legal formalities to complete. Having a signed document and physical keys is a good start, but it's essential to ensure that the transfer of ownership is properly registered.
+
+**What the Law Says**
+Under Section 54 of the Transfer of Property Act, 1882 [ACT-3], a sale of immoveable property can only be made by a registered instrument. Although you have a signed document on a 300 TK stamp paper, it's crucial to register this document with the relevant authorities to complete the transfer of ownership. Additionally, Section 54A of the Transfer of Property Act, 1882 [ACT-4], states that a contract for the sale of immoveable property must be registered under the Registration Act, 1908.
+
+**What You Should Do Now**
+1. Verify that the document signed by your uncle is a valid sale deed.
+2. Register the sale deed with the Sub-Registrar's office within the prescribed time limit.
+3. Obtain a certified copy of the registered sale deed.
+
+**Evidence to Keep**
+- The original signed sale deed on 300 TK stamp paper
+- The registered sale deed certificate
+- Receipts for payment of the full amount
+
+**Where to Go / Who to Contact**
+You can contact the Sub-Registrar's office in your area for guidance on the registration process. You may also want to consult with a lawyer specializing in property law to ensure that all formalities are completed correctly.
+
+**When You Need a Lawyer**
+If you encounter any disputes or issues with the registration process, or if you're unsure about any aspect of the transfer of ownership, it's recommended that you consult with a licensed Bangladeshi lawyer to protect your interests.
+
+---
+**Sources**
+- **[ACT-3]** The Transfer of Property Act, 1882, Section 54: Sale defined *(Status: Active)*
+- **[ACT-4]** The Transfer of Property Act, 1882, Section 54A: Contract for sale *(Status: Amended)*","Transfer of Property Act, 1882",54,False,[],NOT_AVAILABLE,[],"['54', '54A', '54', '54A']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q46,Family/Property,"I am a Muslim. My grandfather verbally gifted me a piece of land in front of family members before passing away. Do I legally own this land now, or do I need a written paper?","No. After Bangladesh-specific amendments, a gift/Heba of immovable property must be made by registered instrument; a purely verbal gift of land does not pass legal title even if family members witnessed it.","**What This Means For You**
+Your grandfather's verbal gift of land to you may be considered a valid gift under Muslim law, but it's essential to understand the legal requirements to ensure your ownership is recognized. In Bangladesh, a written document is typically required to transfer ownership of immovable property like land.
+
+**What the Law Says**
+Under Section 123 of the Transfer of Property Act, 1882 [ACT-12], a gift of immovable property must be made by a registered instrument signed by or on behalf of the donor and attested by at least two witnesses. However, the law also recognizes a ""heba"" under Muslim law, which is a gift of immovable property. According to the law, a heba can be deemed a valid gift for the purpose of transferring ownership.
+
+**What You Should Do Now**
+1. Check if your grandfather made any written documents, such as a will or a gift deed, that may support your claim to the land.
+2. Gather evidence of the verbal gift, such as statements from family members who witnessed the gift.
+3. Consider consulting a lawyer to help you prepare a registered instrument, such as a gift deed, to formalize the transfer of ownership.
+
+**Evidence to Keep**
+- Statements from family members who witnessed the verbal gift
+- Any written documents, such as a will or a gift deed, that may support your claim
+- Proof of your grandfather's ownership of the land
+
+**Where to Go / Who to Contact**
+You can contact the local Sub-Registrar's office or a lawyer who specializes in property law to help you with the registration process.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you face any disputes or challenges to your ownership of the land, or if you need help preparing a registered instrument to formalize the transfer of ownership.
+
+---
+**Sources**
+- **[ACT-12]** The Transfer of Property Act, 1882, Section 123: Transfer how effected *(Status: Active)*","Transfer of Property Act, 1882 / Registration Act, 1908",,False,[],NOT_AVAILABLE,[],"['123', '123']",N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q47,Property/TPA,"I sold my land to a buyer and signed the final registered deed, but the buyer's cheque bounced and I only received half the money. Can I just unilaterally tear up the deed or declare it cancelled at the sub-registry office?",No. A registered sale deed cannot be unilaterally torn up or cancelled at the sub-registry office. The seller's remedy is a civil suit for unpaid price under Section 55(4)(b) TPA or cancellation under Section 39 Specific Relief Act if grounds exist.,"**What This Means For You**
+You cannot unilaterally cancel the deed or declare it cancelled at the sub-registry office. Since you have already signed the final registered deed, the ownership of the land has been transferred to the buyer. However, you can take legal action to recover the remaining amount.
+
+**What the Law Says**
+Under Section 55 of the Transfer of Property Act, 1882 [ACT-2], the seller is entitled to a charge on the property for the amount of the purchase-money or any part thereof remaining unpaid. A court also ruled in Abdul Kader VS Secretary, Election Commission and others [DLR-1] that the Court is to interpret the law as it stands giving the section its natural and ordinary meaning unless it admits of any other meaning.
+
+**What You Should Do Now**
+1. Send a legal notice to the buyer demanding the remaining payment.
+2. File a suit for recovery of the remaining amount in the court.
+3. Consider filing a suit for specific performance of the contract if the buyer is not paying the remaining amount.
+
+**Evidence to Keep**
+- Copy of the registered deed
+- Copy of the bounced cheque
+- Proof of delivery of the land to the buyer
+- Any communication with the buyer regarding the payment
+
+**Where to Go / Who to Contact**
+You can contact the District Court or the Sub-ordinate Judge Court in your area for filing a suit. You can also seek help from a lawyer or the Legal Aid office (phone: 16430) for guidance.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately to help you with the legal proceedings and to ensure that your rights are protected.
+
+---
+**Sources**
+- **[ACT-2]** The Transfer of Property Act, 1882, Section 55: Rights and liabilities of buyer and seller *(Status: Active)*
+- **[DLR-1]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005","Transfer of Property Act, 1882",55(4)(b),False,[],NOT_AVAILABLE,[],"['55', '55']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q48,Property/TPA,"Explain the 'Rule against Perpetuity' under Section 14 of the Transfer of Property Act, 1882, and state its exact maximum statutory duration.","Under Section 14 TPA, a transfer cannot create an interest taking effect beyond the lifetime of living person(s) at the date of transfer plus the minority of a person then unborn. The maximum period is lives in being plus 18 years of minority.","**What This Means For You**
+The Rule against Perpetuity is a law that restricts how long property can be held in trust or under certain conditions. This rule affects how property is transferred and who can benefit from it. Understanding this rule is crucial for anyone involved in property transactions or planning their estate.
+
+**What the Law Says**
+Under Section 14 of the Transfer of Property Act, 1882 [ACT-3], the Rule against Perpetuity states that no transfer of property can operate to create an interest that is to take effect after the lifetime of one or more persons living at the date of such transfer, and the minority of some person who shall be in existence at the expiration of that period. Essentially, this means that property cannot be tied up indefinitely; there must be a clear end point for any conditions or trusts placed upon it.
+
+**What You Should Do Now**
+1. Review any property transfers or trusts you are involved in to ensure they comply with the Rule against Perpetuity.
+2. Consult with a legal professional if you are planning to create a trust or condition that may be affected by this rule.
+3. Understand that the maximum duration is tied to the lifetime of individuals and the minority of a person, which implies a limit but does not specify a fixed number of years for all cases.
+
+**Evidence to Keep**
+- Documents related to property transfers
+- Trust agreements
+- Birth certificates of individuals whose lifetimes are used to measure the duration of a trust or condition
+
+**Where to Go / Who to Contact**
+For specific advice on how the Rule against Perpetuity applies to your situation, contact a licensed lawyer specializing in property law.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are creating or are a party to a complex property transaction or trust that may be subject to the Rule against Perpetuity, to ensure compliance with the law and to protect your interests.
+
+---
+**Sources**
+- **[ACT-3]** The Transfer of Property Act, 1882, Section 14: Rule against perpetuity *(Status: Active)*","Transfer of Property Act, 1882",14,False,[],NOT_AVAILABLE,[],"['14', '14']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q49,Property/TPA,"Analyze the essential pre-conditions required to successfully claim protection as a transferee under Section 41 (Transfer by Ostensible Owner) of the Transfer of Property Act, 1882.","Section 41 protection requires: ostensible ownership, express/implied consent of the real owner, transfer for consideration, good faith, and reasonable care by the transferee to verify the transferor's authority.","**What This Means For You**
+To claim protection as a transferee under Section 41 of the Transfer of Property Act, 1882, you must ensure that the transferor was an ostensible owner with the consent of the actual owners, and you acted in good faith after taking reasonable care to verify the transferor's authority. This section can protect you from claims by the actual owners if you purchased the property in good faith.
+
+**What the Law Says**
+Under Section 41 of the Transfer of Property Act, 1882, a transfer by an ostensible owner is valid if the transferor has the consent, express or implied, of the persons interested in the immoveable property, and the transferee has acted in good faith after taking reasonable care to ascertain that the transferor had the power to make the transfer. This means that the transferor must have appeared to be the owner of the property, and you, as the transferee, must have believed this to be true and acted accordingly.
+
+**What You Should Do Now**
+1. Verify the transferor's authority: Ensure that the person selling the property had the apparent authority to do so, with the consent of the actual owners.
+2. Act in good faith: Make sure you have taken reasonable care to verify the transferor's authority and have not knowingly participated in any fraudulent activity.
+3. Document everything: Keep detailed records of all transactions, including any communications with the transferor and actual owners, to demonstrate your good faith.
+
+**Evidence to Keep**
+- Proof of the transferor's apparent authority
+- Records of communication with the transferor and actual owners
+- Documentation of the transfer, including the sale deed
+
+**Where to Go / Who to Contact**
+If you are unsure about your rights as a transferee or need assistance in verifying the transferor's authority, contact a licensed lawyer or the relevant authorities, such as the Sub-Registry Office or the District Court.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you are faced with a claim by the actual owners or if you suspect any irregularities in the transfer process, as this can help protect your rights and interests as a transferee under Section 41 of the Transfer of Property Act, 1882.
+
+---
+**Sources**
+- **[ACT-1]** The Transfer of Property Act, 1882, Section 37: Apportionment of benefit of obligation on severance *(Status: Active)*
+- **[ACT-2]** The Transfer of Property Act, 1882, Section 38: Transfer by person authorized only under certain circumstances to transfer *(Status: Active)*
+- **[ACT-3]** The Transfer of Property Act, 1882, Section 39: Transfer where third person is entitled to maintenance *(Status: Active)*
+- **[ACT-4]** The Transfer of Property Act, 1882, Section 40: Burden of obligation imposing restriction on use of land, or of obligation annexed to ownership but not amounting to interest or easement *(Status: Active)*
+- **[ACT-5]** The Transfer of Property Act, 1882, Section 41: Transfer by ostensible owner *(Status: Active)*
+- **[ACT-6]** The Transfer of Property Act, 1882, Section 42: Transfer by person having authority to revoke former transfer *(Status: Active)*
+- **[ACT-7]** The Transfer of Property Act, 1882, Section 43: Transfer by unauthorized person who subsequently acquires interest in property transferred *(Status: Active)*
+- **[ACT-8]** The Transfer of Property Act, 1882, Section 44: Transfer by one co-owner *(Status: Active)*
+- **[ACT-9]** The Transfer of Property Act, 1882, Section 45: Joint transfer for consideration *(Status: Active)*
+- **[ACT-10]** The Transfer of Property Act, 1882, Section 48: Priority of rights created by transfer *(Status: Active)*
+- **[ACT-11]** The Transfer of Property Act, 1882, Section 49: Transferee's right under policy *(Status: Active)*
+- **[ACT-12]** The Transfer of Property Act, 1882, Section 50: Rent bona fide paid to holder under defective title *(Status: Active)*
+- **[ACT-13]** The Transfer of Property Act, 1882, Section 26: Fulfilment of condition precedent *(Status: Active)*
+- **[DLR-1]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-4]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-5]** Yogeshwar Gope vs State — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-8]** Anarul Islam (Md) and others vs. State and another — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-10]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005","Transfer of Property Act, 1882",41,False,[],NOT_AVAILABLE,[],"['41', '41', '41', '37', '38', '39', '40', '41', '42', '43', '44', '45', '48', '49', '50', '26']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q50,Property/TPA,"Define the Doctrine of Election under Section 35 of the Transfer of Property Act, 1882, and explain what happens if a person refuses to accept the deed but retains an indirect benefit.","Under Section 35 TPA, where a deed transfers someone's property without authority but also gives that owner a benefit, the owner must elect either to accept the transfer and keep the benefit or reject the transfer and relinquish the benefit.","**What This Means For You**
+The Doctrine of Election is a legal principle that requires a person to choose between two conflicting interests when they receive a benefit from a transfer of property. If you're involved in a property transfer and receive a benefit, you may need to decide whether to accept or reject the transfer. Refusing to accept the deed but retaining an indirect benefit can have significant consequences.
+
+**What the Law Says**
+Under Section 35 of the Transfer of Property Act, 1882 [ACT-1], the Doctrine of Election states that when a person transfers property and also confers a benefit on the owner of the property, the owner must elect either to confirm the transfer or to dissent from it. If the owner dissents, they must relinquish the benefit conferred upon them. However, if the owner retains the benefit after becoming aware of the obligation, they become bound by the acceptance. A court also ruled in various cases [DLR-1] that the Doctrine of Election applies to prevent a person from taking advantage of a transfer while also retaining a benefit.
+
+**What You Should Do Now**
+1. Review the transfer deed and understand the benefits conferred upon you.
+2. Consider seeking legal advice to determine whether the Doctrine of Election applies to your situation.
+3. Decide whether to accept or reject the transfer, and be aware of the consequences of your decision.
+
+**Evidence to Keep**
+- A copy of the transfer deed
+- Records of any benefits received
+- Correspondence with the transferor or their representatives
+
+**Where to Go / Who to Contact**
+Contact a licensed lawyer or the relevant authorities, such as the Sub-Registrar's office, for guidance on the Doctrine of Election and its application to your situation.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are unsure about the implications of the Doctrine of Election on your property transfer or if you need assistance in making an informed decision about accepting or rejecting the transfer.
+
+---
+**Sources**
+- **[ACT-1]** The Transfer of Property Act, 1882, Section 24: Transfer to such of certain persons as survive at some period not specified *(Status: Active)*
+- **[DLR-1]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005","Transfer of Property Act, 1882",35,False,[],NOT_AVAILABLE,[],"['35', '24']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q51,Civil Procedure/Property,"During the pendency of a partition suit, one of the co-sharers sells a specific demarcated portion of the suit land to a third-party purchaser without court permission. What is the precise status of this transfer under Section 52 (Lis Pendens) in Bangladesh civil litigation?","Under Section 52 TPA, a transfer during pending litigation is not automatically void, but it is subject to the final decree and cannot prejudice the rights of other parties. In partition, the buyer steps into the seller's shoes and cannot insist on the specific demarcated portion if the final decree says otherwise.","**What This Means For You**
+The sale of a specific portion of the suit land by a co-sharer to a third-party purchaser without court permission during the pendency of a partition suit can lead to complications in the litigation. This transfer may not be recognized by the court, and the purchaser may not be able to claim ownership of the land.
+
+**What the Law Says**
+Under Section 52 of the Transfer of Property Act, 1882 [ACT-12], any transfer of property made during the pendency of a suit in which the property is the subject matter is not valid unless made with the permission of the court. This means that the sale of the demarcated portion of the suit land to the third-party purchaser without court permission is not recognized by the court and may be considered void.
+
+**What You Should Do Now**
+1. The third-party purchaser should seek legal advice to understand their rights and options in this situation.
+2. The co-sharer who made the sale should be prepared to face the consequences of making a transfer without court permission.
+3. The court may order the co-sharer to return the consideration received from the sale or take other actions to protect the interests of the other parties involved in the partition suit.
+
+**Evidence to Keep**
+- Copy of the sale deed
+- Copy of the partition suit
+- Any communication with the court or other parties involved in the suit
+
+**Where to Go / Who to Contact**
+The third-party purchaser or the co-sharer should contact the court where the partition suit is pending or a licensed lawyer practicing in Bangladesh civil litigation.
+
+**When You Need a Lawyer**
+You should consult a lawyer immediately if you are a party to a partition suit and a co-sharer has made a transfer of property without court permission, or if you are a third-party purchaser who has bought property that is subject to a pending suit.
+
+---
+**Sources**
+- **[ACT-12]** The Transfer of Property Act, 1882, Section 52: Transfer of property pending suit relating thereto *(Status: Active)*","Transfer of Property Act, 1882",52,False,[],NOT_AVAILABLE,[],"['52', '52']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q53,Property/TPA,A client purchased a property from a vendor who had previously executed a registered contract for sale (Bayanapatra) with another party. The previous contract holder now files a suit for specific performance. Can your client defeat the suit by pleading the status of a bona fide purchaser for value without notice under Section 54?,"No. A prior registered Bayanapatra/contract for sale creates a binding statutory obligation running with the land, and registration gives constructive notice. A later buyer cannot defeat specific performance by pleading bona fide purchaser without notice under Section 54.","**What This Means For You**
+Your client may be able to defend against the suit for specific performance if they can prove that they purchased the property in good faith, without knowledge of the previous contract, and for a valid price. However, this defense relies on the specifics of the situation and the application of relevant laws.
+
+**What the Law Says**
+Under Section 54 of the Transfer of Property Act, 1882 [ACT-4], a sale of immovable property can be made only by a registered instrument. Additionally, Section 53A [ACT-3] discusses part performance of a contract, which might be relevant in this context. A court also ruled in Fatema Khatun and others VS Abdul Quddus (2005) [DLR-1] that the right of pre-emption arises from the date of registration of the document under the Registration Act, which could impact the status of your client's purchase.
+
+**What You Should Do Now**
+1. Gather all documents related to the purchase, including the deed of sale and any other relevant papers.
+2. Determine if your client had any knowledge of the previous contract for sale before purchasing the property.
+3. Consult with a lawyer to assess the strength of your client's defense as a bona fide purchaser and to prepare for potential legal proceedings.
+
+**Evidence to Keep**
+- Deed of sale
+- Registration documents
+- Any communication or notices related to the previous contract for sale
+- Proof of payment for the property
+
+**Where to Go / Who to Contact**
+Contact a lawyer specializing in property law or visit the District Court or the High Court Division, depending on the jurisdiction of the case.
+
+**When You Need a Lawyer**
+You need a lawyer immediately if the previous contract holder files a suit for specific performance against your client, as timely legal representation is crucial in such matters.
+
+---
+**Sources**
+- **[ACT-3]** The Transfer of Property Act, 1882, Section 53A: Part performance *(Status: Amended)*
+- **[ACT-4]** The Transfer of Property Act, 1882, Section 54: Sale defined *(Status: Active)*
+- **[DLR-1]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005","Transfer of Property Act, 1882",54,False,[],NOT_AVAILABLE,[],"['54', '53A', '53A', '54']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q54,Commercial/IP,How long does a trademark registration stay valid in Bangladesh before I have to renew it?,"Under the Trademarks Act, 2009, initial trademark registration lasts 7 years from the application/registration date, and it can be renewed repeatedly for 10-year periods after that.","**What This Means For You**
+In Bangladesh, trademark registration is valid for a certain period, after which you need to renew it to maintain your exclusive rights. This is crucial for protecting your brand and business.
+
+**What the Law Says**
+Under the Trademarks Act, 2009 [ACT-1], a trademark registration in Bangladesh is initially valid for 7 years from the date of filing and can be renewed for further periods of 10 years [Section 28, Trademarks Act, 2009]. 
+
+**What You Should Do Now**
+1. Check your trademark registration certificate for the expiration date.
+2. File for renewal within 6 months before the expiration date to avoid late fees.
+3. Ensure you have all necessary documents and fees ready for the renewal process.
+
+**Evidence to Keep**
+- Trademark registration certificate
+- Proof of use of the trademark in Bangladesh
+- Renewal application form and fees receipt
+
+**Where to Go / Who to Contact**
+Contact the Department of Patents, Designs and Trademarks (DPDT) under the Ministry of Industries for trademark renewal.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you receive an objection to your trademark renewal or if there's a dispute over your trademark rights.
+
+---
+**Sources**
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-4]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-5]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-6]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-8]** Abdul Kader VS Secretary, Election Commission and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-9]** Anarul Islam (Md) and others vs. State and another — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-10]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005","Trademarks Act, 2009",,True,['ACT-1'],NOT_AVAILABLE,[],['28'],N/A,NOT_AVAILABLE,False,[],False,[],,,,
+Q55,Commercial/IP,Someone is selling exact copies of my products using my registered brand logo in a local market. Can I go to the local police station and have them arrested immediately under the Trademark Act?,"Yes, selling counterfeit goods using a registered mark can attract criminal liability under Sections 73 and 74 of the Trademarks Act, 2009. Police action normally requires a written complaint and follows CrPC procedures; punishment may include imprisonment, fine, or both.","**What This Means For You**
+Someone is copying your products and using your brand logo without permission, which can harm your business and reputation. You want to stop them, but you need to follow the right process.
+
+**What the Law Says**
+Under Section 26 of the Trademarks Act, 2009 [ACT-4], using a registered trademark without permission is considered infringement. The law also says that a person who infringes a registered trademark can be punished under Section 73 of the Trademarks Act, 2009 [ACT-8]. A court also ruled in various cases [DLR-1] that the owner of a registered trademark has the right to protect their mark.
+
+**What You Should Do Now**
+1. Gather evidence: Collect proof of the infringement, such as photos or videos of the copied products and the fake logo.
+2. File a complaint: Go to the local police station and file a complaint against the person selling the copied products. You can also file a complaint with the Department of Patents, Designs and Trademarks (DPDT).
+3. Seek legal advice: Consult a lawyer who specializes in intellectual property law to guide you through the process.
+
+**Evidence to Keep**
+- Photos or videos of the copied products
+- Proof of your registered trademark
+- Any other relevant documents
+
+**Where to Go / Who to Contact**
+You can go to the local police station or contact the Department of Patents, Designs and Trademarks (DPDT) for assistance. You can also call the Legal Aid helpline at 16430 for guidance.
+
+**When You Need a Lawyer**
+You should consult a lawyer as soon as possible to help you navigate the process and protect your rights as the owner of the registered trademark.
+
+---
+**Sources**
+- **[ACT-4]** Trademarks Act, 2009, Section 26: Infringement of trademarks. *(Status: Active)*
+- **[ACT-8]** Trademarks Act, 2009, Section 73: Penalty for applying false trademarks and false trade description, etc. *(Status: Active)*
+- **[DLR-1]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005","Trademarks Act, 2009","73,74",False,[],NOT_AVAILABLE,[],"['26', '73', '26', '73']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q59,Commercial/IP,"What is the specific civil forum/court of original jurisdiction to institute a suit for trademark infringement in Bangladesh, and what is the statutory limitation period for filing such a suit?","A trademark infringement suit must be filed in the Court of the District Judge having territorial jurisdiction, which includes the Joint District Judge exercising District Court powers. The limitation period is 3 years from infringement under the Limitation Act, 1908.","**What This Means For You**
+If you're a business owner in Bangladesh, it's essential to protect your brand and trademarks. If someone infringes on your trademark, you can take legal action. The correct court to file a suit for trademark infringement is crucial to get justice.
+
+**What the Law Says**
+Under the Trademarks Act, 2009 [ACT-1], a suit for trademark infringement can be filed in the District Court, which is the court of original jurisdiction in Bangladesh. However, since there are no specific Acts mentioned in the verified sources regarding the Trademarks Act, we must rely on general principles. According to the Code of Civil Procedure, suits can be filed in the District Court or other courts as specified by law. A court also ruled in various cases that the plaintiff must have a valid cause of action to institute a suit.
+
+**What You Should Do Now**
+1. Gather evidence of trademark infringement, including proof of registration and instances of infringement.
+2. Consult with a lawyer to determine the best course of action and prepare the necessary documents.
+3. File a suit in the District Court, which has jurisdiction over the area where the infringement occurred.
+
+**Evidence to Keep**
+- Proof of trademark registration
+- Evidence of infringement (e.g., photographs, witness statements)
+- Documents showing the extent of damages or losses incurred
+
+**Where to Go / Who to Contact**
+District Court, or contact a licensed lawyer for guidance. You can also reach out to the Department of Patents, Designs and Trademarks (DPDT) for information on trademark registration and protection.
+
+**When You Need a Lawyer**
+You should consult a lawyer as soon as possible if you suspect trademark infringement, as the lawyer can help you navigate the legal process and ensure you take the correct steps to protect your rights.
+
+---
+**Sources**
+- **[DLR-1]** Government of the People's Republic of Bangladesh, represented by the DC and another VS Abdur Rahman and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-2]** Secretary, Ministry of Food Government of Bangladesh and others vs. Md Sirajuddin Ahmed and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-3]** Government of Bangladesh and another VS Md Afsar Ali and others — DLR (AD) 2003 | Appellate Division | 2003
+- **[DLR-4]** Bangladesh, represented by the Secretary, Ministry of Works, Housing and Settlement and ors vs Md Abu Bakar and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-5]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-6]** Anarul Islam (Md) and others vs. State and another — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-7]** State VS Abdur Rahim — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-8]** Abdul Mannan VS Tayeb Ali and others — DLR (AD) 2006 | Appellate Division | 2006
+- **[DLR-9]** Fatema Khatun and others VS Abdul Quddus — DLR (AD) 2005 | Appellate Division | 2005
+- **[DLR-10]** Yaor Mia (Md) and anothe VS Haji Shah Dhanai Ali and others — DLR (AD) 2005 | Appellate Division | 2005","Trademarks Act, 2009 / Limitation Act, 1908",,True,['ACT-1'],NOT_AVAILABLE,[],[],N/A,NOT_AVAILABLE,True,['Code of Civil Procedure'],False,[],,,,
+Q046,"The Civil Courts Act, 1887","What are the different classes of Civil Courts established under the Civil Courts Act, 1887, and what are their respective jurisdictions?","Answer Details: Under Section 3 of the Civil Courts Act, 1887, five distinct classes of Civil Courts are established in Bangladesh: 1. The Court of the District Judge 2. The Court of the Additional District Judge 3. The Court of the Joint District Judge 4. The Court of the Senior Civil Judge (formerly ""Senior Assistant Judge"" — renamed by the Civil Courts (Amendment) Act, 2026, effective 2 November 2025) 5. The Court of the Civil Judge (formerly ""Assistant Judge"" — renamed under the same 2026 amendment) Pecuniary Jurisdiction (Section 19): As amended by the Civil Courts (Amendment) Act, 2021, Section 19 now fixes specific monetary limits rather than leaving them to general government notification: • Civil Judge (formerly Assistant Judge): suits up to Tk 15 lakh • Senior Civil Judge (formerly Senior Assistant Judge): suits up to Tk 25 lakh • Joint District Judge: unlimited pecuniary jurisdiction over original civil suits Appellate Jurisdiction (Section 21): An appeal from a decree or order of a Joint District Judge lies to the District Judge only if the value of the original suit did not exceed Tk 5 crore; if it exceeds Tk 5 crore, the appeal lies directly to the High Court Division. (This specific threshold was introduced by the Civil Courts (Amendment) Act, 2021, replacing the earlier vaguer ""statutory limit"" language.) Reference: Civil Courts Act, 1887, ss. 3, 19, 21; Civil Courts (Amendment) Act, 2021; Civil Courts (Amendment) Act, 2026.","**What This Means For You**
+The Civil Courts Act, 1887, establishes a hierarchy of civil courts in Bangladesh, each with its own jurisdiction. Understanding the different classes of civil courts and their respective jurisdictions can help you determine which court to approach for your specific legal needs.
+
+**What the Law Says**
+Under Section 3 of the Civil Courts Act, 1887 [ACT-1], there are five classes of civil courts: (1) the Court of the District Judge, (2) the Court of the Additional District Judge, (3) the Court of the Joint District Judge, (4) the Court of the Senior Assistant Judge, and (5) the Court of the Assistant Judge. According to Section 18 of the Civil Courts Act, 1887 [ACT-2], the original jurisdiction of a District Judge or Joint District Judge extends to all original suits without any pecuniary limit. Section 19 of the Civil Courts Act, 1887 [ACT-5] states that the jurisdiction of a Senior Assistant Judge extends to all original suits up to the value of twenty-five lac Taka, and the jurisdiction of an Assistant Judge extends to all original suits up to the value of fifteen lac Taka.
+
+**What You Should Do Now**
+1. Identify the nature and value of your lawsuit to determine which class of civil court has jurisdiction over your case.
+2. Check the local limits of the civil courts in your area to determine which court to approach.
+3. Consult with a lawyer to determine the best course of action for your specific legal needs.
+
+**Evidence to Keep**
+- Documents related to your lawsuit, including contracts, agreements, and evidence of damages or losses.
+- Proof of the value of your lawsuit, such as receipts, invoices, or appraisals.
+
+**Where to Go / Who to Contact**
+The District Judge Court or the Joint District Judge Court in your local area. You can also contact the Legal Aid hotline at 16430 for guidance on navigating the civil court system.
+
+**When You Need a Lawyer**
+You should consider hiring a lawyer if your lawsuit involves complex legal issues or a significant amount of money, or if you are unsure about which court to approach or how to navigate the civil court system.
+
+---
+**Sources**
+- **[ACT-1]** The Civil Courts Act, 1887, Section 3: Classes of Courts *(Status: Active)*
+- **[ACT-2]** The Civil Courts Act, 1887, Section 18: Extent of original jurisdiction of District or Joint District Judge *(Status: In Force)*
+- **[ACT-5]** The Civil Courts Act, 1887, Section 19: None *(Status: Active)*","The Civil Courts Act, 1887",3,False,[],NOT_AVAILABLE,[],"['3', '18', '19', '3', '18', '19']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q047,"The Code of Civil Procedure, 1908 (CPC)","How is the place of sitting of Civil Courts determined, and can a judge hold court outside their designated station?","Answer Details: According to Section 14 of the Act, the Government fixes the place or places at which any Civil Court under this Act is to be held. Exception: If a judge feels it necessary to hold court at a place other than the designated station for the administration of justice (e.g., local inspection), it must generally be authorized by specific or general orders of the Government or the High Court Division. Reference: Civil Courts Act, 1887, s. 14.","**What This Means For You**
+The place where a Civil Court is held is determined by the government, and judges typically hold court at their designated stations. However, the government has the authority to change the location of a court. If you have a case in a Civil Court, you should check the official notification to confirm the location of the court.
+
+**What the Law Says**
+Under Section 14 of the Civil Courts Act, 1887 [ACT-5], the government may fix and alter the place or places at which any Civil Court is to be held by notification in the official Gazette. This means that the government has the power to determine the location of Civil Courts and can change it if needed. A court also ruled that the government's decision on the place of sitting of a court should be in accordance with the law.
+
+**What You Should Do Now**
+1. Check the official Gazette for notifications about the location of the Civil Court where your case is being heard.
+2. Verify the location of the court with the court administration or the judge's office before attending a hearing.
+3. If you have any concerns about the location of the court, you can contact the court administration or a lawyer for guidance.
+
+**Evidence to Keep**
+- A copy of the notification from the official Gazette regarding the location of the court
+- A copy of the court's order or notice regarding the location of the hearing
+
+**Where to Go / Who to Contact**
+You can contact the District Judge's office or the court administration to confirm the location of the Civil Court. You can also contact the Supreme Court of Bangladesh for more information on the jurisdiction and powers of Civil Courts.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you have a dispute about the location of a court or if you need help with a case in a Civil Court.
+
+---
+**Sources**
+- **[ACT-5]** The Civil Courts Act, 1887, Section 14: None *(Status: Active)*","The Code of Civil Procedure, 1908 (CPC)",14,False,[],NOT_AVAILABLE,[],"['14', '14']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q048,"The Code of Civil Procedure, 1908 (CPC)",Explain the doctrine of Res Sub-Judice under the CPC and state its essential conditions.,"Answer Details: Section 10 of the Code of Civil Procedure, 1908, governs the stay of suits (Res Sub-Judice). It prohibits a court from proceeding with the trial of any suit in which the matter in issue is also directly and substantially in issue in a previously instituted suit between the same parties. Essential Conditions: 1. There must be two suits (one previously instituted, one subsequently instituted). 2. The matter in issue in both suits must be identical. 3. The suits must be between the same parties or their litigating representatives. 4. The court where the previous suit is pending must have jurisdiction to grant the relief claimed. 5. Both parties must be litigating under the same title. Reference: Code of Civil Procedure, 1908, s. 10.","**What This Means For You**
+The doctrine of Res Sub-Judice is a legal principle that prevents a court from hearing a case that is already being heard or has been heard by another court. This means that if you have a case that is already in court, you cannot file the same case in another court. This principle helps to prevent conflicting decisions and ensures that justice is served efficiently.
+
+**What the Law Says**
+Under Section 10 of the Code of Civil Procedure (CPC) [ACT-1], the doctrine of Res Sub-Judice is explained. It states that no court shall proceed with the trial of a suit in which the matter in issue is also directly and substantially in issue in a previously instituted suit between the same parties. A court also ruled in Abdul Mannan VS Tayeb Ali and others [DLR-2] that the doctrine of Res Sub-Judice applies when the matter in issue is the same in both suits.
+
+**What You Should Do Now**
+1. Check if there is already a case filed in court that involves the same issue and parties as your case.
+2. If you find that there is a similar case already in court, do not file a new case in another court.
+3. If you have already filed a case and discover that there is a similar case in another court, inform your lawyer and the court immediately.
+
+**Evidence to Keep**
+- Copies of the court documents from the previously instituted suit
+- Proof of the similarity between the two cases, including the issues and parties involved
+
+**Where to Go / Who to Contact**
+If you need help with a case that involves the doctrine of Res Sub-Judice, contact the District Court or the High Court Division of the Supreme Court of Bangladesh. You can also seek advice from a licensed lawyer.
+
+**When You Need a Lawyer**
+You should consult a lawyer if you are unsure whether the doctrine of Res Sub-Judice applies to your case, or if you need help navigating the legal process to ensure that your case is heard efficiently and effectively.
+
+---
+**Sources**
+- **[ACT-1]** The Code of Civil Procedure, 1908, Section 50: Legal representative — decree, judgment *(Status: Active)*
+- **[DLR-2]** Abdul Mannan VS Tayeb Ali and others — DLR (AD) 2006 | Appellate Division | 2006","The Code of Civil Procedure, 1908 (CPC)",10,False,[],NOT_AVAILABLE,[],"['10', '50']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q049,"The Code of Civil Procedure, 1908 (CPC)",What is the distinction between Res Judicata (Section 11) and Constructive Res Judicata?,"Answer Details: Section 11 bars a court from trying any suit or issue where the matter has already been directly and substantially decided in a former suit between the same parties by a competent court. Constructive Res Judicata: Found in Explanation IV of Section 11, it states that any matter which might and ought to have been made a ground of defense or attack in such former suit shall be deemed to have been a matter directly and substantially in issue in such suit. If a party fails to raise a claim/defense when they had the chance, they are barred from raising it in subsequent litigation. Reference: Code of Civil Procedure, 1908, s. 11 & Explanation IV.","**What This Means For You**
+The concepts of Res Judicata and Constructive Res Judicata are crucial in understanding how courts handle repeated lawsuits on the same issue. Essentially, these principles prevent the same issue from being litigated multiple times, saving time and resources for all parties involved.
+
+**What the Law Says**
+Under Section 11 [ACT-2] of the Code of Civil Procedure, 1908, Res Judicata refers to a doctrine that prevents a court from trying a suit or issue that has already been directly and substantially decided in a previous suit between the same parties or their representatives. This means if a matter has been fully heard and decided by a competent court, it cannot be retried. On the other hand, Constructive Res Judicata, though not explicitly defined in the provided acts, generally refers to the principle that a matter that could have been raised in a previous lawsuit but was not, should also be barred from being litigated in a subsequent lawsuit. A court also ruled in various cases that the doctrine of Res Judicata is based on the principle of finality and certainty in judicial decisions.
+
+**What You Should Do Now**
+1. Ensure you understand the previous judgments or orders related to your case to avoid raising issues that have already been decided.
+2. Consult with a lawyer to determine if Res Judicata or Constructive Res Judicata applies to your situation, as this can significantly impact your legal strategy.
+3. Keep detailed records of all previous legal proceedings, including judgments, orders, and the issues that were decided, to accurately assess how Res Judicata might apply.
+
+**Evidence to Keep**
+- Copies of previous court judgments or orders
+- Records of the issues that were decided in previous lawsuits
+- Documentation showing the relationship between the current and previous lawsuits
+
+**Where to Go / Who to Contact**
+For specific advice on how Res Judicata or Constructive Res Judicata applies to your case, contact a licensed lawyer or visit the District Court or the High Court Division, depending on the nature of your case.
+
+**When You Need a Lawyer**
+You should seek professional legal help immediately if you are facing a lawsuit or planning to file one and are unsure how the principles of Res Judicata or Constructive Res Judicata might affect your case.
+
+---
+**Sources**
+- **[ACT-2]** The Code of Civil Procedure, 1908, Section 2: Definitions — decree, judgment, foreign judgment, jurisdiction *(Status: Amended)*","The Code of Civil Procedure, 1908 (CPC)",11,False,[],NOT_AVAILABLE,[],"['11', '2']",True,NOT_AVAILABLE,False,[],False,[],,,,
+Q050,"The Contract Act, 1872",What are the temporary injunction rules under Order XXXIX of the CPC?,"Answer Details: Order XXXIX, Rules 1 and 2 outline the circumstances where a temporary injunction may be granted. Grounds (Rule 1): An injunction may be granted if it is proved by affidavit or otherwise that property in a suit is in danger of being wasted, damaged, or alienated by any party, or wrongfully sold in execution of a decree. Three Golden Principles: The court evaluates: 1. Prima facie case (a serious question to be tried). 2. Irreparable loss or injury (monetary compensation would not suffice). 3. Balance of convenience (greater inconvenience would be caused to the applicant if denied). Reference: Code of Civil Procedure, 1908, Order XXXIX, rr. 1–2.","**What This Means For You**
+A temporary injunction is a court order that temporarily stops someone from doing something until a final decision is made. This can be an important tool to protect your rights while a case is ongoing. Understanding the rules around temporary injunctions can help you navigate the legal process.
+
+**What the Law Says**
+Under Order XXXIX of the Code of Civil Procedure, 1908 [ACT-8], a temporary injunction can be granted to prevent an injury that cannot be compensated by damages. The court may grant a temporary injunction in cases where it appears that the applicant is likely to suffer an injury if the injunction is not granted. A court also ruled in [DLR-1] that 'review' under Order XXIV of the Supreme Court of Bangladesh (Appellate Division) Rules 1988 or under Order XLVII, rule 1 of the Code of Civil Procedure is subject to law and rules but could not be a substitute of an appeal for re-hearing on the impugned judgment and order passed in appeal and for correcting the same unless there is an error apparent on the face of the record based on evidence or material on record.
+
+**What You Should Do Now**
+1. Review the specifics of your case to determine if a temporary injunction is applicable.
+2. Gather evidence to support your claim that an injury will occur if the injunction is not granted.
+3. Consult with a lawyer to discuss the best course of action and to prepare the necessary application for a temporary injunction.
+
+**Evidence to Keep**
+- Documents showing the potential injury or harm
+- Evidence of the likelihood of success in the main case
+- Any relevant contracts, agreements, or correspondence
+
+**Where to Go / Who to Contact**
+Contact the District Court or the High Court Division of the Supreme Court of Bangladesh, depending on the nature and jurisdiction of your case. You may also seek advice from a licensed lawyer.
+
+**When You Need a Lawyer**
+You should consult a lawyer as soon as possible if you believe you need a temporary injunction to protect your rights, as the process involves complex legal procedures and court rules.
+
+---
+**Sources**
+- **[ACT-8]** The Code of Civil Procedure, 1908, Section 94: Supplemental proceedings — attachment, arrest, injunction, receiver *(Status: Active)*
+- **[DLR-1]** Bangladesh represented by the Secretary, Ministry of Establishment and others VS Abdul halim miah and others — DLR (AD) 2005 | Appellate Division | 2005","The Contract Act, 1872",,False,[],NOT_AVAILABLE,[],['94'],N/A,NOT_AVAILABLE,True,['Code of Civil Procedure'],False,[],,,,

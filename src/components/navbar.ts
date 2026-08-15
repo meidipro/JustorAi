@@ -41,6 +41,7 @@ export function renderNavbar(container: HTMLElement, currentPath: string) {
             <div class="navbar-right">
               <div class="nav-links">
                 <a href="/app" class="nav-link" data-link>${i18n.t('nav_myChats')}</a>
+                <a href="/guides" class="nav-link" data-link>Legal Guides</a>
                 <a href="/doc-analysis" class="nav-link" data-link>Doc Analysis</a>
                 <a href="/about" class="nav-link" data-link>${i18n.t('nav_about')}</a>
               </div>
@@ -71,6 +72,7 @@ export function renderNavbar(container: HTMLElement, currentPath: string) {
             </div>
             <div class="navbar-right">
               <div class="nav-links">
+                <a href="/guides" class="nav-link" data-link>Legal Guides</a>
                 <a href="/#features" class="nav-link">${i18n.t('nav_features')}</a>
                 <a href="/about" class="nav-link" data-link>${i18n.t('nav_about')}</a>
               </div>

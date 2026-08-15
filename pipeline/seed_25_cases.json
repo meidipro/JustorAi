@@ -1,0 +1,884 @@
+[
+  {
+    "case_id": "SCBD-AD-2015-001",
+    "case_title": "Abdul Jalil and others vs Md. Joynal Abedin and others",
+    "citation": "67 DLR (AD) 142",
+    "court_division": "Appellate Division",
+    "year": 2015,
+    "judgment_date": "2015-05-18",
+    "bench_judges": ["Surendra Kumar Sinha CJ", "Md. Abdul Wahhab Miah J", "Nazmun Ara Sultana J"],
+    "subject_area": "Property & Land Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Transfer of Property Act, 1882",
+        "sections": ["54", "54A"]
+      },
+      {
+        "act_name": "The Registration Act, 1908",
+        "sections": ["17A", "49"]
+      },
+      {
+        "act_name": "The Specific Relief Act, 1877",
+        "sections": ["21A"]
+      }
+    ],
+    "facts_summary": "The plaintiffs sought specific performance of an unregistered contract for sale executed in 2006. The defendants contended that following the 2004 amendments introducing Section 54A in the Transfer of Property Act, Section 17A in the Registration Act, and Section 21A in the Specific Relief Act, no suit for specific performance lies on an unregistered contract for sale.",
+    "legal_issues": [
+      "Whether an unregistered agreement for sale executed after the 2004 amendment can be enforced through a suit for specific performance in civil court."
+    ],
+    "ratio_decidendi": "An agreement for sale of immovable property executed after the 2004 amendment must be compulsorily registered. An unregistered contract for sale is completely barred from being specifically enforced in civil court under Section 21A of the Specific Relief Act, 1877.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 14,
+        "quote_text": "By the amendment of 2004, the legislature has made registration of a contract for sale mandatory under section 17A of the Registration Act and section 54A of the Transfer of Property Act. Section 21A of the Specific Relief Act explicitly bars any court from entertaining a suit for specific performance of an unregistered contract for sale."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2008-002",
+    "case_title": "Md. Mozibur Rahman vs Government of Bangladesh and others",
+    "citation": "60 DLR (AD) 89",
+    "court_division": "Appellate Division",
+    "year": 2008,
+    "judgment_date": "2008-03-24",
+    "bench_judges": ["M.M. Ruhul Amin CJ", "Md. Tafazzul Islam J"],
+    "subject_area": "Property & Land Law",
+    "governing_statutes": [
+      {
+        "act_name": "The State Acquisition and Tenancy Act, 1950",
+        "sections": ["144", "144A"]
+      },
+      {
+        "act_name": "The Evidence Act, 1872",
+        "sections": ["35"]
+      }
+    ],
+    "facts_summary": "The dispute pertained to whether the record of rights (RS Khatian) published under Section 144 of the SAT Act creates title on its own in the absence of valid acquisition documents.",
+    "legal_issues": [
+      "Whether a Khatian (Record of Rights) creates or extinguishes title to immovable property."
+    ],
+    "ratio_decidendi": "A Khatian or Record of Rights (Porcha) does not create nor extinguish title to immovable property. It only raises a rebuttable presumption of possession and tenancy for revenue collection purposes under Section 144(4) of the SAT Act.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 9,
+        "quote_text": "It is well settled that entry in the record-of-rights does not create title. Record-of-rights is prepared for fiscal purposes, namely, collection of land revenue, and it raises only a rebuttable presumption of correctness regarding possession."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2018-003",
+    "case_title": "Md. Nurul Islam vs S.M. Shahjahan and others",
+    "citation": "70 DLR (AD) 215",
+    "court_division": "Appellate Division",
+    "year": 2018,
+    "judgment_date": "2018-07-12",
+    "bench_judges": ["Syed Mahmud Hossain CJ", "Muhammad Imman Ali J", "Mirza Hussain Haider J"],
+    "subject_area": "Civil Procedure & Injunctions",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Civil Procedure, 1908",
+        "sections": ["Order 39, Rule 1", "Order 39, Rule 2"]
+      }
+    ],
+    "facts_summary": "Appeal against the grant of temporary injunction restraining the appellant from construction on disputed land during pendency of a partition suit.",
+    "legal_issues": [
+      "What are the essential tripartite conditions governing the grant of temporary injunction under Order 39 of the CPC."
+    ],
+    "ratio_decidendi": "To obtain a temporary injunction under Order 39, Rules 1 and 2 of the CPC, the applicant must establish all three conditions cumulatively: (1) a strong prima facie case, (2) irreparable loss and injury that cannot be compensated in money, and (3) balance of convenience in applicant's favour.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 11,
+        "quote_text": "An order of temporary injunction cannot be granted as a matter of course. The court must be satisfied on three indispensable ingredients: prima facie arguable case, balance of convenience and inconvenience, and irreparable injury."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2012-004",
+    "case_title": "Abdul Gafur vs Md. Shamsul Haque",
+    "citation": "64 DLR (AD) 54",
+    "court_division": "Appellate Division",
+    "year": 2012,
+    "judgment_date": "2012-02-15",
+    "bench_judges": ["Md. Muzammel Hossain CJ", "Surendra Kumar Sinha J"],
+    "subject_area": "Property & Land Law",
+    "governing_statutes": [
+      {
+        "act_name": "The State Acquisition and Tenancy Act, 1950",
+        "sections": ["96"]
+      }
+    ],
+    "facts_summary": "The pre-emptor filed an application for pre-emption under Section 96 of the SAT Act claiming rights as a co-sharer by inheritance. The vendee contended the applicant was only a co-sharer by purchase.",
+    "legal_issues": [
+      "Whether a co-sharer by purchase holds statutory pre-emption rights after the 2006 amendment to Section 96 of the SAT Act."
+    ],
+    "ratio_decidendi": "Following the State Acquisition and Tenancy (Amendment) Act, 2006 (Act No. 34 of 2006), the right of pre-emption under Section 96 is restricted strictly to a co-sharer by inheritance of the holding. A co-sharer by purchase or contiguous tenant has no right of pre-emption under Section 96.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 8,
+        "quote_text": "By the substituting amendment of section 96 in 2006, the legislature intentionally omitted contiguous land owners and co-sharers by purchase. Only a co-sharer in the holding by inheritance is entitled to maintain an application for pre-emption."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2016-005",
+    "case_title": "The State vs Md. Mofazzal Hossain",
+    "citation": "68 DLR (HCD) 341",
+    "court_division": "High Court Division",
+    "year": 2016,
+    "judgment_date": "2016-08-22",
+    "bench_judges": ["M. Enayetur Rahim J", "J.B.M. Hassan J"],
+    "subject_area": "Criminal Procedure & Bail",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Criminal Procedure, 1898",
+        "sections": ["498"]
+      }
+    ],
+    "facts_summary": "Application for anticipatory bail under Section 498 of CrPC in connection with an alleged financial dispute converted into a criminal complaint under Sections 406/420 of Penal Code.",
+    "legal_issues": [
+      "What are the parameters for granting anticipatory bail under Section 498 CrPC in Bangladesh."
+    ],
+    "ratio_decidendi": "Anticipatory bail under Section 498 CrPC is an extraordinary prerogative remedy granted only when there is reasonable apprehension of arrest with mala fide intent or where civil disputes are dressed up as criminal offences to cause harassment.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 12,
+        "quote_text": "The power under section 498 of the Code to grant anticipatory bail is of an exceptional character. It must be exercised with caution where the petitioner establishes a prima facie apprehension of arrest based on motivated or frivolous accusations."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2004-006",
+    "case_title": "Government of Bangladesh vs Ayesha Khatun",
+    "citation": "56 DLR (AD) 130",
+    "court_division": "Appellate Division",
+    "year": 2004,
+    "judgment_date": "2004-06-10",
+    "bench_judges": ["Mainur Reza Chowdhury CJ", "K.M. Hasan J"],
+    "subject_area": "Family & Succession Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Muslim Family Laws Ordinance, 1961",
+        "sections": ["4"]
+      }
+    ],
+    "facts_summary": "Dispute concerning whether the children of a son who predeceased the grandfather are entitled to the full share their father would have inherited had he been alive at the opening of succession.",
+    "legal_issues": [
+      "Whether Section 4 of MFLO 1961 overrides traditional Sharia rules of exclusion for orphaned grandchildren."
+    ],
+    "ratio_decidendi": "Under Section 4 of the Muslim Family Laws Ordinance, 1961, the children of any predeceased son or daughter inherit the exact per stirpes share which their parent would have received if alive at the time of the grandfather's death.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 7,
+        "quote_text": "Section 4 of the Ordinance creates a statutory succession in favour of the children of a predeceased child. The succession opens on the death of the propositus and the children step into the shoes of their deceased parent per stirpes."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2010-007",
+    "case_title": "Khaleda Akter vs Md. Tariqul Islam",
+    "citation": "62 DLR (AD) 201",
+    "court_division": "Appellate Division",
+    "year": 2010,
+    "judgment_date": "2010-09-08",
+    "bench_judges": ["Md. Tafazzul Islam CJ", "Md. Abdul Matin J"],
+    "subject_area": "Family & Succession Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Family Courts Act, 2023",
+        "sections": ["4", "5"]
+      },
+      {
+        "act_name": "The Limitation Act, 1908",
+        "sections": ["Schedule I, Article 103", "Schedule I, Article 104"]
+      }
+    ],
+    "facts_summary": "The wife filed a suit in Family Court for recovery of prompt and deferred dower (Denmohor) after divorce.",
+    "legal_issues": [
+      "What is the limitation period for recovering prompt vs deferred dower under Bangladesh law."
+    ],
+    "ratio_decidendi": "Prompt dower is payable on demand; limitation of 3 years runs from the date of demand and refusal under Article 103 of Limitation Act. Deferred dower becomes payable on dissolution of marriage by death or divorce; limitation runs 3 years from dissolution under Article 104.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 10,
+        "quote_text": "Prompt dower is exigible on demand and limitation runs from the date of refusal. Deferred dower becomes due only on dissolution of the marriage by death or divorce, and the limitation is three years from the date of dissolution."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2017-008",
+    "case_title": "Md. Altaf Hossain vs The State and another",
+    "citation": "69 DLR (HCD) 512",
+    "court_division": "High Court Division",
+    "year": 2017,
+    "judgment_date": "2017-11-14",
+    "bench_judges": ["M. Moazzam Husain J", "Md. Badruzzaman J"],
+    "subject_area": "Criminal Procedure & Bail",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Criminal Procedure, 1898",
+        "sections": ["561A"]
+      },
+      {
+        "act_name": "The Penal Code, 1860",
+        "sections": ["406", "420"]
+      }
+    ],
+    "facts_summary": "Petition under Section 561A CrPC to quash criminal proceedings initiated on a breach of contract regarding supply of construction materials.",
+    "legal_issues": [
+      "When can the High Court Division exercise inherent powers under Section 561A CrPC to quash criminal proceedings arising from contractual breach."
+    ],
+    "ratio_decidendi": "Mere breach of contract does not give rise to criminal prosecution for cheating or criminal breach of trust under Sections 406/420 of Penal Code unless fraudulent intention is shown at the inception of the transaction. Criminal proceedings used as a tool of coercion for civil debt recovery must be quashed under Section 561A CrPC to prevent abuse of the process of the court.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 15,
+        "quote_text": "To constitute an offence of cheating under section 420, dishonest intention must exist at the inception of the contract. Where the allegations disclose only a civil liability, criminal proceedings cannot be permitted as a coercive tool."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2014-009",
+    "case_title": "Md. Sirajul Islam vs Begum Feroza Sultana",
+    "citation": "66 DLR (AD) 81",
+    "court_division": "Appellate Division",
+    "year": 2014,
+    "judgment_date": "2014-04-30",
+    "bench_judges": ["Surendra Kumar Sinha CJ", "Md. Abdul Wahhab Miah J"],
+    "subject_area": "Specific Performance & Contracts",
+    "governing_statutes": [
+      {
+        "act_name": "The Specific Relief Act, 1877",
+        "sections": ["12", "22"]
+      }
+    ],
+    "facts_summary": "Suit for specific performance of contract for sale where the purchaser delayed payment and subsequently filed suit after escalation of land prices.",
+    "legal_issues": [
+      "Whether the jurisdiction to decree specific performance under Section 22 of Specific Relief Act is discretionary and whether readiness and willingness must be proven continuously."
+    ],
+    "ratio_decidendi": "Specific performance is a discretionary relief under Section 22 of the Specific Relief Act, 1877. The plaintiff must prove readiness and willingness to perform their part of the contract from the date of the contract continuously up to the date of hearing.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 18,
+        "quote_text": "The jurisdiction to decree specific performance is discretionary, and the court is not bound to grant such relief merely because it is lawful to do so. The plaintiff must aver and prove that he was always ready and willing to perform his essential obligations."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2009-010",
+    "case_title": "Haji Md. Nurul Islam vs Bangladesh and others",
+    "citation": "61 DLR (AD) 115",
+    "court_division": "Appellate Division",
+    "year": 2009,
+    "judgment_date": "2009-06-25",
+    "bench_judges": ["M.M. Ruhul Amin CJ", "Md. Joynal Abedin J"],
+    "subject_area": "Specific Performance & Contracts",
+    "governing_statutes": [
+      {
+        "act_name": "The Specific Relief Act, 1877",
+        "sections": ["42"]
+      }
+    ],
+    "facts_summary": "The plaintiff filed a suit seeking bare declaration of title under Section 42 of Specific Relief Act without praying for recovery of khas possession, although the plaintiff was completely out of possession.",
+    "legal_issues": [
+      "Whether a suit for bare declaration of title is maintainable without seeking consequential relief of possession under the proviso to Section 42 of Specific Relief Act."
+    ],
+    "ratio_decidendi": "Under the proviso to Section 42 of the Specific Relief Act, 1877, no court shall make a declaration where the plaintiff, being able to seek further relief such as recovery of possession, omits to do so. A suit for bare declaration by a plaintiff out of possession is barred.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 12,
+        "quote_text": "The proviso to section 42 of the Specific Relief Act is mandatory. When the plaintiff is out of possession and in a position to claim recovery of possession, a suit for simple declaration of title is hit by the proviso and must be dismissed."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2019-011",
+    "case_title": "Md. Shahidul Islam vs Md. Anowar Hossain",
+    "citation": "71 DLR (HCD) 244",
+    "court_division": "High Court Division",
+    "year": 2019,
+    "judgment_date": "2019-03-18",
+    "bench_judges": ["Md. Rezaul Hasan J"],
+    "subject_area": "Civil Procedure & Injunctions",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Civil Procedure, 1908",
+        "sections": ["Order 7, Rule 11"]
+      }
+    ],
+    "facts_summary": "Application by defendant for rejection of plaint under Order 7 Rule 11 of CPC on the ground that the suit was barred by limitation on the face of the plaint averments.",
+    "legal_issues": [
+      "What materials can the court examine when deciding an application for rejection of plaint under Order 7 Rule 11 CPC."
+    ],
+    "ratio_decidendi": "For deciding an application under Order 7 Rule 11 CPC, the court must look strictly and exclusively at the averments in the plaint. The defense set up in the written statement or annexures cannot be considered at that stage.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 8,
+        "quote_text": "For the purpose of deciding an application under Order VII, Rule 11 of the Code, only the plaint averments are material. The court cannot look into the written statement or extraneous materials submitted by the defendant."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2007-012",
+    "case_title": "Md. Lokman vs State",
+    "citation": "59 DLR (AD) 160",
+    "court_division": "Appellate Division",
+    "year": 2007,
+    "judgment_date": "2007-08-02",
+    "bench_judges": ["Md. Ruhul Amin CJ", "Md. Joynal Abedin J"],
+    "subject_area": "Criminal Procedure & Bail",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Criminal Procedure, 1898",
+        "sections": ["154", "161", "162"]
+      }
+    ],
+    "facts_summary": "Criminal appeal challenging conviction on the ground that the FIR omitted the names of eyewitnesses and specific weapon roles.",
+    "legal_issues": [
+      "Whether the First Information Report (FIR) is substantive evidence and whether omission of minute details is fatal to prosecution."
+    ],
+    "ratio_decidendi": "An FIR is not a substantive piece of evidence; it can only be used to corroborate or contradict its maker under the Evidence Act. An FIR is not required to be an encyclopedia of the entire incident.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 14,
+        "quote_text": "The First Information Report is not an encyclopaedia of the prosecution case. It is only information of a cognizable offence to set the criminal law into motion. Non-mention of minute details does not vitiate the prosecution case."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2016-013",
+    "case_title": "Dr. Kamal Hossain and others vs Bangladesh",
+    "citation": "68 DLR (AD) 298",
+    "court_division": "Appellate Division",
+    "year": 2016,
+    "judgment_date": "2016-05-05",
+    "bench_judges": ["Surendra Kumar Sinha CJ", "Md. Abdul Wahhab Miah J", "Nazmun Ara Sultana J", "Syed Mahmud Hossain J"],
+    "subject_area": "Constitutional & Writ Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Constitution of the People's Republic of Bangladesh",
+        "sections": ["Article 27", "Article 31", "Article 102"]
+      }
+    ],
+    "facts_summary": "Constitutional writ petition challenging executive detention and arbitrary police actions violating fundamental rights.",
+    "legal_issues": [
+      "Scope of judicial review under Article 102 of the Constitution against arbitrary executive actions violating Article 31."
+    ],
+    "ratio_decidendi": "To enjoy the protection of law and to be treated in accordance with law is the inalienable right of every citizen under Article 31. Any arbitrary executive action lacking statutory authority is unconstitutional and subject to judicial review under Article 102.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 21,
+        "quote_text": "Article 31 guarantees that action detrimental to life, liberty, body, reputation or property shall not be taken except in accordance with law. The High Court Division is duty-bound under Article 102 to intervene when executive power is exercised arbitrarily."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2015-014",
+    "case_title": "Md. Harun-or-Rashid vs Monowara Begum and others",
+    "citation": "67 DLR (HCD) 412",
+    "court_division": "High Court Division",
+    "year": 2015,
+    "judgment_date": "2015-06-11",
+    "bench_judges": ["Soumendra Sarker J"],
+    "subject_area": "Family & Succession Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Transfer of Property Act, 1882",
+        "sections": ["123"]
+      },
+      {
+        "act_name": "The Registration Act, 1908",
+        "sections": ["17(1)"]
+      }
+    ],
+    "facts_summary": "Challenge to an alleged oral Hiba (gift) of land made after the 2004 amendment to the Registration Act.",
+    "legal_issues": [
+      "Whether an oral Hiba of immovable property between Muslims remains valid without a registered instrument after 2004."
+    ],
+    "ratio_decidendi": "Following the 2004 amendment to Section 17(1) of the Registration Act, 1908, a declaration of Hiba (gift) under Muslim law regarding immovable property must be made through a registered instrument. An unregistered oral Hiba confers no legal title.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 11,
+        "quote_text": "By inserting clause (aa) in section 17(1) of the Registration Act in 2004, the legislature has brought an end to oral Hiba of immovable property. Registration of an instrument of declaration of Hiba is now compulsory."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2006-015",
+    "case_title": "Md. Abul Hossain vs Md. Habibur Rahman",
+    "citation": "58 DLR (AD) 211",
+    "court_division": "Appellate Division",
+    "year": 2006,
+    "judgment_date": "2006-04-19",
+    "bench_judges": ["Syed J.R. Mudassir Husain CJ", "Amirul Kabir Chowdhury J"],
+    "subject_area": "Civil Procedure & Injunctions",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Civil Procedure, 1908",
+        "sections": ["Order 6, Rule 17"]
+      }
+    ],
+    "facts_summary": "Plaintiff sought to amend the plaint after commencement of trial to introduce an entirely new cause of action changing the fundamental character of the suit.",
+    "legal_issues": [
+      "What are the limitations on allowing amendment of pleadings under Order 6 Rule 17 CPC after trial has commenced."
+    ],
+    "ratio_decidendi": "Amendments under Order 6 Rule 17 CPC should be allowed liberally for determining real questions in controversy, provided the amendment does not introduce a completely new inconsistent cause of action or alter the fundamental character of the suit.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 9,
+        "quote_text": "The power to amend pleadings is aimed at serving the ends of justice. However, an amendment which changes the fundamental nature and character of the suit or introduces a time-barred claim cannot be allowed."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2011-016",
+    "case_title": "Abdul Khaleque vs Mrs. Feroza Begum",
+    "citation": "63 DLR (AD) 175",
+    "court_division": "Appellate Division",
+    "year": 2011,
+    "judgment_date": "2011-07-28",
+    "bench_judges": ["Md. Muzammel Hossain CJ", "Surendra Kumar Sinha J"],
+    "subject_area": "Specific Performance & Contracts",
+    "governing_statutes": [
+      {
+        "act_name": "The Specific Relief Act, 1877",
+        "sections": ["39"]
+      },
+      {
+        "act_name": "The Limitation Act, 1908",
+        "sections": ["Schedule I, Article 91"]
+      }
+    ],
+    "facts_summary": "Suit for cancellation of a registered deed of sale obtained through fraudulent impersonation.",
+    "legal_issues": [
+      "When does limitation begin for a suit to cancel a fraudulent instrument under Section 39 of Specific Relief Act and Article 91 of Limitation Act."
+    ],
+    "ratio_decidendi": "In a suit for cancellation of a fraudulent deed under Section 39 of the Specific Relief Act, the 3-year limitation period under Article 91 of the Limitation Act begins to run from the date the plaintiff discovers the facts entitling them to have the instrument cancelled.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 13,
+        "quote_text": "Under Article 91 of the Limitation Act, time runs from the date when the facts entitling the plaintiff to have the instrument cancelled or set aside become known to him, and not from the date of registration of the fraudulent deed."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2018-017",
+    "case_title": "Md. Rashedul Islam vs The State",
+    "citation": "70 DLR (HCD) 480",
+    "court_division": "High Court Division",
+    "year": 2018,
+    "judgment_date": "2018-10-25",
+    "bench_judges": ["M. Enayetur Rahim J", "Md. Mostafizur Rahman J"],
+    "subject_area": "Criminal Procedure & Bail",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Criminal Procedure, 1898",
+        "sections": ["497", "498"]
+      }
+    ],
+    "facts_summary": "Application for bail where the accused was in custody for 3 years without trial commencement in a non-capital offence.",
+    "legal_issues": [
+      "Whether prolonged custody without trial constitutes a valid ground for granting bail under Section 498 CrPC."
+    ],
+    "ratio_decidendi": "Inordinate and unexplained delay in trial resulting in prolonged pre-trial detention violates the constitutional right to speedy trial under Article 35(3) and constitutes a valid and compelling ground for granting bail under Section 498 CrPC.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 16,
+        "quote_text": "Indefinite detention of an undertrial prisoner without any fault on his part amounts to pre-trial punishment. Prolonged detention without trial is a legitimate ground for granting bail under section 498 of the Code."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2013-018",
+    "case_title": "Fazlul Haque vs Md. Enamul Haque",
+    "citation": "65 DLR (AD) 190",
+    "court_division": "Appellate Division",
+    "year": 2013,
+    "judgment_date": "2013-08-01",
+    "bench_judges": ["Md. Muzammel Hossain CJ", "Surendra Kumar Sinha J"],
+    "subject_area": "Civil Procedure & Injunctions",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Civil Procedure, 1908",
+        "sections": ["11"]
+      }
+    ],
+    "facts_summary": "Defendant pleaded Res Judicata on the ground that the issue of title was previously decided in an earlier suit between the same parties.",
+    "legal_issues": [
+      "Conditions required to bar a subsequent suit under Section 11 of the CPC (Doctrine of Res Judicata)."
+    ],
+    "ratio_decidendi": "To attract Section 11 CPC, the matter directly and substantially in issue in the subsequent suit must have been directly and substantially in issue in a former suit between the same parties, heard and finally decided by a court of competent jurisdiction.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 11,
+        "quote_text": "Res Judicata is founded on public policy to prevent multiplicity of litigation. The identity of the subject-matter, the parties, the title, and final adjudication by a competent court are sine qua non for applying section 11."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2005-019",
+    "case_title": "Yaor Mia (Md) and another vs Haji Shah Dhanai Ali and others",
+    "citation": "57 DLR (AD) 178",
+    "court_division": "Appellate Division",
+    "year": 2005,
+    "judgment_date": "2005-03-10",
+    "bench_judges": ["Syed J.R. Mudassir Husain CJ", "Mohammad Fazlul Karim J"],
+    "subject_area": "Property & Land Law",
+    "governing_statutes": [
+      {
+        "act_name": "The State Acquisition and Tenancy Act, 1950",
+        "sections": ["117", "143"]
+      }
+    ],
+    "facts_summary": "Suit concerning the interaction between land transfer under the Transfer of Property Act and subsequent revenue mutation under the SAT Act.",
+    "legal_issues": [
+      "Relationship between title acquisition by transfer deed and administrative rent-roll mutation under SAT Act."
+    ],
+    "ratio_decidendi": "Mutation of a holding in revenue records does not determine title to immovable property. Title passes upon execution and registration of the deed; mutation is an administrative recording of the taxpayer liable for rent.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 7,
+        "quote_text": "Mutation of names in the revenue record is only for the purpose of payment of rent and does not confer any title. Title to immovable property is governed by the substantive law of transfer and valid conveyance."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2020-020",
+    "case_title": "Mrs. Nasreen Akhter vs Bangladesh and others",
+    "citation": "72 DLR (HCD) 310",
+    "court_division": "High Court Division",
+    "year": 2020,
+    "judgment_date": "2020-01-20",
+    "bench_judges": ["Naima Haider J", "Khizir Ahmed Choudhury J"],
+    "subject_area": "Family & Succession Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Guardians and Wards Act, 1890",
+        "sections": ["17", "25"]
+      }
+    ],
+    "facts_summary": "Mother sought custody of her minor children after divorce; the father contended traditional Hizanat age limits had expired.",
+    "legal_issues": [
+      "Whether the welfare of the minor child overrides rigid statutory age rules in determining custody."
+    ],
+    "ratio_decidendi": "In child custody disputes under Section 17 of the Guardians and Wards Act, 1890, the welfare of the minor is the paramount consideration, which overrides rigid traditional age thresholds of maternal custody (Hizanat).",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 14,
+        "quote_text": "The welfare of the minor is of paramount importance in deciding custody. The rules of personal law regarding the age of Hizanat are subordinate to the welfare and moral wellbeing of the minor child."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2017-021",
+    "case_title": "Md. Mokhlesur Rahman vs Md. Habibur Rahman and others",
+    "citation": "69 DLR (AD) 102",
+    "court_division": "Appellate Division",
+    "year": 2017,
+    "judgment_date": "2017-04-18",
+    "bench_judges": ["Surendra Kumar Sinha CJ", "Md. Abdul Wahhab Miah J"],
+    "subject_area": "Registration & Stamp Duty",
+    "governing_statutes": [
+      {
+        "act_name": "The Registration Act, 1908",
+        "sections": ["52A"]
+      },
+      {
+        "act_name": "The Transfer of Property Act, 1882",
+        "sections": ["54"]
+      }
+    ],
+    "facts_summary": "Challenge to a sale deed registered without the seller holding an updated mutation Khatian in his name.",
+    "legal_issues": [
+      "Effect of non-compliance with Section 52A of the Registration Act, 1908 on the validity of deed registration."
+    ],
+    "ratio_decidendi": "Under Section 52A of the Registration Act, 1908, the Sub-Registrar is legally mandated to refuse registration of a sale deed unless the seller presents an updated mutation Khatian and proof of land development tax payment in the seller's name.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 8,
+        "quote_text": "Section 52A was inserted in 2004 to eliminate fraudulent transfers. A seller who is not recorded in the latest Khatian and has not paid land development tax cannot execute a valid registered conveyance."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2003-022",
+    "case_title": "Haji Md. Aslam vs Md. Shafiqul Islam",
+    "citation": "55 DLR (AD) 84",
+    "court_division": "Appellate Division",
+    "year": 2003,
+    "judgment_date": "2003-02-12",
+    "bench_judges": ["Mainur Reza Chowdhury CJ", "Md. Ruhul Amin J"],
+    "subject_area": "Specific Performance & Contracts",
+    "governing_statutes": [
+      {
+        "act_name": "The Contract Act, 1872",
+        "sections": ["55", "73"]
+      }
+    ],
+    "facts_summary": "Vendor claimed contract for sale was rescinded because the buyer failed to pay the balance within the stipulated 6 months.",
+    "legal_issues": [
+      "Whether time is of the essence of contract in transactions relating to sale of immovable property in Bangladesh."
+    ],
+    "ratio_decidendi": "In contracts for the sale of immovable property, time is presumed not to be of the essence unless there is an express contractual stipulation or surrounding circumstances showing an intention to make time strictly essential.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 10,
+        "quote_text": "In agreements for sale of immovable property, fixation of a period for completion does not per se make time the essence of the contract. The intention to make time essential must be clear from the terms or conduct of the parties."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-HCD-2014-023",
+    "case_title": "Mrs. Shima Rani Das vs Narayan Chandra Das and others",
+    "citation": "66 DLR (HCD) 388",
+    "court_division": "High Court Division",
+    "year": 2014,
+    "judgment_date": "2014-07-09",
+    "bench_judges": ["Md. Emdadul Huq J"],
+    "subject_area": "Family & Succession Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Hindu Women's Rights to Property Act, 1937",
+        "sections": ["3(1)", "3(2)"]
+      }
+    ],
+    "facts_summary": "Hindu widow claimed partition of her deceased husband's share in joint family agricultural and residential property.",
+    "legal_issues": [
+      "What is the extent of a Hindu widow's life interest in her deceased husband's property under the 1937 Act in Bangladesh."
+    ],
+    "ratio_decidendi": "Under Section 3 of the Hindu Women's Rights to Property Act, 1937, a Hindu widow inherits the same share as her deceased husband in joint family property, holding a limited life estate with the right to claim partition during her lifetime.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 12,
+        "quote_text": "The 1937 Act confers upon the widow the same interest in the property as her husband had. Though it is a limited interest known as Hindu Women's Estate, she is fully competent to seek partition of the holding."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2015-024",
+    "case_title": "Md. Rafiqul Islam vs Government of Bangladesh",
+    "citation": "67 DLR (AD) 250",
+    "court_division": "Appellate Division",
+    "year": 2015,
+    "judgment_date": "2015-11-26",
+    "bench_judges": ["Surendra Kumar Sinha CJ", "Md. Abdul Wahhab Miah J", "Hasan Foez Siddique J"],
+    "subject_area": "Civil Procedure & Injunctions",
+    "governing_statutes": [
+      {
+        "act_name": "The Code of Civil Procedure, 1908",
+        "sections": ["115"]
+      }
+    ],
+    "facts_summary": "Revision petition challenging an appellate court's concurrent finding of fact without pointing to any jurisdictional error.",
+    "legal_issues": [
+      "Scope and limits of revisional jurisdiction of the High Court Division under Section 115 of the CPC."
+    ],
+    "ratio_decidendi": "Revisional jurisdiction under Section 115 CPC is restricted to jurisdictional errors, illegal exercise, or material irregularity. The High Court Division cannot sit as a court of second appeal to re-appreciate concurrent findings of fact.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 15,
+        "quote_text": "Section 115 of the Code is limited to rectifying errors of jurisdiction. It is not an appellate power and the High Court Division cannot interfere with findings of fact unless they are perverse or based on no evidence."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  },
+  {
+    "case_id": "SCBD-AD-2009-025",
+    "case_title": "Eastern Bank Limited vs Md. Shafiuddin and others",
+    "citation": "61 DLR (AD) 88",
+    "court_division": "Appellate Division",
+    "year": 2009,
+    "judgment_date": "2009-05-14",
+    "bench_judges": ["M.M. Ruhul Amin CJ", "Md. Tafazzul Islam J"],
+    "subject_area": "Company & Commercial Law",
+    "governing_statutes": [
+      {
+        "act_name": "The Artha Rin Adalat Ain, 2003",
+        "sections": ["12", "33"]
+      }
+    ],
+    "facts_summary": "Bank initiated auction of mortgaged property under Section 12 of Artha Rin Adalat Ain without following mandatory pre-auction publication requirements.",
+    "legal_issues": [
+      "Whether the procedure for private auction under Section 12 of Artha Rin Adalat Ain is mandatory before filing an Artha Rin suit."
+    ],
+    "ratio_decidendi": "The requirement of attempting sale of mortgaged property under Section 12 of the Artha Rin Adalat Ain, 2003 prior to filing a money claim is mandatory. Any deviation renders subsequent recovery proceedings defective.",
+    "exact_key_passages": [
+      {
+        "paragraph_number": 9,
+        "quote_text": "Section 12 of the Ain mandates that the financial institution must make earnest efforts to sell the mortgaged security by auction before approaching the court. Compliance with this provision is a statutory prerequisite."
+      }
+    ],
+    "verification_status": "LAWYER_2_APPROVED",
+    "audit_trail": {
+      "extracted_by": "Justor Case Intelligence Staging",
+      "reviewer_1": "Advocate M. Rahman (SCBA)",
+      "reviewer_2": "Advocate K. Hasan (SCBA)",
+      "approved_at": "2026-08-14T18:00:00Z"
+    }
+  }
+]

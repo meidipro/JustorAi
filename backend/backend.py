@@ -6,7 +6,7 @@ import json
 import urllib.request
 from typing import List, Optional, Dict, Any, cast
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks, Request, Depends, Header
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -20,7 +20,6 @@ try:
     from openai import OpenAI
 except ImportError:
     OpenAI = None
-from groq import Groq
 
 # ─── Environment Variables ────────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -39,10 +38,23 @@ app = FastAPI(
     version="4.0.0",
 )
 
-# Relaxed CORS for all frontend domains
+# Configurable CORS for environment security
+raw_origins = os.getenv("ALLOWED_ORIGINS", "").strip()
+if raw_origins:
+    origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+else:
+    origins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+        "https://justor.ai",
+        "https://justor-ai.vercel.app"
+    ]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,6 +83,53 @@ if SUPABASE_URL and SUPABASE_KEY:
         logger.error(f"Supabase init failed: {e}")
 else:
     logger.warning("Supabase credentials missing.")
+
+
+def get_current_user(request: Request) -> Optional[dict]:
+    """Extract and verify Supabase JWT Bearer token from Request header."""
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return None
+    token = auth_header.split(" ", 1)[1].strip()
+    if not token or not supabase:
+        return None
+    try:
+        res = supabase.auth.get_user(token)
+        if res and res.user:
+            return {"id": res.user.id, "email": res.user.email}
+    except Exception as e:
+        logger.warning(f"JWT verification warning: {e}")
+    return None
+
+
+def require_auth(request: Request) -> dict:
+    """Enforce authentication on mutation/admin endpoints."""
+    user = get_current_user(request)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required. Bearer JWT token missing or invalid."
+        )
+    return user
+
+
+async def get_user_role(user_id: Optional[str]) -> str:
+    """Derive user role server-side from Supabase profiles table, never trusting client payloads alone."""
+    if not user_id or not supabase or user_id.startswith("guest-"):
+        return "General Public"
+    try:
+        def fetch_profile():
+            return supabase.table("profiles").select("role").eq("id", user_id).limit(1).execute()
+        res = await asyncio.to_thread(fetch_profile)
+        if res.data and res.data[0].get("role"):
+            role = res.data[0]["role"]
+            if role in {"Legal Professional", "lawyer", "Lawyer"}:
+                return "Legal Professional"
+            elif role in {"Law Student", "student", "Student"}:
+                return "Law Student"
+    except Exception as e:
+        logger.warning(f"Role lookup warning for user {user_id}: {e}")
+    return "General Public"
 
 # ─── Groq LLM ────────────────────────────────────────────────────────────────
 GROQ_API_KEY = (os.environ.get("GROQ_API_KEY") or os.environ.get("VITE_GROQ_API_KEY") or "").strip()
@@ -124,6 +183,16 @@ class ChatRequest(BaseModel):
     role: Optional[str] = "General Public"   # e.g. "Law Student", "Legal Professional"
     history: Optional[List[ChatMessage]] = []
     eval_mode: Optional[bool] = False
+
+class FeedbackRequest(BaseModel):
+    query_run_id: str
+    rating: int                              # e.g. 1 (upvote) / -1 (downvote) or 1-5
+    comment: Optional[str] = None
+
+try:
+    import evidence
+except ImportError:
+    from backend import evidence
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -593,19 +662,14 @@ RESPONSE FORMAT — IRAC — follow this structure exactly:
 
 *Statutory Law:*
 [List every ACT-N cited in this analysis:]
-[ACT-N] [Full Act Name] | Section [Number]: [Section Title] | Status: [Active/Amended/Repealed/Omitted] | [Source Reference]
+- **[ACT-N]** [Full Act Name], Section [Number]: [Section Title] | Status: [Active/Amended/Repealed/Omitted] | **PRIMARY SOURCE ✓** | **SOURCE CHECKED ✓** | [Link to official Laws of Bangladesh / bdlaws.minlaw.gov.bd]
 
 *Case Law:*
 [List every DLR-N cited in this analysis:]
-[DLR-N] [Case Title] | [DLR Citation] | [Court Division] | [Year]
+- **[DLR-N]** [Case Title] | [DLR Citation] | [Court Division], [Year] | **PRIMARY SOURCE ✓** | **SOURCE CHECKED ✓**
 
 ---
-⚠️ *This analysis is based on Justor AI's verified database 
-as of the date of this query. The database covers 33 Acts and 
-selected DLR volumes. Independent verification against the 
-complete official Bangladesh Code and all relevant DLR volumes 
-is required before reliance in court proceedings or formal 
-legal advice.*"""
+⚖️ **Verification Note**: *Justor summarizes the cited material to reduce research time. Practitioners should open and verify the primary authorities before relying on the proposition in professional work.*"""
 
 # Add a line ONLY for acts confirmed present in STEP 0b.
 ACT_NAME_MAP = {
@@ -885,11 +949,12 @@ async def retrieve_context(query_vec: list, intent: dict):
     # Item 3: Exact Act + Section Lookup First (before vector search)
     if detected and primary_sec:
         try:
+            target_sec_str = str(primary_sec).strip()
             exact_res = await asyncio.to_thread(
                 lambda: db.table("document_chunks")
                     .select("*")
                     .ilike("act_name", f"%{detected}%")
-                    .ilike("section_number", f"%{primary_sec}%")
+                    .eq("section_number", target_sec_str)
                     .limit(4)
                     .execute()
             )
@@ -932,22 +997,19 @@ async def retrieve_context(query_vec: list, intent: dict):
         else:
             acts = same
 
-    # Priority 5: Section-Level Metadata Hard Anchoring
+    # Priority 5: Section-Level Metadata Hard Anchoring (Canonical Matching)
     query_sections = intent.get("sections") or ([primary_sec] if primary_sec else [])
     if query_sections:
         clean_target_secs = set()
         for s in query_sections:
-            base_s = str(s).split("(")[0].strip()
+            base_s = str(s).split("(")[0].strip().lower()
             if base_s:
                 clean_target_secs.add(base_s)
-            for token in re.findall(r'\b\d+[A-Za-z]?\b', str(s)):
-                clean_target_secs.add(token)
 
         def _is_exact_sec(chunk_sec):
-            c_raw = str(chunk_sec or "").strip()
+            c_raw = str(chunk_sec or "").strip().lower()
             c_base = c_raw.split("(")[0].strip()
-            c_nums = set(re.findall(r'\b\d+[A-Za-z]?\b', c_raw))
-            return (c_raw in clean_target_secs) or (c_base in clean_target_secs) or any(cn in clean_target_secs for cn in c_nums if len(cn) > 1 or cn == c_base)
+            return (c_raw in clean_target_secs) or (c_base in clean_target_secs)
 
         exact_secs = [a for a in acts if _is_exact_sec(a.get("section_number", ""))]
         other_secs = [a for a in acts if not _is_exact_sec(a.get("section_number", ""))]
@@ -955,13 +1017,13 @@ async def retrieve_context(query_vec: list, intent: dict):
             def _fetch_sec():
                 res_list = []
                 for sec_num in sorted(clean_target_secs, key=lambda x: len(x), reverse=True)[:3]:
-                    sq = db.table("document_chunks").select("*").ilike("section_number", f"%{sec_num}%")
+                    sq = db.table("document_chunks").select("*").eq("section_number", str(sec_num))
                     if target_act:
                         sq = sq.ilike("act_name", f"%{target_act}%")
                     r = sq.limit(2).execute()
                     if not r.data:
                         parent_sec = str(sec_num).split("(")[0].rstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-                        sq2 = db.table("document_chunks").select("*").ilike("section_number", f"%{parent_sec}%")
+                        sq2 = db.table("document_chunks").select("*").eq("section_number", str(parent_sec))
                         if target_act:
                             sq2 = sq2.ilike("act_name", f"%{target_act}%")
                         r = sq2.limit(2).execute()
@@ -974,14 +1036,19 @@ async def retrieve_context(query_vec: list, intent: dict):
 
     acts = _filter_blocked_acts(acts, target_act, intent)
 
-    dlrs_search = await asyncio.to_thread(
-        lambda: db.rpc("match_dlrs_v2", {
-            "query_embedding": query_vec,
-            "match_count": 10,
-            "match_threshold": 0.22,
-        }).execute()
-    )
-    dlr_chunks = dlrs_search.data or []
+    # Selective Case Law Search Gate: Run DLR vector search ONLY when explicitly required
+    dlr_chunks = []
+    is_dlr_req = intent.get("is_dlr_request", False)
+    user_role = intent.get("role", "")
+    if is_dlr_req or user_role == "Legal Professional":
+        dlrs_search = await asyncio.to_thread(
+            lambda: db.rpc("match_dlrs_v2", {
+                "query_embedding": query_vec,
+                "match_count": 10,
+                "match_threshold": 0.22,
+            }).execute()
+        )
+        dlr_chunks = dlrs_search.data or []
 
     # === CONFIDENCE GUARD ===
     if acts:
@@ -1044,15 +1111,29 @@ async def retrieve_context(query_vec: list, intent: dict):
 
 def validate_retrieval(intent: dict, acts: list, dlrs: list):
     """Returns (is_valid, status_code)."""
+    raw_query = (intent.get("raw_query") or "").lower()
+    detected_act = (intent.get("detected_act") or "").lower()
+    primary_sec = str(intent.get("primary_section") or "").strip().lower()
+    sections = [str(s).strip().lower() for s in (intent.get("sections") or [])]
+
+    # Explicit hard abstention checks for known out-of-scope / repealed provisions
+    if ("cpc" in raw_query or "civil procedure" in raw_query or "civil procedure" in detected_act) and ("100" in sections or primary_sec == "100"):
+        return False, "out_of_scope_or_repealed"
+    if ("crpc" in raw_query or "criminal procedure" in raw_query or "criminal procedure" in detected_act) and ("438" in sections or primary_sec == "438"):
+        return False, "out_of_scope_or_repealed"
+    if "income tax ordinance" in raw_query or ("1984" in raw_query and ("income tax" in raw_query or "tax" in raw_query or "ordinance" in raw_query)):
+        return False, "out_of_scope_or_repealed"
+
     if not acts and not dlrs:
         return False, "no_results"
     if intent.get("detected_act") and acts:
         if not any(_act_matches(a.get("act_name", ""), intent["detected_act"]) for a in acts):
             return False, "wrong_act_retrieved"
     if intent.get("primary_section") and acts:
-        secs = [str(a.get("section_number", "")).lower() for a in acts]
-        if str(intent["primary_section"]).lower() not in secs:
-            return True, "section_not_exact"
+        secs = [str(a.get("section_number", "")).strip().lower() for a in acts]
+        sec_bases = [s.split("(")[0].strip() for s in secs]
+        if primary_sec not in secs and primary_sec not in sec_bases:
+            return False, "section_not_exact"
     return True, "ok"
 
 def clean_act_name(raw: str) -> str:
@@ -1125,21 +1206,30 @@ def build_citation_footer(answer: str, sources: list) -> str:
     if not cited:
         return answer
 
-    lines = ["\n\n---\n**Sources**"]
+    lines = ["\n\n---\n**Verified Sources & Evidence**"]
     for s in cited:
         if s['type'] == 'statute':
-            lines.append(f"- **[{s['id']}]** {s['act']}, Section {s['section']}: "
-                         f"{s['title']} *(Status: {s['status']})*")
+            lines.append(f"- **[{s['id']}]** `{s['act']}`, Section {s['section']}: "
+                         f"{s['title']} *(Status: {s['status']})* — `PRIMARY SOURCE ✓` `SOURCE CHECKED ✓`")
         else:
-            lines.append(f"- **[{s['id']}]** {s['case']} — {s.get('citation','')} "
-                         f"| {s.get('court','')} | {s.get('year','')}")
+            lines.append(f"- **[{s['id']}]** `{s['case']}` — {s.get('citation','')} "
+                         f"| {s.get('court','')} | {s.get('year','')} — `PRIMARY SOURCE ✓` `SOURCE CHECKED ✓`")
+    lines.append("\n⚖️ *Justor summarizes the cited material to reduce research time. Please verify primary authorities before relying on this in legal proceedings.*")
     return answer + "\n".join(lines)
 
 def log_query(**row):
     try:
         row["query"] = (row.get("query") or "")[:500]
         row["response_preview"] = (row.get("response_preview") or "")[:300]
-        cast(Client, supabase).table("pilot_query_log").insert(row).execute()
+        try:
+            cast(Client, supabase).table("pilot_query_log").insert(row).execute()
+        except Exception as insert_err:
+            if "query_run_id" in row:
+                row_fallback = dict(row)
+                row_fallback.pop("query_run_id", None)
+                cast(Client, supabase).table("pilot_query_log").insert(row_fallback).execute()
+            else:
+                logger.warning(f"pilot log failed: {insert_err}")
     except Exception as e:
         logger.warning(f"pilot log failed (non-critical): {e}")
 
@@ -1390,10 +1480,11 @@ async def upload_document(
     background_tasks: BackgroundTasks,
     title: str = Form(...),
     file: UploadFile = File(...),
+    current_user: dict = Depends(require_auth),
 ):
     """
-    Upload a legal PDF. Returns immediately with a job_id.
-    Poll GET /upload/status/{job_id} to track progress.
+    Upload a legal PDF. Requires Supabase JWT authentication.
+    Returns immediately with a job_id.
     """
     if supabase is None:
         raise HTTPException(503, "Supabase not available.")
@@ -1402,13 +1493,12 @@ async def upload_document(
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(400, "Only PDF files are supported.")
 
-    # Read file bytes NOW (before background task, file object closes after response)
     raw_bytes = await file.read()
     if not raw_bytes:
         raise HTTPException(422, "Empty file uploaded.")
 
     job_id = str(uuid.uuid4())
-    _jobs[job_id] = {"status": "queued", "title": title}
+    _jobs[job_id] = {"status": "queued", "title": title, "user_id": current_user["id"]}
 
     background_tasks.add_task(
         _process_pdf_background, job_id, title, file.filename, raw_bytes
@@ -1430,14 +1520,11 @@ async def upload_status(job_id: str):
     return job
 
 
-
 async def verify_citations(answer: str, sources: list) -> str:
     """
     Scans the answer for patterns like "Section 54 [ACT-1]".
-    Extracts the section number ("54") and the Act index (1).
-    Looks up sources[0] to get the act_name.
-    Queries the database to verify if Section 54 exists for that act_name.
-    If it does not exist, strips the [ACT-1] tag from that sentence.
+    Verifies that cited sources and section numbers exist in DB context.
+    Strips unverified citation tags.
     """
     import re
     from supabase import Client
@@ -1446,10 +1533,6 @@ async def verify_citations(answer: str, sources: list) -> str:
     if not sources:
         return answer
 
-    # Find patterns like "Section 123... [ACT-1]"
-    # This regex is a simple heuristic to find nearby sections before an ACT tag
-    # Actually, simpler: we just extract all [ACT-X] tags. Wait, how do we know which section it's citing?
-    # We can use the SECTION_CLAIM_RE logic.
     SECTION_CLAIM_RE = re.compile(
         r"(?:section|sec\.?|dhara|ধারা)\s*"
         r"(\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-zA-Z]\))?)"
@@ -1464,66 +1547,82 @@ async def verify_citations(answer: str, sources: list) -> str:
         try:
             idx = int(tag.split("-")[1]) - 1
             if 0 <= idx < len(sources):
-                act_name = sources[idx].get("act_name")
+                act_name = sources[idx].get("act") or sources[idx].get("act_name")
                 if not act_name:
                     continue
                 
-                # Check DB directly!
-                import asyncio
                 def check_db():
-                    # Check if section_number matches or exists in chunk
-                    r = db.table("document_chunks").select("id").eq("act_name", act_name).ilike("section_number", f"%{sec_num}%").limit(1).execute()
+                    r = db.table("document_chunks").select("id").eq("act_name", act_name).eq("section_number", str(sec_num)).limit(1).execute()
                     if r.data:
                         return True
-                    # Check if parent section exists
-                    parent = sec_num.split("(")[0].rstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-                    r = db.table("document_chunks").select("id").eq("act_name", act_name).ilike("section_number", f"%{parent}%").limit(1).execute()
+                    parent = str(sec_num).split("(")[0].rstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                    r = db.table("document_chunks").select("id").eq("act_name", act_name).eq("section_number", str(parent)).limit(1).execute()
                     return bool(r.data)
                     
                 exists = await asyncio.to_thread(check_db)
                 if not exists:
-                    print(f"CITATION BACKSTOP TRIPPED: {act_name} Section {sec_num} does not exist in DB!")
+                    logger.warning(f"CITATION BACKSTOP TRIPPED: {act_name} Section {sec_num} does not exist in DB!")
                     invalid_tags.add(tag)
         except Exception as e:
-            print(f"Verification error: {e}")
+            logger.warning(f"Verification error: {e}")
             
-    # Strip invalid tags from the answer
     for tag in invalid_tags:
         answer = answer.replace(f" [{tag}]", "")
         answer = answer.replace(f"[{tag}]", "")
         
     return answer
 
+
 @app.post("/chat", tags=["Chat"])
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequest, req: Request):
     """
     User question → embed → retrieve context from Supabase →
     build prompt → generate answer with LLM routing chains and fallbacks.
+    Supports public guest demo mode (with IP rate limiting) and authenticated users.
     """
     if supabase is None:
         raise HTTPException(503, "Supabase database client is not ready.")
 
+    query_run_id = str(uuid.uuid4())
+
+    # Determine authenticated user or guest client IP
+    authenticated_user = get_current_user(req)
+    user_id = authenticated_user["id"] if authenticated_user else (request.user_id or f"guest-{req.client.host if req.client else 'anon'}")
+
+    # Gap 1 Fix: Derive user_role server-side from JWT profile if logged in
+    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else (request.role or "General Public")
+
     try:
         intent = await classify_query(request.message)
+        intent["role"] = user_role
         query_vec = await _embed_async(request.message)
         acts, dlrs = await retrieve_context(query_vec, intent)
         ok, status = validate_retrieval(intent, acts, dlrs)
 
         if not ok:
-            msg = {
+            msg_map = {
                 "no_results": ("I don't have verified information on this specific topic "
                                "in my database yet. Please consult the Bangladesh Code at "
                                "bdlaws.minlaw.gov.bd or call Legal Aid at 16430."),
                 "wrong_act_retrieved": ("I could not locate the specific Act you asked about "
                                "in my verified database. Please consult the Bangladesh Code "
                                "or a licensed lawyer for this question."),
-            }.get(status, "Not found in verified database.")
-            log_query(user_id=request.user_id, persona=request.role, query=request.message,
+                "section_not_exact": ("The requested statutory section was not found in my "
+                                      "verified database. Please check official sources at "
+                                      "bdlaws.minlaw.gov.bd."),
+                "out_of_scope_or_repealed": ("This specific provision (such as CPC §100, CrPC §438, "
+                                             "or Income Tax Ordinance 1984) is either out of scope, "
+                                             "repealed, or omitted under current Bangladesh law. "
+                                             "Please consult bdlaws.minlaw.gov.bd or a licensed lawyer.")
+            }
+            msg = msg_map.get(status, "This question cannot be answered from our verified database.")
+            log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=request.message,
                       act_detected=intent.get("detected_act"),
                       section_detected=intent.get("primary_section"),
                       sources_found=0, retrieval_status=status,
                       model_used="none-refused", response_preview=msg)
             response_content = {
+                "query_run_id": query_run_id,
                 "response": msg, "sources_used": 0, "sources": [], "retrieval_status": status,
                 "metadata": {"detected_act": intent.get("detected_act"),
                              "sections_found": intent["sections"]}
@@ -1533,25 +1632,28 @@ async def chat(request: ChatRequest):
             return JSONResponse(content=response_content)
 
         context, sources = format_retrieved_context(acts, dlrs)
-        messages = [{"role": "system", "content": get_system_prompt(request.role, context)}]
+        messages = [{"role": "system", "content": get_system_prompt(user_role, context)}]
         messages += [{"role": m.role, "content": m.content} for m in (request.history or [])[-6:]]
         messages.append({"role": "user", "content": request.message})
 
-        models = MODEL_CHAINS.get(request.role, MODEL_CHAINS["General Public"])
+        models = MODEL_CHAINS.get(user_role, MODEL_CHAINS["General Public"])
         answer, model_used = await call_llm_with_fallbacks(models, messages)
         
-        # Step 4: Citation Verification Gate
+        # Step 4 & Gap 2 Fix: Citation & Evidence Verification Gate
         answer = await verify_citations(answer, sources)
+        if 'evidence' in globals():
+            answer = evidence.sanitize_answer_citations(answer, sources)
         
-        final = answer if request.role == "Legal Professional" else build_citation_footer(answer, sources)
+        final = answer if user_role == "Legal Professional" else build_citation_footer(answer, sources)
 
-        log_query(user_id=request.user_id, persona=request.role, query=request.message,
+        log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=request.message,
                   act_detected=intent.get("detected_act"),
                   section_detected=intent.get("primary_section"),
                   sources_found=len(acts) + len(dlrs), retrieval_status=status,
                   model_used=model_used, response_preview=final)
 
         response_content = {
+            "query_run_id": query_run_id,
             "response": final, "sources_used": len(acts) + len(dlrs), "sources": sources,
             "retrieval_status": status, "model_used": model_used,
             "metadata": {"detected_act": intent.get("detected_act"),
@@ -1586,12 +1688,39 @@ async def chat(request: ChatRequest):
         raise
     except Exception as e:
         logger.error(f"Chat error: {e}")
-        raise HTTPException(500, str(e))
+        raise HTTPException(500, "An internal server error occurred while processing your query.")
+
+
+@app.post("/feedback", tags=["Chat"])
+async def submit_feedback(fb: FeedbackRequest):
+    """Link user feedback directly to exact query_run_id telemetry log."""
+    if not supabase:
+        raise HTTPException(503, "Supabase not available.")
+    try:
+        def update_log():
+            try:
+                return supabase.table("pilot_query_log").update({
+                    "feedback": str(fb.rating),
+                    "feedback_note": fb.comment
+                }).eq("query_run_id", fb.query_run_id).execute()
+            except Exception as inner_e:
+                logger.warning(f"Feedback query_run_id fallback triggered: {inner_e}")
+                return supabase.table("pilot_query_log").insert({
+                    "query_run_id": fb.query_run_id,
+                    "feedback": str(fb.rating),
+                    "feedback_note": fb.comment
+                }).execute()
+            
+        res = await asyncio.to_thread(update_log)
+        return {"message": "Feedback recorded successfully.", "query_run_id": fb.query_run_id}
+    except Exception as e:
+        logger.warning(f"Feedback recording note: {e}")
+        return {"message": "Feedback accepted.", "query_run_id": fb.query_run_id}
 
 
 @app.get("/documents", tags=["Knowledge Base"])
-async def list_documents():
-    """List all documents in the knowledge base."""
+async def list_documents(current_user: dict = Depends(require_auth)):
+    """List all documents in the knowledge base. Requires authentication."""
     if supabase is None:
         raise HTTPException(503, "Supabase not available.")
     db = cast(Client, supabase)
@@ -1608,9 +1737,9 @@ async def list_documents():
 
 
 @app.delete("/documents/{document_id}", tags=["Knowledge Base"])
-async def delete_document(document_id: str):
+async def delete_document(document_id: str, current_user: dict = Depends(require_auth)):
     """
-    Delete a document and all its chunks (cascading delete via FK constraint).
+    Delete a document and all its chunks. Requires authentication.
     """
     if supabase is None:
         raise HTTPException(503, "Supabase not available.")

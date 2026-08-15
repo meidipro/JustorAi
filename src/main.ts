@@ -9,6 +9,7 @@ import { renderLoginPage } from './pages/login';
 import { renderAppPage } from './pages/app';
 import { renderUserProfilePage } from './pages/user-profile';
 import { renderDocAnalysisPage } from './pages/doc-analysis';
+import { renderGuidesPage } from './pages/guides';
 
 const appContainer = document.getElementById('app') as HTMLElement;
 const navbarContainer = document.getElementById('navbar-container') as HTMLElement;
@@ -18,6 +19,7 @@ const routes: { [key: string]: (container: HTMLElement) => void } = {
   '/about': renderAboutPage,
   '/login': renderLoginPage,
   '/app': renderAppPage,
+  '/guides': renderGuidesPage,
   '/profile': renderUserProfilePage,
   '/doc-analysis': renderDocAnalysisPage,
 };
@@ -31,6 +33,14 @@ const router = () => {
     history.pushState(null, '', '/login');
     path = '/login';
   }
+
+  // Handle dynamic /guides/:slug route
+  if (path.startsWith('/guides/')) {
+    const slug = path.replace('/guides/', '').split('/')[0];
+    renderGuidesPage(appContainer, slug);
+    return;
+  }
+
   const renderPage = routes[path] || routes['/'];
   renderPage(appContainer);
 };
