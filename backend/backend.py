@@ -262,18 +262,18 @@ class ChatRequest(BaseModel):
     user_id: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
 
-    def get_query(self) -> str:
-        return (self.query or self.message or "").strip()
+def resolve_request_query(req: ChatRequest) -> str:
+    return (getattr(req, "query", None) or getattr(req, "message", None) or "").strip()
 
-    def get_role(self) -> str:
-        r = self.user_role or self.role or "General Public"
-        if r in {"citizen", "Citizen", "General Public"}:
-            return "General Public"
-        elif r in {"student", "Law Student"}:
-            return "Law Student"
-        elif r in {"professional", "lawyer", "Legal Professional"}:
-            return "Legal Professional"
-        return r
+def resolve_request_role(req: ChatRequest) -> str:
+    r = getattr(req, "user_role", None) or getattr(req, "role", None) or "General Public"
+    if r in {"citizen", "Citizen", "General Public"}:
+        return "General Public"
+    elif r in {"student", "Law Student"}:
+        return "Law Student"
+    elif r in {"professional", "lawyer", "Legal Professional"}:
+        return "Legal Professional"
+    return r
 
 class FeedbackRequest(BaseModel):
     query_run_id: str
@@ -1826,8 +1826,8 @@ async def chat(request: ChatRequest, req: Request):
     user_id = authenticated_user["id"] if authenticated_user else (request.user_id or f"guest-{req.client.host if req.client else 'anon'}")
 
     # Derive user_role server-side from JWT profile if logged in
-    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else request.get_role()
-    query_str = request.get_query()
+    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
+    query_str = resolve_request_query(request)
 
     if not query_str:
         raise HTTPException(400, "Query/message cannot be empty.")
