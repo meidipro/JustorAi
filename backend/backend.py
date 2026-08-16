@@ -39,36 +39,40 @@ app = FastAPI(
 )
 
 # Configurable CORS for environment security
-raw_origins = os.getenv("ALLOWED_ORIGINS", "").strip()
-if raw_origins:
-    if raw_origins == "*":
-        origins = ["*"]
-    else:
-        origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
-else:
-    origins = [
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        "https://justorai.com",
-        "https://www.justorai.com",
-        "http://justorai.com",
-        "http://www.justorai.com",
-        "https://justor.ai",
-        "https://www.justor.ai",
-        "https://justorai.vercel.app",
-        "https://justor-ai.vercel.app"
-    ]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex=r"https?://.*(justorai\.com|justor\.ai|vercel\.app|localhost|127\.0\.0\.1)(:\d+)?",
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
+@app.middleware("http")
+async def add_cors_headers(request: Request, call_next):
+    if request.method == "OPTIONS":
+        response = JSONResponse(content={"status": "ok"})
+    else:
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            logger.error(f"Unhandled exception in {request.url.path}: {exc}")
+            response = JSONResponse(
+                status_code=500,
+                content={"detail": "Internal server error occurred.", "error": str(exc)}
+            )
+    
+    origin = request.headers.get("origin") or "*"
+    response.headers["Access-Control-Allow-Origin"] = origin if origin != "*" else "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
+
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    """Handle CORS preflight across all paths."""
+    return JSONResponse(content={"status": "ok"})
 
 # ─── Health / Keep-Alive ──────────────────────────────────────────────────────
 @app.get("/ping")
