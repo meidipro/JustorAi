@@ -47,10 +47,13 @@ class EvidenceBuilder:
                     evidence.role = authority.role
                     found.append(evidence)
 
-        # 2. Hybrid discovery for supporting law.
-        try:
-            embedding = await self.embed_fn(query)
-        except Exception:
+        # 2. Hybrid discovery for supporting law (only if exact matches need supplementation)
+        if len(found) < 2:
+            try:
+                embedding = await self.embed_fn(query)
+            except Exception:
+                embedding = []
+        else:
             embedding = []
 
         if embedding:

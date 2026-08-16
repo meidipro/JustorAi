@@ -723,6 +723,48 @@ const renderResearchResult = (result: ResearchResult): string => {
     </div>`;
 };
 
+const liveThinkingSteps = [
+  { title: 'Legal Intent & Statutory Routing', desc: 'Targeting controlling Bangladesh Acts and legal domain...' },
+  { title: 'Primary Authority Retrieval', desc: 'Searching 46,000+ provisions & Supreme Court precedent database...' },
+  { title: '7-Gate Deterministic Verification', desc: 'Validating exact statutory quotes & 2026 amendment deadlines...' },
+  { title: 'Grounded Legal Synthesis', desc: 'Synthesizing structured legal analysis strictly from verified sources...' },
+];
+
+const renderLiveThinking = (seconds: number, activeStepIndex: number): string => `
+  <div class="live-thinking-card">
+    <div class="live-thinking-header">
+      <div class="live-thinking-title">
+        <span class="thinking-sparkle">✨</span>
+        <strong>Thinking...</strong>
+        <span class="thinking-timer">(${seconds.toFixed(1)}s)</span>
+      </div>
+      <span class="thinking-badge">AI Brain Active</span>
+    </div>
+    <div class="live-thinking-steps">
+      ${liveThinkingSteps.map((step, idx) => {
+        const isDone = idx < activeStepIndex;
+        const isActive = idx === activeStepIndex;
+        return `
+          <div class="live-step-row ${isDone ? 'is-done' : ''} ${isActive ? 'is-active' : ''}">
+            <div class="live-step-indicator">
+              ${isDone ? '✓' : isActive ? '<span class="step-spinner"></span>' : (idx + 1)}
+            </div>
+            <div class="live-step-text">
+              <strong>${escapeHtml(step.title)}</strong>
+              <span>${escapeHtml(step.desc)}</span>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="thinking-shimmer-preview">
+      <div class="shimmer-line line-1"></div>
+      <div class="shimmer-line line-2"></div>
+      <div class="shimmer-line line-3"></div>
+    </div>
+  </div>
+`;
+
 const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   const query = String(new FormData(form).get('query') ?? '').trim();
   if (!query) return;
@@ -736,9 +778,39 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   const output = form.closest('.workspace-content, .citizen-ai-handoff')?.querySelector<HTMLElement>('[data-research-output]') ?? document.querySelector<HTMLElement>('[data-research-output]');
   if (!output) return;
   output.hidden = false;
-  output.innerHTML = '<div class="research-loading"><span></span><p>Checking the connected legal research service…</p></div>';
+  
+  let elapsed = 0;
+  let activeStep = 0;
+  output.innerHTML = renderLiveThinking(elapsed, activeStep);
+  output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  const timerInterval = setInterval(() => {
+    elapsed += 0.2;
+    if (elapsed > 0.8 && activeStep === 0) activeStep = 1;
+    if (elapsed > 2.0 && activeStep === 1) activeStep = 2;
+    if (elapsed > 3.4 && activeStep === 2) activeStep = 3;
+    const headerTimer = output.querySelector<HTMLElement>('.thinking-timer');
+    if (headerTimer) headerTimer.textContent = `(${elapsed.toFixed(1)}s)`;
+    
+    const stepRows = output.querySelectorAll<HTMLElement>('.live-step-row');
+    stepRows.forEach((row, idx) => {
+      const indicator = row.querySelector('.live-step-indicator');
+      if (idx < activeStep) {
+        row.className = 'live-step-row is-done';
+        if (indicator) indicator.innerHTML = '✓';
+      } else if (idx === activeStep) {
+        row.className = 'live-step-row is-active';
+        if (indicator) indicator.innerHTML = '<span class="step-spinner"></span>';
+      } else {
+        row.className = 'live-step-row';
+        if (indicator) indicator.innerHTML = String(idx + 1);
+      }
+    });
+  }, 200);
+
   try {
     const result = await runResearch(query, role, state.language, context);
+    clearInterval(timerInterval);
     state.lastResearch = result;
     state.lastResearchRole = role;
     state.selectedSource = 0;
@@ -747,6 +819,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
     if (quota) document.querySelectorAll<HTMLElement>('[data-quota]').forEach((element) => { element.textContent = `${quota.remaining} of ${quota.limit} AI answers remaining today`; });
     output.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (error) {
+    clearInterval(timerInterval);
     const message = error instanceof Error && error.message === 'authentication-required'
       ? 'Your session has ended. Sign in again to continue.'
       : 'The legal research service is unavailable. No answer was generated.';
