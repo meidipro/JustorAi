@@ -623,13 +623,104 @@ const hydrateRoute = async (path: string): Promise<void> => {
   if (path === '/workspace/citizen') await hydrateCitizen();
 };
 
+const formatAnswerMarkdown = (text: string): string => {
+  if (!text) return '';
+  const lines = text.split('\n');
+  const htmlParts: string[] = [];
+  let currentList: string[] = [];
+
+  const flushList = () => {
+    if (currentList.length) {
+      htmlParts.push(`<ul>${currentList.map((li) => `<li>${li}</li>`).join('')}</ul>`);
+      currentList = [];
+    }
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) {
+      flushList();
+      continue;
+    }
+    if (line.startsWith('### ')) {
+      flushList();
+      htmlParts.push(`<h4>${escapeHtml(line.slice(4))}</h4>`);
+    } else if (line.startsWith('## ')) {
+      flushList();
+      htmlParts.push(`<h3>${escapeHtml(line.slice(3))}</h3>`);
+    } else if (line.startsWith('# ')) {
+      flushList();
+      htmlParts.push(`<h2>${escapeHtml(line.slice(2))}</h2>`);
+    } else if (line.startsWith('- ') || line.startsWith('* ')) {
+      currentList.push(escapeHtml(line.slice(2)));
+    } else if (/^\d+\.\s/.test(line)) {
+      currentList.push(escapeHtml(line.replace(/^\d+\.\s/, '')));
+    } else if (line.startsWith('> ')) {
+      flushList();
+      htmlParts.push(`<blockquote>${escapeHtml(line.slice(2))}</blockquote>`);
+    } else {
+      flushList();
+      const formatted = escapeHtml(line)
+        .replace(/\[(ACT-\d+|S\d+)\]/g, '<span class="inline-citation">[$1]</span>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      htmlParts.push(`<p>${formatted}</p>`);
+    }
+  }
+  flushList();
+  return htmlParts.join('');
+};
+
 const renderResearchResult = (result: ResearchResult): string => {
   const sources = result.authorities ?? [];
+  const steps = result.reasoningSteps ?? [];
+
+  const reasoningBlock = steps.length ? `
+    <details class="reasoning-accordion" open>
+      <summary class="reasoning-summary">
+        <span class="reasoning-icon">✨</span>
+        <span class="reasoning-heading">Reasoning process</span>
+        <span class="reasoning-count">${steps.length} steps verified</span>
+        <span class="reasoning-chevron">▼</span>
+      </summary>
+      <div class="reasoning-steps-list">
+        ${steps.map((step) => `
+          <div class="reasoning-step-item">
+            <div class="step-num">${step.step}</div>
+            <div class="step-content">
+              <strong>${escapeHtml(step.title)}</strong>
+              <p>${escapeHtml(step.summary)}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </details>` : '';
+
   const section = (title: string, body?: string | string[]) => {
     if (!body || (Array.isArray(body) && !body.length)) return '';
     return `<section><h3>${title}</h3>${Array.isArray(body) ? `<ul>${body.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : `<p>${escapeHtml(body)}</p>`}</section>`;
   };
-  return `<div class="research-result-layout"><article class="research-analysis"><span class="section-kicker">Research analysis</span>${section('Short Answer', result.shortAnswer)}${section('Legal Issues', result.legalIssues)}${section('Applicable Law', result.applicableLaw)}${section('Relevant Case Law', result.relevantCases)}${section('Exceptions / Qualifications', result.qualifications)}${section('Application to Facts', result.applicationToFacts)}${section('Practical Position', result.practicalPosition)}${sources.length ? `<section><h3>Authorities</h3><div class="citation-list">${sources.map((source, index) => `<button type="button" data-result-source="${index}" class="${index === 0 ? 'active' : ''}"><span>[${index + 1}]</span>${escapeHtml(source.title)}</button>`).join('')}</div></section>` : ''}${result.limitations ? `<section class="limitations"><h3>Coverage / limitations</h3><p>${escapeHtml(result.limitations)}</p></section>` : ''}</article>${sourcePanel(sources[0])}</div>`;
+
+  const hasStructuredSections = Boolean(
+    (result.legalIssues && result.legalIssues.length) ||
+    (result.applicableLaw && result.applicableLaw.length) ||
+    (result.relevantCases && result.relevantCases.length)
+  );
+
+  const mainContent = hasStructuredSections
+    ? `${section('Short Answer', result.shortAnswer)}${section('Legal Issues', result.legalIssues)}${section('Applicable Law', result.applicableLaw)}${section('Relevant Case Law', result.relevantCases)}${section('Exceptions / Qualifications', result.qualifications)}${section('Application to Facts', result.applicationToFacts)}${section('Practical Position', result.practicalPosition)}`
+    : `<div class="research-formatted-markdown">${formatAnswerMarkdown(result.shortAnswer)}</div>`;
+
+  return `
+    <div class="research-result-layout">
+      <article class="research-analysis">
+        <span class="section-kicker">Research analysis</span>
+        ${reasoningBlock}
+        ${mainContent}
+        ${sources.length ? `<section class="authorities-section"><h3>Authorities</h3><div class="citation-list">${sources.map((source, index) => `<button type="button" data-result-source="${index}" class="${index === 0 ? 'active' : ''}"><span>[${index + 1}]</span>${escapeHtml(source.title)}</button>`).join('')}</div></section>` : ''}
+        ${result.limitations ? `<section class="limitations"><h3>Coverage / limitations</h3><p>${escapeHtml(result.limitations)}</p></section>` : ''}
+      </article>
+      ${sourcePanel(sources[0])}
+    </div>`;
 };
 
 const submitResearch = async (form: HTMLFormElement): Promise<void> => {
