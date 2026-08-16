@@ -1,0 +1,132 @@
+{
+  "id": 49,
+  "cluster": "government",
+  "route": "government/right-to-information",
+  "sourceRoutePrefix": "guides",
+  "seo": {
+    "title": "How to Make a Right to Information Request | Justor",
+    "description": "The Right to Information Act, 2009 gives a legal framework for requesting information from covered authorities, subject to exclusions and procedures....",
+    "searchIntent": "A citizen wants information held by a public authority."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH"
+  },
+  "officialSources": [
+    {
+      "label": "Right to Information Act, 2009",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1011.html"
+    },
+    {
+      "label": "Right to Information (Amendment) Ordinance, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1623.html"
+    },
+    {
+      "label": "Government Grievance Redress System",
+      "type": "official",
+      "url": "https://grs.gov.bd/"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: LAW UPDATED: Right to Information (Amendment) Ordinance, 2026 dated 9 February 2026. Verify current consolidated sections and forms before publication."
+  ],
+  "relatedPages": [
+    {
+      "label": "Government Office Did Not Give You a Service: How to Complain",
+      "route": "/action-guides/government/government-service-complaint"
+    },
+    {
+      "label": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+      "route": "/action-guides/government/local-service-complaint"
+    },
+    {
+      "label": "Land Office Is Delaying Your Service",
+      "route": "/action-guides/property/land-office-delay"
+    },
+    {
+      "label": "How to Get Government Legal Aid in Bangladesh",
+      "route": "/guides/legal-help/government-legal-aid"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "How to Make a Right to Information Request",
+      "directAnswer": "The Right to Information Act, 2009 gives a legal framework for requesting information from covered authorities, subject to exclusions and procedures. In 2026 the law was amended, so Justor must use the current consolidated text, not an old RTI template.",
+      "atAGlance": {
+        "whoFor": "A citizen wants information held by a public authority.",
+        "legalBasis": "Right to Information Act, 2009; Right to Information (Amendment) Ordinance, 2026; current Information Commission rules/forms.",
+        "mainRule": "RTI is for information. It is not the same as a service complaint. GRS itself lists RTI matters outside the normal grievance route.",
+        "updateStatus": "LAW UPDATED: Right to Information (Amendment) Ordinance, 2026 dated 9 February 2026. Verify current consolidated sections and forms before publication."
+      },
+      "lawMeaning": "RTI is for information. It is not the same as a service complaint. GRS itself lists RTI matters outside the normal grievance route. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the authority holding the information.",
+        "Identify the designated information officer.",
+        "Describe the information clearly.",
+        "Use the official form/process.",
+        "Pay lawful fee if required.",
+        "Save proof of submission.",
+        "Track the statutory response period.",
+        "Use the RTI appeal/complaint process when available."
+      ],
+      "evidence": [
+        "Application; identity/contact details as required; information description; fee receipt; refusal/reply."
+      ],
+      "simpleExample": "A citizen wants a copy of an official decision. An RTI request should ask for the specific document, date or file rather than demand that the office “explain why the government is bad.”",
+      "commonMistakes": [
+        "Common mistakes: Using RTI to demand a personal service.",
+        "Common mistakes: vague requests.",
+        "Common mistakes: asking for exempt information.",
+        "Common mistakes: missing appeal deadline.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the authority refuses?",
+          "answer": "Read the reason and use the RTI appeal route."
+        },
+        {
+          "question": "What if the information is already public?",
+          "answer": "The authority may direct you to it."
+        },
+        {
+          "question": "What if the matter is urgent?",
+          "answer": "Check whether the Act has a special rule that applies."
+        }
+      ],
+      "specialistTrigger": "Sensitive/exempt information; national-security issue; personal privacy; deadline dispute; repeated refusal.",
+      "faqs": [
+        {
+          "question": "What can I ask under RTI?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Where do I submit an RTI request?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How long does it take?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the request is refused?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I use GRS for an RTI problem?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "c28646de7d682ed0869789d96cf83eae22d192cb3825649f68fdccaff4cea233"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

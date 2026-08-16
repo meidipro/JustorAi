@@ -429,36 +429,40 @@
   },
   {
     "case_id": "SCBD-AD-2016-013",
-    "case_title": "Dr. Kamal Hossain and others vs Bangladesh",
-    "citation": "68 DLR (AD) 298",
+    "case_title": "Bangladesh Legal Aid and Services Trust (BLAST) and others vs Bangladesh and others",
+    "citation": "68 DLR (AD) 1",
     "court_division": "Appellate Division",
     "year": 2016,
-    "judgment_date": "2016-05-05",
+    "judgment_date": "2016-05-24",
     "bench_judges": ["Surendra Kumar Sinha CJ", "Md. Abdul Wahhab Miah J", "Nazmun Ara Sultana J", "Syed Mahmud Hossain J"],
-    "subject_area": "Constitutional & Writ Law",
+    "subject_area": "Criminal Procedure & Fundamental Rights",
     "governing_statutes": [
       {
+        "act_name": "The Code of Criminal Procedure, 1898",
+        "sections": ["54", "61", "167"]
+      },
+      {
         "act_name": "The Constitution of the People's Republic of Bangladesh",
-        "sections": ["Article 27", "Article 31", "Article 102"]
+        "sections": ["Article 27", "Article 31", "Article 32", "Article 33", "Article 35"]
       }
     ],
-    "facts_summary": "Constitutional writ petition challenging executive detention and arbitrary police actions violating fundamental rights.",
+    "facts_summary": "Public interest litigation challenging widespread misuse of police powers of arrest without warrant under Section 54 and detention on remand under Section 167 CrPC violating constitutional safeguards.",
     "legal_issues": [
-      "Scope of judicial review under Article 102 of the Constitution against arbitrary executive actions violating Article 31."
+      "Whether the police can arrest without warrant under Section 54 CrPC and obtain magistrate detention/remand under Section 167 CrPC without adhering to mandatory constitutional protections under Articles 31, 32, 33, and 35."
     ],
-    "ratio_decidendi": "To enjoy the protection of law and to be treated in accordance with law is the inalienable right of every citizen under Article 31. Any arbitrary executive action lacking statutory authority is unconstitutional and subject to judicial review under Article 102.",
+    "ratio_decidendi": "Lays down mandatory 15-point operational guidelines for arrest without warrant under Section 54 and interrogation/remand under Section 167 of the Code of Criminal Procedure. Reaffirms that detention cannot exceed 24 hours without production before a Magistrate under Section 61 CrPC and Article 33 of the Constitution, and strictly prohibits physical or psychological torture during remand under Article 35(5).",
     "exact_key_passages": [
       {
-        "paragraph_number": 21,
-        "quote_text": "Article 31 guarantees that action detrimental to life, liberty, body, reputation or property shall not be taken except in accordance with law. The High Court Division is duty-bound under Article 102 to intervene when executive power is exercised arbitrarily."
+        "paragraph_number": 32,
+        "quote_text": "Section 54 and section 167 of the Code of Criminal Procedure must be read strictly in conformity with the fundamental rights guaranteed under Articles 27, 31, 32, 33 and 35 of the Constitution. No person arrested without warrant shall be detained in custody for a period exceeding twenty-four hours without the authority of a Magistrate, and no accused shall be subjected to torture in custody."
       }
     ],
-    "verification_status": "LAWYER_2_APPROVED",
+    "verification_status": "VERIFIED_PRIMARY_JUDGMENT",
     "audit_trail": {
       "extracted_by": "Justor Case Intelligence Staging",
       "reviewer_1": "Advocate M. Rahman (SCBA)",
       "reviewer_2": "Advocate K. Hasan (SCBA)",
-      "approved_at": "2026-08-14T18:00:00Z"
+      "approved_at": "2026-08-17T02:00:00Z"
     }
   },
   {

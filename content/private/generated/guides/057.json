@@ -1,0 +1,141 @@
+{
+  "id": 57,
+  "cluster": "cyber",
+  "route": "cyber/deepfake-ai-fake-content",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Deepfake or AI Fake Photo/Video in Bangladesh: What to Do",
+    "description": "Someone used AI to create a fake voice, photo or video of you. Learn how to preserve evidence, report the content and identify possible legal issues.",
+    "searchIntent": "A citizen discovers synthetic media using their identity or likeness."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED"
+  },
+  "officialSources": [
+    {
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Section 21",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57962.html"
+    },
+    {
+      "label": "Section 22",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57963.html"
+    },
+    {
+      "label": "Section 25",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57966.html"
+    },
+    {
+      "label": "Penal Code, 1860",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11/chapter-details-24.html"
+    },
+    {
+      "label": "Pornography Control Act, 2012",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1091.html"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: Current Cyber Security Act and 1 July 2026 amendment status checked. Section 20 is repealed; this guide does not rely on it."
+  ],
+  "relatedPages": [
+    {
+      "label": "Social Media Impersonation",
+      "route": "/action-guides/cyber/social-media-impersonation"
+    },
+    {
+      "label": "Online Blackmail or Sextortion",
+      "route": "/action-guides/cyber/online-blackmail-sextortion"
+    },
+    {
+      "label": "Defamation in Bangladesh",
+      "route": "/guides/digital/defamation"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+      "directAnswer": "Save the original post URL, account name, date, screenshots and any message that shows why the fake content was made. Report the content to the platform. If the deepfake is being used to steal money, impersonate you, damage your reputation, threaten you or create sexual material, different laws may become relevant. Bangladesh does not need one offence called “deepfake” for the conduct to have legal consequences; the correct legal provision depends on how the fake media is used.",
+      "atAGlance": {
+        "whoFor": "A citizen discovers synthetic media using their identity or likeness.",
+        "legalBasis": "Possible current-law issues include: This page must not state that “deepfakes are illegal in Bangladesh” as a blanket rule. The use and content matter.",
+        "mainRule": "Save the original post URL, account name, date, screenshots and any message that shows why the fake content was made. Report the content to the platform. If the deepfake is being used to steal money, impersonate you, damage your reputation, threaten you or create sexual material, different laws may become relevant. Bangladesh does not need one offence called “deepfake” for the conduct to have legal consequences; the correct legal provision depends on how the fake media is used.",
+        "updateStatus": "15 August 2026: Current Cyber Security Act and 1 July 2026 amendment status checked. Section 20 is repealed; this guide does not rely on it."
+      },
+      "lawMeaning": "Possible current-law issues include: This page must not state that “deepfakes are illegal in Bangladesh” as a blanket rule. The use and content matter.",
+      "steps": [
+        "Copy the exact URL.",
+        "Save screenshots showing the account and date.",
+        "Save the original file if lawfully available, without spreading it.",
+        "Note whether the material is labelled AI-generated.",
+        "Save messages showing threats, payment requests or intent.",
+        "Report the content through the platform.",
+        "Warn people if the content is being used for financial impersonation.",
+        "If sexual, threatening or fraudulent, consider formal reporting.",
+        "Keep the original evidence before requesting removal."
+      ],
+      "evidence": [],
+      "simpleExample": "A fake AI voice recording sounds like a business owner asking an employee to transfer money. The employee should verify the instruction through a separate channel. If money was sent, preserve the audio, sender details, transaction record and chat. The incident may raise cyber-fraud and impersonation issues.",
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "The fake video is a joke or parody. Context matters. Do not automatically label it criminal.",
+          "answer": ""
+        },
+        {
+          "question": "It asks people for money using my face or voice. Preserve the payment instructions. Fraud provisions may be relevant.",
+          "answer": ""
+        },
+        {
+          "question": "It is an explicit fake image of me. Section 25 and other laws may require urgent review.",
+          "answer": ""
+        },
+        {
+          "question": "It is being shared privately, not publicly. Threats, blackmail or fraud may still be legally relevant.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "",
+      "faqs": [
+        {
+          "question": "Is there a separate “deepfake law” in Bangladesh?",
+          "answer": "This guide does not rely on a standalone offence named “deepfake.” It maps the conduct to current laws depending on fraud, forgery, sexual abuse, defamation or other facts."
+        },
+        {
+          "question": "Should I publicly repost the deepfake to prove it is fake?",
+          "answer": "Usually no. Preserve evidence without increasing distribution."
+        },
+        {
+          "question": "Can a cloned voice be evidence?",
+          "answer": "Digital evidence can be important, but authenticity and context may need technical and legal assessment."
+        },
+        {
+          "question": "What if a deepfake caused financial loss?",
+          "answer": "Contact the financial provider immediately and preserve the synthetic media and transaction trail."
+        },
+        {
+          "question": "Should this article be human-reviewed?",
+          "answer": "Yes. Deepfake cases can touch several overlapping laws and facts."
+        }
+      ],
+      "disclaimer": "This page provides general legal information. Synthetic-media disputes are fact-specific and may require legal and technical review.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "dbf5e9ff5120f277eb4db8c3db68e54548d0ebc8c1393ab273f4ad4151457ccb"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

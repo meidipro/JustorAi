@@ -1,0 +1,139 @@
+{
+  "id": 56,
+  "cluster": "cyber",
+  "route": "cyber/online-blackmail-sextortion",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Online Blackmail or Sextortion in Bangladesh: What to Do",
+    "description": "Someone threatens to publish private or sexual images unless you pay or comply. Preserve evidence, protect accounts and learn the current legal routes.",
+    "searchIntent": "A person is being threatened with disclosure of intimate/private material."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED"
+  },
+  "officialSources": [
+    {
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Section 25",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57966.html"
+    },
+    {
+      "label": "Pornography Control Act, 2012",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1091.html"
+    },
+    {
+      "label": "Bangladesh Police",
+      "type": "official",
+      "url": "https://www.police.gov.bd/en/policecybersupportforwomen"
+    },
+    {
+      "label": "Bangladesh Police",
+      "type": "official",
+      "url": "https://www.police.gov.bd/en/%E0%A6%85%E0%A6%AD%E0%A6%BF%E0%A6%AF%E0%A7%8B%E0%A6%97%E0%A6%A6%E0%A6%BE%E0%A6%96%E0%A6%BF%E0%A6%B2%28%E0%A6%85%E0%A6%A8%E0%A6%B2%E0%A6%BE%E0%A6%87%E0%A6%A8%E0%A6%86%E0%A6%AC%E0%A7%87%E0%A6%A6%E0%A6%A8%29"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: Current section 25 and current Cyber Security Act verified."
+  ],
+  "relatedPages": [
+    {
+      "label": "Deepfake or AI-Generated Fake Content",
+      "route": "/action-guides/cyber/deepfake-ai-fake-content"
+    },
+    {
+      "label": "Social Media Impersonation",
+      "route": "/action-guides/cyber/social-media-impersonation"
+    },
+    {
+      "label": "Online Harassment and Threats",
+      "route": "/action-guides/digital/online-harassment-blackmail"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "Online Blackmail, Sextortion or Threat to Share Private Images",
+      "directAnswer": "Do not delete the threat. Save screenshots, profile links, phone numbers, payment demands and the original messages. Secure your accounts. Do not send more private material. Paying does not guarantee that the blackmailer will stop. If there is a threat of sexual exposure, blackmail, extortion, physical harm or content involving a child, seek urgent support from the appropriate police or specialist authority. Women can also review Bangladesh Police's Police Cyber Support for Women service.",
+      "atAGlance": {
+        "whoFor": "A person is being threatened with disclosure of intimate/private material.",
+        "legalBasis": "Section 25 of the Cyber Security Act, 2026 specifically addresses offences relating to sexual harassment, blackmailing or publication of obscene content. Depending on the facts, other laws may also apply, including the Pornography Control Act, 2012. If money is obtained through deception, cyber fraud provisions may also be relevant. Do not tell a victim that section 25 definitely applies without checking the exact conduct and evidence.",
+        "mainRule": "Do not delete the threat. Save screenshots, profile links, phone numbers, payment demands and the original messages. Secure your accounts. Do not send more private material. Paying does not guarantee that the blackmailer will stop. If there is a threat of sexual exposure, blackmail, extortion, physical harm or content involving a child, seek urgent support from the appropriate police or specialist authority. Women can also review Bangladesh Police's Police Cyber Support for Women service.",
+        "updateStatus": "15 August 2026: Current section 25 and current Cyber Security Act verified."
+      },
+      "lawMeaning": "Section 25 of the Cyber Security Act, 2026 specifically addresses offences relating to sexual harassment, blackmailing or publication of obscene content. Depending on the facts, other laws may also apply, including the Pornography Control Act, 2012. If money is obtained through deception, cyber fraud provisions may also be relevant. Do not tell a victim that section 25 definitely applies without checking the exact conduct and evidence.",
+      "steps": [
+        "Immediate steps: Preserve the threat before blocking the account.",
+        "Immediate steps: Save the full chat, not only one screenshot.",
+        "Immediate steps: Save username, profile URL, phone number and email.",
+        "Immediate steps: Save any image or video identifiers without forwarding the content widely.",
+        "Immediate steps: Save payment demands and account numbers.",
+        "Immediate steps: Secure social media and email accounts.",
+        "Immediate steps: Tell a trusted person if personal safety is at risk.",
+        "Immediate steps: Use the platform's reporting tools.",
+        "Immediate steps: Consider police/cyber reporting where a crime is suspected.",
+        "Immediate steps: If there is an immediate physical threat, seek urgent police assistance."
+      ],
+      "evidence": [],
+      "simpleExample": "A person threatens to publish a private video unless the victim sends ৳20,000. The victim should preserve the threat, profile, payment number and messages, secure their accounts, avoid sending more material, and use the appropriate police/platform reporting route.",
+      "commonMistakes": [
+        "Do not upload or send intimate images to random “helpers” or public groups to prove what happened. Keep evidence in a secure place. When reporting, use the official secure channel and share only what is necessary."
+      ],
+      "whatIf": [
+        {
+          "question": "I already paid once. Preserve the payment record. Another payment may not stop the threat.",
+          "answer": ""
+        },
+        {
+          "question": "The image is fake. A fake sexual image can still cause serious harm. See the deepfake guide.",
+          "answer": ""
+        },
+        {
+          "question": "The blackmailer lives abroad. Preserve all digital identifiers. Cross-border cases can be harder, but reporting may still be appropriate.",
+          "answer": ""
+        },
+        {
+          "question": "I am under 18 or the image shows a child. Seek urgent trusted-adult and law-enforcement support. Do not redistribute the material.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "Any intimate-image blackmail; large payment demand; threat to family or employment; repeat offender; child involvement; physical threat; or uncertainty about filing a complaint.",
+      "faqs": [
+        {
+          "question": "Should I pay the blackmailer?",
+          "answer": "Payment does not guarantee deletion or silence. Preserve evidence and seek official help."
+        },
+        {
+          "question": "Can a woman contact Police Cyber Support for Women?",
+          "answer": "Bangladesh Police states that PCSW provides cyber-crime support to women, including technological assistance and help with legal action."
+        },
+        {
+          "question": "Should I delete the conversation because it is embarrassing?",
+          "answer": "No. Evidence may be important. Store it securely instead."
+        },
+        {
+          "question": "What if the image was originally shared consensually?",
+          "answer": "Consent to receive an image is not automatically consent to threaten, blackmail or publish it. The exact legal analysis depends on the facts."
+        },
+        {
+          "question": "Is every sexual message an offence under section 25?",
+          "answer": "No. The section and other laws must be applied to the actual conduct and context."
+        }
+      ],
+      "disclaimer": "This page provides general information and does not replace urgent police, safety or legal assistance.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "9521ee28caf336b983980477a1e7d6b6ee3ab0299112325318c7d58fa51d05db"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

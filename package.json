@@ -1,23 +1,20 @@
 {
-  "name": "vanila",
+  "name": "justor-ai-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "content:build": "node --experimental-strip-types scripts/build-citizen-guides.ts",
+    "content:verify": "node --experimental-strip-types scripts/verify-public-guide-boundary.ts",
+    "build": "node --experimental-strip-types scripts/build-citizen-guides.ts && tsc && vite build && node --experimental-strip-types scripts/verify-public-guide-boundary.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
     "typescript": "~5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^6.4.3"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.50.0",
-    "@types/marked": "^5.0.2",
-    "franc-min": "^6.2.0",
-    "groq-sdk": "^0.26.0",
-    "marked": "^16.0.0",
-    "mermaid": "^11.8.1"
+    "@supabase/supabase-js": "^2.50.0"
   }
 }

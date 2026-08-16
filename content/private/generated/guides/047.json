@@ -1,0 +1,121 @@
+{
+  "id": 47,
+  "cluster": "government",
+  "route": "government/local-service-complaint",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Waste, Drainage or Road-Service Problem: Where Do You Complain? | Justor",
+    "description": "There is no single office for every waste, drain or road problem in Bangladesh. First identify who controls the service: city corporation,...",
+    "searchIntent": "A citizen wants to complain about an everyday local public service."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK"
+  },
+  "officialSources": [
+    {
+      "label": "Government Grievance Redress System",
+      "type": "official",
+      "url": "https://grs.gov.bd/"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: Add city-specific links only on local versions of this page. Keep national copy authority-neutral."
+  ],
+  "relatedPages": [
+    {
+      "label": "Government Office Did Not Give You a Service: How to Complain",
+      "route": "/action-guides/government/government-service-complaint"
+    },
+    {
+      "label": "Land Office Is Delaying Your Service",
+      "route": "/action-guides/property/land-office-delay"
+    },
+    {
+      "label": "How to Make a Right to Information Request",
+      "route": "/guides/government/right-to-information"
+    },
+    {
+      "label": "How to Get Government Legal Aid in Bangladesh",
+      "route": "/guides/legal-help/government-legal-aid"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+      "directAnswer": "There is no single office for every waste, drain or road problem in Bangladesh. First identify who controls the service: city corporation, municipality, union/local authority, road agency, water/drainage body or another office. Save photos, dates and the exact location, then use that authority’s complaint route. GRS may help for eligible government-service complaints.",
+      "atAGlance": {
+        "whoFor": "A citizen wants to complain about an everyday local public service.",
+        "legalBasis": "Local-government/service law; agency rules; GRS where applicable.",
+        "mainRule": "The page must not send every local-service problem to the same national authority.",
+        "updateStatus": "Add city-specific links only on local versions of this page. Keep national copy authority-neutral."
+      },
+      "lawMeaning": "The page must not send every local-service problem to the same national authority. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Record exact location.",
+        "Take dated photos.",
+        "Identify responsible authority.",
+        "Use its complaint line/app/office.",
+        "Save complaint number.",
+        "Follow up after the stated service time.",
+        "Use GRS if the authority/service falls within GRS and the grievance is eligible."
+      ],
+      "evidence": [
+        "Photos; location; prior complaint; health/safety impact; service ticket."
+      ],
+      "simpleExample": "A drain overflows beside a school. The complaint should identify the exact road/location and responsible city/municipal authority, not simply say “government is responsible.”",
+      "commonMistakes": [
+        "Common mistakes: Complaining to the wrong agency.",
+        "Common mistakes: no location.",
+        "Common mistakes: no photos.",
+        "Common mistakes: creating duplicate complaints with conflicting facts.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if you do not know the authority?",
+          "answer": "Start with the relevant city/municipal information portal."
+        },
+        {
+          "question": "What if there is immediate danger?",
+          "answer": "Contact the emergency/service authority directly."
+        },
+        {
+          "question": "What if nothing happens?",
+          "answer": "Escalate through the grievance officer/GRS where eligible."
+        }
+      ],
+      "specialistTrigger": "Serious injury; dangerous infrastructure; disputed private/public responsibility; repeated ignored complaint.",
+      "faqs": [
+        {
+          "question": "Where do I complain about garbage?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who handles drains?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I use GRS?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I attach?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if I do not know the responsible office?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "661b3a7d8a01b57445d5074317af8ad820d2932c9fe9f300b0bedb44beb89416"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

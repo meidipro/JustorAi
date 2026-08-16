@@ -1,0 +1,133 @@
+{
+  "id": 41,
+  "cluster": "digital",
+  "route": "digital/online-scam",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "What to Do After an Online Scam | Justor",
+    "description": "Act quickly. Stop sending money, contact the bank or mobile financial service, secure your accounts and save the full evidence. Keep transaction IDs,...",
+    "searchIntent": "A person sent money or information to an online scammer."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH"
+  },
+  "officialSources": [
+    {
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Cyber Security (Amendment) Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1728.html"
+    },
+    {
+      "label": "The Penal Code, 1860",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11.html"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: LAW UPDATED: use Cyber Security Act, 2026 and Cyber Security (Amendment) Act, 2026. Do not cite the repealed 2025 Ordinance or older cyber statutes as current law."
+  ],
+  "relatedPages": [
+    {
+      "label": "Someone Is Pretending to Be You Online",
+      "route": "/action-guides/digital/identity-impersonation"
+    },
+    {
+      "label": "Online Harassment, Threats and Blackmail: What to Do",
+      "route": "/action-guides/digital/online-harassment-blackmail"
+    },
+    {
+      "label": "Defamation in Bangladesh Explained Simply",
+      "route": "/guides/digital/defamation"
+    },
+    {
+      "label": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+      "route": "/guides/everyday/gd-police-complaint-case"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "What to Do After an Online Scam",
+      "directAnswer": "Act quickly. Stop sending money, contact the bank or mobile financial service, secure your accounts and save the full evidence. Keep transaction IDs, profile links, phone numbers, messages and screenshots. The Cyber Security Act, 2026 is now the current core cyber statute, subject to its July 2026 amendment.",
+      "atAGlance": {
+        "whoFor": "A person sent money or information to an online scammer.",
+        "legalBasis": "Cyber Security Act, 2026; Cyber Security (Amendment) Act, 2026; Penal Code and other financial/criminal law where relevant.",
+        "mainRule": "Do not promise recovery. Fast reporting can still help protect accounts and evidence.",
+        "updateStatus": "LAW UPDATED: use Cyber Security Act, 2026 and Cyber Security (Amendment) Act, 2026. Do not cite the repealed 2025 Ordinance or older cyber statutes as current law."
+      },
+      "lawMeaning": "Do not promise recovery. Fast reporting can still help protect accounts and evidence. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Stop further payment.",
+        "Contact bank/MFS through official channel.",
+        "Change compromised passwords.",
+        "Enable stronger account security.",
+        "Save full chat and URLs.",
+        "Save transaction IDs.",
+        "Report the fake account to the platform.",
+        "Use police/cyber reporting where appropriate."
+      ],
+      "evidence": [
+        "Transaction ID; account number; profile URL; chat; email; phone; screenshots; bank/MFS complaint number."
+      ],
+      "simpleExample": "A scammer says the victim must pay another “verification fee” to recover the first payment. The victim should stop paying and contact the real financial provider.",
+      "commonMistakes": [
+        "Common mistakes: Paying more to recover money.",
+        "Common mistakes: deleting chat.",
+        "Common mistakes: calling a number sent by the scammer.",
+        "Common mistakes: sharing OTP.",
+        "Common mistakes: editing screenshots.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the scammer has your password?",
+          "answer": "Change it immediately and secure connected accounts."
+        },
+        {
+          "question": "What if money went through MFS?",
+          "answer": "Contact the provider quickly."
+        },
+        {
+          "question": "What if the scammer threatens you?",
+          "answer": "Preserve threats and seek police/legal help."
+        }
+      ],
+      "specialistTrigger": "Large loss; identity theft; threats; intimate-image blackmail; business account compromise.",
+      "faqs": [
+        {
+          "question": "What should I do first after a scam?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I get my money back?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Which cyber law is current?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I contact my bank or police?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "35c596220c259fee128b003f885cba75ac7b657fd106a0ee0708551eb40663cb"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

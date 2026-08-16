@@ -1,0 +1,130 @@
+{
+  "id": 40,
+  "cluster": "employment",
+  "route": "employment/leave-maternity-rights",
+  "sourceRoutePrefix": "guides",
+  "seo": {
+    "title": "Leave, Maternity and Basic Workplace Rights | Justor",
+    "description": "Bangladesh labour law provides rights on matters such as leave, working conditions and maternity benefits for workers who fall within the relevant law....",
+    "searchIntent": "A worker wants an overview of leave and basic statutory rights."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "freshnessRequirementRaw": "LAW UPDATED: all numbers must be checked against the 2026 amended text immediately before publication. | - 15 August 2026: LAW UPDATED: all numbers must be checked against the 2026 amended text immediately before publication."
+  },
+  "officialSources": [
+    {
+      "label": "Bangladesh Labour Act, 2006",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-952.html"
+    },
+    {
+      "label": "Bangladesh Labour (Amendment) Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1672.html"
+    },
+    {
+      "label": "Bangladesh EPZ Labour Act, 2019",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1285.html"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: LAW UPDATED: all numbers must be checked against the 2026 amended text immediately before publication."
+  ],
+  "relatedPages": [
+    {
+      "label": "How to Read an Appointment Letter and Employment Contract",
+      "route": "/guides/employment/employment-contract"
+    },
+    {
+      "label": "Your Employer Has Not Paid Your Salary",
+      "route": "/action-guides/employment/unpaid-salary"
+    },
+    {
+      "label": "Termination and Dismissal Explained Simply",
+      "route": "/guides/employment/termination-dismissal"
+    },
+    {
+      "label": "Workplace Harassment: What Evidence Should You Keep?",
+      "route": "/action-guides/employment/workplace-harassment"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "Leave, Maternity and Basic Workplace Rights",
+      "directAnswer": "Bangladesh labour law provides rights on matters such as leave, working conditions and maternity benefits for workers who fall within the relevant law. The exact amount of leave, eligibility and procedure depend on current amended sections and the worker’s status. Do not rely on an old HR blog.",
+      "atAGlance": {
+        "whoFor": "A worker wants an overview of leave and basic statutory rights.",
+        "legalBasis": "Bangladesh Labour Act, 2006; Bangladesh Labour (Amendment) Act, 2026; EPZ Labour Act where applicable.",
+        "mainRule": "Every numeric entitlement in the final article must cite the current amended section.",
+        "updateStatus": "LAW UPDATED: all numbers must be checked against the 2026 amended text immediately before publication."
+      },
+      "lawMeaning": "Every numeric entitlement in the final article must cite the current amended section. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify whether the Labour Act or EPZ Act applies.",
+        "Check length of service and worker category.",
+        "Read the current leave section.",
+        "Follow employer notice/document rules.",
+        "Keep leave requests and approvals.",
+        "For maternity benefit, keep required medical/employment records."
+      ],
+      "evidence": [
+        "Appointment letter; attendance; leave ledger; HR policy; medical documents; salary records."
+      ],
+      "simpleExample": "A worker reads an old article saying one number of maternity days. Justor should instead show the current amended section and verification date.",
+      "commonMistakes": [
+        "Common mistakes: Publishing old leave numbers.",
+        "Common mistakes: treating company policy as the law.",
+        "Common mistakes: assuming every worker has identical coverage.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if company policy gives more than the law?",
+          "answer": "The more generous lawful policy may still apply."
+        },
+        {
+          "question": "What if the employer refuses statutory leave?",
+          "answer": "Keep the refusal and seek the correct remedy."
+        },
+        {
+          "question": "What if you work in an EPZ?",
+          "answer": "Check EPZ law."
+        }
+      ],
+      "specialistTrigger": "Maternity dismissal; health/safety issue; disputed worker classification; EPZ.",
+      "faqs": [
+        {
+          "question": "How much annual leave do workers get?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What maternity benefits apply?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does company policy replace the law?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do EPZ workers follow the same Act?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if leave is refused?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "3d75c06b931f1963761ed2984e859804b21bdf7dba0e0f73daa3d7da49a9442a"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

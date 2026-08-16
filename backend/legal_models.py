@@ -30,6 +30,13 @@ ClaimType = Literal[
     "general",
 ]
 
+TrustTier = Literal[
+    "PRIMARY_STATUTE",
+    "VERIFIED_JUDGMENT",
+    "UNVERIFIED_REPORTER_CITATION",
+    "ABSTAIN",
+]
+
 class CandidateAuthority(BaseModel):
     act: str
     sections: list[str] = Field(default_factory=list)
@@ -51,14 +58,14 @@ class LegalRoute(BaseModel):
 
 class EvidenceItem(BaseModel):
     evidence_id: str
-    instrument_id: str
-    provision_id: str
-    version_id: str
+    instrument_id: str = ""
+    provision_id: str = ""
+    version_id: str = ""
     act_name: str
-    section_number: str
+    section_number: str = ""
     heading: str | None = None
     role: AuthorityRole = "SUPPORTING"
-    legal_text: str
+    legal_text: str = ""
     official_url: str | None = None
     valid_from: date | None = None
     valid_to: date | None = None
@@ -66,6 +73,27 @@ class EvidenceItem(BaseModel):
     official_source_verified: bool = False
     exact_section_verified: bool = False
     version_verified: bool = False
+    
+    # Case law & Trust Hierarchy attributes
+    item_type: Literal["statute", "case"] = "statute"
+    case_title: str | None = None
+    citation: str | None = None
+    court: str | None = None
+    year: int | None = None
+    ratio_decidendi: str | None = None
+    trust_tier: TrustTier = "PRIMARY_STATUTE"
+    trust_badge: str | None = None
+
+    def get_badge(self) -> str:
+        if self.trust_badge:
+            return self.trust_badge
+        if self.item_type == "statute":
+            return "`PRIMARY SOURCE ✓` `SOURCE CHECKED ✓`"
+        if self.item_type == "case":
+            if self.trust_tier == "VERIFIED_JUDGMENT":
+                return "`PRIMARY JUDGMENT ✓` `RATIO VERIFIED ✓`"
+            return "`REPORTER CITATION AVAILABLE ⚠️` *(Primary judgment text pending verification)*"
+        return "`UNVERIFIED`"
 
 class EvidencePack(BaseModel):
     query: str

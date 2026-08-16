@@ -1,0 +1,144 @@
+{
+  "id": 4,
+  "cluster": "property",
+  "route": "property/verify-land-deed",
+  "sourceRoutePrefix": "guides",
+  "seo": {
+    "title": "How to Check Whether a Land Deed Is Genuine | Justor",
+    "description": "A deed can look real and still be unsafe. Check the registration record, the seller’s identity, the property description, the chain of earlier deeds,...",
+    "searchIntent": "A buyer wants to reduce the risk of a fake or misleading deed."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "freshnessRequirementRaw": "Re-check any new Registration Directorate digital verification service before publication. | - 15 August 2026: Re-check any new Registration Directorate digital verification service before publication."
+  },
+  "officialSources": [
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
+    },
+    {
+      "label": "Registration Directorate",
+      "type": "official",
+      "url": "https://rd.gov.bd/"
+    },
+    {
+      "label": "Digital Land Record Management System",
+      "type": "official",
+      "url": "https://dlrms.land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/search-mortgage-info"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: Re-check any new Registration Directorate digital verification service before publication."
+  ],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "Gift Deed and Hiba of Property in Bangladesh",
+      "route": "/guides/property/gift-hiba-property"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "How to Check Whether a Land Deed Is Genuine",
+      "directAnswer": "A deed can look real and still be unsafe. Check the registration record, the seller’s identity, the property description, the chain of earlier deeds, current land records, mutation, tax records and any available mortgage information. A genuine document does not always mean the seller has complete legal title.",
+      "atAGlance": {
+        "whoFor": "A buyer wants to reduce the risk of a fake or misleading deed.",
+        "legalBasis": "Registration Act, 1908; Transfer of Property Act, 1882; official Registration Directorate and land records.",
+        "mainRule": "Verification should compare the document with official records, not only the paper shown by the seller.",
+        "updateStatus": "Re-check any new Registration Directorate digital verification service before publication."
+      },
+      "lawMeaning": "Verification should compare the document with official records, not only the paper shown by the seller. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Read the original document.",
+        "Confirm names and identity.",
+        "Match deed number, date and registration office.",
+        "Compare property description with khatian and map.",
+        "Trace earlier deeds.",
+        "Check mutation and tax records.",
+        "Check available mortgage information.",
+        "Ask why any record does not match."
+      ],
+      "evidence": [
+        "Original deed; certified copy where available; NID; earlier deeds; khatian; mutation; map; tax receipts; mortgage information."
+      ],
+      "simpleExample": "A seller shows a clean-looking deed, but the plot number in the deed does not match the latest land record. That mismatch should be resolved before purchase.",
+      "commonMistakes": [
+        "Common mistakes: Checking only the stamp paper.",
+        "Common mistakes: trusting a scanned copy.",
+        "Common mistakes: ignoring earlier deeds.",
+        "Common mistakes: not checking seller identity.",
+        "Common mistakes: assuming registration means no mortgage exists.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the seller lost the original deed?",
+          "answer": "Ask for an official certified copy and supporting records."
+        },
+        {
+          "question": "What if the record is in a parent’s name?",
+          "answer": "Check inheritance or transfer authority."
+        },
+        {
+          "question": "What if the seller pressures you to pay quickly?",
+          "answer": "Slow down and verify."
+        }
+      ],
+      "specialistTrigger": "Missing title chain; forged or altered documents; disputed inheritance; power of attorney; mortgage; court case; unusual urgent sale.",
+      "faqs": [
+        {
+          "question": "How can I verify a deed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can a registered deed be fraudulent?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What records should match the deed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do I check a mortgage?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I pay before deed verification?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "5b9114af697372b8f8e5ead1692dc3741b3bbcae5d284a7392d160d0e5081993"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

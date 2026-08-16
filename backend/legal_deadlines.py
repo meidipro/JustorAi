@@ -31,5 +31,6 @@ def evaluate_deadline(
         "deadline": deadline.isoformat(),
         "action_date": action_date.isoformat(),
         "within_period": action_date <= deadline,
+        "days_remaining": max(0, (deadline - action_date).days),
         "days_after_deadline": max(0, (action_date - deadline).days),
     }

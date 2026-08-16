@@ -1,0 +1,125 @@
+{
+  "id": 18,
+  "cluster": "family",
+  "route": "family/child-custody",
+  "sourceRoutePrefix": "guides",
+  "seo": {
+    "title": "Child Custody: What Should Parents Know? | Justor",
+    "description": "Child custody is about who cares for a child in daily life. Guardianship concerns legal authority and can involve different questions. A court can...",
+    "searchIntent": "A parent wants a basic guide to custody and guardianship."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
+  },
+  "officialSources": [
+    {
+      "label": "Family Courts Act, 2023",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1444.html"
+    },
+    {
+      "label": "Laws of Bangladesh",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: High-risk family-law page. Legal reviewer should verify current guardianship law citations before publication."
+  ],
+  "relatedPages": [
+    {
+      "label": "Muslim Marriage Registration in Bangladesh",
+      "route": "/guides/family/muslim-marriage-registration"
+    },
+    {
+      "label": "Talaq Procedure in Bangladesh",
+      "route": "/guides/family/talaq-procedure"
+    },
+    {
+      "label": "How Can a Muslim Woman Seek Divorce?",
+      "route": "/guides/family/divorce-women"
+    },
+    {
+      "label": "Dower or Mehr: What Are Your Rights?",
+      "route": "/guides/family/dower-mehr"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "Child Custody: What Should Parents Know?",
+      "directAnswer": "Child custody is about who cares for a child in daily life. Guardianship concerns legal authority and can involve different questions. A court can consider the child’s welfare and the specific family facts. Do not rely on a simple internet rule that one parent always wins at a certain age.",
+      "atAGlance": {
+        "whoFor": "A parent wants a basic guide to custody and guardianship.",
+        "legalBasis": "Family Courts Act, 2023; Guardians and Wards law; applicable personal law.",
+        "mainRule": "Custody and guardianship should be explained separately. Existing court orders must be followed until changed by lawful process.",
+        "updateStatus": "High-risk family-law page. Legal reviewer should verify current guardianship law citations before publication."
+      },
+      "lawMeaning": "Custody and guardianship should be explained separately. Existing court orders must be followed until changed by lawful process. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Put the child’s safety first.",
+        "Keep school, medical and care records.",
+        "Record the current living arrangement.",
+        "Do not hide the child or breach a court order.",
+        "Try safe agreement where possible.",
+        "Use the family-court/guardianship process when necessary."
+      ],
+      "evidence": [
+        "Birth record; school records; medical records; care history; housing information; communications; existing court order."
+      ],
+      "simpleExample": "Two parents separate and both say, “The child belongs to me.” The legal question is not ownership of a child. The court process focuses on lawful custody/guardianship and the child’s welfare.",
+      "commonMistakes": [
+        "Common mistakes: Using the child as pressure.",
+        "Common mistakes: breaking court orders.",
+        "Common mistakes: relying on fixed-age myths.",
+        "Common mistakes: taking a child abroad without checking legal restrictions.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if there is violence?",
+          "answer": "Safety and urgent legal protection may be needed."
+        },
+        {
+          "question": "What if a court order already exists?",
+          "answer": "Do not ignore it."
+        },
+        {
+          "question": "What if one parent wants to move abroad?",
+          "answer": "Get advice before travel."
+        }
+      ],
+      "specialistTrigger": "Abuse; abduction risk; international travel; existing order; serious health needs; high-conflict dispute.",
+      "faqs": [
+        {
+          "question": "What is the difference between custody and guardianship?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does the mother always get custody?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What does the court consider?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can a parent take the child abroad?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can custody orders be changed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "ab918ece5dfaaecacc21256b35e34b55997f69d3153be753e93f24c661aa964a"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

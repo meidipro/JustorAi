@@ -1,0 +1,131 @@
+{
+  "id": 7,
+  "cluster": "property",
+  "route": "property/land-mortgage",
+  "sourceRoutePrefix": "guides",
+  "seo": {
+    "title": "Mortgage of Land Explained Simply | Justor",
+    "description": "A mortgage uses an interest in specific immovable property as security for a debt or other covered obligation. The exact legal effect depends on the...",
+    "searchIntent": "A borrower or buyer wants to understand a property mortgage."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "freshnessRequirementRaw": "Re-check the Ministry mortgage-search feature and any updated lender/registration process before publication. | - 15 August 2026: Re-check the Ministry mortgage-search feature and any updated lender/registration process before publication."
+  },
+  "officialSources": [
+    {
+      "label": "The Transfer of Property Act, 1882",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-48.html"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/search-mortgage-info"
+    },
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: Re-check the Ministry mortgage-search feature and any updated lender/registration process before publication."
+  ],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "Mortgage of Land Explained Simply",
+      "directAnswer": "A mortgage uses an interest in specific immovable property as security for a debt or other covered obligation. The exact legal effect depends on the type of mortgage and the documents used. A buyer should check whether land is already mortgaged before purchase.",
+      "atAGlance": {
+        "whoFor": "A borrower or buyer wants to understand a property mortgage.",
+        "legalBasis": "Transfer of Property Act, 1882; Registration Act where applicable.",
+        "mainRule": "Do not say that a lender automatically “owns” mortgaged land. The legal rights depend on the mortgage form and current documents.",
+        "updateStatus": "Re-check the Ministry mortgage-search feature and any updated lender/registration process before publication."
+      },
+      "lawMeaning": "Do not say that a lender automatically “owns” mortgaged land. The legal rights depend on the mortgage form and current documents. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Read the mortgage document.",
+        "Identify the debt and property.",
+        "Check registration requirements.",
+        "Understand default and repayment terms.",
+        "Keep repayment proof.",
+        "Obtain release/redemption documents when debt is cleared.",
+        "Buyers should check available mortgage records."
+      ],
+      "evidence": [
+        "Loan agreement; mortgage deed; title papers; repayment proof; lender release; land records."
+      ],
+      "simpleExample": "A buyer finds a seller’s property in a mortgage search. The buyer should not assume the debt is cleared because the seller says so. Ask for lender evidence and proper release.",
+      "commonMistakes": [
+        "Common mistakes: Buying mortgaged land without lender clearance.",
+        "Common mistakes: losing repayment proof.",
+        "Common mistakes: assuming title deed possession alone explains the legal position.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the loan is fully paid?",
+          "answer": "Get clear release evidence."
+        },
+        {
+          "question": "What if the lender holds original deeds?",
+          "answer": "Find out why before buying."
+        },
+        {
+          "question": "What if several loans exist?",
+          "answer": "Get professional title review."
+        }
+      ],
+      "specialistTrigger": "Foreclosure/default; disputed loan; missing original deeds; multiple lenders; sale of mortgaged property.",
+      "faqs": [
+        {
+          "question": "What is a mortgage?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can mortgaged land be sold?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do I check a mortgage?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is redemption?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does the bank own mortgaged land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "7ccdd23123cec6b13dc7b02dedc4e00b6eab9b321374a9fa4cbfb12d83166b52"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

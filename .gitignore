@@ -48,7 +48,9 @@ local_storage/
 # Dependencies
 node_modules/
 venv/
+.venv/
 __pycache__/
+UPGRADE_PRONTEND/
 
 # Build outputs
 dist/

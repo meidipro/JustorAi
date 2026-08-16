@@ -1,9 +1,9 @@
 [
   {
-    "id": "REG-CONTRACT-SALE-001",
+    "id": "REG-CONTRACT-SALE-2026",
     "persona": "Legal Professional",
-    "question": "A client entered into a written contract for sale of immovable property in Bangladesh. Is the contract legally enforceable if unregistered, and within what statutory period must it be presented for registration under Section 17A?",
-    "as_of_date": "2026-08-15",
+    "question": "A client entered into a written contract for sale of immovable property on 1 June 2026 in Bangladesh. Is the contract legally enforceable if unregistered, and within what statutory period must it be presented for registration under Section 17A following recent amendments?",
+    "as_of_date": "2026-08-17",
     "required_authorities": [
       {
         "act": "The Registration Act, 1908",
@@ -22,42 +22,52 @@
     ],
     "forbidden_as_controlling": [
       {
-        "act": "The Registration Act, 1908",
-        "section": "24"
+        "act": "The Transfer of Property Act, 1882",
+        "section": "64"
       }
     ],
-    "required_legal_numbers": ["30"]
+    "required_legal_numbers": ["60"]
   },
   {
-    "id": "REG-DENIAL-EXECUTION-001",
+    "id": "CRPC-ARREST-REMAND-001",
     "persona": "Legal Professional",
-    "question": "A Sub-Registrar refuses to register a deed because execution is denied. What is the statutory remedy, before which authority must the application be made, and within what limitation period under the Registration Act, 1908?",
-    "as_of_date": "2026-08-15",
+    "question": "What are the statutory and constitutional limits on police detention without warrant, magistrate remand procedures, and protections against torture in custody under Bangladesh law?",
+    "as_of_date": "2026-08-17",
     "required_authorities": [
       {
-        "act": "The Registration Act, 1908",
-        "section": "72"
+        "act": "The Code of Criminal Procedure, 1898",
+        "section": "61"
       },
       {
-        "act": "The Registration Act, 1908",
-        "section": "73"
+        "act": "The Code of Criminal Procedure, 1898",
+        "section": "167"
       }
     ],
-    "required_legal_numbers": ["30"]
-  },
-  {
-    "id": "CPC-RES-JUDICATA-001",
-    "persona": "Law Student",
-    "question": "Explain the difference between section 10 and section 11 of the Code of Civil Procedure, 1908.",
-    "as_of_date": "2026-08-15",
-    "required_authorities": [
+    "allowed_supporting_authorities": [
       {
-        "act": "The Code of Civil Procedure, 1908",
-        "section": "10"
+        "act": "The Constitution of the People's Republic of Bangladesh",
+        "section": "Article 33"
       },
       {
-        "act": "The Code of Civil Procedure, 1908",
-        "section": "11"
+        "act": "The Constitution of the People's Republic of Bangladesh",
+        "section": "Article 35"
+      }
+    ],
+    "required_legal_numbers": ["24"]
+  },
+  {
+    "id": "CONST-PRECEDENT-001",
+    "persona": "Law Student",
+    "question": "Explain the doctrine of binding precedent under Article 111 of the Bangladesh Constitution and distinguish it from the High Court's superintendence powers under Article 109.",
+    "as_of_date": "2026-08-17",
+    "required_authorities": [
+      {
+        "act": "The Constitution of the People's Republic of Bangladesh",
+        "section": "111"
+      },
+      {
+        "act": "The Constitution of the People's Republic of Bangladesh",
+        "section": "109"
       }
     ]
   }

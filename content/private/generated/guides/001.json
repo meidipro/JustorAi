@@ -1,0 +1,145 @@
+{
+  "id": 1,
+  "cluster": "property",
+  "route": "property/land-registration-bangladesh",
+  "sourceRoutePrefix": "guides",
+  "seo": {
+    "title": "How to Register Land in Bangladesh | Justor",
+    "description": "To register land safely, do more than sign a deed. Check the seller, the property records, the chain of ownership, tax information, and any mortgage or...",
+    "searchIntent": "A buyer or seller wants the safe legal steps for registering land."
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH"
+  },
+  "officialSources": [
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
+    },
+    {
+      "label": "The Transfer of Property Act, 1882",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-48.html"
+    },
+    {
+      "label": "Registration Directorate",
+      "type": "official",
+      "url": "https://rd.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/"
+    }
+  ],
+  "updateHistory": [
+    "15 August 2026: LAW UPDATED: Registration (Amendment) Act, 2026 (Act No. 14 of 2026) is reflected in the current Registration Act. Section 23 now shows three months, so older four-month guides must not be reused."
+  ],
+  "relatedPages": [
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    },
+    {
+      "label": "Gift Deed and Hiba of Property in Bangladesh",
+      "route": "/guides/property/gift-hiba-property"
+    }
+  ],
+  "content": {
+    "en": {
+      "title": "How to Register Land in Bangladesh",
+      "directAnswer": "To register land safely, do more than sign a deed. Check the seller, the property records, the chain of ownership, tax information, and any mortgage or dispute. Then prepare the correct deed and present it to the proper registration office within the legal time. After registration, keep the registered copy and update the land record where needed.",
+      "atAGlance": {
+        "whoFor": "A buyer or seller wants the safe legal steps for registering land.",
+        "legalBasis": "Registration Act, 1908; Transfer of Property Act, 1882; current Registration amendments.",
+        "mainRule": "Section 23 of the current Registration Act generally requires a document other than a will to be presented within three months from execution, subject to sections 24–26. The place of registration also matters for land documents.",
+        "updateStatus": "LAW UPDATED: Registration (Amendment) Act, 2026 (Act No. 14 of 2026) is reflected in the current Registration Act. Section 23 now shows three months, so older four-month guides must not be reused."
+      },
+      "lawMeaning": "Section 23 of the current Registration Act generally requires a document other than a will to be presented within three months from execution, subject to sections 24–26. The place of registration also matters for land documents. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Check the seller’s identity and authority to sell.",
+        "Match the deed with khatian, plot, mouza and area details.",
+        "Check earlier deeds and current land records.",
+        "Check mutation, land tax and available mortgage information.",
+        "Read the draft deed carefully.",
+        "Sign and present the deed to the proper registration office.",
+        "Pay only official taxes, duties and fees that apply.",
+        "Collect the registered document and keep payment records.",
+        "Apply for mutation or record update when required."
+      ],
+      "evidence": [
+        "Seller NID or identity document; title deeds; khatian/record; mutation papers; tax or dakhila records; property description; power of attorney if used; payment documents."
+      ],
+      "simpleExample": "Rina wants to buy a plot. The seller shows one old deed, but the current record still shows several co-owners. Rina should not treat the old deed alone as enough. She should check the record, the co-owners and the seller’s legal authority before paying the full price.",
+      "commonMistakes": [
+        "Common mistakes: Paying a large advance before checking title.",
+        "Common mistakes: trusting only photocopies.",
+        "Common mistakes: ignoring co-owners.",
+        "Common mistakes: not matching plot numbers.",
+        "Common mistakes: using an old registration deadline.",
+        "Common mistakes: paying unofficial fees.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the seller inherited the land?",
+          "answer": "Check the inheritance chain and mutation."
+        },
+        {
+          "question": "What if the deed is already signed?",
+          "answer": "Check the section 23 time limit immediately."
+        },
+        {
+          "question": "What if there is a mortgage?",
+          "answer": "Do not assume it is clear until the relevant records and lender position are checked."
+        }
+      ],
+      "specialistTrigger": "Ownership is disputed; a co-owner objects; the seller acts through a power of attorney; the land is under litigation; the title chain is incomplete; the document was presented late.",
+      "faqs": [
+        {
+          "question": "What is the time limit for registering a deed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does registration prove full ownership?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need mutation after registration?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How can I check registration fees?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What should I verify before paying the seller?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "c2c2f6425f3672620392fca0434b5c811fef53fea74a177f39b0cda75a4edf4b"
+  },
+  "releaseStatus": {
+    "en": "review",
+    "bn": "missing"
+  }
+}

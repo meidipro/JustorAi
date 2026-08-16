@@ -155,6 +155,139 @@ def validate_material_claims(
     return errors
 
 
+def validate_heading_entailment(
+    draft: LegalAnswerDraft,
+    pack: EvidencePack,
+) -> list[ValidationError]:
+    """Gate 3: Validate that section headings and topics entail the claims asserted.
+    Prevents corrupt section mappings (e.g. TPA §64 being cited for contract for sale).
+    """
+    errors = []
+    sources = evidence_map(pack)
+    
+    # Topic conflict matrix for known critical statutory confusions
+    CONFUSION_RULES = [
+        {
+            "topic_keywords": ["contract for sale", "agreement for sale", "baina", "sale deed", "unregistered contract"],
+            "forbidden_headings": ["mortgage", "mortgaged", "lease", "usufructuary", "renewal"],
+            "expected_sections": ["54", "54a", "17a", "21a"],
+            "act_patterns": ["transfer of property", "tpa", "registration", "specific relief"],
+            "error_message": "Contract for sale cannot be attributed to a mortgage or lease provision (e.g. Section 62/63/64)."
+        },
+        {
+            "topic_keywords": ["superintendence", "control over subordinate courts"],
+            "forbidden_articles": ["111"],
+            "expected_articles": ["109"],
+            "act_patterns": ["constitution"],
+            "error_message": "High Court Division superintendence is governed by Article 109, not Article 111 (binding precedent)."
+        },
+        {
+            "topic_keywords": ["binding effect", "doctrine of precedent", "binding on subordinate"],
+            "forbidden_articles": ["109"],
+            "expected_articles": ["111"],
+            "act_patterns": ["constitution"],
+            "error_message": "Doctrine of binding precedent is governed by Article 111, not Article 109 (superintendence)."
+        },
+        {
+            "topic_keywords": ["self-incrimination", "witness against himself"],
+            "forbidden_articles": ["35(3)", "35(5)"],
+            "expected_articles": ["35(4)"],
+            "act_patterns": ["constitution"],
+            "error_message": "Privilege against self-incrimination is Article 35(4), not Article 35(3) or 35(5)."
+        },
+        {
+            "topic_keywords": ["torture", "cruel, inhuman", "custodial violence"],
+            "forbidden_articles": ["35(3)", "35(4)"],
+            "expected_articles": ["35(5)"],
+            "act_patterns": ["constitution"],
+            "error_message": "Protection against torture is Article 35(5), not Article 35(3) or 35(4)."
+        }
+    ]
+
+    all_blocks = (
+        draft.rules
+        + draft.doctrine
+        + draft.application
+        + draft.key_points
+        + ([draft.conclusion] if draft.conclusion else [])
+    )
+
+    for block in all_blocks:
+        block_text = block.text.lower()
+        for ev_id in block.evidence_ids:
+            source = sources.get(ev_id)
+            if not source:
+                continue
+            
+            source_heading = (source.heading or "").lower()
+            source_sec = (source.section_number or "").lower()
+            act_name = source.act_name.lower()
+
+            for rule in CONFUSION_RULES:
+                matches_act = any(pat in act_name for pat in rule["act_patterns"])
+                if not matches_act:
+                    continue
+
+                has_topic = any(kw in block_text for kw in rule["topic_keywords"])
+                if not has_topic:
+                    continue
+
+                if "forbidden_headings" in rule:
+                    if any(fh in source_heading for fh in rule["forbidden_headings"]):
+                        errors.append(
+                            ValidationError(
+                                code="SECTION_HEADING_MISMATCH",
+                                severity="critical",
+                                message=f"Gate 3 Failure: [{ev_id}] '{source.act_name} §{source.section_number}' ({source.heading}) does not entail topic. {rule['error_message']}",
+                            )
+                        )
+
+                if "forbidden_articles" in rule:
+                    if any(fa in source_sec for fa in rule["forbidden_articles"]) or any(fa in block_text for fa in rule["forbidden_articles"]):
+                        errors.append(
+                            ValidationError(
+                                code="CONSTITUTIONAL_ARTICLE_MISMATCH",
+                                severity="critical",
+                                message=f"Gate 3 Failure: [{ev_id}] '{source.act_name} §{source.section_number}'. {rule['error_message']}",
+                            )
+                        )
+
+    return errors
+
+
+def validate_case_trust_tiers(
+    draft: LegalAnswerDraft,
+    pack: EvidencePack,
+) -> list[ValidationError]:
+    """Gate 6: Validate that case citations in draft match verified case models."""
+    errors = []
+    sources = evidence_map(pack)
+
+    # Detect known contaminated citations
+    CONTAMINATED_CITATIONS = {
+        "68 DLR (AD) 298": "Mohammad Eusof Babu vs State (NI Act matter) — cannot be cited as Dr. Kamal Hossain or arrest guidelines.",
+    }
+
+    all_text = " ".join(
+        p.text for p in (
+            draft.rules + draft.doctrine + draft.application + draft.key_points + ([draft.conclusion] if draft.conclusion else [])
+        )
+    )
+
+    for cit, reason in CONTAMINATED_CITATIONS.items():
+        if cit.lower() in all_text.lower():
+            if "kamal hossain" in all_text.lower() or "arrest" in all_text.lower() or "remand" in all_text.lower():
+                errors.append(
+                    ValidationError(
+                        code="CONTAMINATED_CASE_CITATION",
+                        severity="critical",
+                        message=f"Gate 6 Failure: {reason}",
+                    )
+                )
+
+    return errors
+
+
 def validate_source_status(pack: EvidencePack) -> list[ValidationError]:
     errors = []
     for source in pack.authorities:
@@ -189,5 +322,7 @@ def validate_draft(
     errors += validate_source_status(pack)
     errors += validate_evidence_ids(draft, pack)
     errors += validate_material_claims(draft, pack)
+    errors += validate_heading_entailment(draft, pack)
+    errors += validate_case_trust_tiers(draft, pack)
     critical = any(error.severity == "critical" for error in errors)
     return ValidationResult(passed=not critical, errors=errors)

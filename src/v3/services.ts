@@ -1,0 +1,255 @@
+import { createClient, type Session, type SupabaseClient } from '@supabase/supabase-js';
+import {
+  findPublishedGuideByRoute,
+  getGuidesByCluster,
+  getPublishedGuides,
+  loadPublicGuide,
+  searchGuides,
+} from '../content/guides/public-loader';
+import type {
+  CitizenGuide,
+  GuideCluster,
+  PublicGuideIndexEntry,
+} from '../content/types/guide';
+
+export type Role = 'citizen' | 'student' | 'professional';
+export type Language = 'en' | 'bn';
+
+export interface QuotaState {
+  remaining: number;
+  limit: number;
+}
+
+export interface LegalSource {
+  id: string;
+  title: string;
+  authority?: string;
+  citation?: string;
+  provision?: string;
+  status?: string;
+  verificationStatus?: string;
+  excerpt?: string;
+  url?: string;
+}
+
+export interface ResearchResult {
+  shortAnswer: string;
+  legalIssues?: string[];
+  applicableLaw?: string[];
+  relevantCases?: string[];
+  qualifications?: string[];
+  applicationToFacts?: string;
+  practicalPosition?: string;
+  authorities?: LegalSource[];
+  limitations?: string;
+  quota?: QuotaState;
+}
+
+export type GuideRecord = PublicGuideIndexEntry;
+export type GuideDetailRecord = CitizenGuide;
+
+export interface LibraryRecord {
+  id: string;
+  type: 'law' | 'section' | 'case' | 'amendment' | 'guide' | 'update' | string;
+  title: string;
+  subtitle?: string;
+  status?: string;
+  source?: LegalSource;
+  href?: string;
+}
+
+export interface LegalUpdateRecord {
+  id: string;
+  topic?: string;
+  date?: string;
+  title: string;
+  summary?: string;
+  effect?: string;
+  source?: LegalSource;
+}
+
+export interface ProductProofRecord {
+  verified?: boolean;
+  propositions: Array<{ id: string; text: string; sourceId: string }>;
+  sources: LegalSource[];
+}
+
+export type ResourceState<T> =
+  | { status: 'ready'; data: T }
+  | { status: 'empty'; data: T }
+  | { status: 'unavailable'; data: T };
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+const backendUrl = import.meta.env.VITE_BACKEND_URL?.trim().replace(/\/$/, '');
+
+const supabase: SupabaseClient | null = supabaseUrl && supabaseAnonKey
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
+
+export const authService = {
+  available: Boolean(supabase),
+  async session(): Promise<Session | null> {
+    if (!supabase) return null;
+    const { data } = await supabase.auth.getSession();
+    return data.session;
+  },
+  async signInWithGoogle(nextPath: string): Promise<{ error?: string }> {
+    if (!supabase) return { error: 'Sign-in is temporarily unavailable.' };
+    const redirectTo = new URL(nextPath, window.location.origin).toString();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo },
+    });
+    return error ? { error: error.message } : {};
+  },
+  async signOut(): Promise<void> {
+    await supabase?.auth.signOut();
+  },
+  subscribe(callback: (session: Session | null) => void): () => void {
+    if (!supabase) return () => undefined;
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => callback(session));
+    return () => data.subscription.unsubscribe();
+  },
+};
+
+const safeArray = <T>(value: unknown): T[] => Array.isArray(value) ? value as T[] : [];
+
+const getJson = async <T>(path: string, signal?: AbortSignal): Promise<ResourceState<T[]>> => {
+  if (!backendUrl) return { status: 'unavailable', data: [] };
+  try {
+    const response = await fetch(`${backendUrl}${path}`, {
+      headers: { Accept: 'application/json' },
+      signal,
+    });
+    if (!response.ok) return { status: 'unavailable', data: [] };
+    const payload = await response.json() as unknown;
+    const data = safeArray<T>(Array.isArray(payload) ? payload : (payload as { data?: unknown })?.data);
+    return { status: data.length ? 'ready' : 'empty', data };
+  } catch {
+    return { status: 'unavailable', data: [] };
+  }
+};
+
+const getOne = async <T>(path: string, signal?: AbortSignal): Promise<ResourceState<T | null>> => {
+  if (!backendUrl) return { status: 'unavailable', data: null };
+  try {
+    const response = await fetch(`${backendUrl}${path}`, {
+      headers: { Accept: 'application/json' },
+      signal,
+    });
+    if (response.status === 404) return { status: 'empty', data: null };
+    if (!response.ok) return { status: 'unavailable', data: null };
+    const payload = await response.json() as T | { data?: T };
+    const data = (payload as { data?: T })?.data ?? payload as T;
+    return data ? { status: 'ready', data } : { status: 'empty', data: null };
+  } catch {
+    return { status: 'unavailable', data: null };
+  }
+};
+
+export const publicData = {
+  library(query = '', type = '', signal?: AbortSignal): Promise<ResourceState<LibraryRecord[]>> {
+    const params = new URLSearchParams();
+    if (query) params.set('q', query);
+    if (type) params.set('type', type);
+    const suffix = params.size ? `?${params}` : '';
+    return getJson<LibraryRecord>(`/public/library${suffix}`, signal);
+  },
+  async guides(
+    query = '',
+    cluster = '',
+    page = 1,
+    locale: Language = 'en',
+  ): Promise<ResourceState<GuideRecord[]>> {
+    void page;
+    const records = query
+      ? searchGuides(query, locale)
+      : cluster
+        ? getGuidesByCluster(cluster as GuideCluster, locale)
+        : getPublishedGuides(locale);
+    return records.length ? { status: 'ready', data: records } : { status: 'empty', data: [] };
+  },
+  async guide(
+    route: string,
+    locale: Language = 'en',
+  ): Promise<ResourceState<GuideDetailRecord | null>> {
+    const entry = findPublishedGuideByRoute(route, locale);
+    if (!entry) return { status: 'empty', data: null };
+    const renderLocale = locale === 'bn' && entry.publishedLocales.includes('bn') ? 'bn' : 'en';
+    try {
+      return { status: 'ready', data: await loadPublicGuide(entry.id, renderLocale) };
+    } catch {
+      return { status: 'unavailable', data: null };
+    }
+  },
+  updates(signal?: AbortSignal): Promise<ResourceState<LegalUpdateRecord[]>> {
+    return getJson<LegalUpdateRecord>('/public/legal-updates', signal);
+  },
+  update(id: string, signal?: AbortSignal): Promise<ResourceState<LegalUpdateRecord | null>> {
+    return getOne<LegalUpdateRecord>(`/public/legal-updates/${encodeURIComponent(id)}`, signal);
+  },
+  proof(signal?: AbortSignal): Promise<ResourceState<ProductProofRecord | null>> {
+    return getOne<ProductProofRecord>('/public/product-proof', signal);
+  },
+};
+
+const normalizeResearch = (payload: Record<string, unknown>): ResearchResult => {
+  const sources = safeArray<Record<string, unknown>>(payload.authorities ?? payload.sources).map((source, index) => ({
+    id: String(source.id ?? `S${index + 1}`),
+    title: String(source.title ?? source.source ?? 'Source'),
+    authority: source.authority ? String(source.authority) : source.source ? String(source.source) : undefined,
+    citation: source.citation ? String(source.citation) : undefined,
+    provision: source.provision ? String(source.provision) : source.page !== undefined ? `Page ${Number(source.page) + 1}` : undefined,
+    status: source.status ? String(source.status) : undefined,
+    verificationStatus: source.verificationStatus ? String(source.verificationStatus) : undefined,
+    excerpt: source.excerpt ? String(source.excerpt) : undefined,
+    url: source.url ? String(source.url) : undefined,
+  }));
+  const quotaPayload = payload.quota as Record<string, unknown> | undefined;
+  return {
+    shortAnswer: String(payload.shortAnswer ?? payload.answer ?? payload.response ?? ''),
+    legalIssues: safeArray<string>(payload.legalIssues),
+    applicableLaw: safeArray<string>(payload.applicableLaw),
+    relevantCases: safeArray<string>(payload.relevantCases),
+    qualifications: safeArray<string>(payload.qualifications ?? payload.exceptions),
+    applicationToFacts: payload.applicationToFacts ? String(payload.applicationToFacts) : undefined,
+    practicalPosition: payload.practicalPosition ? String(payload.practicalPosition) : undefined,
+    authorities: sources,
+    limitations: payload.limitations ? String(payload.limitations) : undefined,
+    quota: quotaPayload && Number.isFinite(Number(quotaPayload.remaining)) && Number.isFinite(Number(quotaPayload.limit))
+      ? { remaining: Number(quotaPayload.remaining), limit: Number(quotaPayload.limit) }
+      : undefined,
+  };
+};
+
+export async function runResearch(
+  query: string,
+  role: Role,
+  language: Language,
+  context?: Record<string, string>,
+): Promise<ResearchResult> {
+  if (!backendUrl) throw new Error('service-unavailable');
+  const session = await authService.session();
+  if (!session) throw new Error('authentication-required');
+  const response = await fetch(`${backendUrl}/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({
+      query,
+      user_role: role,
+      language,
+      chat_history: [],
+      context,
+    }),
+  });
+  if (response.status === 401) throw new Error('authentication-required');
+  if (!response.ok) throw new Error('service-unavailable');
+  const payload = await response.json() as Record<string, unknown>;
+  const result = normalizeResearch(payload);
+  if (!result.shortAnswer) throw new Error('empty-response');
+  return result;
+}

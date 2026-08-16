@@ -1,0 +1,962 @@
+[
+  {
+    "id": 1,
+    "cluster": "property",
+    "route": "property/land-registration-bangladesh",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Register Land in Bangladesh",
+    "titleBn": "বাংলাদেশে জমি রেজিস্ট্রি করবেন কীভাবে?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "c2c2f6425f3672620392fca0434b5c811fef53fea74a177f39b0cda75a4edf4b"
+    }
+  },
+  {
+    "id": 2,
+    "cluster": "property",
+    "route": "property/mutation-namjari",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Mutation or Namjari: What Is It and How Do You Apply?",
+    "titleBn": "নামজারি কী এবং কীভাবে করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA FOR TITLE WARNINGS",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "1585b8fbf4d78da763ac554d94996f705c60acd81aad0079d66731e1fe9d828c"
+    }
+  },
+  {
+    "id": 3,
+    "cluster": "property",
+    "route": "property/khatian-types",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "CS, SA, RS and BS Khatian Explained Simply",
+    "titleBn": "CS, SA, RS এবং BS খতিয়ান কী?",
+    "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR TITLE LANGUAGE",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "77a29acc8763ba751c7275a6d967b2fd84ffb225cfb8c720ee202e32178bf372"
+    }
+  },
+  {
+    "id": 4,
+    "cluster": "property",
+    "route": "property/verify-land-deed",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Check Whether a Land Deed Is Genuine",
+    "titleBn": "জমির দলিল আসল কিনা কীভাবে যাচাই করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "5b9114af697372b8f8e5ead1692dc3741b3bbcae5d284a7392d160d0e5081993"
+    }
+  },
+  {
+    "id": 5,
+    "cluster": "property",
+    "route": "property/gift-hiba-property",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Gift Deed and Hiba of Property in Bangladesh",
+    "titleBn": "হেবা ও দান দলিল কীভাবে কাজ করে?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "eb8bf7bc6e8c179a95777d5c2027e981d233e7f12dd488ae11f947fd2f9ae1b4"
+    }
+  },
+  {
+    "id": 6,
+    "cluster": "property",
+    "route": "property/buy-sell-land",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Legal Steps for Buying and Selling Land",
+    "titleBn": "জমি কেনা-বেচার আইনি ধাপ",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "fddd355d0bcd6630ca8dbbc2b7ab5437f9fbded35f909dd04b6fd2f30c15b941"
+    }
+  },
+  {
+    "id": 7,
+    "cluster": "property",
+    "route": "property/land-mortgage",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Mortgage of Land Explained Simply",
+    "titleBn": "জমি বন্ধক কী এবং কীভাবে কাজ করে?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "7ccdd23123cec6b13dc7b02dedc4e00b6eab9b321374a9fa4cbfb12d83166b52"
+    }
+  },
+  {
+    "id": 8,
+    "cluster": "property",
+    "route": "property/inherited-land-transfer",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Transfer Inherited Land to the Heirs",
+    "titleBn": "মৃত ব্যক্তির জমি উত্তরাধিকারীদের নামে কীভাবে নেবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "41b081e0bb6c7884db3677239e430736e69cc794b2e27e3311fa0c36326edc4a"
+    }
+  },
+  {
+    "id": 9,
+    "cluster": "property",
+    "route": "property/pre-emption",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "What Is Pre-emption in Bangladesh?",
+    "titleBn": "অগ্রক্রয় বা Pre-emption অধিকার কী?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "b74e64bb30844290b228c97587615a6f999fbd872f140b35796f379367507181"
+    }
+  },
+  {
+    "id": 10,
+    "cluster": "property",
+    "route": "property/land-dispute-first-steps",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What Should You Do First in a Land Dispute?",
+    "titleBn": "জমি বিরোধ হলে প্রথমে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "75426ad61500767fd387429aa1011ab789e78144d705ea7459faa809a35f4013"
+    }
+  },
+  {
+    "id": 11,
+    "cluster": "property",
+    "route": "property/land-development-tax",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Pay Land Development Tax",
+    "titleBn": "ভূমি উন্নয়ন কর কীভাবে দেবেন?",
+    "publishGateRaw": "SOURCE CHECK",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "9bc4b1490d9a24e4d7d021d85d1d53519ba32f935b8e61cfe2ba612521e7b8e4"
+    }
+  },
+  {
+    "id": 12,
+    "cluster": "property",
+    "route": "property/mutation-delay",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Mutation Is Delayed: What Can You Do?",
+    "titleBn": "নামজারি আবেদন আটকে গেলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "d94f71eae5ba81cfb12def20ccbf0ac8ab2a4e77cf8499d6b0117480ca445639"
+    }
+  },
+  {
+    "id": 13,
+    "cluster": "family",
+    "route": "family/muslim-marriage-registration",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Muslim Marriage Registration in Bangladesh",
+    "titleBn": "মুসলিম বিবাহ নিবন্ধন কীভাবে করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "48de2f538d9e1b4654b961ab51457ee351e19f067b8feb068a814664d3843377"
+    }
+  },
+  {
+    "id": 14,
+    "cluster": "family",
+    "route": "family/talaq-procedure",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Talaq Procedure in Bangladesh",
+    "titleBn": "স্বামী তালাক দিতে চাইলে আইনি প্রক্রিয়া কী?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "ef7d73f8bbb761b5dca2e7565da016c5c0a5054f9052bd42e5a9f0456dfb8794"
+    }
+  },
+  {
+    "id": 15,
+    "cluster": "family",
+    "route": "family/divorce-women",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How Can a Muslim Woman Seek Divorce?",
+    "titleBn": "মুসলিম নারী কীভাবে বিবাহ বিচ্ছেদ চাইতে পারেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "5d84becc7805aeaebd224edac12780a13341230ed20c712a95522b3564e59c03"
+    }
+  },
+  {
+    "id": 16,
+    "cluster": "family",
+    "route": "family/dower-mehr",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Dower or Mehr: What Are Your Rights?",
+    "titleBn": "দেনমোহর বা Mehr কী?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "c0ab6d9e61ac7098ce7a374bda60ed6c3fe255fee351facaa16d6822bb83c281"
+    }
+  },
+  {
+    "id": 17,
+    "cluster": "family",
+    "route": "family/maintenance",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Maintenance Rights in Bangladesh",
+    "titleBn": "ভরণপোষণ পাওয়ার অধিকার কীভাবে কাজ করে?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "ff360ed785f7f083990f11a53ca818a771ecfcc3f47247d2d9a86ea3551e8758"
+    }
+  },
+  {
+    "id": 18,
+    "cluster": "family",
+    "route": "family/child-custody",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Child Custody: What Should Parents Know?",
+    "titleBn": "সন্তানের হেফাজত সম্পর্কে কী জানা দরকার?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "ab918ece5dfaaecacc21256b35e34b55997f69d3153be753e93f24c661aa964a"
+    }
+  },
+  {
+    "id": 19,
+    "cluster": "family",
+    "route": "family/muslim-inheritance",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+    "titleBn": "মুসলিম উত্তরাধিকার আইন সহজভাবে",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "1b9d3c709157fdfc6d2c94ab6c3c3874bb8470357b6e2b16af0261dd271e8c7b"
+    }
+  },
+  {
+    "id": 20,
+    "cluster": "family",
+    "route": "family/polygamy-bangladesh",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Second Marriage and Polygamy: What Does the Law Require?",
+    "titleBn": "দ্বিতীয় বিয়ে করতে আইনে কী লাগে?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "e4fc9ef090f2898bd15aa7bcb53e465d4285e65ff216188e4d0fc8200b8a5c2c"
+    }
+  },
+  {
+    "id": 21,
+    "cluster": "tax",
+    "route": "tax/salary-income-tax-2026-27",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Income Tax for Salaried People — 2026–27",
+    "titleBn": "চাকরিজীবীদের আয়কর ২০২৬–২৭",
+    "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "fbe247cb9e6500612fe4ba8c47b6e142f4a6a2986977d0cd626505c12c77c486"
+    }
+  },
+  {
+    "id": 22,
+    "cluster": "tax",
+    "route": "tax/salary-tax-examples-2026-27",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+    "titleBn": "মাসিক বেতন অনুযায়ী আয়কর উদাহরণ",
+    "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "fc9734e09f235f27b174eb8f5947714680b1c48da2c9d4303ef49e24f1093c94"
+    }
+  },
+  {
+    "id": 23,
+    "cluster": "tax",
+    "route": "tax/freelancer-tax-bangladesh",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Freelancer and Remote Worker Tax Guide — 2026–27",
+    "titleBn": "ফ্রিল্যান্সার ও রিমোট ওয়ার্কারদের আয়কর",
+    "publishGateRaw": "TAX PROFESSIONAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "82b8ef9ed356a4afb17015dd847d5e02595373c856b7f740f589622d159a3db6"
+    }
+  },
+  {
+    "id": 24,
+    "cluster": "tax",
+    "route": "tax/tin-registration",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Get a TIN in Bangladesh",
+    "titleBn": "TIN কীভাবে করবেন?",
+    "publishGateRaw": "SOURCE CHECK",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "a57df72b532d14cae9f388ec51811573ce2abbf48df458f30af090a7ebac8d9e"
+    }
+  },
+  {
+    "id": 25,
+    "cluster": "tax",
+    "route": "tax/e-return-2026-27",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to File an e-Return — 2026–27",
+    "titleBn": "e-Return কীভাবে জমা দেবেন?",
+    "publishGateRaw": "SOURCE CHECK; TAX REVIEW FOR NUMERIC CONTENT",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "033f4f5a0f92675047c8da85917f820b0f07a0464aa859ffd6f64796e67ead0f"
+    }
+  },
+  {
+    "id": 26,
+    "cluster": "tax",
+    "route": "tax/who-must-file-return",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Who Needs to File an Income Tax Return?",
+    "titleBn": "কারা আয়কর রিটার্ন জমা দেবেন?",
+    "publishGateRaw": "TAX PROFESSIONAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "92fb580618e90c8dec489748a53839ed40e8cc450cd12853f3098b0496c832c0"
+    }
+  },
+  {
+    "id": 27,
+    "cluster": "tax",
+    "route": "tax/tds-explained",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Tax Deducted at Source (TDS) Explained Simply",
+    "titleBn": "উৎসে কর বা TDS কী?",
+    "publishGateRaw": "TAX PROFESSIONAL REVIEW",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "b50650cf0534909ee70de6bd0cbe1c3a0b46207aac6b96326cbc48c8d0512410"
+    }
+  },
+  {
+    "id": 28,
+    "cluster": "tax",
+    "route": "tax/tax-notice",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "You Received a Tax Notice: What Should You Do?",
+    "titleBn": "আয়কর নোটিশ পেলে কী করবেন?",
+    "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "87c872f8dbdd42b9030be3c4283a132f5bde90b658c280265e5c00d4e0948e54"
+    }
+  },
+  {
+    "id": 29,
+    "cluster": "consumer",
+    "route": "consumer/defective-product",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What to Do If You Buy a Defective Product",
+    "titleBn": "নষ্ট বা ত্রুটিপূর্ণ পণ্য কিনলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "824bcb498d2d623346909dd87e55de110ab1e5192287b2f6766a2a9e80d39c52"
+    }
+  },
+  {
+    "id": 30,
+    "cluster": "consumer",
+    "route": "consumer/online-shop-no-delivery",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Facebook or Online Shop Did Not Deliver Your Product",
+    "titleBn": "অনলাইন শপ টাকা নিয়েও পণ্য না দিলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "7452eb9c59abadd4bc5d6d5d81b75061675bc95ee65fd696241a59f3a6aa6c47"
+    }
+  },
+  {
+    "id": 31,
+    "cluster": "consumer",
+    "route": "consumer/service-not-delivered",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "You Paid for a Service but Did Not Receive It",
+    "titleBn": "টাকা দিয়েও সেবা না পেলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "605c2838bd9943f701adc3a546590c13dc84c2aa920e24e4f90de0f356bba627"
+    }
+  },
+  {
+    "id": 32,
+    "cluster": "consumer",
+    "route": "consumer/misleading-advertising",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Wrong Price and Misleading Advertising: What Can You Do?",
+    "titleBn": "ভুল দাম ও misleading advertisement হলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "a97e8f40c556cc400a78c98518f9bce66b2ba9f8d6f0352f8d74149ef515b307"
+    }
+  },
+  {
+    "id": 33,
+    "cluster": "consumer",
+    "route": "consumer/billing-dispute",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Mobile, Internet or Subscription Billing Dispute",
+    "titleBn": "মোবাইল, ইন্টারনেট বা subscription bill ভুল হলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "8934f9912ff4cbea20c28fe8e09f0fe20062949ffe5d51a8a077f3704a3c1481"
+    }
+  },
+  {
+    "id": 34,
+    "cluster": "consumer",
+    "route": "consumer/travel-ticket-complaint",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Ticket, Travel or Transport Service Complaint",
+    "titleBn": "টিকিট বা পরিবহন সেবা নিয়ে অভিযোগ করবেন কীভাবে?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "5e8cabc9042f448a923e8b15dfd640ab80592fe4b8ddc03137a5d2d643e4b291"
+    }
+  },
+  {
+    "id": 35,
+    "cluster": "consumer",
+    "route": "consumer/dncrp-complaint",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to File a DNCRP Consumer Complaint",
+    "titleBn": "ভোক্তা অধিকার অভিযোগ কীভাবে করবেন?",
+    "publishGateRaw": "SOURCE CHECK",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "3ace8f137db57554f78aca212cf88e3b3beb4a70471608086217589e31f412e5"
+    }
+  },
+  {
+    "id": 36,
+    "cluster": "employment",
+    "route": "employment/employment-contract",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Read an Appointment Letter and Employment Contract",
+    "titleBn": "Appointment Letter ও Employment Contract বুঝবেন কীভাবে?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "d3a71ece28beff469bd4e88202b9dd67f192194f9879fe0c68d33dc124e2e758"
+    }
+  },
+  {
+    "id": 37,
+    "cluster": "employment",
+    "route": "employment/unpaid-salary",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Your Employer Has Not Paid Your Salary",
+    "titleBn": "বেতন না দিলে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "2f6380c134b18de0716b232bca30a667b79a4078727b07b53295ffdbe8085e98"
+    }
+  },
+  {
+    "id": 38,
+    "cluster": "employment",
+    "route": "employment/termination-dismissal",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Termination and Dismissal Explained Simply",
+    "titleBn": "চাকরি থেকে বাদ দিলে আপনার কী জানা দরকার?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "1e49667cd74ebfa6160b3536a4752ebca0e9b37fd3731a2f5661eff6d3456ec4"
+    }
+  },
+  {
+    "id": 39,
+    "cluster": "employment",
+    "route": "employment/workplace-harassment",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Workplace Harassment: What Evidence Should You Keep?",
+    "titleBn": "কর্মক্ষেত্রে হয়রানি হলে কী প্রমাণ রাখবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "db5edec427eb301bc629ae013f4961501937d5b2de3a0c2b828697bbb569fe2f"
+    }
+  },
+  {
+    "id": 40,
+    "cluster": "employment",
+    "route": "employment/leave-maternity-rights",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Leave, Maternity and Basic Workplace Rights",
+    "titleBn": "ছুটি, মাতৃত্বকালীন সুবিধা ও কর্মক্ষেত্রের মৌলিক অধিকার",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "3d75c06b931f1963761ed2984e859804b21bdf7dba0e0f73daa3d7da49a9442a"
+    }
+  },
+  {
+    "id": 41,
+    "cluster": "digital",
+    "route": "digital/online-scam",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What to Do After an Online Scam",
+    "titleBn": "অনলাইনে প্রতারণার শিকার হলে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "35c596220c259fee128b003f885cba75ac7b657fd106a0ee0708551eb40663cb"
+    }
+  },
+  {
+    "id": 42,
+    "cluster": "digital",
+    "route": "digital/identity-impersonation",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Someone Is Pretending to Be You Online",
+    "titleBn": "কেউ আপনার নামে ভুয়া online account খুললে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "936f42fd8d73e902e62986a3e532a98b0d8bbc576a379b40c939522068dacbe2"
+    }
+  },
+  {
+    "id": 43,
+    "cluster": "digital",
+    "route": "digital/online-harassment-blackmail",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Online Harassment, Threats and Blackmail: What to Do",
+    "titleBn": "অনলাইনে হুমকি বা ব্ল্যাকমেইল হলে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "9f18fa7aebeb38144c84b214fe02f5e4bc136ec58241b535ee44dfc99770f367"
+    }
+  },
+  {
+    "id": 44,
+    "cluster": "digital",
+    "route": "digital/defamation",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "Defamation in Bangladesh Explained Simply",
+    "titleBn": "মানহানি বা Defamation কী?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "1599b2fbda67460271f80eb5a5fc7efcc31b27caf953c9c866e63cc8b14df68d"
+    }
+  },
+  {
+    "id": 45,
+    "cluster": "digital",
+    "route": "everyday/gd-police-complaint-case",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+    "titleBn": "GD, পুলিশ অভিযোগ ও মামলা—পার্থক্য কী?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "bbcfba2b67ea3e037628f883753bd173b64e93d838b028349361f1d0e32252bc"
+    }
+  },
+  {
+    "id": 46,
+    "cluster": "government",
+    "route": "government/government-service-complaint",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Government Office Did Not Give You a Service: How to Complain",
+    "titleBn": "সরকারি সেবা না পেলে কোথায় অভিযোগ করবেন?",
+    "publishGateRaw": "SOURCE CHECK",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "52a22c06b97c5f85a4cff16fc2196c5645742f81eb3672801a38e3c0b9f6ae3a"
+    }
+  },
+  {
+    "id": 47,
+    "cluster": "government",
+    "route": "government/local-service-complaint",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+    "titleBn": "রাস্তা, ড্রেন বা ময়লার সমস্যা কোথায় জানাবেন?",
+    "publishGateRaw": "SOURCE CHECK",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "661b3a7d8a01b57445d5074317af8ad820d2932c9fe9f300b0bedb44beb89416"
+    }
+  },
+  {
+    "id": 48,
+    "cluster": "government",
+    "route": "property/land-office-delay",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Land Office Is Delaying Your Service",
+    "titleBn": "ভূমি অফিসে দেরি হলে কোথায় অভিযোগ করবেন?",
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "94c70d7733f88355a9cb8dbaf57793513cf340e990bdb9ffc68912afc0455a2b"
+    }
+  },
+  {
+    "id": 49,
+    "cluster": "government",
+    "route": "government/right-to-information",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Make a Right to Information Request",
+    "titleBn": "তথ্য অধিকার আবেদন কীভাবে করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "c28646de7d682ed0869789d96cf83eae22d192cb3825649f68fdccaff4cea233"
+    }
+  },
+  {
+    "id": 50,
+    "cluster": "government",
+    "route": "legal-help/government-legal-aid",
+    "sourceRoutePrefix": "guides",
+    "titleEn": "How to Get Government Legal Aid in Bangladesh",
+    "titleBn": "সরকারি Legal Aid কীভাবে পাবেন?",
+    "publishGateRaw": "SOURCE CHECK; HUMAN LEGAL REVIEW FOR ELIGIBILITY LANGUAGE",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "117457ba052207d112416a86a3cdfa0763a601d2d4c7b336e6d6c47aec414fe9"
+    }
+  },
+  {
+    "id": 51,
+    "cluster": "cyber",
+    "route": "cyber/fake-bank-police-government-call",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Fake Bank, Police or Government Call: What Should You Do?",
+    "titleBn": "ব্যাংক, পুলিশ বা সরকারি কর্মকর্তা সেজে ভুয়া কল এলে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "1f3c002edbeaa2561f6532baa3748cd29a8578cca2302aab96e43bf448eaea2d"
+    }
+  },
+  {
+    "id": 52,
+    "cluster": "cyber",
+    "route": "cyber/otp-pin-mfs-scam",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+    "titleBn": "OTP, PIN বা মোবাইল ফাইন্যান্সিয়াল সার্ভিস স্ক্যাম হলে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "848730d69cbc6ec6d1c21fbf5905e8f524c61a980a99db87646dc6a6a4677377"
+    }
+  },
+  {
+    "id": 53,
+    "cluster": "cyber",
+    "route": "cyber/phishing-link-fake-website",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+    "titleBn": "ফিশিং লিংক, ভুয়া লগইন পেজ বা নকল ওয়েবসাইট পেলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK + HUMAN REVIEW FOR LEGAL CLAIMS",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "75e0db2e45fb65130b43d49afed68449aefad0bcbd6a080b2980608488d672aa"
+    }
+  },
+  {
+    "id": 54,
+    "cluster": "cyber",
+    "route": "cyber/social-media-account-hacked",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+    "titleBn": "Facebook, Instagram, Gmail বা social account হ্যাক হলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR OFFENCE CHARACTERISATION",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "2190b6cf660c79d7ea03e7e8538c07e310439d4ddb4f8146ed0a4c6157e419e8"
+    }
+  },
+  {
+    "id": 55,
+    "cluster": "cyber",
+    "route": "cyber/social-media-impersonation",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+    "titleBn": "আপনার নামে ভুয়া Facebook, Instagram বা social account খুললে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "21fc10295c1ecfd41e25c7e6ab856ac0e24d6d68b6ac2d48f6f81a396e76c33a"
+    }
+  },
+  {
+    "id": 56,
+    "cluster": "cyber",
+    "route": "cyber/online-blackmail-sextortion",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Online Blackmail, Sextortion or Threat to Share Private Images",
+    "titleBn": "অনলাইন ব্ল্যাকমেইল, sextortion বা ব্যক্তিগত ছবি ছড়িয়ে দেওয়ার হুমকি পেলে কী করবেন?",
+    "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "9521ee28caf336b983980477a1e7d6b6ee3ab0299112325318c7d58fa51d05db"
+    }
+  },
+  {
+    "id": 57,
+    "cluster": "cyber",
+    "route": "cyber/deepfake-ai-fake-content",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+    "titleBn": "Deepfake, AI voice clone বা AI দিয়ে বানানো ভুয়া ছবি/ভিডিও হলে কী করবেন?",
+    "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "dbf5e9ff5120f277eb4db8c3db68e54548d0ebc8c1393ab273f4ad4151457ccb"
+    }
+  },
+  {
+    "id": 58,
+    "cluster": "cyber",
+    "route": "cyber/unknown-sim-sim-swap",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
+    "titleBn": "আপনার NID-তে অচেনা SIM বা SIM-swap সন্দেহ হলে কী করবেন?",
+    "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR CRIMINAL-LAW CLAIMS",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "b4472f0b22dbc4dd1cfc83b052f90e42b0a762615fa60d24fe1ec903abbf8854"
+    }
+  },
+  {
+    "id": 59,
+    "cluster": "cyber",
+    "route": "cyber/marketplace-advance-payment-scam",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+    "titleBn": "Facebook Marketplace, online seller বা advance payment scam হলে কী করবেন?",
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "f0e2087099609f525142c4b102e848f606c655b37623b6a0d4d379301f74f1e4"
+    }
+  },
+  {
+    "id": 60,
+    "cluster": "cyber",
+    "route": "cyber/personal-data-nid-leak",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
+    "titleBn": "NID, ফোন নম্বর বা ব্যক্তিগত তথ্য ফাঁস বা অপব্যবহার হলে কী করবেন?",
+    "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED",
+    "releaseStatus": {
+      "en": "review",
+      "bn": "missing"
+    },
+    "contentHashes": {
+      "en": "e5e583e8f2e22042b77b7267e075122d342abf25da31aba17b0ea12f814b8909"
+    }
+  }
+]

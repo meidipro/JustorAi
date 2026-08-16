@@ -23,20 +23,29 @@ class EvidenceBuilder:
         # 1. Exact candidate retrieval first.
         for authority in route.authorities:
             instrument = await self.repository.resolve_instrument(authority.act)
-            if not instrument:
-                continue
-
-            for section in authority.sections:
-                evidence = await self.repository.resolve_exact_section(
-                    instrument_id=instrument["id"],
-                    section_number=section,
-                    query_date=query_date,
-                )
-                if not evidence or evidence.version_id in seen_versions:
-                    continue
-                evidence.role = authority.role
-                found.append(evidence)
-                seen_versions.add(evidence.version_id)
+            if instrument:
+                for section in authority.sections:
+                    evidence = await self.repository.resolve_exact_section(
+                        instrument_id=instrument["id"],
+                        section_number=section,
+                        query_date=query_date,
+                    )
+                    if not evidence or evidence.version_id in seen_versions:
+                        continue
+                    evidence.role = authority.role
+                    found.append(evidence)
+                    seen_versions.add(evidence.version_id)
+            else:
+                # Fallback to document_chunks
+                for section in authority.sections:
+                    evidence = await self.repository.resolve_from_chunks_fallback(
+                        act_name=authority.act,
+                        section_number=section,
+                    )
+                    if not evidence:
+                        continue
+                    evidence.role = authority.role
+                    found.append(evidence)
 
         # 2. Hybrid discovery for supporting law.
         try:
@@ -86,7 +95,7 @@ class EvidenceBuilder:
         # 3. Special-over-general relationships.
         if found:
             relationships = await self.repository.get_relationships(
-                [x.provision_id for x in found]
+                [x.provision_id for x in found if x.provision_id]
             )
 
             special_ids = {
@@ -106,6 +115,20 @@ class EvidenceBuilder:
                 elif evidence.provision_id in general_ids:
                     evidence.role = "GENERAL"
 
+        # 4. Search relevant case law / precedents for Lawyer and Student modes
+        cases_found: list[EvidenceItem] = []
+        is_legal_persona = any(
+            p in persona.lower()
+            for p in ["lawyer", "legal professional", "student"]
+        )
+        if route.needs_case_law or is_legal_persona:
+            cand_acts = [a.act for a in route.authorities]
+            cases_found = await self.repository.search_case_law(
+                query=query,
+                candidate_acts=cand_acts,
+                limit=2,
+            )
+
         rank = {
             "CONTROLLING": 0,
             "SUPPORTING": 1,
@@ -114,9 +137,19 @@ class EvidenceBuilder:
         }
         found.sort(key=lambda x: rank.get(x.role, 1))
 
-        # Backend, not LLM, creates evidence IDs.
-        for index, evidence in enumerate(found, start=1):
-            evidence.evidence_id = f"ACT-{index}"
+        # Backend, not LLM, creates collision-free evidence IDs.
+        act_idx = 1
+        for evidence in found:
+            evidence.item_type = "statute"
+            evidence.evidence_id = f"ACT-{act_idx}"
+            act_idx += 1
+
+        dlr_idx = 1
+        for case in cases_found:
+            case.evidence_id = f"DLR-{dlr_idx}"
+            dlr_idx += 1
+
+        all_authorities = found + cases_found
 
         return EvidencePack(
             query=query,
@@ -124,5 +157,5 @@ class EvidenceBuilder:
             as_of_date=query_date,
             temporal_mode=route.temporal_mode,
             issues=route.issues,
-            authorities=found,
+            authorities=all_authorities,
         )
