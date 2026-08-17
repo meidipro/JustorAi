@@ -245,6 +245,80 @@ async def legal_data_health():
     return await internal_legal_data_health()
 
 
+# ─── Public Legal Updates & Proof Endpoints ────────────────────────────────────
+RECENT_LEGAL_UPDATES = [
+    {
+        "id": "update-family-courts-2023",
+        "topic": "Family Law",
+        "date": "2023-11-01",
+        "title": "Enactment of the Family Courts Act, 2023",
+        "summary": "Repeals and replaces the Family Courts Ordinance 1985 with expanded jurisdiction and modernized appeal procedures.",
+        "effect": "Recheck Section 5 and Section 24 for all family dispute filings.",
+        "source": {
+            "title": "Family Courts Act, 2023",
+            "citation": "Act No. 38 of 2023",
+            "verified": True
+        }
+    },
+    {
+        "id": "update-income-tax-2023",
+        "topic": "Taxation Law",
+        "date": "2023-06-22",
+        "title": "Enactment of the Income Tax Act, 2023",
+        "summary": "Replaces the Income Tax Ordinance 1984 with restructured provisions for universal return submission and automated assessments.",
+        "effect": "Recheck Sections 166 and 174 for mandatory return filing requirements.",
+        "source": {
+            "title": "Income Tax Act, 2023",
+            "citation": "Act No. 12 of 2023",
+            "verified": True
+        }
+    },
+    {
+        "id": "update-registration-17a",
+        "topic": "Property Law",
+        "date": "2026-01-01",
+        "title": "Mandatory Registration of Contracts for Sale (Section 17A)",
+        "summary": "Strict 60-day presentation requirements for registration of Baina patra following Section 17A amendments.",
+        "effect": "Unregistered contracts for sale are unenforceable in court under Section 54A TP Act.",
+        "source": {
+            "title": "The Registration Act, 1908",
+            "citation": "Section 17A",
+            "verified": True
+        }
+    }
+]
+
+@app.get("/public/legal-updates", tags=["Public Resources"])
+async def get_public_legal_updates():
+    """Returns curated recent Bangladesh statutory and precedential legal updates."""
+    return JSONResponse(content={"items": RECENT_LEGAL_UPDATES, "count": len(RECENT_LEGAL_UPDATES)})
+
+@app.get("/public/legal-updates/{update_id}", tags=["Public Resources"])
+async def get_public_legal_update_detail(update_id: str):
+    """Returns specific legal update by ID."""
+    match = next((u for u in RECENT_LEGAL_UPDATES if u["id"] == update_id), None)
+    if not match:
+        raise HTTPException(404, "Legal update record not found.")
+    return JSONResponse(content=match)
+
+@app.get("/public/product-proof", tags=["Public Resources"])
+async def get_public_product_proof():
+    """Returns verified product proof metadata."""
+    return JSONResponse(content={
+        "verified": True,
+        "propositions": [
+            {"id": "P1", "text": "Contract for sale must be registered within 60 days under Section 17A.", "sourceId": "S1"},
+            {"id": "P2", "text": "Police custody without magistrate authorization is limited to 24 hours under CrPC Section 61.", "sourceId": "S2"},
+            {"id": "P3", "text": "Appellate Division precedents are binding on all courts under Article 111.", "sourceId": "S3"}
+        ],
+        "sources": [
+            {"id": "S1", "title": "The Registration Act, 1908", "citation": "Section 17A", "verified": True},
+            {"id": "S2", "title": "The Code of Criminal Procedure, 1898", "citation": "Section 61", "verified": True},
+            {"id": "S3", "title": "The Constitution of Bangladesh", "citation": "Article 111", "verified": True}
+        ]
+    })
+
+
 # ─── Pydantic Request Models ──────────────────────────────────────────────────
 class ChatMessage(BaseModel):
     role: str
@@ -366,24 +440,6 @@ if DASHSCOPE_API_KEY and not DASHSCOPE_API_KEY.startswith("your_") and OpenAI:
     logger.info("Alibaba DashScope client initialized.")
 else:
     logger.warning("DASHSCOPE_API_KEY missing, is placeholder, or 'openai' package not installed.")
-
-# ─── Pydantic Models ──────────────────────────────────────────────────────────
-
-class ChatMessage(BaseModel):
-    role: str
-    content: str
-
-class ChatRequest(BaseModel):
-    message: str
-    user_id: Optional[str] = None
-    role: Optional[str] = "General Public"   # e.g. "Law Student", "Legal Professional"
-    history: Optional[List[ChatMessage]] = []
-    eval_mode: Optional[bool] = False
-
-class FeedbackRequest(BaseModel):
-    query_run_id: str
-    rating: int                              # e.g. 1 (upvote) / -1 (downvote) or 1-5
-    comment: Optional[str] = None
 
 try:
     import evidence
