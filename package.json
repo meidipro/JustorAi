@@ -5,16 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "content:build": "node --experimental-strip-types scripts/build-citizen-guides.ts",
-    "content:verify": "node --experimental-strip-types scripts/verify-public-guide-boundary.ts",
-    "build": "node --experimental-strip-types scripts/build-citizen-guides.ts && tsc && vite build && node --experimental-strip-types scripts/verify-public-guide-boundary.ts",
+    "content:build": "tsx scripts/build-citizen-guides.ts",
+    "content:verify": "tsx scripts/verify-public-guide-boundary.ts",
+    "build": "tsx scripts/build-citizen-guides.ts && tsc && vite build && tsx scripts/verify-public-guide-boundary.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "tsx": "^4.23.12",
     "typescript": "~5.8.3",
     "vite": "^6.4.3"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.50.0"
+    "@supabase/supabase-js": "^2.50.0",
+    "@types/marked": "^5.0.2",
+    "marked": "^18.0.9",
+    "mermaid": "^11.16.1"
   }
 }
