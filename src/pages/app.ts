@@ -998,15 +998,32 @@ export async function renderAppPage(container: HTMLElement) {
         let backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:10000';
         backendUrl = backendUrl.replace(/\/$/, "");
 
-        const response = await fetch(`${backendUrl}/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: requestBody
-        });
+        let response: Response | null = null;
+        let lastError: Error | null = null;
+
+        for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+                response = await fetch(`${backendUrl}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: requestBody
+                });
+                if (response.ok) break;
+            } catch (err) {
+                lastError = err instanceof Error ? err : new Error(String(err));
+                if (attempt < 2) {
+                    await new Promise(r => setTimeout(r, 1500));
+                }
+            }
+        }
 
         clearInterval(timerInterval);
 
-        if (!response.ok) {
+        if (!response || !response.ok) {
+            if (!response) {
+                const detail = lastError ? ` (${lastError.message})` : '';
+                throw new Error(`The backend service is waking up or deploying${detail}. Please try your question again in a moment.`);
+            }
             const errorBody = await response.text();
             throw new Error(`API Error: ${response.status} ${response.statusText} - ${errorBody}`);
         }
