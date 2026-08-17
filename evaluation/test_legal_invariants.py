@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath("."))
+
 from backend.legal_validation import validate_quote, extract_numeric_tokens
 from backend.legal_normalize import normalize_section, split_section_reference, normalize_act_alias
 from backend.legal_deadlines import calculate_deadline, evaluate_deadline

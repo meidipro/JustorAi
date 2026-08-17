@@ -66,6 +66,13 @@ Return JSON only:
 
 def extract_json(text: str) -> dict:
     text = text.strip()
+    if text.startswith("```json"):
+        text = text[7:]
+    elif text.startswith("```"):
+        text = text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+    text = text.strip()
     try:
         return json.loads(text)
     except json.JSONDecodeError:
@@ -73,7 +80,14 @@ def extract_json(text: str) -> dict:
     match = re.search(r"\{.*\}", text, flags=re.S)
     if not match:
         raise ValueError("Model did not return JSON")
-    return json.loads(match.group(0))
+    candidate = match.group(0)
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        # Fallback: remove non-printable control chars and retry
+        clean = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', candidate)
+        return json.loads(clean)
+
 
 
 def fast_exact_route(query: str) -> Optional[LegalRoute]:

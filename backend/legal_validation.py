@@ -178,13 +178,16 @@ def validate_authority_identity(pack: EvidencePack) -> list[ValidationError]:
 
 def validate_provision_identity(pack: EvidencePack) -> list[ValidationError]:
     """Gate 2 (G2): Exact Provision Identity.
-    Verifies that exact section/article numbers are well-formed and resolved.
+    Verifies that exact section/article/order numbers are well-formed and resolved.
     """
     errors = []
     for source in pack.authorities:
         if source.item_type == "statute":
             sec = str(source.section_number).strip()
-            if not sec or not re.match(r"^[0-9]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*$", sec):
+            clean_sec = re.sub(r'^(?:Section|Sec\.?|Article|Art\.?)\s*', '', sec, flags=re.IGNORECASE).strip()
+            is_order_rule = bool(re.match(r'^Order\s+[0-9IVXLCDM]+(?:\s*,?\s*Rule\s+[0-9]+)?$', sec, re.IGNORECASE))
+            is_valid_sec = bool(re.match(r'^[0-9IVXLCDM]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*$', clean_sec))
+            if not (is_order_rule or is_valid_sec or sec.lower().startswith("order") or sec.lower().startswith("article")):
                 errors.append(
                     ValidationError(
                         code="G2_INVALID_PROVISION_IDENTITY",

@@ -1495,14 +1495,17 @@ def compress_for_small_model(messages: list) -> list:
 # Lawyer chain intentionally ends at the 70B — never route IRAC to the 8B.
 MODEL_CHAINS = {
     "Legal Professional": [("groq","llama-3.3-70b-versatile"),
+                           ("groq","llama3-70b-8192"),
                            ("openrouter","meta-llama/llama-3.3-70b-instruct"),
                            ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
                            ("gemini","gemini-2.5-flash")],
     "Law Student":        [("groq","llama-3.3-70b-versatile"),
+                           ("groq","llama3-70b-8192"),
                            ("openrouter","meta-llama/llama-3.3-70b-instruct"),
                            ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
                            ("gemini","gemini-2.5-flash")],
     "General Public":     [("groq","llama-3.3-70b-versatile"),
+                           ("groq","llama3-70b-8192"),
                            ("openrouter","meta-llama/llama-3.3-70b-instruct"),
                            ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
                            ("gemini","gemini-2.5-flash")],

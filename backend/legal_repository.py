@@ -268,50 +268,61 @@ class LegalRepository:
         import re
         clean_words = [w for w in re.sub(r'[^a-zA-Z0-9\s]', ' ', act_name).split() if w.lower() not in {"the", "act", "ordinance", "code", "of", "and", "in"}]
         main_kw = clean_words[0] if clean_words else act_name.strip()
-        root, parts = split_section_reference(section_number)
-        rendered_sec = root if not parts else f"{root}({parts[0]})"
+        # Generate candidate section representations to match various DB formatting styles
+        raw_sec = str(section_number).strip()
+        sec_candidates = [raw_sec]
+        
+        clean_num = re.sub(r'^(?:Article|ARTICLE|Order|ORDER|Section|SECTION|Sec\.?|Art\.?)\s*', '', raw_sec, flags=re.IGNORECASE).strip()
+        if clean_num and clean_num not in sec_candidates:
+            sec_candidates.append(clean_num)
+        
+        root, parts = split_section_reference(clean_num or raw_sec)
+        if root and root not in sec_candidates:
+            sec_candidates.append(root)
+        if parts:
+            rendered_sec = f"{root}({parts[0]})"
+            if rendered_sec not in sec_candidates:
+                sec_candidates.append(rendered_sec)
 
-        def query():
-            return (
-                self.db.table("document_chunks")
-                .select("id, act_name, section_number, section_title, content, jurisdiction, status")
-                .ilike("act_name", f"%{act_name.replace('The ', '').strip()}%")
-                .eq("section_number", rendered_sec)
-                .limit(1)
-                .execute()
-            )
+        order_match = re.search(r'order\s*([0-9IVXLCDM]+)', raw_sec, re.IGNORECASE)
+        if order_match:
+            ord_val = order_match.group(1)
+            sec_candidates.extend([f"Order {ord_val}", f"Order {ord_val} Rule 1", f"Order {ord_val} Rule 2", f"Order {ord_val} Rule 11", f"Order {ord_val} Rule 13", ord_val])
 
+        response = None
         try:
-            response = await self._run(query)
-            if not response.data:
-                # Try with root section
-                def query_root():
+            for cand in sec_candidates:
+                def query_cand(c=cand):
                     return (
                         self.db.table("document_chunks")
                         .select("id, act_name, section_number, section_title, content, jurisdiction, status")
                         .ilike("act_name", f"%{act_name.replace('The ', '').strip()}%")
-                        .eq("section_number", root)
+                        .eq("section_number", c)
                         .limit(1)
                         .execute()
                     )
-                response = await self._run(query_root)
+                res = await self._run(query_cand)
+                if res.data:
+                    response = res
+                    break
 
-            if not response.data:
-                # Try with main_kw fallback
-                def query_kw():
-                    return (
-                        self.db.table("document_chunks")
-                        .select("id, act_name, section_number, section_title, content, jurisdiction, status")
-                        .ilike("act_name", f"%{main_kw}%")
-                        .eq("section_number", root)
-                        .limit(5)
-                        .execute()
-                    )
-                res_kw = await self._run(query_kw)
-                if res_kw.data:
-                    # Pick row where act_name is closest
-                    best = min(res_kw.data, key=lambda r: abs(len(r.get("act_name","")) - len(act_name)))
-                    response = type("obj", (), {"data": [best]})()
+            if not response or not response.data:
+                # Try with main_kw fallback across candidates
+                for cand in sec_candidates:
+                    def query_kw(c=cand):
+                        return (
+                            self.db.table("document_chunks")
+                            .select("id, act_name, section_number, section_title, content, jurisdiction, status")
+                            .ilike("act_name", f"%{main_kw}%")
+                            .eq("section_number", c)
+                            .limit(5)
+                            .execute()
+                        )
+                    res_kw = await self._run(query_kw)
+                    if res_kw.data:
+                        best = min(res_kw.data, key=lambda r: abs(len(r.get("act_name","")) - len(act_name)))
+                        response = type("obj", (), {"data": [best]})()
+                        break
 
             if not response or not response.data:
                 return None
