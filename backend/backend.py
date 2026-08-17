@@ -444,10 +444,10 @@ async def _embed_async(text: str) -> List[float]:
 
 
 def _call_gemini_native(messages, temperature=0.1) -> str:
-    """Helper to query Gemini 2.5 Flash directly via native Google REST API."""
+    """Helper to query Gemini 1.5 Flash directly via native Google REST API."""
     if not GEMINI_API_KEY:
         raise ValueError("GEMINI_API_KEY missing.")
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     
     contents = []
     system_instruction = None
@@ -1494,84 +1494,76 @@ def compress_for_small_model(messages: list) -> list:
 # Provider strings match your code: "alibaba", "gemini", "groq".
 # Lawyer chain intentionally ends at the 70B — never route IRAC to the 8B.
 MODEL_CHAINS = {
-    "Legal Professional": [("groq","llama-3.3-70b-versatile"),
-                           ("groq","llama3-70b-8192"),
-                           ("openrouter","meta-llama/llama-3.3-70b-instruct"),
-                           ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
-                           ("gemini","gemini-2.5-flash")],
-    "Law Student":        [("groq","llama-3.3-70b-versatile"),
-                           ("groq","llama3-70b-8192"),
-                           ("openrouter","meta-llama/llama-3.3-70b-instruct"),
-                           ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
-                           ("gemini","gemini-2.5-flash")],
-    "General Public":     [("groq","llama-3.3-70b-versatile"),
-                           ("groq","llama3-70b-8192"),
-                           ("openrouter","meta-llama/llama-3.3-70b-instruct"),
-                           ("openrouter","deepseek/deepseek-r1-distill-llama-70b"),
-                           ("gemini","gemini-2.5-flash")],
+    "Legal Professional": [
+        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
+        ("groq", "llama-3.3-70b-versatile"),
+        ("openrouter", "deepseek/deepseek-r1-distill-llama-70b"),
+        ("gemini", "gemini-1.5-flash"),
+        ("groq", "llama-3.1-8b-instant"),
+    ],
+    "Law Student": [
+        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
+        ("groq", "llama-3.3-70b-versatile"),
+        ("openrouter", "deepseek/deepseek-r1-distill-llama-70b"),
+        ("gemini", "gemini-1.5-flash"),
+        ("groq", "llama-3.1-8b-instant"),
+    ],
+    "General Public": [
+        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
+        ("groq", "llama-3.3-70b-versatile"),
+        ("openrouter", "deepseek/deepseek-r1-distill-llama-70b"),
+        ("gemini", "gemini-1.5-flash"),
+        ("groq", "llama-3.1-8b-instant"),
+    ],
 }
 
 async def call_llm_with_fallbacks(models: list, messages) -> tuple:
-    """Returns (text, 'provider/model'). Compresses the prompt for small models.
-    
-    IMPORTANT: This is async and uses asyncio.sleep for rate-limit backoff.
-    Using time.sleep() here would block the FastAPI event loop and crash concurrent requests.
-    """
+    """Returns (text, 'provider/model'). Fast zero-wait fallback across models with strict 12s per-provider timeout."""
     import asyncio
     
-    # Outer retry loop across model chain to recover from temporary multi-provider outages/rate-limits
-    for chain_pass in range(3):
-        for provider, model in models:
-            retries = 3
-            for attempt in range(retries):
-                try:
-                    payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
-                    if provider == "alibaba" and dashscope_client:
-                        c = await asyncio.to_thread(
-                            lambda: dashscope_client.chat.completions.create(
-                                model=model, messages=payload, temperature=0.1, max_tokens=4000)
+    for provider, model in models:
+        try:
+            payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
+            
+            async def _invoke():
+                if provider == "openrouter" and openrouter_client:
+                    c = await asyncio.to_thread(
+                        lambda: openrouter_client.chat.completions.create(
+                            model=model, messages=payload, temperature=0.1, max_tokens=4000
                         )
-                        return c.choices[0].message.content, f"{provider}/{model}"
-                    elif provider == "gemini" and GEMINI_API_KEY:
-                        ans = await asyncio.to_thread(_call_gemini_native, payload, 0.1)
-                        return ans, f"{provider}/{model}"
-                    elif provider == "groq" and groq_client:
-                        c = await asyncio.to_thread(
-                            lambda: groq_client.chat.completions.create(
-                                model=model, messages=payload, temperature=0.1, max_tokens=4000)
+                    )
+                    return c.choices[0].message.content
+                elif provider == "groq" and groq_client:
+                    c = await asyncio.to_thread(
+                        lambda: groq_client.chat.completions.create(
+                            model=model, messages=payload, temperature=0.1, max_tokens=4000
                         )
-                        return c.choices[0].message.content, f"{provider}/{model}"
-                    elif provider == "openrouter" and openrouter_client:
-                        c = await asyncio.to_thread(
-                            lambda: openrouter_client.chat.completions.create(
-                                model=model, messages=payload, temperature=0.1, max_tokens=4000)
+                    )
+                    return c.choices[0].message.content
+                elif provider == "gemini" and GEMINI_API_KEY:
+                    ans = await asyncio.to_thread(_call_gemini_native, payload, 0.1)
+                    return ans
+                elif provider == "alibaba" and dashscope_client:
+                    c = await asyncio.to_thread(
+                        lambda: dashscope_client.chat.completions.create(
+                            model=model, messages=payload, temperature=0.1, max_tokens=4000
                         )
-                        return c.choices[0].message.content, f"{provider}/{model}"
-                except Exception as e:
-                    err_msg = str(e)
-                    if any(x in err_msg for x in ["tokens per day", "Limit", "AccessDenied", "403", "quota"]):
-                        logger.warning(f"[LLM] {provider}/{model} quota/access limit reached, falling back instantly.")
-                        break
-                    
-                    is_transient = any(x in err_msg for x in [
-                        "429", "Too Many Requests", "rate_limit", "ConnectionTerminated", 
-                        "connection", "Connection", "500", "502", "503", "504", 
-                        "Timeout", "timeout", "Reset", "Closed", "http2"
-                    ]) or isinstance(e, (ConnectionError, TimeoutError))
+                    )
+                    return c.choices[0].message.content
+                return None
 
-                    if is_transient and attempt < retries - 1:
-                        wait_sec = (attempt + 1) * 2.5
-                        logger.info(f"[{provider}/{model}] Transient error ({err_msg[:60]}). Retrying in {wait_sec}s...")
-                        await asyncio.sleep(wait_sec)
-                        continue
-
-                    logger.warning(f"[LLM] {provider}/{model} failed (attempt {attempt+1}/{retries}): {e}")
-                    break  # try next provider/model
-                    
-        if chain_pass < 2:
-            wait_pass = (chain_pass + 1) * 3.0
-            logger.warning(f"[LLM] All providers failed on chain pass {chain_pass+1}. Retrying whole chain in {wait_pass}s...")
-            await asyncio.sleep(wait_pass)
+            # Enforce 12.0s maximum per LLM call — never hang or stall
+            result = await asyncio.wait_for(_invoke(), timeout=12.0)
+            if result:
+                return result, f"{provider}/{model}"
+                
+        except asyncio.TimeoutError:
+            logger.warning(f"[LLM] {provider}/{model} timed out after 12s, switching to next model instantly.")
+            continue
+        except Exception as e:
+            err_msg = str(e)
+            logger.warning(f"[LLM] {provider}/{model} failed ({err_msg[:80]}), switching instantly.")
+            continue
 
     raise HTTPException(status_code=503, detail="AI service busy. Please try again in a moment.")
 
