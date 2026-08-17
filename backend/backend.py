@@ -1608,13 +1608,13 @@ async def call_llm_with_fallbacks(models: list, messages) -> tuple:
                     return c.choices[0].message.content
                 return None
 
-            # Enforce 12.0s maximum per LLM call — never hang or stall
-            result = await asyncio.wait_for(_invoke(), timeout=12.0)
+            # Enforce 25.0s maximum per LLM call — ample time for complex legal synthesis without hanging
+            result = await asyncio.wait_for(_invoke(), timeout=25.0)
             if result:
                 return result, f"{provider}/{model}"
                 
         except asyncio.TimeoutError:
-            logger.warning(f"[LLM] {provider}/{model} timed out after 12s, switching to next model instantly.")
+            logger.warning(f"[LLM] {provider}/{model} timed out after 25s, switching to next model instantly.")
             continue
         except Exception as e:
             err_msg = str(e)
