@@ -32,10 +32,21 @@ ClaimType = Literal[
 
 TrustTier = Literal[
     "PRIMARY_STATUTE",
+    "LEGACY_CORPUS",
     "VERIFIED_JUDGMENT",
     "UNVERIFIED_REPORTER_CITATION",
     "ABSTAIN",
 ]
+
+class ProvenanceMetadata(BaseModel):
+    reviewer: str | None = None
+    reviewed_at: date | None = None
+    source_url: str | None = None
+    source_hash: str | None = None
+    provision_checked: bool = False
+    amendment_checked: bool = False
+    effective_date_checked: bool = False
+    decision: str = "PENDING_AUDIT"
 
 class CandidateAuthority(BaseModel):
     act: str
@@ -73,6 +84,7 @@ class EvidenceItem(BaseModel):
     official_source_verified: bool = False
     exact_section_verified: bool = False
     version_verified: bool = False
+    provenance: ProvenanceMetadata | None = None
     
     # Case law & Trust Hierarchy attributes
     item_type: Literal["statute", "case"] = "statute"
@@ -87,8 +99,12 @@ class EvidenceItem(BaseModel):
     def get_badge(self) -> str:
         if self.trust_badge:
             return self.trust_badge
-        if self.item_type == "statute":
-            return "`PRIMARY SOURCE ✓` `SOURCE CHECKED ✓`"
+        if self.trust_tier == "LEGACY_CORPUS":
+            return "`UNREVIEWED CORPUS (LEGACY DB)`"
+        if self.item_type == "statute" and self.trust_tier == "PRIMARY_STATUTE":
+            if self.official_source_verified and self.version_verified and self.exact_section_verified:
+                return "`PRIMARY SOURCE ✓` `SOURCE CHECKED ✓`"
+            return "`OFFICIAL LEGISLATION (UNAUDITED VERSION)`"
         if self.item_type == "case":
             if self.trust_tier == "VERIFIED_JUDGMENT":
                 return "`PRIMARY JUDGMENT ✓` `RATIO VERIFIED ✓`"

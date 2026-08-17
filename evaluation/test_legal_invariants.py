@@ -71,7 +71,7 @@ def test_registration_act_2026_amendment_60_days():
 
 def test_section_heading_mismatch_rejected():
     from backend.legal_models import EvidencePack, EvidenceItem, LegalAnswerDraft, DraftParagraph, DraftClaim
-    from backend.legal_validation import validate_heading_entailment
+    from backend.legal_validation import validate_claim_entailment
 
     item_mortgage = EvidenceItem(
         evidence_id="ACT-1",
@@ -96,14 +96,14 @@ def test_section_heading_mismatch_rejected():
         conclusion=DraftParagraph(text="Contract for sale is governed by Section 64.", evidence_ids=["ACT-1"]),
         claims=[DraftClaim(claim_id="C1", text="Section 64 provides for contract for sale registration.", claim_type="legal_rule", evidence_ids=["ACT-1"])],
     )
-    errors = validate_heading_entailment(draft, pack)
+    errors = validate_claim_entailment(draft, pack)
     assert len(errors) > 0
-    assert any(e.code == "SECTION_HEADING_MISMATCH" for e in errors)
+    assert any(e.code == "G4_SECTION_HEADING_MISMATCH" for e in errors)
 
 
 def test_constitutional_articles_distinction():
     from backend.legal_models import EvidencePack, EvidenceItem, LegalAnswerDraft, DraftParagraph, DraftClaim
-    from backend.legal_validation import validate_heading_entailment
+    from backend.legal_validation import validate_claim_entailment
 
     item_art111 = EvidenceItem(
         evidence_id="ACT-1",
@@ -128,14 +128,14 @@ def test_constitutional_articles_distinction():
         conclusion=DraftParagraph(text="Superintendence is under Article 111.", evidence_ids=["ACT-1"]),
         claims=[DraftClaim(claim_id="C1", text="Article 111 governs superintendence over subordinate courts.", claim_type="legal_rule", evidence_ids=["ACT-1"])],
     )
-    errors = validate_heading_entailment(draft, pack)
+    errors = validate_claim_entailment(draft, pack)
     assert len(errors) > 0
-    assert any(e.code == "CONSTITUTIONAL_ARTICLE_MISMATCH" for e in errors)
+    assert any(e.code == "G4_CONSTITUTIONAL_ARTICLE_MISMATCH" for e in errors)
 
 
 def test_contaminated_case_citation_rejected():
     from backend.legal_models import EvidencePack, LegalAnswerDraft, DraftParagraph
-    from backend.legal_validation import validate_case_trust_tiers
+    from backend.legal_validation import validate_case_provenance
 
     pack = EvidencePack(
         query="Arrest without warrant guidelines",
@@ -150,22 +150,40 @@ def test_contaminated_case_citation_rejected():
         rules=[DraftParagraph(text="In Dr. Kamal Hossain v Bangladesh, 68 DLR (AD) 298, the court gave arrest guidelines.", evidence_ids=[])],
         conclusion=DraftParagraph(text="Guidelines were settled in 68 DLR (AD) 298.", evidence_ids=[]),
     )
-    errors = validate_case_trust_tiers(draft, pack)
+    errors = validate_case_provenance(draft, pack)
     assert len(errors) > 0
-    assert any(e.code == "CONTAMINATED_CASE_CITATION" for e in errors)
+    assert any(e.code == "G6_CONTAMINATED_CASE_CITATION" for e in errors)
 
 
 def test_trust_badge_resolution():
     from backend.legal_models import EvidenceItem
 
-    statute_item = EvidenceItem(
+    # 1. Fully verified official statute receives Primary badge
+    official_statute = EvidenceItem(
         evidence_id="ACT-1",
         act_name="The Registration Act, 1908",
         section_number="17A",
         item_type="statute",
+        trust_tier="PRIMARY_STATUTE",
+        official_source_verified=True,
+        version_verified=True,
+        exact_section_verified=True,
     )
-    assert "PRIMARY SOURCE ✓" in statute_item.get_badge()
+    assert "PRIMARY SOURCE ✓" in official_statute.get_badge()
 
+    # 2. Legacy corpus NEVER receives Primary badge
+    legacy_statute = EvidenceItem(
+        evidence_id="ACT-2",
+        act_name="The Registration Act, 1908",
+        section_number="17A",
+        item_type="statute",
+        trust_tier="LEGACY_CORPUS",
+        official_source_verified=False,
+    )
+    assert "PRIMARY SOURCE ✓" not in legacy_statute.get_badge()
+    assert "UNREVIEWED CORPUS" in legacy_statute.get_badge()
+
+    # 3. Verified case receives Primary Judgment badge
     verified_case = EvidenceItem(
         evidence_id="DLR-1",
         act_name="BLAST v Bangladesh",
@@ -174,6 +192,7 @@ def test_trust_badge_resolution():
     )
     assert "PRIMARY JUDGMENT ✓" in verified_case.get_badge()
 
+    # 4. Reporter citation without verified text receives Warning badge
     unverified_case = EvidenceItem(
         evidence_id="DLR-2",
         act_name="Md. Nurul Islam v S.M. Shahjahan",
@@ -181,4 +200,104 @@ def test_trust_badge_resolution():
         trust_tier="UNVERIFIED_REPORTER_CITATION",
     )
     assert "REPORTER CITATION AVAILABLE ⚠️" in unverified_case.get_badge()
+
+
+def test_g1_authority_identity():
+    from backend.legal_models import EvidencePack, EvidenceItem
+    from backend.legal_validation import validate_authority_identity
+
+    item_empty_act = EvidenceItem(
+        evidence_id="ACT-1",
+        act_name="",
+        section_number="17A",
+    )
+    pack = EvidencePack(
+        query="Test query",
+        persona="General Public",
+        as_of_date=date(2026, 8, 17),
+        temporal_mode="CURRENT",
+        issues=[],
+        authorities=[item_empty_act],
+    )
+    errors = validate_authority_identity(pack)
+    assert len(errors) > 0
+    assert any(e.code == "G1_INVALID_AUTHORITY_IDENTITY" for e in errors)
+
+
+def test_g2_provision_identity():
+    from backend.legal_models import EvidencePack, EvidenceItem
+    from backend.legal_validation import validate_provision_identity
+
+    item_bad_sec = EvidenceItem(
+        evidence_id="ACT-1",
+        act_name="The Registration Act, 1908",
+        section_number="invalid_sec_#",
+    )
+    pack = EvidencePack(
+        query="Test query",
+        persona="General Public",
+        as_of_date=date(2026, 8, 17),
+        temporal_mode="CURRENT",
+        issues=[],
+        authorities=[item_bad_sec],
+    )
+    errors = validate_provision_identity(pack)
+    assert len(errors) > 0
+    assert any(e.code == "G2_INVALID_PROVISION_IDENTITY" for e in errors)
+
+
+def test_g3_lawyer_mode_legacy_controlling_rejected():
+    from backend.legal_models import EvidencePack, EvidenceItem
+    from backend.legal_validation import validate_version_validity
+
+    legacy_controlling = EvidenceItem(
+        evidence_id="ACT-1",
+        act_name="The Registration Act, 1908",
+        section_number="17A",
+        role="CONTROLLING",
+        trust_tier="LEGACY_CORPUS",
+        official_source_verified=False,
+    )
+    pack = EvidencePack(
+        query="Test query",
+        persona="Legal Professional",
+        as_of_date=date(2026, 8, 17),
+        temporal_mode="CURRENT",
+        issues=[],
+        authorities=[legacy_controlling],
+    )
+    errors = validate_version_validity(pack)
+    assert len(errors) > 0
+    assert any(e.code == "G3_UNVERIFIED_LEGACY_CONTROLLING" for e in errors)
+
+
+def test_g6_unverified_reporter_citation_controlling_rejected():
+    from backend.legal_models import EvidencePack, EvidenceItem, LegalAnswerDraft, DraftParagraph
+    from backend.legal_validation import validate_case_provenance
+
+    unverified_case = EvidenceItem(
+        evidence_id="CASE-1",
+        act_name="Some Case",
+        citation="70 DLR 100",
+        item_type="case",
+        role="CONTROLLING",
+        trust_tier="UNVERIFIED_REPORTER_CITATION",
+    )
+    pack = EvidencePack(
+        query="Test query",
+        persona="Legal Professional",
+        as_of_date=date(2026, 8, 17),
+        temporal_mode="CURRENT",
+        issues=[],
+        authorities=[unverified_case],
+    )
+    draft = LegalAnswerDraft(
+        issue="Test",
+        rules=[DraftParagraph(text="Under 70 DLR 100...", evidence_ids=["CASE-1"])],
+        conclusion=DraftParagraph(text="Conclusion", evidence_ids=["CASE-1"]),
+    )
+    errors = validate_case_provenance(draft, pack)
+    assert len(errors) > 0
+    assert any(e.code == "G6_UNVERIFIED_REPORTER_CITATION_CONTROLLING" for e in errors)
+
 

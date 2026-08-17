@@ -180,14 +180,17 @@ class LegalAnswerEngine:
         if second_draft is not None:
             second_validation = validate_draft(second_draft, pack)
             if second_validation.passed:
-                return self._success(second_draft, pack, route)
+                # Re-run legal critic on second draft to prevent critic bypass
+                second_critic = await self.critic.audit(second_draft, pack)
+                if bool(second_critic.get("pass", False)):
+                    return self._success(second_draft, pack, route)
 
         # 7. Fail closed.
         return {
             "status": "abstain",
             "answer": (
                 "Justor identified potentially relevant law, but the generated "
-                "analysis did not pass its legal evidence verification checks. "
+                "analysis did not pass its evidence-checked legal verification gates. "
                 "Please review the primary authorities directly."
             ),
             "reason": "LEGAL_VERIFICATION_FAILED",
@@ -207,19 +210,19 @@ class LegalAnswerEngine:
             {
                 "step": 2,
                 "title": "Primary Authority Retrieval",
-                "summary": f"Retrieved {len(pack.authorities)} verified provisions with official citations.",
+                "summary": f"Retrieved {len(pack.authorities)} provisions with official citations.",
                 "status": "completed"
             },
             {
                 "step": 3,
-                "title": "7-Gate Deterministic Verification",
-                "summary": "Verified quote exactness, 2026 amendment timelines, and source trust badges.",
+                "title": "Rule & Citation Verification",
+                "summary": "Verified statutory quotes, temporal validity, trust tiers, and numeric deadlines.",
                 "status": "passed" if status == "ok" else "failed_closed"
             },
             {
                 "step": 4,
                 "title": "Grounded Legal Synthesis",
-                "summary": "Generated structured legal analysis anchored strictly to official sources.",
+                "summary": "Generated structured legal analysis anchored strictly to primary sources." if status == "ok" else "Abstained due to verification constraints.",
                 "status": "completed" if status == "ok" else "abstained"
             }
         ]

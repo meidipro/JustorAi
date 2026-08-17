@@ -327,11 +327,11 @@ class LegalRepository:
                 heading=row.get("section_title"),
                 role="SUPPORTING",
                 legal_text=row.get("content", ""),
-                official_source_verified=True,
-                exact_section_verified=True,
-                version_verified=True,
+                official_source_verified=False,
+                exact_section_verified=False,
+                version_verified=False,
                 item_type="statute",
-                trust_tier="PRIMARY_STATUTE",
+                trust_tier="LEGACY_CORPUS",
             )
         except Exception:
             return None

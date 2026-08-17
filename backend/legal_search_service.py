@@ -177,6 +177,7 @@ class LegalSearchAggregator:
             try:
                 res_sec = await asyncio.to_thread(q_exact_sec)
                 for row in res_sec.data or []:
+                    is_official = bool(row.get("official_source_verified", False))
                     results.append({
                         "entity_type": "section",
                         "entity_id": str(row.get("id")),
@@ -192,7 +193,11 @@ class LegalSearchAggregator:
                         "case_number": None,
                         "document_date": None,
                         "legal_status": row.get("status", "Active"),
-                        "verification_status": "verified",
+                        "source_tier": "PRIMARY_STATUTE" if is_official else "LEGACY_CORPUS",
+                        "source_verified": is_official,
+                        "version_verified": bool(row.get("version_verified", False)),
+                        "status_verified": bool(row.get("status_verified", False)),
+                        "verification_status": "official_verified" if is_official else "unreviewed_corpus",
                         "source_url": "https://bdlaws.minlaw.gov.bd",
                         "source_document_url": "https://bdlaws.minlaw.gov.bd",
                         "score": 1.00,
@@ -228,7 +233,11 @@ class LegalSearchAggregator:
                         "case_number": None,
                         "document_date": None,
                         "legal_status": "In Force",
-                        "verification_status": "verified",
+                        "source_tier": "PRIMARY_STATUTE",
+                        "source_verified": True,
+                        "version_verified": True,
+                        "status_verified": True,
+                        "verification_status": "official_verified",
                         "source_url": "https://bdlaws.minlaw.gov.bd",
                         "source_document_url": "https://bdlaws.minlaw.gov.bd",
                         "score": score,
@@ -247,6 +256,7 @@ class LegalSearchAggregator:
             res_chunks = await asyncio.to_thread(q_chunks)
             for row in res_chunks.data or []:
                 doc_type = "guide" if row.get("document_type") == "Citizen Guide" else "section"
+                is_official = bool(row.get("official_source_verified", False))
                 results.append({
                     "entity_type": doc_type,
                     "entity_id": str(row.get("id")),
@@ -262,7 +272,11 @@ class LegalSearchAggregator:
                     "case_number": None,
                     "document_date": None,
                     "legal_status": row.get("status", "Active"),
-                    "verification_status": "verified",
+                    "source_tier": "PRIMARY_STATUTE" if is_official else "LEGACY_CORPUS",
+                    "source_verified": is_official,
+                    "version_verified": bool(row.get("version_verified", False)),
+                    "status_verified": bool(row.get("status_verified", False)),
+                    "verification_status": "official_verified" if is_official else "unreviewed_corpus",
                     "source_url": "https://bdlaws.minlaw.gov.bd",
                     "source_document_url": "https://bdlaws.minlaw.gov.bd",
                     "score": 0.85,
@@ -296,6 +310,7 @@ class LegalSearchAggregator:
             for row in res_cases.data or []:
                 citation = row.get("citation", "")
                 title = row.get("case_title", "")
+                has_pdf = bool(row.get("pdf_source_url"))
                 
                 # Match score
                 if parsed.dlr_vol and str(parsed.dlr_vol) in citation:
@@ -322,8 +337,12 @@ class LegalSearchAggregator:
                     "court": f"Supreme Court of Bangladesh ({row.get('court_division')})",
                     "case_number": row.get("case_id"),
                     "document_date": str(row.get("judgment_date")) if row.get("judgment_date") else None,
-                    "legal_status": "Settled Precedent",
-                    "verification_status": "verified",
+                    "legal_status": "Reported Judgment",
+                    "precedential_status": "not_determined",
+                    "judgment_verified": has_pdf,
+                    "primary_pdf_verified": has_pdf,
+                    "citation_verified": True,
+                    "verification_status": "primary_pdf_linked" if has_pdf else "reporter_indexed",
                     "source_url": row.get("pdf_source_url") or "https://supremecourt.gov.bd",
                     "source_document_url": row.get("pdf_source_url"),
                     "score": score,
