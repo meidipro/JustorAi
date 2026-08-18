@@ -3,6 +3,8 @@ from __future__ import annotations
 from datetime import date
 from .legal_models import EvidencePack, EvidenceItem, LegalRoute
 from .legal_repository import LegalRepository
+from .legal_dictionary import expand_query_with_dictionary, normalize_bengali_text
+from .legal_relevance import PreGenerationRelevanceGate
 
 
 class EvidenceBuilder:
@@ -19,8 +21,20 @@ class EvidenceBuilder:
         query_date = route.as_of_date or date.today()
         found: list[EvidenceItem] = []
         seen_versions: set[str] = set()
+        seen_keys: set[str] = set()
 
-        # 1. Exact candidate retrieval first.
+        # ── 1. Bilingual Dictionary & Query Expansion ──
+        dict_expansion = expand_query_with_dictionary(query)
+        detected_domain = dict_expansion.get("domains", ["General"])[0] if dict_expansion.get("domains") else route.legal_domain
+
+        # Combine router authorities with dictionary candidate Acts
+        candidate_acts: list[str] = [a.act for a in route.authorities]
+        for d_act in dict_expansion.get("candidate_acts", []):
+            if d_act not in candidate_acts:
+                candidate_acts.append(d_act)
+
+        # ── 2. Exact Candidate Provision Resolution (Act -> Section Hierarchy) ──
+        # Process explicit router authority sections
         for authority in route.authorities:
             instrument = await self.repository.resolve_instrument(authority.act)
             if instrument:
@@ -35,6 +49,7 @@ class EvidenceBuilder:
                     evidence.role = authority.role
                     found.append(evidence)
                     seen_versions.add(evidence.version_id)
+                    seen_keys.add(f"{evidence.act_name}:{evidence.section_number}")
             else:
                 # Fallback to document_chunks
                 for section in authority.sections:
@@ -44,21 +59,53 @@ class EvidenceBuilder:
                     )
                     if not evidence:
                         continue
+                    key = f"{evidence.act_name}:{evidence.section_number}"
+                    if key in seen_keys:
+                        continue
                     evidence.role = authority.role
                     found.append(evidence)
+                    seen_keys.add(key)
 
-        # 2. Hybrid discovery for supporting law (only if exact matches need supplementation)
+        # Process dictionary suggested sections if not already retrieved
+        for act_name in candidate_acts:
+            for sec_cand in dict_expansion.get("candidate_sections", []):
+                key = f"{act_name}:{sec_cand}"
+                if key in seen_keys:
+                    continue
+                instrument = await self.repository.resolve_instrument(act_name)
+                if instrument:
+                    evidence = await self.repository.resolve_exact_section(
+                        instrument_id=instrument["id"],
+                        section_number=sec_cand,
+                        query_date=query_date,
+                    )
+                    if evidence and evidence.version_id not in seen_versions:
+                        evidence.role = "SUPPORTING"
+                        found.append(evidence)
+                        seen_versions.add(evidence.version_id)
+                        seen_keys.add(key)
+                else:
+                    evidence = await self.repository.resolve_from_chunks_fallback(
+                        act_name=act_name,
+                        section_number=sec_cand,
+                    )
+                    if evidence and key not in seen_keys:
+                        evidence.role = "SUPPORTING"
+                        found.append(evidence)
+                        seen_keys.add(key)
+
+        # ── 3. Hierarchical Hybrid Section Discovery (Inside Candidate Acts) ──
         if len(found) < 2:
             try:
-                embedding = await self.embed_fn(query)
+                embedding = await self.embed_fn(dict_expansion.get("normalized_query", query))
             except Exception:
                 embedding = []
         else:
             embedding = []
 
         if embedding:
-            for authority in route.authorities:
-                instrument = await self.repository.resolve_instrument(authority.act)
+            for act_name in candidate_acts[:3]:
+                instrument = await self.repository.resolve_instrument(act_name)
                 if not instrument:
                     continue
 
@@ -72,7 +119,8 @@ class EvidenceBuilder:
 
                 for row in results:
                     version_id = str(row["provision_version_id"])
-                    if version_id in seen_versions:
+                    key = f"{row['act_name']}:{row['section_number']}"
+                    if version_id in seen_versions or key in seen_keys:
                         continue
 
                     found.append(
@@ -94,8 +142,17 @@ class EvidenceBuilder:
                         )
                     )
                     seen_versions.add(version_id)
+                    seen_keys.add(key)
 
-        # 3. Special-over-general relationships.
+        # ── 4. Pre-Generation Relevance Gate (3-Tier Filtering) ──
+        found = PreGenerationRelevanceGate.filter_evidence_items(
+            items=found,
+            query=query,
+            detected_domain=detected_domain,
+            allowed_acts=candidate_acts,
+        )
+
+        # ── 5. Special-Over-General Statutory Relationship Graph ──
         if found:
             relationships = await self.repository.get_relationships(
                 [x.provision_id for x in found if x.provision_id]
@@ -118,17 +175,16 @@ class EvidenceBuilder:
                 elif evidence.provision_id in general_ids:
                     evidence.role = "GENERAL"
 
-        # 4. Search relevant case law / precedents for Lawyer and Student modes
+        # ── 6. Domain-Aligned Case Law / Precedent Retrieval ──
         cases_found: list[EvidenceItem] = []
         is_legal_persona = any(
             p in persona.lower()
             for p in ["lawyer", "legal professional", "student"]
         )
-        if route.needs_case_law or is_legal_persona:
-            cand_acts = [a.act for a in route.authorities]
+        if (route.needs_case_law or is_legal_persona) and len(found) > 0:
             cases_found = await self.repository.search_case_law(
                 query=query,
-                candidate_acts=cand_acts,
+                candidate_acts=candidate_acts,
                 limit=2,
             )
 
@@ -138,27 +194,18 @@ class EvidenceBuilder:
             "GENERAL": 2,
             "BACKGROUND": 3,
         }
-        found.sort(key=lambda x: rank.get(x.role, 1))
+        found.sort(key=lambda x: rank.get(x.role, 4))
 
-        # Backend, not LLM, creates collision-free evidence IDs.
-        act_idx = 1
-        for evidence in found:
-            evidence.item_type = "statute"
-            evidence.evidence_id = f"ACT-{act_idx}"
-            act_idx += 1
+        # Assign unique evidence tags: [ACT-1], [ACT-2], [DLR-1]
+        all_items: list[EvidenceItem] = []
+        for index, item in enumerate(found, start=1):
+            item.evidence_id = f"ACT-{index}"
+            item.item_type = "statute"
+            all_items.append(item)
 
-        dlr_idx = 1
-        for case in cases_found:
-            case.evidence_id = f"DLR-{dlr_idx}"
-            dlr_idx += 1
+        for index, case_item in enumerate(cases_found, start=1):
+            case_item.evidence_id = f"DLR-{index}"
+            case_item.item_type = "case"
+            all_items.append(case_item)
 
-        all_authorities = found + cases_found
-
-        return EvidencePack(
-            query=query,
-            persona=persona,
-            as_of_date=query_date,
-            temporal_mode=route.temporal_mode,
-            issues=route.issues,
-            authorities=all_authorities,
-        )
+        return EvidencePack(items=all_items, created_at=query_date)

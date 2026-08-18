@@ -8,6 +8,7 @@ from .legal_repository import LegalRepository
 from .evidence_builder import EvidenceBuilder
 from .legal_validation import validate_draft
 from .legal_critic import LegalCritic
+from .legal_clarification import FactSufficiencyGate
 
 
 class LegalAnswerEngine:
@@ -86,6 +87,24 @@ class LegalAnswerEngine:
         return verified
 
     async def answer(self, query: str, persona: str) -> dict:
+        # 0. Fact Sufficiency & Interactive Clarification Gate
+        clarification = FactSufficiencyGate.evaluate_fact_sufficiency(query, persona)
+        if clarification and clarification.get("status") == "needs_clarification":
+            return {
+                "status": "ok",
+                "answer": clarification["clarification_prompt"],
+                "reason": "FACT_CLARIFICATION_REQUIRED",
+                "authorities": [],
+                "reasoning_steps": [
+                    {
+                        "step": 1,
+                        "title": "Legal Intent & Fact Sufficiency",
+                        "summary": f"Detected {clarification['intent']} inquiry requiring missing material variables.",
+                        "status": "needs_clarification"
+                    }
+                ]
+            }
+
         # 1. Route.
         try:
             route = await self.router.route(query)

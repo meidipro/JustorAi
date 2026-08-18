@@ -1,0 +1,456 @@
+[
+  {
+    "id": "PROP-01",
+    "domain": "Property Law",
+    "persona": "Legal Professional",
+    "question": "What is the statutory requirement for registering a contract for sale of immovable property (Baina patra) in Bangladesh under Section 17A of the Registration Act, 1908?",
+    "expected_act": "The Registration Act, 1908",
+    "expected_sections": ["17A"],
+    "forbidden_sections": ["64"],
+    "must_mention": ["17A", "registration"]
+  },
+  {
+    "id": "PROP-02",
+    "domain": "Property Law",
+    "persona": "General Public",
+    "question": "Within how much time must a document be presented for registration after its execution under Section 23 of the Registration Act, 1908?",
+    "expected_act": "The Registration Act, 1908",
+    "expected_sections": ["23"],
+    "must_mention": ["23"]
+  },
+  {
+    "id": "PROP-03",
+    "domain": "Property Law",
+    "persona": "Legal Professional",
+    "question": "What is the legal effect of an unregistered contract for sale under Section 54A of the Transfer of Property Act, 1882?",
+    "expected_act": "The Transfer of Property Act, 1882",
+    "expected_sections": ["54A"],
+    "must_mention": ["54A"]
+  },
+  {
+    "id": "PROP-04",
+    "domain": "Property Law",
+    "persona": "Legal Professional",
+    "question": "Can an unregistered contract for sale be specifically enforced in court under Section 21A of the Specific Relief Act, 1877?",
+    "expected_act": "The Specific Relief Act, 1877",
+    "expected_sections": ["21A"],
+    "must_mention": ["21A"]
+  },
+  {
+    "id": "PROP-05",
+    "domain": "Property Law",
+    "persona": "Law Student",
+    "question": "What is the legal effect of non-registration of documents required to be registered under Section 49 of the Registration Act, 1908?",
+    "expected_act": "The Registration Act, 1908",
+    "expected_sections": ["49"],
+    "must_mention": ["49"]
+  },
+  {
+    "id": "PROP-06",
+    "domain": "Land Revenue Law",
+    "persona": "General Public",
+    "question": "What is the statutory basis and procedure for mutation (e-Namjari) of land records under Section 143 of the State Acquisition and Tenancy Act, 1950?",
+    "expected_act": "State Acquisition and Tenancy Act, 1950",
+    "expected_sections": ["143"],
+    "must_mention": ["143", "mutation"]
+  },
+  {
+    "id": "PROP-07",
+    "domain": "Property Law",
+    "persona": "Legal Professional",
+    "question": "How is 'sale' of immovable property defined and required to be made under Section 54 of the Transfer of Property Act, 1882?",
+    "expected_act": "The Transfer of Property Act, 1882",
+    "expected_sections": ["54"],
+    "must_mention": ["54"]
+  },
+  {
+    "id": "PROP-08",
+    "domain": "Property Law",
+    "persona": "Law Student",
+    "question": "What is the doctrine of part performance under Section 53A of the Transfer of Property Act, 1882?",
+    "expected_act": "The Transfer of Property Act, 1882",
+    "expected_sections": ["53A"],
+    "must_mention": ["53A"]
+  },
+  {
+    "id": "FAM-01",
+    "domain": "Family Law",
+    "persona": "General Public",
+    "question": "What are the statutory steps to pronounce and give notice of Talaq (divorce) under Section 7 of the Muslim Family Laws Ordinance, 1961?",
+    "expected_act": "The Muslim Family Laws Ordinance, 1961",
+    "expected_sections": ["7"],
+    "must_mention": ["7", "Chairman", "90"]
+  },
+  {
+    "id": "FAM-02",
+    "domain": "Family Law",
+    "persona": "General Public",
+    "question": "How can a wife recover prompt or deferred dower (Denmohor) under Section 10 of the Muslim Family Laws Ordinance, 1961?",
+    "expected_act": "The Muslim Family Laws Ordinance, 1961",
+    "expected_sections": ["10"],
+    "must_mention": ["10", "dower"]
+  },
+  {
+    "id": "FAM-03",
+    "domain": "Family Law",
+    "persona": "General Public",
+    "question": "What are the legal provisions regarding maintenance of wives and children under Section 9 of the Muslim Family Laws Ordinance, 1961?",
+    "expected_act": "The Muslim Family Laws Ordinance, 1961",
+    "expected_sections": ["9"],
+    "must_mention": ["9", "maintenance"]
+  },
+  {
+    "id": "FAM-04",
+    "domain": "Family Law",
+    "persona": "Legal Professional",
+    "question": "What are the statutory grounds on which a Muslim woman can obtain judicial dissolution of marriage under Section 2 of the Dissolution of Muslim Marriages Act, 1939?",
+    "expected_act": "The Dissolution of Muslim Marriages Act, 1939",
+    "expected_sections": ["2"],
+    "must_mention": ["2", "dissolution"]
+  },
+  {
+    "id": "FAM-05",
+    "domain": "Family Law",
+    "persona": "Legal Professional",
+    "question": "What is the exclusive jurisdiction of the Family Court under Section 5 of the Family Courts Act, 2023?",
+    "expected_act": "Family Courts Act, 2023",
+    "expected_sections": ["5"],
+    "must_mention": ["5", "Family Court"]
+  },
+  {
+    "id": "FAM-06",
+    "domain": "Family Law",
+    "persona": "General Public",
+    "question": "What are the legal requirements and permissions needed for polygamy (contracting a second marriage) under Section 6 of the Muslim Family Laws Ordinance, 1961?",
+    "expected_act": "The Muslim Family Laws Ordinance, 1961",
+    "expected_sections": ["6"],
+    "must_mention": ["6", "Arbitration Council"]
+  },
+  {
+    "id": "CRIM-01",
+    "domain": "Criminal Procedure",
+    "persona": "Legal Professional",
+    "question": "Under what statutory conditions may a police officer arrest a person without a warrant under Section 54 of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["54"],
+    "must_mention": ["54"]
+  },
+  {
+    "id": "CRIM-02",
+    "domain": "Criminal Procedure",
+    "persona": "General Public",
+    "question": "What is the 24-hour statutory limit on police custody without magistrate authorization under Section 61 of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["61"],
+    "must_mention": ["61", "24"]
+  },
+  {
+    "id": "CRIM-03",
+    "domain": "Criminal Procedure",
+    "persona": "Legal Professional",
+    "question": "What is the procedure for police remand and magistrate detention orders under Section 167 of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["167"],
+    "must_mention": ["167"]
+  },
+  {
+    "id": "CRIM-04",
+    "domain": "Criminal Procedure",
+    "persona": "Legal Professional",
+    "question": "What are the statutory guidelines for grant of bail in non-bailable offences under Section 497 of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["497"],
+    "must_mention": ["497"]
+  },
+  {
+    "id": "CRIM-05",
+    "domain": "Criminal Procedure",
+    "persona": "Legal Professional",
+    "question": "What are the inherent powers of the High Court Division to prevent abuse of the process of any court under Section 561A of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["561A"],
+    "must_mention": ["561A"]
+  },
+  {
+    "id": "CRIM-06",
+    "domain": "Criminal Procedure",
+    "persona": "General Public",
+    "question": "What is the procedure for lodging a First Information Report (FIR) under Section 154 of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["154"],
+    "must_mention": ["154"]
+  },
+  {
+    "id": "CRIM-07",
+    "domain": "Criminal Procedure",
+    "persona": "General Public",
+    "question": "Under what circumstances can an Executive Magistrate issue prohibitory orders under Section 144 of the Code of Criminal Procedure, 1898?",
+    "expected_act": "The Code of Criminal Procedure, 1898",
+    "expected_sections": ["144"],
+    "must_mention": ["144"]
+  },
+  {
+    "id": "CONST-01",
+    "domain": "Constitutional Law",
+    "persona": "Law Student",
+    "question": "Explain the doctrine of binding precedent under Article 111 of the Constitution of Bangladesh.",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["111"],
+    "forbidden_sections": ["109"],
+    "must_mention": ["111", "binding", "Appellate Division"]
+  },
+  {
+    "id": "CONST-02",
+    "domain": "Constitutional Law",
+    "persona": "Law Student",
+    "question": "What is the scope of the High Court Division's power of superintendence and control over all subordinate courts under Article 109 of the Constitution of Bangladesh?",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["109"],
+    "forbidden_sections": ["111"],
+    "must_mention": ["109", "superintendence"]
+  },
+  {
+    "id": "CONST-03",
+    "domain": "Constitutional Law",
+    "persona": "Legal Professional",
+    "question": "What are the fundamental safeguards as to arrest and detention under Article 33 of the Constitution of Bangladesh?",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["33"],
+    "must_mention": ["33", "grounds", "consult", "advocate"]
+  },
+  {
+    "id": "CONST-04",
+    "domain": "Constitutional Law",
+    "persona": "Legal Professional",
+    "question": "Explain the constitutional protection against self-incrimination under Article 35(4) of the Constitution of Bangladesh.",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["35"],
+    "must_mention": ["35", "witness against himself"]
+  },
+  {
+    "id": "CONST-05",
+    "domain": "Constitutional Law",
+    "persona": "Legal Professional",
+    "question": "What constitutional protection exists against torture or cruel, inhuman, or degrading punishment under Article 35(5) of the Constitution of Bangladesh?",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["35"],
+    "must_mention": ["35", "torture"]
+  },
+  {
+    "id": "CONST-06",
+    "domain": "Constitutional Law",
+    "persona": "Legal Professional",
+    "question": "What are the five constitutional prerogative writs available under Article 102 of the Constitution of Bangladesh?",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["102"],
+    "must_mention": ["102"]
+  },
+  {
+    "id": "CONST-07",
+    "domain": "Constitutional Law",
+    "persona": "General Public",
+    "question": "What is the guarantee of equality before law and equal protection of law under Article 27 of the Constitution of Bangladesh?",
+    "expected_act": "The Constitution of the People's Republic of Bangladesh",
+    "expected_sections": ["27"],
+    "must_mention": ["27", "equality"]
+  },
+  {
+    "id": "COMM-01",
+    "domain": "Commercial & Banking Law",
+    "persona": "Legal Professional",
+    "question": "What are the essential elements and notice requirements to initiate a criminal prosecution for dishonour of cheque under Section 138 of the Negotiable Instruments Act, 1881?",
+    "expected_act": "The Negotiable Instruments Act, 1881",
+    "expected_sections": ["138"],
+    "must_mention": ["138", "notice", "dishonour"]
+  },
+  {
+    "id": "COMM-02",
+    "domain": "Contract Law",
+    "persona": "Law Student",
+    "question": "What are the essential conditions of a valid contract under Section 10 of the Contract Act, 1872?",
+    "expected_act": "The Contract Act, 1872",
+    "expected_sections": ["10"],
+    "must_mention": ["10", "free consent"]
+  },
+  {
+    "id": "COMM-03",
+    "domain": "Contract Law",
+    "persona": "Legal Professional",
+    "question": "What are the rules for compensation for loss or damage caused by breach of contract under Section 73 of the Contract Act, 1872?",
+    "expected_act": "The Contract Act, 1872",
+    "expected_sections": ["73"],
+    "must_mention": ["73", "compensation"]
+  },
+  {
+    "id": "COMM-04",
+    "domain": "Commercial Law",
+    "persona": "Legal Professional",
+    "question": "What are the implied conditions and warranties as to title and quality under Sections 14 and 16 of the Sale of Goods Act, 1930?",
+    "expected_act": "The Sale of Goods Act, 1930",
+    "expected_sections": ["14", "16"],
+    "must_mention": ["14"]
+  },
+  {
+    "id": "CIVIL-01",
+    "domain": "Civil Procedure",
+    "persona": "Legal Professional",
+    "question": "What are the principles and conditions for granting temporary injunctions under Order 39, Rules 1 and 2 of the Code of Civil Procedure, 1908?",
+    "expected_act": "The Code of Civil Procedure, 1908",
+    "expected_sections": ["39"],
+    "must_mention": ["Order 39", "injunction"]
+  },
+  {
+    "id": "CIVIL-02",
+    "domain": "Civil Procedure",
+    "persona": "Legal Professional",
+    "question": "What are the grounds for rejection of a plaint under Order 7, Rule 11 of the Code of Civil Procedure, 1908?",
+    "expected_act": "The Code of Civil Procedure, 1908",
+    "expected_sections": ["7"],
+    "must_mention": ["Order 7", "Rule 11"]
+  },
+  {
+    "id": "CIVIL-03",
+    "domain": "Civil Procedure",
+    "persona": "Legal Professional",
+    "question": "What is the procedure for setting aside an ex-parte decree against a defendant under Order 9, Rule 13 of the Code of Civil Procedure, 1908?",
+    "expected_act": "The Code of Civil Procedure, 1908",
+    "expected_sections": ["9"],
+    "must_mention": ["Order 9", "Rule 13"]
+  },
+  {
+    "id": "CIVIL-04",
+    "domain": "Civil Procedure",
+    "persona": "Law Student",
+    "question": "Explain the concept and jurisdiction of civil courts under Section 9 of the Code of Civil Procedure, 1908.",
+    "expected_act": "The Code of Civil Procedure, 1908",
+    "expected_sections": ["9"],
+    "must_mention": ["9", "civil nature"]
+  },
+  {
+    "id": "CIVIL-05",
+    "domain": "Limitation Law",
+    "persona": "Legal Professional",
+    "question": "What is the effect of expiry of the period of limitation on suits and appeals under Section 3 of the Limitation Act, 1908?",
+    "expected_act": "The Limitation Act, 1908",
+    "expected_sections": ["3"],
+    "must_mention": ["3", "dismissed"]
+  },
+  {
+    "id": "CIVIL-06",
+    "domain": "Limitation Law",
+    "persona": "Legal Professional",
+    "question": "Under what circumstances can a delay in filing an appeal or application be condoned under Section 5 of the Limitation Act, 1908?",
+    "expected_act": "The Limitation Act, 1908",
+    "expected_sections": ["5"],
+    "must_mention": ["5", "sufficient cause"]
+  },
+  {
+    "id": "LABOUR-01",
+    "domain": "Labour Law",
+    "persona": "General Public",
+    "question": "What is the statutory compensation and procedure for retrenchment of workers under Section 20 of the Bangladesh Labour Act, 2006?",
+    "expected_act": "The Bangladesh Labour Act, 2006",
+    "expected_sections": ["20"],
+    "must_mention": ["20", "retrenchment"]
+  },
+  {
+    "id": "LABOUR-02",
+    "domain": "Labour Law",
+    "persona": "General Public",
+    "question": "What notice or wages in lieu of notice is required for termination of employment by an employer under Section 26 of the Bangladesh Labour Act, 2006?",
+    "expected_act": "The Bangladesh Labour Act, 2006",
+    "expected_sections": ["26"],
+    "must_mention": ["26", "termination"]
+  },
+  {
+    "id": "LABOUR-03",
+    "domain": "Labour Law",
+    "persona": "General Public",
+    "question": "What are the rules and service benefits regarding resignation by a worker under Section 27 of the Bangladesh Labour Act, 2006?",
+    "expected_act": "The Bangladesh Labour Act, 2006",
+    "expected_sections": ["27"],
+    "must_mention": ["27", "resignation"]
+  },
+  {
+    "id": "LABOUR-04",
+    "domain": "Labour Law",
+    "persona": "Legal Professional",
+    "question": "What is the grievance procedure for individual worker complaints under Section 33 of the Bangladesh Labour Act, 2006?",
+    "expected_act": "The Bangladesh Labour Act, 2006",
+    "expected_sections": ["33"],
+    "must_mention": ["33", "grievance"]
+  },
+  {
+    "id": "CONSUMER-01",
+    "domain": "Consumer Protection",
+    "persona": "General Public",
+    "question": "How can a consumer file a complaint for defective or adulterated products under the Consumers' Right Protection Act, 2009 and receive 25% of the fine under Section 76?",
+    "expected_act": "Consumers' Right Protection Act, 2009",
+    "expected_sections": ["76"],
+    "must_mention": ["76", "25"]
+  },
+  {
+    "id": "CONSUMER-02",
+    "domain": "Consumer Protection",
+    "persona": "General Public",
+    "question": "What penalties exist for selling adulterated or expired goods under Section 45 of the Consumers' Right Protection Act, 2009?",
+    "expected_act": "Consumers' Right Protection Act, 2009",
+    "expected_sections": ["45"],
+    "must_mention": ["45"]
+  },
+  {
+    "id": "TAX-01",
+    "domain": "Taxation Law",
+    "persona": "General Public",
+    "question": "What are the requirements for mandatory submission of return of income under the Income Tax Act, 2023?",
+    "expected_act": "Income Tax Act, 2023",
+    "expected_sections": ["166", "174"],
+    "must_mention": ["return", "tax"]
+  },
+  {
+    "id": "SPEC-01",
+    "domain": "Specific Relief",
+    "persona": "Legal Professional",
+    "question": "What is the procedure for recovery of possession of immovable property by a person dispossessed without consent under Section 9 of the Specific Relief Act, 1877?",
+    "expected_act": "The Specific Relief Act, 1877",
+    "expected_sections": ["9"],
+    "must_mention": ["9", "dispossessed", "six months"]
+  },
+  {
+    "id": "SPEC-02",
+    "domain": "Specific Relief",
+    "persona": "Legal Professional",
+    "question": "What is the discretion of the court in granting a declaratory decree under Section 42 of the Specific Relief Act, 1877?",
+    "expected_act": "The Specific Relief Act, 1877",
+    "expected_sections": ["42"],
+    "must_mention": ["42", "declaration"]
+  },
+  {
+    "id": "PENAL-01",
+    "domain": "Criminal Law",
+    "persona": "General Public",
+    "question": "What is the statutory definition and punishment for cheating under Section 415 and 420 of the Penal Code, 1860?",
+    "expected_act": "The Penal Code, 1860",
+    "expected_sections": ["415", "420"],
+    "must_mention": ["420", "cheating"]
+  },
+  {
+    "id": "PENAL-02",
+    "domain": "Criminal Law",
+    "persona": "Legal Professional",
+    "question": "What constitutes criminal breach of trust under Section 405 and 406 of the Penal Code, 1860?",
+    "expected_act": "The Penal Code, 1860",
+    "expected_sections": ["405", "406"],
+    "must_mention": ["405", "406"]
+  },
+  {
+    "id": "NEG-01",
+    "domain": "Adversarial Integrity",
+    "persona": "Legal Professional",
+    "question": "Explain Section 999 of the Contract Act, 1872 and its penalty on commercial banking.",
+    "expected_act": "None",
+    "expected_sections": [],
+    "should_abstain_or_reject": true,
+    "must_not_hallucinate": ["Section 999 is valid"]
+  }
+]
