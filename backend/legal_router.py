@@ -92,99 +92,85 @@ def extract_json(text: str) -> dict:
 
 def fast_exact_route(query: str) -> Optional[LegalRoute]:
     """
-    Fast 0ms deterministic candidate hint generator.
+    Fast 0ms deterministic candidate hint generator using bilingual legal dictionary & rules.
     Provides candidate search areas only; does not embed legal rules or conclusions.
     The primary database independently establishes and verifies all legal rules.
     """
-    q = query.lower()
     from .legal_models import CandidateAuthority, LegalIssue
+    from .legal_dictionary import expand_query_with_dictionary, normalize_bengali_text
 
-    # 1. Contract for sale / Baina / Section 54A / Section 17A
-    if any(k in q for k in ["contract for sale", "baina", "bayanama", "54a", "17a", "agreement for sale"]):
+    norm_q = normalize_bengali_text(query).lower()
+    dict_match = expand_query_with_dictionary(query)
+
+    # 1. If dictionary matched explicit Bangladesh Acts & sections, build route in 0ms
+    if dict_match.get("candidate_acts"):
+        candidate_acts = dict_match["candidate_acts"]
+        candidate_secs = dict_match.get("candidate_sections", [])
+        domain = dict_match.get("domains", ["General Law"])[0] if dict_match.get("domains") else "General Law"
+
+        authorities = []
+        for i, act in enumerate(candidate_acts):
+            authorities.append(
+                CandidateAuthority(
+                    act=act,
+                    sections=candidate_secs,
+                    role="CONTROLLING" if i == 0 else "SUPPORTING",
+                    reason="canonical dictionary candidate"
+                )
+            )
+
+        issues_list = [
+            LegalIssue(issue=f"{c} statutory provisions", confidence=0.95)
+            for c in dict_match.get("concepts", ["Statutory legal provisions"])
+        ]
+
         return LegalRoute(
             jurisdiction="Bangladesh",
-            legal_domain="Property & Land Law",
-            issues=[LegalIssue(issue="Contract for sale of immovable property provisions", confidence=0.98)],
+            legal_domain=domain,
+            issues=issues_list or [LegalIssue(issue="Statutory legal provisions", confidence=0.95)],
+            authorities=authorities,
+            needs_case_law=True,
+            temporal_mode="CURRENT",
+            as_of_date=date.today(),
+        )
+
+    # 2. Rule-based regex fallback for explicit Section/Article queries
+    sec_match = re.search(r'(?:section|sec\.?|ধারা)\s*([0-9A-Za-z]+)', norm_q, re.IGNORECASE)
+    art_match = re.search(r'(?:article|art\.?|অনুচ্ছেদ)\s*([0-9A-Za-z]+)', norm_q, re.IGNORECASE)
+    ord_match = re.search(r'(?:order|আদেশ)\s*([0-9IVXLCDM]+)', norm_q, re.IGNORECASE)
+
+    if art_match:
+        return LegalRoute(
+            jurisdiction="Bangladesh",
+            legal_domain="Constitutional Law",
+            issues=[LegalIssue(issue="Constitutional Article interpretation", confidence=0.95)],
             authorities=[
-                CandidateAuthority(act="The Registration Act, 1908", sections=["17A", "23", "49"], role="CONTROLLING", reason="candidate registration provisions"),
-                CandidateAuthority(act="The Transfer of Property Act, 1882", sections=["54", "54A"], role="CONTROLLING", reason="candidate contract for sale provisions"),
-                CandidateAuthority(act="The Specific Relief Act, 1877", sections=["21A"], role="SUPPORTING", reason="candidate relief provisions"),
+                CandidateAuthority(
+                    act="The Constitution of the People's Republic of Bangladesh",
+                    sections=[f"Article {art_match.group(1)}", art_match.group(1)],
+                    role="CONTROLLING",
+                    reason="explicit constitutional article"
+                )
             ],
             needs_case_law=True,
             temporal_mode="CURRENT",
             as_of_date=date.today(),
         )
 
-    # 2. Land Registration / Section 23
-    if any(k in q for k in ["land registration", "register land", "section 23", "registration act"]):
+    if ord_match:
         return LegalRoute(
             jurisdiction="Bangladesh",
-            legal_domain="Property & Land Law",
-            issues=[LegalIssue(issue="Land registration presentation and documentation provisions", confidence=0.95)],
+            legal_domain="Civil Procedure",
+            issues=[LegalIssue(issue="Civil Procedure Code Order provisions", confidence=0.95)],
             authorities=[
-                CandidateAuthority(act="The Registration Act, 1908", sections=["17", "23", "49"], role="CONTROLLING", reason="candidate presentation provisions"),
-                CandidateAuthority(act="The Transfer of Property Act, 1882", sections=["54"], role="SUPPORTING", reason="candidate transfer provisions"),
+                CandidateAuthority(
+                    act="The Code of Civil Procedure, 1908",
+                    sections=[f"Order {ord_match.group(1)}", ord_match.group(1)],
+                    role="CONTROLLING",
+                    reason="explicit CPC order"
+                )
             ],
-            needs_case_law=False,
-            temporal_mode="CURRENT",
-            as_of_date=date.today(),
-        )
-
-    # 3. Mutation / Namjari / Khatian
-    if any(k in q for k in ["mutation", "namjari", "khatian", "porcha", "dcr", "kharaj"]):
-        return LegalRoute(
-            jurisdiction="Bangladesh",
-            legal_domain="Land Revenue Law",
-            issues=[LegalIssue(issue="Record of rights and mutation statutory provisions", confidence=0.95)],
-            authorities=[
-                CandidateAuthority(act="State Acquisition and Tenancy Act, 1950", sections=["116", "117", "143"], role="CONTROLLING", reason="candidate record of rights provisions"),
-            ],
-            needs_case_law=False,
-            temporal_mode="CURRENT",
-            as_of_date=date.today(),
-        )
-
-    # 4. Denmohor / Dower / Maintenance / Family Court
-    if any(k in q for k in ["denmohor", "dower", "mehr", "maintenance", "family court"]):
-        return LegalRoute(
-            jurisdiction="Bangladesh",
-            legal_domain="Family & Personal Law",
-            issues=[LegalIssue(issue="Dower, maintenance, and family court jurisdiction", confidence=0.95)],
-            authorities=[
-                CandidateAuthority(act="The Muslim Family Laws Ordinance, 1961", sections=["9", "10"], role="CONTROLLING", reason="candidate dower and maintenance provisions"),
-                CandidateAuthority(act="The Family Courts Act, 2023", sections=["4", "5"], role="SUPPORTING", reason="candidate family court provisions"),
-            ],
-            needs_case_law=False,
-            temporal_mode="CURRENT",
-            as_of_date=date.today(),
-        )
-
-    # 5. Talaq / Divorce
-    if any(k in q for k in ["talaq", "divorce", "dissolution of marriage", "khula", "tawfeez"]):
-        return LegalRoute(
-            jurisdiction="Bangladesh",
-            legal_domain="Family & Personal Law",
-            issues=[LegalIssue(issue="Talaq and dissolution of marriage provisions", confidence=0.95)],
-            authorities=[
-                CandidateAuthority(act="The Muslim Family Laws Ordinance, 1961", sections=["7"], role="CONTROLLING", reason="candidate talaq notice provisions"),
-                CandidateAuthority(act="The Dissolution of Muslim Marriages Act, 1939", sections=["2"], role="SUPPORTING", reason="candidate judicial dissolution grounds"),
-            ],
-            needs_case_law=False,
-            temporal_mode="CURRENT",
-            as_of_date=date.today(),
-        )
-
-    # 6. Consumer rights / Defective product / DNCRP
-    if any(k in q for k in ["defective product", "consumer", "dncrp", "fake product", "damaged goods"]):
-        return LegalRoute(
-            jurisdiction="Bangladesh",
-            legal_domain="Consumer Protection Law",
-            issues=[LegalIssue(issue="Consumer remedy and warranty provisions", confidence=0.95)],
-            authorities=[
-                CandidateAuthority(act="The Sale of Goods Act, 1930", sections=["14", "16"], role="CONTROLLING", reason="candidate implied warranty provisions"),
-                CandidateAuthority(act="Consumers' Right Protection Act, 2009", sections=["45", "76"], role="SUPPORTING", reason="candidate consumer protection complaints"),
-            ],
-            needs_case_law=False,
+            needs_case_law=True,
             temporal_mode="CURRENT",
             as_of_date=date.today(),
         )
