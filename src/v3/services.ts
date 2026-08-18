@@ -89,7 +89,7 @@ export type ResourceState<T> =
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
-const backendUrl = import.meta.env.VITE_BACKEND_URL?.trim().replace(/\/$/, '');
+const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
 
 const supabase: SupabaseClient | null = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
@@ -255,18 +255,28 @@ export async function runResearch(
 ): Promise<ResearchResult> {
   if (!backendUrl) throw new Error('service-unavailable');
   const session = await authService.session();
-  if (!session) throw new Error('authentication-required');
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`;
+  }
+
+  let guestId = localStorage.getItem('justor-guest-id');
+  if (!guestId) {
+    guestId = `guest_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    localStorage.setItem('justor-guest-id', guestId);
+  }
+
   const response = await fetch(`${backendUrl}/chat`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
+    headers,
     body: JSON.stringify({
       query,
       user_role: role,
       language,
       chat_history: [],
+      user_id: session?.user?.id || guestId,
       context,
     }),
   });

@@ -319,6 +319,56 @@ async def get_public_product_proof():
     })
 
 
+@app.get("/public/library", tags=["Public Resources"])
+async def get_public_library(
+    q: str = Query("", description="Search query"),
+    type: str = Query("all", description="Entity type filter: all, act, section, case, amendment, guide"),
+    limit: int = Query(20, ge=1, le=50)
+):
+    """Returns unified library records across Acts, Sections, Precedents and Guides for the frontend."""
+    if not legal_search_aggregator:
+        return JSONResponse(content={"data": []})
+
+    results = await legal_search_aggregator.search(
+        query=q if q else "law",
+        entity_type=type if type else "all",
+        limit=limit
+    )
+
+    library_records = []
+    for r in results:
+        etype = r.get("entity_type", "law")
+        if etype == "act":
+            display_type = "law"
+        elif etype == "case":
+            display_type = "case"
+        elif etype == "section":
+            display_type = "section"
+        elif etype == "guide":
+            display_type = "guide"
+        else:
+            display_type = etype
+
+        library_records.append({
+            "id": r.get("entity_id", str(uuid.uuid4())),
+            "type": display_type,
+            "title": r.get("title_en") or r.get("act_name") or r.get("citation") or "Legal Record",
+            "subtitle": r.get("subtitle_en") or r.get("citation") or r.get("court"),
+            "status": r.get("legal_status") or "Active",
+            "href": None,
+            "source": {
+                "id": r.get("entity_id", "src"),
+                "title": r.get("act_name") or r.get("title_en") or "Bangladesh Law",
+                "citation": r.get("citation"),
+                "status": r.get("legal_status"),
+                "verificationStatus": r.get("verification_status"),
+                "url": r.get("source_url") or "https://bdlaws.minlaw.gov.bd"
+            }
+        })
+
+    return JSONResponse(content={"data": library_records})
+
+
 # ─── Pydantic Request Models ──────────────────────────────────────────────────
 class ChatMessage(BaseModel):
     role: str
