@@ -1601,25 +1601,23 @@ def compress_for_small_model(messages: list) -> list:
 # Lawyer chain intentionally ends at the 70B — never route IRAC to the 8B.
 MODEL_CHAINS = {
     "Legal Professional": [
+        ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
-        ("groq", "llama-3.3-70b-versatile"),
-        ("openrouter", "deepseek/deepseek-r1-distill-llama-70b"),
-        ("gemini", "gemini-1.5-flash"),
-        ("groq", "llama-3.1-8b-instant"),
+        ("openrouter", "deepseek/deepseek-chat"),
+        ("openrouter", "qwen/qwen-2.5-72b-instruct"),
+        ("openrouter", "meta-llama/llama-3.1-8b-instruct"),
     ],
     "Law Student": [
+        ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
-        ("groq", "llama-3.3-70b-versatile"),
-        ("openrouter", "deepseek/deepseek-r1-distill-llama-70b"),
-        ("gemini", "gemini-1.5-flash"),
-        ("groq", "llama-3.1-8b-instant"),
+        ("openrouter", "deepseek/deepseek-chat"),
+        ("openrouter", "meta-llama/llama-3.1-8b-instruct"),
     ],
     "General Public": [
+        ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
-        ("groq", "llama-3.3-70b-versatile"),
-        ("openrouter", "deepseek/deepseek-r1-distill-llama-70b"),
-        ("gemini", "gemini-1.5-flash"),
-        ("groq", "llama-3.1-8b-instant"),
+        ("openrouter", "deepseek/deepseek-chat"),
+        ("openrouter", "meta-llama/llama-3.1-8b-instruct"),
     ],
 }
 

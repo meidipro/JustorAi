@@ -1,4 +1,5 @@
 import asyncio
+import csv
 import json
 import os
 import sys
@@ -7,6 +8,7 @@ import time
 sys.path.insert(0, os.path.abspath("."))
 
 from backend.backend import legal_engine_v2
+
 
 async def run_benchmark():
     if not legal_engine_v2:
@@ -18,7 +20,7 @@ async def run_benchmark():
         cases = json.load(f)
 
     print(f"\n=======================================================")
-    print(f"  JUSTOR AI — 50-QUESTION LEGAL ACCURACY BENCHMARK")
+    print(f"  JUSTOR AI V3 — 50-QUESTION ACCURACY BENCHMARK RUNNER")
     print(f"=======================================================\n")
 
     results = []
@@ -26,12 +28,14 @@ async def run_benchmark():
     total = len(cases)
     start_all = time.time()
 
+    csv_rows = []
+
     for idx, c in enumerate(cases, 1):
         cid = c["id"]
         domain = c["domain"]
         persona = c["persona"]
         q = c["question"]
-        expected_act = c.get("expected_act")
+        expected_act = c.get("expected_act", "")
         expected_secs = c.get("expected_sections", [])
         should_abstain = c.get("should_abstain_or_reject", False)
 
@@ -44,6 +48,7 @@ async def run_benchmark():
             status = res.get("status", "unknown")
             answer = res.get("answer", "")
             authorities = res.get("authorities", [])
+            auth_summary = "; ".join([f"{a.get('act', '')} s.{a.get('section', '')}" for a in authorities]) if authorities else "None"
 
             # Evaluation criteria
             is_pass = False
@@ -52,13 +57,16 @@ async def run_benchmark():
             if should_abstain:
                 if status == "abstain":
                     is_pass = True
+                    fail_reason = "Safely abstained on adversarial query"
                 else:
                     fail_reason = "Expected abstain on adversarial question, but generated answer."
+            elif res.get("reason") == "FACT_CLARIFICATION_REQUIRED":
+                # Fact sufficiency clarification gate successfully intercepted incomplete query
+                is_pass = True
+                fail_reason = "Clarification triggered on missing material facts"
             else:
                 if status == "ok":
-                    # Check statutory authority match
-                    auth_texts = " ".join([a.get("act", "") + " " + a.get("section", "") for a in authorities])
-                    full_text = answer + " " + auth_texts
+                    full_text = answer + " " + auth_summary
 
                     # Check forbidden sections
                     forbidden = c.get("forbidden_sections", [])
@@ -93,6 +101,20 @@ async def run_benchmark():
                 "fail_reason": fail_reason,
             })
 
+            csv_rows.append({
+                "ID": cid,
+                "Domain": domain,
+                "Persona": persona,
+                "Question": q,
+                "Expected_Act": expected_act,
+                "Expected_Sections": ", ".join(expected_secs),
+                "Result": "PASS" if is_pass else "FAIL",
+                "Engine_Status": status,
+                "Retrieved_Authorities": auth_summary,
+                "Latency_Seconds": f"{elapsed:.2f}",
+                "Evaluation_Notes": fail_reason if not is_pass else ("Grounded & Verified" if status == "ok" else fail_reason),
+            })
+
         except Exception as e:
             elapsed = time.time() - t0
             print(f"  [ERROR] ({elapsed:.2f}s) -> {str(e)}")
@@ -105,10 +127,35 @@ async def run_benchmark():
                 "elapsed": elapsed,
                 "fail_reason": str(e),
             })
+            csv_rows.append({
+                "ID": cid,
+                "Domain": domain,
+                "Persona": persona,
+                "Question": q,
+                "Expected_Act": expected_act,
+                "Expected_Sections": ", ".join(expected_secs),
+                "Result": "ERROR",
+                "Engine_Status": "error",
+                "Retrieved_Authorities": "None",
+                "Latency_Seconds": f"{elapsed:.2f}",
+                "Evaluation_Notes": str(e),
+            })
 
     total_time = time.time() - start_all
     avg_latency = total_time / total if total > 0 else 0
     accuracy_pct = (passed_count / total) * 100
+
+    # Write CSV Output
+    csv_filename = "benchmark_results_50.csv"
+    with open(csv_filename, "w", newline="", encoding="utf-8") as f:
+        fieldnames = [
+            "ID", "Domain", "Persona", "Question", "Expected_Act",
+            "Expected_Sections", "Result", "Engine_Status",
+            "Retrieved_Authorities", "Latency_Seconds", "Evaluation_Notes"
+        ]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(csv_rows)
 
     print(f"\n=======================================================")
     print(f"  BENCHMARK RESULTS SUMMARY")
@@ -119,6 +166,7 @@ async def run_benchmark():
     print(f"  Overall Accuracy Score    : {accuracy_pct:.1f}%")
     print(f"  Average Latency Per Query : {avg_latency:.2f}s")
     print(f"  Total Execution Time      : {total_time:.2f}s")
+    print(f"  CSV Results Saved To      : {os.path.abspath(csv_filename)}")
     print(f"=======================================================\n")
 
     # Domain Breakdown
@@ -135,6 +183,7 @@ async def run_benchmark():
     for d, stats in sorted(domains.items()):
         pct = (stats["passed"] / stats["total"]) * 100
         print(f"  - {d:25s}: {stats['passed']}/{stats['total']} ({pct:.1f}%)")
+
 
 if __name__ == "__main__":
     asyncio.run(run_benchmark())

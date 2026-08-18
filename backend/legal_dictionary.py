@@ -247,25 +247,49 @@ def normalize_bengali_text(text: str) -> str:
 
 def extract_legal_dictionary_matches(query: str) -> list[dict]:
     """Scans the query for terms in the bilingual legal dictionary and returns candidate targets."""
-    normalized = normalize_bengali_text(query).lower()
+    normalized = normalize_bengali_text(query)
+    q_lower = normalized.lower()
     matches = []
     seen_concepts = set()
-    
+
+    scored_matches: list[tuple[int, dict]] = []
+
     for item in LEGAL_DICTIONARY:
         canonical = item["canonical"]
         if canonical in seen_concepts:
             continue
-            
+
         # Match bn term, en term, or any alias
         all_terms = [item["term_bn"], item["term_en"]] + item.get("aliases", [])
         for term in all_terms:
-            t_clean = normalize_bengali_text(term).lower()
-            if t_clean in normalized or re.search(rf'\b{re.escape(t_clean)}\b', normalized):
-                matches.append(item)
+            t_clean = normalize_bengali_text(term).strip()
+            if not t_clean:
+                continue
+            
+            is_matched = False
+            match_len = len(t_clean)
+
+            if len(t_clean) <= 3 and t_clean.isascii():
+                # Strict case-sensitive or word boundary check for short acronyms like CS, SA, RS, FIR
+                if re.search(rf'\b{re.escape(t_clean)}\b', normalized, re.IGNORECASE):
+                    is_matched = True
+            elif t_clean.isascii():
+                # English words require word boundaries
+                if re.search(rf'\b{re.escape(t_clean.lower())}\b', q_lower):
+                    is_matched = True
+            else:
+                # Bengali phrases require exact substring match
+                if t_clean in normalized:
+                    is_matched = True
+
+            if is_matched:
+                scored_matches.append((match_len, item))
                 seen_concepts.add(canonical)
                 break
-                
-    return matches
+
+    # Sort by longest/most specific match first, take at most top 2 concepts
+    scored_matches.sort(key=lambda x: x[0], reverse=True)
+    return [m[1] for m in scored_matches[:2]]
 
 
 def expand_query_with_dictionary(query: str) -> dict:
@@ -275,22 +299,30 @@ def expand_query_with_dictionary(query: str) -> dict:
     """
     normalized_q = normalize_bengali_text(query)
     matches = extract_legal_dictionary_matches(normalized_q)
-    
+
     candidate_acts: list[str] = []
     candidate_sections: list[str] = []
+    act_to_sections: dict[str, list[str]] = {}
     domains: set[str] = set()
     concepts: list[str] = []
-    
+
     for m in matches:
         concepts.append(m["canonical"])
         domains.add(m.get("domain", "General"))
-        for act in m.get("candidate_acts", []):
+        acts = m.get("candidate_acts", [])
+        secs = m.get("candidate_sections", [])
+        for act in acts:
             if act not in candidate_acts:
                 candidate_acts.append(act)
-        for sec in m.get("candidate_sections", []):
+            if act not in act_to_sections:
+                act_to_sections[act] = []
+            for sec in secs:
+                if sec not in act_to_sections[act]:
+                    act_to_sections[act].append(sec)
+        for sec in secs:
             if sec not in candidate_sections:
                 candidate_sections.append(sec)
-                
+
     return {
         "original_query": query,
         "normalized_query": normalized_q,
@@ -298,4 +330,5 @@ def expand_query_with_dictionary(query: str) -> dict:
         "domains": list(domains),
         "candidate_acts": candidate_acts,
         "candidate_sections": candidate_sections,
+        "act_to_sections": act_to_sections,
     }

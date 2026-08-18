@@ -65,6 +65,8 @@ Return JSON only:
 
 
 def extract_json(text: str) -> dict:
+    if not text:
+        raise ValueError("Model returned empty response")
     text = text.strip()
     if text.startswith("```json"):
         text = text[7:]
@@ -77,16 +79,27 @@ def extract_json(text: str) -> dict:
         return json.loads(text)
     except json.JSONDecodeError:
         pass
+
     match = re.search(r"\{.*\}", text, flags=re.S)
     if not match:
-        raise ValueError("Model did not return JSON")
+        raise ValueError(f"Model did not return JSON: {text[:100]}")
     candidate = match.group(0)
+    
+    # 1. Clean control characters
+    candidate = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', candidate)
+    
+    # 2. Fix trailing commas (e.g. [1, 2,] -> [1, 2])
+    candidate = re.sub(r',\s*([\]}])', r'\1', candidate)
+
     try:
         return json.loads(candidate)
-    except json.JSONDecodeError:
-        # Fallback: remove non-printable control chars and retry
-        clean = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', candidate)
-        return json.loads(clean)
+    except json.JSONDecodeError as exc:
+        # 3. Fallback: try parsing with regex key-value extractor if JSON is slightly malformed
+        try:
+            import ast
+            return ast.literal_eval(candidate)
+        except Exception:
+            raise ValueError(f"Failed to parse JSON: {str(exc)}")
 
 
 
@@ -109,11 +122,12 @@ def fast_exact_route(query: str) -> Optional[LegalRoute]:
         domain = dict_match.get("domains", ["General Law"])[0] if dict_match.get("domains") else "General Law"
 
         authorities = []
+        act_sections_map = dict_match.get("act_to_sections", {})
         for i, act in enumerate(candidate_acts):
             authorities.append(
                 CandidateAuthority(
                     act=act,
-                    sections=candidate_secs,
+                    sections=act_sections_map.get(act, candidate_secs),
                     role="CONTROLLING" if i == 0 else "SUPPORTING",
                     reason="canonical dictionary candidate"
                 )

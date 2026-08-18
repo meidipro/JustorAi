@@ -67,8 +67,9 @@ class EvidenceBuilder:
                     seen_keys.add(key)
 
         # Process dictionary suggested sections if not already retrieved
+        act_sections_map = dict_expansion.get("act_to_sections", {})
         for act_name in candidate_acts:
-            for sec_cand in dict_expansion.get("candidate_sections", []):
+            for sec_cand in act_sections_map.get(act_name, []):
                 key = f"{act_name}:{sec_cand}"
                 if key in seen_keys:
                     continue
@@ -206,6 +207,14 @@ class EvidenceBuilder:
         for index, case_item in enumerate(cases_found, start=1):
             case_item.evidence_id = f"DLR-{index}"
             case_item.item_type = "case"
+            case_item.role = "SUPPORTING"
             all_items.append(case_item)
 
-        return EvidencePack(items=all_items, created_at=query_date)
+        return EvidencePack(
+            query=query,
+            persona=persona,
+            as_of_date=query_date,
+            temporal_mode=route.temporal_mode,
+            issues=route.issues,
+            authorities=all_items,
+        )

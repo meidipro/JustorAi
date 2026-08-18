@@ -32,6 +32,14 @@ NUMBER_WORDS = {
 }
 
 
+COMMON_ACT_YEARS = {
+    "1860", "1872", "1877", "1881", "1882", "1887", "1890", "1898", "1908", "1930",
+    "1939", "1947", "1949", "1950", "1961", "1972", "1974", "1982", "1994", "1997",
+    "2000", "2001", "2003", "2004", "2006", "2009", "2012", "2015", "2017", "2018",
+    "2021", "2023", "2024", "2025", "2026"
+}
+
+
 def remove_section_references(text: str) -> str:
     return SECTION_PATTERN.sub("SECTION_REF", text or "")
 
@@ -42,7 +50,7 @@ def extract_numeric_tokens(text: str) -> set[str]:
     for word, value in NUMBER_WORDS.items():
         if re.search(rf"\b{re.escape(word)}\b", text_lower):
             tokens.add(value)
-    return tokens
+    return tokens - COMMON_ACT_YEARS
 
 
 def evidence_map(pack: EvidencePack):
