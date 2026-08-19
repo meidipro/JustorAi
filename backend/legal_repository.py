@@ -314,11 +314,6 @@ class LegalRepository:
                 f"Order {arabic_o}", f"Order {roman_o}", arabic_o, roman_o
             ])
 
-        if "consumer" in act_name.lower() and "Guide-29" not in sec_candidates:
-            sec_candidates.append("Guide-29")
-        elif "income" in act_name.lower() and "Guide-21" not in sec_candidates:
-            sec_candidates.append("Guide-21")
-
         response = None
         try:
             for cand in sec_candidates:

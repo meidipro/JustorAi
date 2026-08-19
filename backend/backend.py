@@ -1210,8 +1210,26 @@ SUBJECT_BLOCK_MAP = {
         "Code of Civil Procedure",
     ],
     "Muslim Family Laws Ordinance, 1961": [
+        "The Specific Relief Act, 1877",
+        "Specific Relief Act, 1877",
+        "Code of Civil Procedure",
         "Bangladesh Labour Act, 2006",
         "Income Tax Act, 2023",
+    ],
+    "The Muslim Family Laws Ordinance, 1961": [
+        "The Specific Relief Act, 1877",
+        "Specific Relief Act, 1877",
+        "Code of Civil Procedure",
+        "Bangladesh Labour Act, 2006",
+        "Income Tax Act, 2023",
+    ],
+    "The Limitation Act, 1908": [
+        "Family Courts Ordinance, 1985",
+        "Family Courts Act, 2023",
+    ],
+    "Limitation Act, 1908": [
+        "Family Courts Ordinance, 1985",
+        "Family Courts Act, 2023",
     ],
 }
 
@@ -1672,18 +1690,30 @@ async def _call_gemini_native(messages: list, temperature: float = 0.1, model_na
 MODEL_CHAINS = {
     "Legal Professional": [
         ("gemini", "gemini-2.5-flash"),
+        ("gemini", "gemini-2.0-flash"),
+        ("gemini", "gemini-1.5-flash"),
+        ("groq", "llama-3.3-70b-versatile"),
+        ("groq", "llama-3.1-8b-instant"),
         ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "deepseek/deepseek-chat"),
         ("groq", "qwen/qwen3.6-27b"),
     ],
     "Law Student": [
         ("gemini", "gemini-2.5-flash"),
+        ("gemini", "gemini-2.0-flash"),
+        ("gemini", "gemini-1.5-flash"),
+        ("groq", "llama-3.3-70b-versatile"),
+        ("groq", "llama-3.1-8b-instant"),
         ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "deepseek/deepseek-chat"),
         ("groq", "qwen/qwen3.6-27b"),
     ],
     "General Public": [
         ("gemini", "gemini-2.5-flash"),
+        ("gemini", "gemini-2.0-flash"),
+        ("gemini", "gemini-1.5-flash"),
+        ("groq", "llama-3.3-70b-versatile"),
+        ("groq", "llama-3.1-8b-instant"),
         ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "deepseek/deepseek-chat"),
         ("groq", "qwen/qwen3.6-27b"),
@@ -1696,7 +1726,7 @@ async def call_llm_with_fallbacks(models: list, messages) -> tuple:
     
     for provider, model in models:
         try:
-            payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
+            payload = messages
             
             async def _invoke():
                 if provider == "gemini":

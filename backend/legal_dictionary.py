@@ -223,10 +223,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_bn": "পারিবারিক আদালতের এখতিয়ার",
         "term_en": "family court jurisdiction",
         "canonical": "Exclusive Jurisdiction of Family Court",
-        "aliases": ["family courts act", "family court", "পারিবারিক আদালত", "jurisdiction of family court", "section 5"],
+        "aliases": ["family courts act", "family court", "পারিবারিক আদালত", "jurisdiction of family court", "family court jurisdiction", "পারিবারিক আদালতের এখতিয়ার"],
         "authorities": [
-            {"act": "Family Courts Act, 2023", "sections": ["5"], "role": "CONTROLLING"},
-            {"act": "The Family Courts Ordinance, 1985", "sections": ["5", "6", "23"], "role": "LEGACY_CORPUS"}
+            {"act": "Family Courts Act, 2023", "sections": ["5"], "role": "CONTROLLING"}
         ],
         "domain": "Family"
     },

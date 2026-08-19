@@ -74,6 +74,36 @@ DOMAIN_ACT_ALLOWLIST: dict[str, list[str]] = {
     ]
 }
 
+# ─── Strict Cross-Statute Collision Block Map (Prevents identical section-number bleed) ─
+CROSS_STATUTE_COLLISION_BLOCK_MAP: dict[str, list[str]] = {
+    "The Limitation Act, 1908": [
+        "Family Courts Ordinance",
+        "Family Courts Act",
+    ],
+    "Limitation Act, 1908": [
+        "Family Courts Ordinance",
+        "Family Courts Act",
+    ],
+    "The Muslim Family Laws Ordinance, 1961": [
+        "The Specific Relief Act",
+        "Specific Relief",
+        "The Code of Civil Procedure",
+    ],
+    "Muslim Family Laws Ordinance, 1961": [
+        "The Specific Relief Act",
+        "Specific Relief",
+        "The Code of Civil Procedure",
+    ],
+    "The Specific Relief Act, 1877": [
+        "The Muslim Family Laws Ordinance",
+        "Muslim Family Laws",
+    ],
+    "Specific Relief Act, 1877": [
+        "The Muslim Family Laws Ordinance",
+        "Muslim Family Laws",
+    ],
+}
+
 
 class PreGenerationRelevanceGate:
     """
@@ -99,8 +129,8 @@ class PreGenerationRelevanceGate:
             if not cls._is_metadata_eligible(item):
                 continue
 
-            # ── Tier 2: Domain Alignment ──
-            if domain and not cls._is_domain_aligned(item, domain, allowed_acts):
+            # ── Tier 2: Domain Alignment & Collision Block Enforcement ──
+            if not cls._is_domain_aligned(item, domain, allowed_acts):
                 continue
 
             # ── Tier 3: Issue Match & Non-Empty Text ──
@@ -125,14 +155,22 @@ class PreGenerationRelevanceGate:
     def _is_domain_aligned(
         cls,
         item: EvidenceItem,
-        domain: str,
+        domain: Optional[str],
         allowed_acts: Optional[list[str]] = None
     ) -> bool:
-        """Ensures the statute belongs to the active legal domain or query whitelist."""
+        """Ensures the statute belongs to the active legal domain or query whitelist, and obeys collision blocks."""
+        act_clean = item.act_name.replace("The ", "").strip().lower()
+
+        # Check cross-statute collision block map first
+        if allowed_acts:
+            for allowed in allowed_acts:
+                for blocker_key, blocked_acts in CROSS_STATUTE_COLLISION_BLOCK_MAP.items():
+                    if blocker_key.lower() in allowed.lower() or allowed.lower() in blocker_key.lower():
+                        if any(b.lower() in act_clean for b in blocked_acts):
+                            return False
+
         if not domain or domain == "General":
             return True
-
-        act_clean = item.act_name.replace("The ", "").strip().lower()
 
         # Whitelist override
         if allowed_acts:
