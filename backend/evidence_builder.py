@@ -7,10 +7,14 @@ from .legal_dictionary import expand_query_with_dictionary, normalize_bengali_te
 from .legal_relevance import PreGenerationRelevanceGate
 
 
+from .hierarchical_retriever import HierarchicalRetriever, REPEAL_REPLACEMENT_GRAPH
+
+
 class EvidenceBuilder:
     def __init__(self, repository: LegalRepository, embed_fn):
         self.repository = repository
         self.embed_fn = embed_fn
+        self.hierarchical_retriever = HierarchicalRetriever(repository=repository, embed_fn=embed_fn)
 
     async def build(
         self,
@@ -36,7 +40,11 @@ class EvidenceBuilder:
         # ── 2. Exact Candidate Provision Resolution (Act -> Section Hierarchy) ──
         # Process explicit router authority sections
         for authority in route.authorities:
-            instrument = await self.repository.resolve_instrument(authority.act)
+            # Check repeal status for current query date
+            repeal_info = self.hierarchical_retriever.resolve_repeal_replacement(authority.act, query_date)
+            target_act = repeal_info["controlling_act"]
+
+            instrument = await self.repository.resolve_instrument(target_act) or await self.repository.resolve_instrument(authority.act)
             for section in authority.sections:
                 evidence = None
                 if instrument:
@@ -47,6 +55,9 @@ class EvidenceBuilder:
                     )
                 if not evidence:
                     evidence = await self.repository.resolve_from_chunks_fallback(
+                        act_name=target_act,
+                        section_number=section,
+                    ) or await self.repository.resolve_from_chunks_fallback(
                         act_name=authority.act,
                         section_number=section,
                     )
@@ -67,7 +78,10 @@ class EvidenceBuilder:
                 key = f"{act_name}:{sec_cand}"
                 if key in seen_keys:
                     continue
-                instrument = await self.repository.resolve_instrument(act_name)
+                repeal_info = self.hierarchical_retriever.resolve_repeal_replacement(act_name, query_date)
+                target_act = repeal_info["controlling_act"]
+
+                instrument = await self.repository.resolve_instrument(target_act) or await self.repository.resolve_instrument(act_name)
                 evidence = None
                 if instrument:
                     evidence = await self.repository.resolve_exact_section(
@@ -77,7 +91,7 @@ class EvidenceBuilder:
                     )
                 if not evidence:
                     evidence = await self.repository.resolve_from_chunks_fallback(
-                        act_name=act_name,
+                        act_name=target_act,
                         section_number=sec_cand,
                     )
                 if evidence and evidence.version_id not in seen_versions:
@@ -88,54 +102,17 @@ class EvidenceBuilder:
 
         # ── 3. Hierarchical Hybrid Section Discovery (Inside Candidate Acts) ──
         if len(found) < 2:
-            try:
-                embedding = await self.embed_fn(dict_expansion.get("normalized_query", query))
-            except Exception:
-                embedding = []
-        else:
-            embedding = []
-
-        if embedding:
-            for act_name in candidate_acts[:3]:
-                instrument = await self.repository.resolve_instrument(act_name)
-                if not instrument:
-                    continue
-
-                results = await self.repository.hybrid_search(
-                    query=query,
-                    embedding=embedding,
-                    query_date=query_date,
-                    instrument_id=instrument["id"],
-                    match_count=6,
-                )
-
-                for row in results:
-                    version_id = str(row["provision_version_id"])
-                    key = f"{row['act_name']}:{row['section_number']}"
-                    if version_id in seen_versions or key in seen_keys:
-                        continue
-
-                    is_official = bool(row.get("official_source_verified", False))
-                    found.append(
-                        EvidenceItem(
-                            evidence_id="",
-                            instrument_id=str(row["instrument_id"]),
-                            provision_id=str(row["provision_id"]),
-                            version_id=version_id,
-                            act_name=row["act_name"],
-                            section_number=row["section_number"],
-                            heading=row.get("heading"),
-                            role="SUPPORTING",
-                            legal_text=row["legal_text"],
-                            official_url=row.get("official_url"),
-                            current_for_query_date=True,
-                            official_source_verified=is_official,
-                            exact_section_verified=True,
-                            version_verified=True,
-                            trust_tier="PRIMARY_STATUTE" if is_official else "UNVERIFIED",
-                        )
-                    )
-                    seen_versions.add(version_id)
+            hierarchical_items = await self.hierarchical_retriever.retrieve_hierarchical_sections(
+                query=dict_expansion.get("normalized_query", query),
+                candidate_acts=candidate_acts,
+                query_date=query_date,
+                limit_per_act=5,
+            )
+            for item in hierarchical_items:
+                key = f"{item.act_name}:{item.section_number}"
+                if item.version_id not in seen_versions and key not in seen_keys:
+                    found.append(item)
+                    seen_versions.add(item.version_id)
                     seen_keys.add(key)
 
         # ── 4. Pre-Generation Relevance Gate (3-Tier Filtering) ──
