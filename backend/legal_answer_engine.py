@@ -20,11 +20,18 @@ class LegalAnswerEngine:
         self.builder = EvidenceBuilder(repository=repository, embed_fn=embed_fn)
         self.critic = LegalCritic(llm_call=llm_call)
 
-    def _system_prompt(self, persona: str) -> str:
+    def _system_prompt(self, persona: str, language: str = "EN") -> str:
         normalized = persona.lower()
-        if "lawyer" in normalized or "legal professional" in normalized:
-            return LAWYER_PROMPT
-        return STUDENT_PROMPT
+        base_prompt = LAWYER_PROMPT if ("lawyer" in normalized or "legal professional" in normalized) else STUDENT_PROMPT
+        if language == "BN":
+            base_prompt += (
+                "\n\nBILINGUAL GENERATION INSTRUCTIONS:\n"
+                "- The user query is in Bengali or mixed Banglish.\n"
+                "- Write the legal explanations, doctrines, and application in fluent, clear Bengali.\n"
+                "- RETAIN CANONICAL CITATIONS IN THEIR OFFICIAL FORMAT (e.g. 'The Registration Act, 1908-এর Section 17A', 'Article 102', 'Order 39 Rule 1').\n"
+                "- Strictly tag every claim with its exact evidence tag (e.g. [ACT-1], [DLR-1])."
+            )
+        return base_prompt
 
     def _serialize_pack(self, pack: EvidencePack) -> str:
         return json.dumps(
