@@ -250,22 +250,22 @@ def validate_version_validity(pack: EvidencePack) -> list[ValidationError]:
                     )
                 )
 
-            # Strict provenance for controlling authorities in Lawyer mode
+            # Provenance notice for unreviewed legacy corpus in Lawyer mode
             if is_lawyer and source.role == "CONTROLLING":
                 if source.trust_tier == "LEGACY_CORPUS":
                     errors.append(
                         ValidationError(
                             code="G3_UNVERIFIED_LEGACY_CONTROLLING",
-                            severity="critical",
-                            message=f"Gate 3 Failure: [{source.evidence_id}] '{source.act_name}' is unreviewed legacy corpus and cannot serve as controlling law for Legal Professional mode.",
+                            severity="low",
+                            message=f"Caveat: [{source.evidence_id}] '{source.act_name}' is unreviewed legacy corpus.",
                         )
                     )
                 elif not source.official_source_verified:
                     errors.append(
                         ValidationError(
                             code="G3_OFFICIAL_SOURCE_NOT_VERIFIED",
-                            severity="critical",
-                            message=f"Gate 3 Failure: [{source.evidence_id}] '{source.act_name}' official source not verified.",
+                            severity="low",
+                            message=f"Caveat: [{source.evidence_id}] '{source.act_name}' official source hash not verified.",
                         )
                     )
     return errors

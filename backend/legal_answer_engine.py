@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from .legal_models import EvidencePack, LegalAnswerDraft
 from .legal_prompts import LAWYER_PROMPT, STUDENT_PROMPT
 from .legal_router import LegalRouter, extract_json
@@ -34,11 +35,28 @@ class LegalAnswerEngine:
         return base_prompt
 
     def _serialize_pack(self, pack: EvidencePack) -> str:
-        return json.dumps(
-            pack.model_dump(mode="json"),
-            ensure_ascii=False,
-            indent=2,
-        )
+        compact_authorities = []
+        for a in pack.authorities:
+            compact_authorities.append({
+                "evidence_id": a.evidence_id,
+                "act_name": a.act_name,
+                "section_number": a.section_number,
+                "heading": a.heading,
+                "role": a.role,
+                "trust_tier": a.trust_tier,
+                "legal_text": a.legal_text[:1000] if a.legal_text else "",
+                "case_title": a.case_title,
+                "citation": a.citation,
+                "ratio_decidendi": a.ratio_decidendi,
+            })
+        
+        payload = {
+            "query": pack.query,
+            "persona": pack.persona,
+            "as_of_date": pack.as_of_date.isoformat(),
+            "authorities": compact_authorities,
+        }
+        return json.dumps(payload, ensure_ascii=False, indent=2)
 
     async def _generate(
         self,
@@ -172,6 +190,8 @@ class LegalAnswerEngine:
                 "status": "abstain",
                 "answer": "Justor found relevant law, but generation failed.",
                 "reason": "GENERATION_FAILURE",
+                "authorities": self._authority_cards(pack),
+                "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
                 "debug": str(exc),
             }
 

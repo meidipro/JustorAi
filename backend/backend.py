@@ -98,16 +98,39 @@ if SUPABASE_URL and SUPABASE_KEY:
 else:
     logger.warning("Supabase credentials missing.")
 
-SUPABASE_CASES_URL = os.getenv("SUPABASE_CASES_URL", "").strip()
-SUPABASE_CASES_KEY = os.getenv("SUPABASE_CASES_KEY", "").strip()
+# ─── LLM Clients Initialization ──────────────────────────────────────────────
+GROQ_API_KEY = (os.getenv("GROQ_API_KEY") or os.getenv("VITE_GROQ_API_KEY", "")).strip()
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
+DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "").strip()
 
-supabase_cases: Optional[Client] = None
-if SUPABASE_CASES_URL and SUPABASE_CASES_KEY:
+groq_client = None
+if GROQ_API_KEY:
     try:
-        supabase_cases = create_client(SUPABASE_CASES_URL, SUPABASE_CASES_KEY)
-        logger.info("Supabase Cases client initialized (Project 2: Cases & DLR).")
+        groq_client = Groq(api_key=GROQ_API_KEY, max_retries=0)
+        logger.info("Groq client initialized.")
     except Exception as e:
-        logger.warning(f"Supabase Cases client init failed: {e}")
+        logger.warning(f"Groq init failed: {e}")
+
+openrouter_client = None
+if OpenAI and OPENROUTER_API_KEY:
+    try:
+        openrouter_client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=OPENROUTER_API_KEY,
+        )
+        logger.info("OpenRouter client initialized.")
+    except Exception as e:
+        logger.warning(f"OpenRouter init failed: {e}")
+
+dashscope_client = None
+if OpenAI and DASHSCOPE_API_KEY:
+    try:
+        dashscope_client = OpenAI(
+            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+            api_key=DASHSCOPE_API_KEY,
+        )
+    except Exception:
+        pass
 
 # ─── Legal Evidence Engine V2 & Unified Search Aggregator ────────────────────
 legal_repository_v2 = None
@@ -455,7 +478,7 @@ async def get_user_role(user_id: Optional[str]) -> str:
 GROQ_API_KEY = (os.environ.get("GROQ_API_KEY") or os.environ.get("VITE_GROQ_API_KEY") or "").strip()
 groq_client: Optional[Groq] = None
 if GROQ_API_KEY:
-    groq_client = Groq(api_key=GROQ_API_KEY)
+    groq_client = Groq(api_key=GROQ_API_KEY, max_retries=0)
     logger.info("Groq client initialized securely (backend secret).")
 else:
     logger.warning("GROQ_API_KEY missing.")
@@ -1599,30 +1622,76 @@ def compress_for_small_model(messages: list) -> list:
 
 # Provider strings match your code: "alibaba", "gemini", "groq".
 # Lawyer chain intentionally ends at the 70B — never route IRAC to the 8B.
+async def _call_gemini_native(messages: list, temperature: float = 0.1, model_name: str = "gemini-2.5-flash") -> str:
+    """Call Google Gemini natively via official Generative Language API endpoint using async httpx."""
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY is not set")
+    
+    contents = []
+    system_instruction = None
+    for m in messages:
+        if m["role"] == "system":
+            system_instruction = {"parts": [{"text": m["content"]}]}
+        elif m["role"] == "user":
+            contents.append({"role": "user", "parts": [{"text": m["content"]}]})
+        elif m["role"] == "assistant":
+            contents.append({"role": "model", "parts": [{"text": m["content"]}]})
+    
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GEMINI_API_KEY}"
+    body = {
+        "contents": contents,
+        "generationConfig": {
+            "temperature": temperature,
+            "maxOutputTokens": 4000,
+            "responseMimeType": "application/json",
+            "thinkingConfig": {"thinkingBudget": 0}
+        }
+    }
+    if system_instruction:
+        body["systemInstruction"] = system_instruction
+    
+    import httpx
+    async with httpx.AsyncClient(timeout=25.0) as client:
+        resp = await client.post(url, json=body)
+        if resp.status_code == 200:
+            data = resp.json()
+            candidates = data.get("candidates", [])
+            if candidates and "content" in candidates[0]:
+                parts = candidates[0]["content"].get("parts", [])
+                text_parts = [p.get("text", "") for p in parts if not p.get("thought", False)]
+                if text_parts:
+                    return "".join(text_parts).strip()
+                elif parts:
+                    return parts[-1].get("text", "").strip()
+        else:
+            logger.warning(f"Gemini API Error ({resp.status_code}): {resp.text[:100]}")
+    return ""
+
+
+# Multi-provider resilient fallback chains with native Google Gemini 2.5 Flash as primary
 MODEL_CHAINS = {
     "Legal Professional": [
+        ("gemini", "gemini-2.5-flash"),
         ("openrouter", "google/gemini-2.5-flash"),
-        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
         ("openrouter", "deepseek/deepseek-chat"),
-        ("openrouter", "qwen/qwen-2.5-72b-instruct"),
-        ("openrouter", "meta-llama/llama-3.1-8b-instruct"),
+        ("groq", "qwen/qwen3.6-27b"),
     ],
     "Law Student": [
+        ("gemini", "gemini-2.5-flash"),
         ("openrouter", "google/gemini-2.5-flash"),
-        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
         ("openrouter", "deepseek/deepseek-chat"),
-        ("openrouter", "meta-llama/llama-3.1-8b-instruct"),
+        ("groq", "qwen/qwen3.6-27b"),
     ],
     "General Public": [
+        ("gemini", "gemini-2.5-flash"),
         ("openrouter", "google/gemini-2.5-flash"),
-        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
         ("openrouter", "deepseek/deepseek-chat"),
-        ("openrouter", "meta-llama/llama-3.1-8b-instruct"),
+        ("groq", "qwen/qwen3.6-27b"),
     ],
 }
 
 async def call_llm_with_fallbacks(models: list, messages) -> tuple:
-    """Returns (text, 'provider/model'). Fast zero-wait fallback across models with strict 12s per-provider timeout."""
+    """Returns (text, 'provider/model'). Fast zero-wait fallback across models with strict per-provider timeout."""
     import asyncio
     
     for provider, model in models:
@@ -1630,39 +1699,37 @@ async def call_llm_with_fallbacks(models: list, messages) -> tuple:
             payload = compress_for_small_model(messages) if model in SMALL_MODELS else messages
             
             async def _invoke():
-                if provider == "openrouter" and openrouter_client:
-                    c = await asyncio.to_thread(
-                        lambda: openrouter_client.chat.completions.create(
-                            model=model, messages=payload, temperature=0.1, max_tokens=4000
-                        )
-                    )
-                    return c.choices[0].message.content
-                elif provider == "groq" and groq_client:
+                if provider == "gemini":
+                    if not GEMINI_API_KEY:
+                        return None
+                    return await _call_gemini_native(payload, 0.1, model)
+                elif provider == "groq":
+                    if not GROQ_API_KEY or not groq_client:
+                        return None
                     c = await asyncio.to_thread(
                         lambda: groq_client.chat.completions.create(
                             model=model, messages=payload, temperature=0.1, max_tokens=4000
                         )
                     )
                     return c.choices[0].message.content
-                elif provider == "gemini" and GEMINI_API_KEY:
-                    ans = await asyncio.to_thread(_call_gemini_native, payload, 0.1)
-                    return ans
-                elif provider == "alibaba" and dashscope_client:
+                elif provider == "openrouter":
+                    if not OPENROUTER_API_KEY or not openrouter_client:
+                        return None
                     c = await asyncio.to_thread(
-                        lambda: dashscope_client.chat.completions.create(
+                        lambda: openrouter_client.chat.completions.create(
                             model=model, messages=payload, temperature=0.1, max_tokens=4000
                         )
                     )
                     return c.choices[0].message.content
                 return None
 
-            # Enforce 25.0s maximum per LLM call — ample time for complex legal synthesis without hanging
-            result = await asyncio.wait_for(_invoke(), timeout=25.0)
+            # Enforce 6.0s maximum per LLM call
+            result = await asyncio.wait_for(_invoke(), timeout=6.0)
             if result:
                 return result, f"{provider}/{model}"
                 
         except asyncio.TimeoutError:
-            logger.warning(f"[LLM] {provider}/{model} timed out after 25s, switching to next model instantly.")
+            logger.warning(f"[LLM] {provider}/{model} timed out after 6s, switching to next model instantly.")
             continue
         except Exception as e:
             err_msg = str(e)

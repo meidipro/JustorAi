@@ -120,24 +120,74 @@ class EvidencePack(BaseModel):
     issues: list[LegalIssue]
     authorities: list[EvidenceItem]
 
-class DraftClaim(BaseModel):
-    claim_id: str
-    text: str
-    claim_type: ClaimType
-    evidence_ids: list[str] = Field(default_factory=list)
+from pydantic import BaseModel, Field, field_validator, model_validator
+
 
 class DraftParagraph(BaseModel):
     text: str
     evidence_ids: list[str] = Field(default_factory=list)
 
+    @model_validator(mode="before")
+    @classmethod
+    def _coerce_string_to_paragraph(cls, data: Any) -> Any:
+        if isinstance(data, str):
+            return {"text": data, "evidence_ids": []}
+        return data
+
+
+class DraftClaim(BaseModel):
+    claim_id: str = Field(default_factory=lambda: "C-1")
+    text: str
+    claim_type: str = "general"
+    evidence_ids: list[str] = Field(default_factory=list)
+
+    @field_validator("claim_type", mode="before")
+    @classmethod
+    def _normalize_claim_type(cls, v: Any) -> str:
+        valid = {"legal_rule", "procedure", "deadline", "amendment", "case_law", "application", "conclusion", "general"}
+        s = str(v).lower().strip()
+        if s in valid:
+            return s
+        if "rule" in s or "doctrine" in s:
+            return "legal_rule"
+        if "case" in s or "precedent" in s:
+            return "case_law"
+        if "proc" in s:
+            return "procedure"
+        return "general"
+
+
 class LegalAnswerDraft(BaseModel):
-    issue: str
+    issue: str = ""
     rules: list[DraftParagraph] = Field(default_factory=list)
     doctrine: list[DraftParagraph] = Field(default_factory=list)
     application: list[DraftParagraph] = Field(default_factory=list)
-    conclusion: DraftParagraph
+    conclusion: DraftParagraph = Field(default_factory=lambda: DraftParagraph(text=""))
     key_points: list[DraftParagraph] = Field(default_factory=list)
     claims: list[DraftClaim] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_draft_fields(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        
+        # Normalize conclusion if string
+        if isinstance(data.get("conclusion"), str):
+            data["conclusion"] = {"text": data["conclusion"], "evidence_ids": []}
+            
+        # Normalize paragraph lists if they contain strings
+        for field in ["rules", "doctrine", "application", "key_points"]:
+            items = data.get(field)
+            if isinstance(items, list):
+                norm_items = []
+                for it in items:
+                    if isinstance(it, str):
+                        norm_items.append({"text": it, "evidence_ids": []})
+                    else:
+                        norm_items.append(it)
+                data[field] = norm_items
+        return data
 
 class ValidationError(BaseModel):
     code: str
