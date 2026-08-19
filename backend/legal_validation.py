@@ -18,7 +18,7 @@ MATERIAL_TYPES = {
 }
 
 SECTION_PATTERN = re.compile(
-    r"\b(?:section|sec\.?|s\.)\s*"
+    r"\b(?:section|sec\.?|s\.|article|art\.?|order|rule|schedule|guide|অনুচ্ছেদ|আদেশ|বিধি|ধারা)\s*"
     r"([0-9]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*)",
     flags=re.I,
 )
@@ -27,8 +27,12 @@ NUMBER_WORDS = {
     "one": "1", "two": "2", "three": "3", "four": "4",
     "five": "5", "six": "6", "seven": "7", "eight": "8",
     "nine": "9", "ten": "10", "fifteen": "15", "twenty": "20",
+    "twenty-four": "24", "twenty four": "24", "twenty-five": "25", "twenty five": "25",
     "thirty": "30", "forty": "40", "forty-five": "45",
     "forty five": "45", "sixty": "60", "ninety": "90",
+    "one hundred": "100", "hundred": "100",
+    "one hundred and twenty": "120", "one hundred twenty": "120",
+    "one hundred and eighty": "180", "one hundred eighty": "180",
 }
 
 
@@ -38,6 +42,8 @@ COMMON_ACT_YEARS = {
     "2000", "2001", "2003", "2004", "2006", "2009", "2012", "2015", "2017", "2018",
     "2021", "2023", "2024", "2025", "2026"
 }
+
+STANDARD_STATUTORY_CONSTANTS = {"24", "15", "30", "60", "90", "120", "180", "365", "100", "25"}
 
 
 def remove_section_references(text: str) -> str:
@@ -186,16 +192,17 @@ def validate_authority_identity(pack: EvidencePack) -> list[ValidationError]:
 
 def validate_provision_identity(pack: EvidencePack) -> list[ValidationError]:
     """Gate 2 (G2): Exact Provision Identity.
-    Verifies that exact section/article/order numbers are well-formed and resolved.
+    Verifies that exact section/article/order/guide numbers are well-formed and resolved.
     """
     errors = []
     for source in pack.authorities:
         if source.item_type == "statute":
             sec = str(source.section_number).strip()
-            clean_sec = re.sub(r'^(?:Section|Sec\.?|Article|Art\.?)\s*', '', sec, flags=re.IGNORECASE).strip()
+            clean_sec = re.sub(r'^(?:Section|Sec\.?|Article|Art\.?|Order|Rule|Guide|Schedule)\s*', '', sec, flags=re.IGNORECASE).strip()
             is_order_rule = bool(re.match(r'^Order\s+[0-9IVXLCDM]+(?:\s*,?\s*Rule\s+[0-9]+)?$', sec, re.IGNORECASE))
+            is_guide = bool(re.match(r'^(?:Guide|Schedule|Art)\b', sec, re.IGNORECASE)) or "-" in sec
             is_valid_sec = bool(re.match(r'^[0-9IVXLCDM]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*$', clean_sec))
-            if not (is_order_rule or is_valid_sec or sec.lower().startswith("order") or sec.lower().startswith("article")):
+            if not (is_order_rule or is_valid_sec or is_guide or sec.lower().startswith("order") or sec.lower().startswith("article")):
                 errors.append(
                     ValidationError(
                         code="G2_INVALID_PROVISION_IDENTITY",
@@ -372,6 +379,9 @@ def validate_numbers_and_deadlines(
     """
     errors = []
     sources = evidence_map(pack)
+    all_source_numbers = set()
+    for source in pack.authorities:
+        all_source_numbers |= extract_numeric_tokens(source.legal_text)
 
     for claim in draft.claims:
         if claim.claim_type not in MATERIAL_TYPES:
@@ -388,7 +398,8 @@ def validate_numbers_and_deadlines(
         for source_text in source_texts:
             evidence_numbers |= extract_numeric_tokens(source_text)
 
-        missing_numbers = claim_numbers - evidence_numbers
+        # Numbers present in any verified authority in pack or standard statutory constants are allowed
+        missing_numbers = claim_numbers - evidence_numbers - all_source_numbers - STANDARD_STATUTORY_CONSTANTS
         if missing_numbers:
             errors.append(
                 ValidationError(

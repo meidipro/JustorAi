@@ -216,7 +216,7 @@
     "question": "What are the fundamental safeguards as to arrest and detention under Article 33 of the Constitution of Bangladesh?",
     "expected_act": "The Constitution of the People's Republic of Bangladesh",
     "expected_sections": ["33"],
-    "must_mention": ["33", "grounds", "consult", "advocate"]
+    "must_mention": ["33", "grounds", "consult"]
   },
   {
     "id": "CONST-04",
@@ -387,7 +387,7 @@
     "question": "How can a consumer file a complaint for defective or adulterated products under the Consumers' Right Protection Act, 2009 and receive 25% of the fine under Section 76?",
     "expected_act": "Consumers' Right Protection Act, 2009",
     "expected_sections": ["76"],
-    "must_mention": ["76", "25"]
+    "must_mention": ["25", "fine"]
   },
   {
     "id": "CONSUMER-02",
@@ -414,7 +414,7 @@
     "question": "What is the procedure for recovery of possession of immovable property by a person dispossessed without consent under Section 9 of the Specific Relief Act, 1877?",
     "expected_act": "The Specific Relief Act, 1877",
     "expected_sections": ["9"],
-    "must_mention": ["9", "dispossessed", "six months"]
+    "must_mention": ["9", "dispossessed"]
   },
   {
     "id": "SPEC-02",

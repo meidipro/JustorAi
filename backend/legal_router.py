@@ -94,28 +94,215 @@ def extract_json(text: str) -> dict:
     try:
         return json.loads(candidate)
     except json.JSONDecodeError as exc:
-        # 3. Fallback: try parsing with regex key-value extractor if JSON is slightly malformed
         try:
             import ast
             return ast.literal_eval(candidate)
         except Exception:
+            # 3. Robust Regex Key-Value Extractor Fallback
+            domain_m = re.search(r'"legal_domain"\s*:\s*"([^"]+)"', text)
+            domain = domain_m.group(1) if domain_m else "General Law"
+            
+            authorities = []
+            acts_m = re.findall(r'"act"\s*:\s*"([^"]+)"', text)
+            secs_m = re.findall(r'"sections"\s*:\s*\[([^\]]*)\]', text)
+            for i, act in enumerate(acts_m):
+                raw_secs = secs_m[i] if i < len(secs_m) else ""
+                secs = [s.strip(' "\'') for s in raw_secs.split(',') if s.strip(' "\'')]
+                authorities.append({
+                    "act": act,
+                    "sections": secs,
+                    "role": "CONTROLLING" if i == 0 else "SUPPORTING",
+                    "reason": "extracted from model output"
+                })
+            
+            issues = []
+            issues_m = re.findall(r'"issue"\s*:\s*"([^"]+)"', text)
+            for iss in issues_m:
+                issues.append({"issue": iss, "confidence": 0.9})
+            
+            if authorities or issues:
+                return {
+                    "jurisdiction": "Bangladesh",
+                    "legal_domain": domain,
+                    "issues": issues or [{"issue": "Legal query analysis", "confidence": 0.9}],
+                    "authorities": authorities,
+                    "needs_case_law": True,
+                    "temporal_mode": "CURRENT",
+                    "as_of_date": date.today().isoformat()
+                }
             raise ValueError(f"Failed to parse JSON: {str(exc)}")
 
 
+BANGLADESH_ACT_CATALOG = [
+    {
+        "patterns": [r"transfer of property act", r"\btpa\b", r"সম্পত্তি হস্তান্তর আইন"],
+        "canonical": "The Transfer of Property Act, 1882",
+        "domain": "Property Law"
+    },
+    {
+        "patterns": [r"registration act", r"রেজিস্ট্রেশন আইন", r"নিবন্ধন আইন"],
+        "canonical": "The Registration Act, 1908",
+        "domain": "Property Law"
+    },
+    {
+        "patterns": [r"specific relief act", r"\bsr act\b", r"সুনির্দিষ্ট প্রতিকার আইন"],
+        "canonical": "The Specific Relief Act, 1877",
+        "domain": "Specific Relief"
+    },
+    {
+        "patterns": [r"code of criminal procedure", r"\bcrpc\b", r"\bcr\.p\.c\b", r"ফৌজদারী কার্যবিধি", r"ফৌজদারি কার্যবিধি"],
+        "canonical": "The Code of Criminal Procedure, 1898",
+        "domain": "Criminal Procedure"
+    },
+    {
+        "patterns": [r"penal code", r"\bpc\b", r"দণ্ডবিধি", r"দন্ডবিধি"],
+        "canonical": "The Penal Code, 1860",
+        "domain": "Criminal Law"
+    },
+    {
+        "patterns": [r"code of civil procedure", r"\bcpc\b", r"\bc\.p\.c\b", r"দেওয়ানী কার্যবিধি", r"দেওয়ানী কার্যবিধি"],
+        "canonical": "The Code of Civil Procedure, 1908",
+        "domain": "Civil Procedure"
+    },
+    {
+        "patterns": [r"constitution", r"সংবিধান"],
+        "canonical": "The Constitution of the People's Republic of Bangladesh",
+        "domain": "Constitutional Law"
+    },
+    {
+        "patterns": [r"negotiable instruments act", r"\bni act\b", r"হস্তান্তরযোগ্য দলিল আইন"],
+        "canonical": "The Negotiable Instruments Act, 1881",
+        "domain": "Commercial & Banking Law"
+    },
+    {
+        "patterns": [r"contract act", r"চুক্তি আইন"],
+        "canonical": "The Contract Act, 1872",
+        "domain": "Contract Law"
+    },
+    {
+        "patterns": [r"sale of goods act", r"পণ্য বিক্রয় আইন"],
+        "canonical": "The Sale of Goods Act, 1930",
+        "domain": "Commercial Law"
+    },
+    {
+        "patterns": [r"state acquisition and tenancy act", r"\bsata\b", r"রাষ্ট্রীয় অধিগ্রহণ ও প্রজাস্বত্ব আইন"],
+        "canonical": "State Acquisition and Tenancy Act, 1950",
+        "domain": "Land Revenue Law"
+    },
+    {
+        "patterns": [r"muslim family laws ordinance", r"\bmflo\b", r"মুসলিম পারিবারিক আইন অধ্যাদেশ"],
+        "canonical": "The Muslim Family Laws Ordinance, 1961",
+        "domain": "Family Law"
+    },
+    {
+        "patterns": [r"dissolution of muslim marriages act", r"\bdmma\b", r"মুসলিম বিবাহ বিচ্ছেদ আইন"],
+        "canonical": "The Dissolution of Muslim Marriages Act, 1939",
+        "domain": "Family Law"
+    },
+    {
+        "patterns": [r"family courts act", r"family courts ordinance", r"পারিবারিক আদালত আইন"],
+        "canonical": "Family Courts Act, 2023",
+        "domain": "Family Law"
+    },
+    {
+        "patterns": [r"labour act", r"labor act", r"\bbla\b", r"বাংলাদেশ শ্রম আইন", r"শ্রম আইন"],
+        "canonical": "The Bangladesh Labour Act, 2006",
+        "domain": "Labour Law"
+    },
+    {
+        "patterns": [r"consumers['\s]*right", r"consumer protection", r"ভোক্তা অধিকার সংরক্ষণ আইন"],
+        "canonical": "Consumers' Right Protection Act, 2009",
+        "domain": "Consumer Protection"
+    },
+    {
+        "patterns": [r"income tax act", r"income tax ordinance", r"আয়কর আইন", r"আয়কর আইন"],
+        "canonical": "Income Tax Act, 2023",
+        "domain": "Taxation Law"
+    },
+    {
+        "patterns": [r"artha rin adalat", r"money loan court", r"অর্থ ঋণ আদালত আইন"],
+        "canonical": "Artha Rin Adalat Ain, 2003",
+        "domain": "Commercial & Banking Law"
+    },
+    {
+        "patterns": [r"limitation act", r"তামাদি আইন"],
+        "canonical": "The Limitation Act, 1908",
+        "domain": "Limitation Law"
+    },
+]
+
 
 def fast_exact_route(query: str) -> Optional[LegalRoute]:
-    """
-    Fast 0ms deterministic candidate hint generator using bilingual legal dictionary & rules.
-    Provides candidate search areas only; does not embed legal rules or conclusions.
-    The primary database independently establishes and verifies all legal rules.
-    """
     from .legal_models import CandidateAuthority, LegalIssue
     from .legal_dictionary import expand_query_with_dictionary, normalize_bengali_text
 
     norm_q = normalize_bengali_text(query).lower()
-    dict_match = expand_query_with_dictionary(query)
 
-    # 1. If dictionary matched explicit Bangladesh Acts & sections, build route in 0ms
+    matched_acts = []
+    detected_domain = "General Law"
+    for cat in BANGLADESH_ACT_CATALOG:
+        for pat in cat["patterns"]:
+            if re.search(pat, norm_q, re.IGNORECASE):
+                if cat["canonical"] not in matched_acts:
+                    matched_acts.append(cat["canonical"])
+                    detected_domain = cat["domain"]
+                break
+
+    explicit_sections = []
+    for m in re.finditer(r'(?:sections?|sec\.?|ধারা|ধারাসমূহ)\s*([0-9A-Za-z\(\),\s\band\b]+)', norm_q, re.IGNORECASE):
+        chunk = m.group(1)
+        found_nums = re.findall(r'\b[0-9]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*\b', chunk)
+        for num in found_nums:
+            if num not in explicit_sections and num not in {"1860", "1872", "1877", "1881", "1882", "1898", "1908", "1930", "1939", "1950", "1961", "2006", "2009", "2023"}:
+                explicit_sections.append(num)
+    if not explicit_sections:
+        explicit_sections = re.findall(r'(?:section|sec\.?|ধারা)\s*([0-9]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*)', norm_q, re.IGNORECASE)
+
+    explicit_articles = re.findall(r'(?:articles?|art\.?|অনুচ্ছেদ)\s*([0-9]+[A-Za-z]?(?:\([0-9A-Za-z]+\))*)', norm_q, re.IGNORECASE)
+    explicit_orders = re.findall(r'(?:orders?|আদেশ)\s*([0-9IVXLCDM]+)(?:\s*,?\s*(?:rules?|বিধি|নিয়ম|নিয়ম)\s*([0-9]+))?', norm_q, re.IGNORECASE)
+
+    dict_match = expand_query_with_dictionary(query)
+    act_sections_map = dict_match.get("act_to_sections", {})
+
+    if matched_acts:
+        authorities = []
+        for i, act in enumerate(matched_acts):
+            secs = []
+            if "constitution" in act.lower():
+                secs = [f"Article {a}" for a in explicit_articles] + explicit_articles
+            elif "civil procedure" in act.lower() and explicit_orders:
+                for ord_num, rule_num in explicit_orders:
+                    if rule_num:
+                        secs.append(f"Order {ord_num}, Rule {rule_num}")
+                    secs.append(f"Order {ord_num}")
+                    secs.append(ord_num)
+            if not secs:
+                secs = list(explicit_sections) or list(explicit_articles)
+            
+            for s in act_sections_map.get(act, []):
+                if s not in secs:
+                    secs.append(s)
+
+            authorities.append(
+                CandidateAuthority(
+                    act=act,
+                    sections=secs,
+                    role="CONTROLLING" if i == 0 else "SUPPORTING",
+                    reason="explicit Act in query"
+                )
+            )
+
+        return LegalRoute(
+            jurisdiction="Bangladesh",
+            legal_domain=detected_domain,
+            issues=[LegalIssue(issue=f"{matched_acts[0]} statutory provisions", confidence=0.98)],
+            authorities=authorities,
+            needs_case_law=True,
+            temporal_mode="CURRENT",
+            as_of_date=date.today(),
+        )
+
+    dict_match = expand_query_with_dictionary(query)
     if dict_match.get("candidate_acts"):
         candidate_acts = dict_match["candidate_acts"]
         candidate_secs = dict_match.get("candidate_sections", [])
@@ -148,12 +335,7 @@ def fast_exact_route(query: str) -> Optional[LegalRoute]:
             as_of_date=date.today(),
         )
 
-    # 2. Rule-based regex fallback for explicit Section/Article queries
-    sec_match = re.search(r'(?:section|sec\.?|ধারা)\s*([0-9A-Za-z]+)', norm_q, re.IGNORECASE)
-    art_match = re.search(r'(?:article|art\.?|অনুচ্ছেদ)\s*([0-9A-Za-z]+)', norm_q, re.IGNORECASE)
-    ord_match = re.search(r'(?:order|আদেশ)\s*([0-9IVXLCDM]+)', norm_q, re.IGNORECASE)
-
-    if art_match:
+    if explicit_articles:
         return LegalRoute(
             jurisdiction="Bangladesh",
             legal_domain="Constitutional Law",
@@ -161,7 +343,7 @@ def fast_exact_route(query: str) -> Optional[LegalRoute]:
             authorities=[
                 CandidateAuthority(
                     act="The Constitution of the People's Republic of Bangladesh",
-                    sections=[f"Article {art_match.group(1)}", art_match.group(1)],
+                    sections=[f"Article {explicit_articles[0]}", explicit_articles[0]],
                     role="CONTROLLING",
                     reason="explicit constitutional article"
                 )
@@ -171,7 +353,8 @@ def fast_exact_route(query: str) -> Optional[LegalRoute]:
             as_of_date=date.today(),
         )
 
-    if ord_match:
+    if explicit_orders:
+        ord_num = explicit_orders[0][0]
         return LegalRoute(
             jurisdiction="Bangladesh",
             legal_domain="Civil Procedure",
@@ -179,7 +362,7 @@ def fast_exact_route(query: str) -> Optional[LegalRoute]:
             authorities=[
                 CandidateAuthority(
                     act="The Code of Civil Procedure, 1908",
-                    sections=[f"Order {ord_match.group(1)}", ord_match.group(1)],
+                    sections=[f"Order {ord_num}", ord_num],
                     role="CONTROLLING",
                     reason="explicit CPC order"
                 )
@@ -193,25 +376,42 @@ def fast_exact_route(query: str) -> Optional[LegalRoute]:
 
 
 class LegalRouter:
+    """Zero-shot LLM & Fast deterministic router for legal queries."""
+
     def __init__(
         self,
-        llm_call: Callable[[list[dict]], Awaitable[str]],
+        llm_call: Optional[Callable[[list[dict]], Awaitable[str]]] = None,
+        client: Optional[Any] = None,
+        model: str = "openrouter/google/gemini-2.5-flash",
     ):
         self.llm_call = llm_call
+        self.client = client
+        self.model = model
 
     async def route(self, query: str) -> LegalRoute:
-        # Fast 0ms rule-based path
-        fast_res = fast_exact_route(query)
-        if fast_res:
-            return fast_res
+        fast_route = fast_exact_route(query)
+        if fast_route:
+            return fast_route
 
-        # LLM fallback path
-        raw = await self.llm_call(
-            [
+        if self.llm_call:
+            raw = await self.llm_call([
                 {"role": "system", "content": ROUTER_PROMPT},
                 {"role": "user", "content": query},
-            ]
-        )
+            ])
+        elif self.client:
+            user_message = f"Legal Question: {query}\nProvide routing analysis in JSON."
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": ROUTER_PROMPT},
+                    {"role": "user", "content": user_message},
+                ],
+                temperature=0.0,
+            )
+            raw = response.choices[0].message.content
+        else:
+            raise RuntimeError("LegalRouter has no llm_call or client configured")
+
         parsed = extract_json(raw)
         route = LegalRoute.model_validate(parsed)
         if route.temporal_mode == "CURRENT" and route.as_of_date is None:

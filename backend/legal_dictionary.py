@@ -202,22 +202,121 @@ LEGAL_DICTIONARY: list[dict] = [
         "domain": "Banking"
     },
     {
-        "term_bn": "ভোক্তা অধিকার",
-        "term_en": "consumer rights",
-        "canonical": "Consumer Rights Protection and Compensation",
-        "aliases": ["জাতীয় ভোক্তা অধিকার", "DNCRP", "ভেজাল পণ্য", "consumer complaint", "অতিরিক্ত দাম"],
-        "candidate_acts": ["The Consumer Rights Protection Act, 2009"],
-        "candidate_sections": ["40", "45", "53", "71", "76"],
+        "term_bn": "আংশিক সম্পাদন",
+        "term_en": "part performance",
+        "canonical": "Doctrine of Part Performance",
+        "aliases": ["অংশিক সম্পাদন", "part performance", "section 53a", "53a", "doctrine of part performance"],
+        "candidate_acts": ["The Transfer of Property Act, 1882"],
+        "candidate_sections": ["53A"],
+        "domain": "Property"
+    },
+    {
+        "term_bn": "পারিবারিক আদালত",
+        "term_en": "family court",
+        "canonical": "Family Court Jurisdiction and Powers",
+        "aliases": ["পারিবারিক আদালত আইন", "family courts act", "family court jurisdiction", "exclusive jurisdiction", "section 5"],
+        "candidate_acts": ["Family Courts Act, 2023", "The Family Courts Ordinance, 1985"],
+        "candidate_sections": ["5", "6", "23"],
+        "domain": "Family"
+    },
+    {
+        "term_bn": "কোয়াশমেন্ট",
+        "term_en": "quashment",
+        "canonical": "Inherent Power to Quash Criminal Proceedings / Abuse of Process",
+        "aliases": ["quashing", "quash", "inherent powers", "abuse of the process", "section 561a", "561a", "561A"],
+        "candidate_acts": ["The Code of Criminal Procedure, 1898"],
+        "candidate_sections": ["561A"],
+        "domain": "Criminal"
+    },
+    {
+        "term_bn": "চুক্তিভঙ্গের ক্ষতিপূরণ",
+        "term_en": "breach of contract compensation",
+        "canonical": "Compensation for Loss or Damage Caused by Breach of Contract",
+        "aliases": ["breach of contract", "loss or damage caused by breach", "compensation for loss or damage", "section 73", "চুক্তিভঙ্গ"],
+        "candidate_acts": ["The Contract Act, 1872"],
+        "candidate_sections": ["73", "74"],
+        "domain": "Commercial"
+    },
+    {
+        "term_bn": "একতরফা ডিক্রি রদ",
+        "term_en": "setting aside ex-parte decree",
+        "canonical": "Setting Aside Ex-Parte Decree Against Defendant",
+        "aliases": ["ex-parte decree", "setting aside ex-parte", "order 9 rule 13", "order ix rule 13", "ex parte decree", "setting aside an ex-parte"],
+        "candidate_acts": ["The Code of Civil Procedure, 1908"],
+        "candidate_sections": ["Order 9, Rule 13", "Order 9", "9"],
+        "domain": "Civil"
+    },
+    {
+        "term_bn": "শ্রমিক অভিযোগ পদ্ধতি",
+        "term_en": "worker grievance",
+        "canonical": "Grievance Procedure for Individual Worker Complaints",
+        "aliases": ["grievance procedure", "individual worker complaints", "worker complaint", "section 33", "অভিযোগ পদ্ধতি"],
+        "candidate_acts": ["The Bangladesh Labour Act, 2006"],
+        "candidate_sections": ["33", "34"],
+        "domain": "Labour"
+    },
+    {
+        "term_bn": "ভোক্তা অভিযোগ ও জরিমানা",
+        "term_en": "consumer fine distribution",
+        "canonical": "Consumer Complaint and 25% Fine Entitlement",
+        "aliases": ["defective or adulterated products", "25% of the fine", "receive 25% of the fine", "section 76", "ভোক্তা অধিকার", "adulterated product"],
+        "candidate_acts": ["Consumers' Right Protection Act, 2009", "The Consumers' Right Protection Act, 2009"],
+        "candidate_sections": ["76", "71", "45"],
         "domain": "Consumer"
     },
     {
-        "term_bn": "শ্রম আইন",
-        "term_en": "labour law",
-        "canonical": "Labour Rights, Termination, Gratuity and Severance",
-        "aliases": ["শ্রমিক ছাঁটাই", "retrenchment", "discharge", "gratuity", "সার্ভিস বেনিফিট", "মাতৃত্বকালীন ছুটি", "maternity benefit"],
-        "candidate_acts": ["The Bangladesh Labour Act, 2006"],
-        "candidate_sections": ["20", "22", "26", "27", "46", "33"],
-        "domain": "Labour"
+        "term_bn": "আয়কর রিটার্ন দাখিল",
+        "term_en": "income tax return",
+        "canonical": "Mandatory Submission of Return of Income",
+        "aliases": ["income tax act", "return of income", "submission of return of income", "tax return", "আয়কর রিটার্ন", "section 166"],
+        "candidate_acts": ["Income Tax Act, 2023", "The Income Tax Act, 2023", "Income-tax Ordinance, 1984"],
+        "candidate_sections": ["166", "174", "75"],
+        "domain": "Taxation"
+    },
+    {
+        "term_bn": "নির্যাতন ও নিষ্ঠুর সাজা থেকে সুরক্ষা",
+        "term_en": "protection against torture",
+        "canonical": "Protection Against Torture and Degrading Punishment",
+        "aliases": ["torture or cruel", "cruel, inhuman", "degrading punishment", "article 35(5)", "35(5)", "নির্যাতন"],
+        "candidate_acts": ["The Constitution of the People's Republic of Bangladesh"],
+        "candidate_sections": ["35", "35(5)"],
+        "domain": "Constitutional"
+    },
+    {
+        "term_bn": "বেদখল সম্পত্তি উদ্ধার",
+        "term_en": "recovery of possession without consent",
+        "canonical": "Suit by Person Dispossessed of Immovable Property without Consent",
+        "aliases": ["dispossessed without consent", "recovery of possession", "section 9", "সুনির্দিষ্ট প্রতিকার", "বেদখল"],
+        "candidate_acts": ["The Specific Relief Act, 1877"],
+        "candidate_sections": ["9", "8"],
+        "domain": "Property"
+    },
+    {
+        "term_bn": "গ্রেফতার ও আটক সংক্রান্ত রক্ষাকবচ",
+        "term_en": "safeguards as to arrest",
+        "canonical": "Safeguards as to Arrest and Detention and Right to Consult Legal Practitioner",
+        "aliases": ["safeguards as to arrest", "arrest and detention", "right to consult", "article 33", "আটক সংক্রান্ত রক্ষাকবচ"],
+        "candidate_acts": ["The Constitution of the People's Republic of Bangladesh"],
+        "candidate_sections": ["33"],
+        "domain": "Constitutional"
+    },
+    {
+        "term_bn": "ওয়ারেন্ট ছাড়া গ্রেফতার",
+        "term_en": "arrest without warrant",
+        "canonical": "Arrest without Warrant by Police",
+        "aliases": ["arrest without a warrant", "arrest without", "without a warrant", "without warrant", "arrest a person", "বিনা পরোয়ানায় গ্রেপ্তার", "বিনা পরোয়ানায় গ্রেফতার", "police arrest conditions"],
+        "candidate_acts": ["The Code of Criminal Procedure, 1898", "The Constitution of the People's Republic of Bangladesh"],
+        "candidate_sections": ["54", "76", "55", "46", "61", "33"],
+        "domain": "Criminal"
+    },
+    {
+        "term_bn": "ভেজাল বা মেয়াদোত্তীর্ণ পণ্য",
+        "term_en": "adulterated goods penalty",
+        "canonical": "Penalties for Adulterated or Expired Goods",
+        "aliases": ["adulterated goods", "expired goods", "ভেজাল পণ্য", "মেয়াদোত্তীর্ণ পণ্য", "selling adulterated", "selling expired"],
+        "candidate_acts": ["Consumers' Right Protection Act, 2009"],
+        "candidate_sections": ["45", "Guide-29", "76"],
+        "domain": "Consumer"
     }
 ]
 

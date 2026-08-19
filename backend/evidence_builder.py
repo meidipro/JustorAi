@@ -37,34 +37,28 @@ class EvidenceBuilder:
         # Process explicit router authority sections
         for authority in route.authorities:
             instrument = await self.repository.resolve_instrument(authority.act)
-            if instrument:
-                for section in authority.sections:
+            for section in authority.sections:
+                evidence = None
+                if instrument:
                     evidence = await self.repository.resolve_exact_section(
                         instrument_id=instrument["id"],
                         section_number=section,
                         query_date=query_date,
                     )
-                    if not evidence or evidence.version_id in seen_versions:
-                        continue
-                    evidence.role = authority.role
-                    found.append(evidence)
-                    seen_versions.add(evidence.version_id)
-                    seen_keys.add(f"{evidence.act_name}:{evidence.section_number}")
-            else:
-                # Fallback to document_chunks
-                for section in authority.sections:
+                if not evidence:
                     evidence = await self.repository.resolve_from_chunks_fallback(
                         act_name=authority.act,
                         section_number=section,
                     )
-                    if not evidence:
-                        continue
-                    key = f"{evidence.act_name}:{evidence.section_number}"
-                    if key in seen_keys:
-                        continue
-                    evidence.role = authority.role
-                    found.append(evidence)
-                    seen_keys.add(key)
+                if not evidence or evidence.version_id in seen_versions:
+                    continue
+                key = f"{evidence.act_name}:{evidence.section_number}"
+                if key in seen_keys:
+                    continue
+                evidence.role = authority.role
+                found.append(evidence)
+                seen_versions.add(evidence.version_id)
+                seen_keys.add(key)
 
         # Process dictionary suggested sections if not already retrieved
         act_sections_map = dict_expansion.get("act_to_sections", {})
@@ -74,26 +68,23 @@ class EvidenceBuilder:
                 if key in seen_keys:
                     continue
                 instrument = await self.repository.resolve_instrument(act_name)
+                evidence = None
                 if instrument:
                     evidence = await self.repository.resolve_exact_section(
                         instrument_id=instrument["id"],
                         section_number=sec_cand,
                         query_date=query_date,
                     )
-                    if evidence and evidence.version_id not in seen_versions:
-                        evidence.role = "SUPPORTING"
-                        found.append(evidence)
-                        seen_versions.add(evidence.version_id)
-                        seen_keys.add(key)
-                else:
+                if not evidence:
                     evidence = await self.repository.resolve_from_chunks_fallback(
                         act_name=act_name,
                         section_number=sec_cand,
                     )
-                    if evidence and key not in seen_keys:
-                        evidence.role = "SUPPORTING"
-                        found.append(evidence)
-                        seen_keys.add(key)
+                if evidence and evidence.version_id not in seen_versions:
+                    evidence.role = "SUPPORTING"
+                    found.append(evidence)
+                    seen_versions.add(evidence.version_id)
+                    seen_keys.add(key)
 
         # ── 3. Hierarchical Hybrid Section Discovery (Inside Candidate Acts) ──
         if len(found) < 2:

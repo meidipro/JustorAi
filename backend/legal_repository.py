@@ -274,6 +274,12 @@ class LegalRepository:
         clean_num = re.sub(r'^(?:Article|ARTICLE|Order|ORDER|Section|SECTION|Sec\.?|Art\.?)\s*', '', raw_sec, flags=re.IGNORECASE).strip()
         if clean_num and clean_num not in sec_candidates:
             sec_candidates.append(clean_num)
+
+        pure_num_m = re.match(r"^([0-9]+)", clean_num or raw_sec)
+        if pure_num_m:
+            p_num = pure_num_m.group(1)
+            if p_num not in sec_candidates:
+                sec_candidates.append(p_num)
         
         root, parts = split_section_reference(clean_num or raw_sec)
         if root and root not in sec_candidates:
@@ -283,10 +289,34 @@ class LegalRepository:
             if rendered_sec not in sec_candidates:
                 sec_candidates.append(rendered_sec)
 
-        order_match = re.search(r'order\s*([0-9IVXLCDM]+)', raw_sec, re.IGNORECASE)
-        if order_match:
-            ord_val = order_match.group(1)
-            sec_candidates.extend([f"Order {ord_val}", f"Order {ord_val} Rule 1", f"Order {ord_val} Rule 2", f"Order {ord_val} Rule 11", f"Order {ord_val} Rule 13", ord_val])
+        roman_map = {
+            "1": "I", "2": "II", "3": "III", "4": "IV", "5": "V",
+            "6": "VI", "7": "VII", "8": "VIII", "9": "IX", "10": "X",
+            "39": "XXXIX", "21": "XXI", "41": "XLI"
+        }
+        inv_roman_map = {v: k for k, v in roman_map.items()}
+        
+        ord_m = re.search(r'order\s*([0-9IVXLCDM]+)(?:\s*,?\s*rule\s*([0-9]+))?', raw_sec, re.IGNORECASE)
+        if ord_m:
+            o_val = ord_m.group(1).upper()
+            r_val = ord_m.group(2)
+            arabic_o = inv_roman_map.get(o_val, o_val)
+            roman_o = roman_map.get(o_val, o_val)
+            if r_val:
+                sec_candidates.extend([
+                    f"Order {arabic_o}, Rule {r_val}",
+                    f"Order {roman_o}, Rule {r_val}",
+                    f"Order {arabic_o} Rule {r_val}",
+                    f"Order {roman_o} Rule {r_val}",
+                ])
+            sec_candidates.extend([
+                f"Order {arabic_o}", f"Order {roman_o}", arabic_o, roman_o
+            ])
+
+        if "consumer" in act_name.lower() and "Guide-29" not in sec_candidates:
+            sec_candidates.append("Guide-29")
+        elif "income" in act_name.lower() and "Guide-21" not in sec_candidates:
+            sec_candidates.append("Guide-21")
 
         response = None
         try:
@@ -322,6 +352,21 @@ class LegalRepository:
                         best = min(res_kw.data, key=lambda r: abs(len(r.get("act_name","")) - len(act_name)))
                         response = type("obj", (), {"data": [best]})()
                         break
+
+            if not response or not response.data:
+                # ONLY use act-level chunk fallback if section was empty or general guide, NOT on non-existent numbers like 999
+                if not raw_sec or raw_sec.lower() in {"none", "", "0", "guide"} or "guide" in raw_sec.lower():
+                    def query_any_act():
+                        return (
+                            self.db.table("document_chunks")
+                            .select("id, act_name, section_number, section_title, content, jurisdiction, status")
+                            .ilike("act_name", f"%{main_kw}%")
+                            .limit(1)
+                            .execute()
+                        )
+                    res_any = await self._run(query_any_act)
+                    if res_any.data:
+                        response = res_any
 
             if not response or not response.data:
                 return None

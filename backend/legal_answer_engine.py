@@ -45,14 +45,30 @@ class LegalAnswerEngine:
                 + correction_feedback
             )
 
-        raw = await self.llm_call(
-            [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": self._serialize_pack(pack)},
-            ]
-        )
-        parsed = extract_json(raw)
-        return LegalAnswerDraft.model_validate(parsed)
+        for attempt in range(2):
+            raw = await self.llm_call(
+                [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": self._serialize_pack(pack)},
+                ]
+            )
+            try:
+                parsed = extract_json(raw)
+                return LegalAnswerDraft.model_validate(parsed)
+            except Exception as exc:
+                if attempt == 0:
+                    system_prompt += "\n\nCRITICAL INSTRUCTION: Return strictly valid, parseable JSON matching the schema."
+                    continue
+                clean = re.sub(r',\s*([\]}])', r'\1', raw)
+                m = re.search(r'\{.*\}', clean, re.S)
+                if m:
+                    import ast
+                    try:
+                        p = ast.literal_eval(m.group(0))
+                        return LegalAnswerDraft.model_validate(p)
+                    except Exception:
+                        pass
+                raise exc
 
     async def _verify_missing_authorities(
         self,

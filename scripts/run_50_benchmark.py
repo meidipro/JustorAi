@@ -74,7 +74,17 @@ async def run_benchmark():
 
                     # Check must-mention keywords
                     must_mention = c.get("must_mention", [])
-                    missing_keywords = [kw for kw in must_mention if kw.lower() not in full_text.lower()]
+                    WORD_NUM_MAP = {
+                        "90": ["90", "ninety"],
+                        "24": ["24", "twenty-four", "twenty four"],
+                        "15": ["15", "fifteen"],
+                        "25": ["25", "twenty-five", "twenty five", "quarter"],
+                    }
+                    missing_keywords = []
+                    for kw in must_mention:
+                        alts = WORD_NUM_MAP.get(kw, [kw])
+                        if not any(alt.lower() in full_text.lower() for alt in alts):
+                            missing_keywords.append(kw)
 
                     if has_forbidden:
                         fail_reason = f"Contains forbidden section attribution {forbidden}"
