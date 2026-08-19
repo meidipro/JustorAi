@@ -115,6 +115,7 @@ class EvidenceBuilder:
                     if version_id in seen_versions or key in seen_keys:
                         continue
 
+                    is_official = bool(row.get("official_source_verified", False))
                     found.append(
                         EvidenceItem(
                             evidence_id="",
@@ -128,9 +129,10 @@ class EvidenceBuilder:
                             legal_text=row["legal_text"],
                             official_url=row.get("official_url"),
                             current_for_query_date=True,
-                            official_source_verified=True,
+                            official_source_verified=is_official,
                             exact_section_verified=True,
                             version_verified=True,
+                            trust_tier="PRIMARY_STATUTE" if is_official else "UNVERIFIED",
                         )
                     )
                     seen_versions.add(version_id)

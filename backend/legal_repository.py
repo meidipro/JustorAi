@@ -178,6 +178,7 @@ class LegalRepository:
             if provision.get("subsection"):
                 rendered_section += f"({provision['subsection']})"
 
+            is_official = bool(version.get("official_source_verified", False) and instrument.get("official_source_verified", False))
             return EvidenceItem(
                 evidence_id="",
                 instrument_id=instrument_id,
@@ -192,10 +193,10 @@ class LegalRepository:
                 valid_from=version.get("valid_from"),
                 valid_to=version.get("valid_to"),
                 current_for_query_date=True,
-                official_source_verified=True,
+                official_source_verified=is_official,
                 exact_section_verified=True,
                 version_verified=True,
-                trust_tier="PRIMARY_STATUTE",
+                trust_tier="PRIMARY_STATUTE" if is_official else "UNVERIFIED",
             )
         except Exception:
             return None
@@ -382,11 +383,11 @@ class LegalRepository:
                 heading=row.get("section_title"),
                 role="SUPPORTING",
                 legal_text=row.get("content", ""),
-                official_source_verified=True,
+                official_source_verified=False,
                 exact_section_verified=True,
-                version_verified=True,
+                version_verified=False,
                 item_type="statute",
-                trust_tier="PRIMARY_STATUTE",
+                trust_tier="LEGACY_CORPUS",
             )
         except Exception:
             return None

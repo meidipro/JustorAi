@@ -35,6 +35,7 @@ TrustTier = Literal[
     "LEGACY_CORPUS",
     "VERIFIED_JUDGMENT",
     "UNVERIFIED_REPORTER_CITATION",
+    "UNVERIFIED",
     "ABSTAIN",
 ]
 
@@ -93,7 +94,7 @@ class EvidenceItem(BaseModel):
     court: str | None = None
     year: int | None = None
     ratio_decidendi: str | None = None
-    trust_tier: TrustTier = "PRIMARY_STATUTE"
+    trust_tier: TrustTier = "UNVERIFIED"
     trust_badge: str | None = None
 
     def get_badge(self) -> str:

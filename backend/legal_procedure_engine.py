@@ -128,10 +128,10 @@ def calculate_registration_deadline(execution_date: date, instrument_type: str =
         rule = "A contract for sale of immovable property must be presented for registration within 60 days from execution."
         is_mandatory_unregistered_void = True
     else:
-        # Section 23: General 4 months
-        deadline = execution_date + relativedelta(months=4)
+        # Section 23: General 3 months (amended by the Registration (Amendment) Act, 2004)
+        deadline = execution_date + relativedelta(months=3)
         section = "Section 23"
-        rule = "General documents must be presented for registration within 4 months from execution date."
+        rule = "General documents must be presented for registration within 3 months from execution date (Registration Act §23 as amended in 2004)."
         is_mandatory_unregistered_void = False
 
     return {
@@ -142,6 +142,27 @@ def calculate_registration_deadline(execution_date: date, instrument_type: str =
         "statutory_rule": rule,
         "days_allowed": (deadline - execution_date).days,
         "is_mandatory_unregistered_void": is_mandatory_unregistered_void
+    }
+
+
+# ─── Criminal Procedure Detention & Remand Limits (CrPC 1898 & Constitution) ──
+def calculate_police_custody_limits(arrest_date: date, journey_hours: int = 0) -> dict:
+    """
+    Calculates statutory limits on police detention without magistrate and maximum remand under CrPC.
+    - CrPC §61 / Constitution Art. 33: 24-hour limit without magistrate order (excluding journey).
+    - CrPC §167: Maximum 15 days total police custody in the whole case.
+    """
+    remand_max_days = 15
+    remand_deadline = arrest_date + timedelta(days=remand_max_days)
+
+    return {
+        "section_61_custody_limit_hours": 24,
+        "excluded_journey_hours": journey_hours,
+        "constitutional_article": "Article 33(2)",
+        "crpc_section": "Section 61",
+        "remand_max_days_allowed": 15,
+        "remand_max_deadline": remand_deadline.isoformat(),
+        "statutory_rule": "No police officer shall detain in custody a person arrested without warrant for a longer period than 24 hours exclusive of the time necessary for the journey from the place of arrest to the Magistrate's Court (CrPC §61, Const. Art. 33(2)). The aggregate period of remand to police custody shall not exceed 15 days in the whole (CrPC §167)."
     }
 
 

@@ -86,12 +86,25 @@ async def run_benchmark():
                         if not any(alt.lower() in full_text.lower() for alt in alts):
                             missing_keywords.append(kw)
 
+                    # Check retrieved authorities for expected sections
+                    retrieved_str = auth_summary.lower()
+                    missing_sec_retrieval = []
+                    for s in expected_secs:
+                        if s and s.lower() not in retrieved_str:
+                            missing_sec_retrieval.append(s)
+
                     if has_forbidden:
                         fail_reason = f"Contains forbidden section attribution {forbidden}"
                     elif missing_keywords:
                         fail_reason = f"Missing key legal concept/section: {missing_keywords}"
                     else:
                         is_pass = True
+                        if any("primary source" in a.lower() for a in (res.get("authorities") or [])):
+                            eval_note = "FULLY_GROUNDED_PRIMARY_STATUTE"
+                        elif any("guide" in a.lower() for a in (res.get("authorities") or [])):
+                            eval_note = "GROUNDED_REGULATORY_GUIDE"
+                        else:
+                            eval_note = "GROUNDED_LEGACY_CORPUS" if not missing_sec_retrieval else "GROUNDED_WITH_CAVEATS"
                 else:
                     fail_reason = f"Engine abstained: {res.get('reason', 'UNKNOWN')}"
 
@@ -101,6 +114,8 @@ async def run_benchmark():
             else:
                 print(f"  [FAIL] ({elapsed:.2f}s) -> {fail_reason}")
 
+            note = eval_note if is_pass else fail_reason
+
             results.append({
                 "id": cid,
                 "domain": domain,
@@ -108,7 +123,7 @@ async def run_benchmark():
                 "passed": is_pass,
                 "status": status,
                 "elapsed": elapsed,
-                "fail_reason": fail_reason,
+                "fail_reason": note,
             })
 
             csv_rows.append({
@@ -122,7 +137,7 @@ async def run_benchmark():
                 "Engine_Status": status,
                 "Retrieved_Authorities": auth_summary,
                 "Latency_Seconds": f"{elapsed:.2f}",
-                "Evaluation_Notes": fail_reason if not is_pass else ("Grounded & Verified" if status == "ok" else fail_reason),
+                "Evaluation_Notes": note,
             })
 
         except Exception as e:
