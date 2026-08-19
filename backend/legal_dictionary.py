@@ -1,7 +1,7 @@
 """
 Justor AI — Bilingual Legal Dictionary & Query Normalizer for Bangladesh Law
 Maps colonial, Farsi-influenced, and Bengali legal terminology into canonical concepts,
-and normalizes Bengali numerals and statutory prefixes for 100% retrieval accuracy.
+with strict per-Act structured authority bindings to eliminate Cartesian Act×Section contamination.
 """
 
 from __future__ import annotations
@@ -20,17 +20,20 @@ STATUTORY_PREFIX_PATTERNS: list[tuple[re.Pattern, str]] = [
     (re.compile(r'(?:উপধারা|সাবসেকশন)\s*([0-9A-Za-z]+)', re.IGNORECASE), r'(\1)'),
 ]
 
-# ─── Comprehensive Bangladesh Legal Dictionary ────────────────────────────────
-# Maps local/Farsi/colonial terms to canonical concepts, primary candidate Acts, and sections.
+# ─── Comprehensive Bangladesh Legal Dictionary (Structured Schema) ───────────
+# Each entry binds specific sections to its respective Act only.
 LEGAL_DICTIONARY: list[dict] = [
     # ── Property & Land Law ──
     {
         "term_bn": "বায়না",
         "term_en": "baina",
         "canonical": "Contract for Sale of Immovable Property",
-        "aliases": ["বায়না দলিল", "বায়নাপত্র", "bainapatra", "agreement for sale", "contract for sale"],
-        "candidate_acts": ["The Registration Act, 1908", "The Transfer of Property Act, 1882", "The Specific Relief Act, 1877"],
-        "candidate_sections": ["17A", "54A", "21A"],
+        "aliases": ["বায়না দলিল", "বায়নাপত্র", "bainapatra", "agreement for sale", "contract for sale", "baina"],
+        "authorities": [
+            {"act": "The Registration Act, 1908", "sections": ["17A"], "role": "CONTROLLING"},
+            {"act": "The Transfer of Property Act, 1882", "sections": ["54A"], "role": "CONTROLLING"},
+            {"act": "The Specific Relief Act, 1877", "sections": ["21A"], "role": "SUPPORTING"}
+        ],
         "domain": "Property"
     },
     {
@@ -38,8 +41,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "namjari",
         "canonical": "Mutation of Record of Rights",
         "aliases": ["মিউটেশন", "mutation", "e-namjari", "ই-নামজারি", "খারিজ", "kharij", "জমা খারিজ", "joma kharij"],
-        "candidate_acts": ["The State Acquisition and Tenancy Act, 1950", "The Land Reform Act, 2023"],
-        "candidate_sections": ["143", "144", "116", "117"],
+        "authorities": [
+            {"act": "The State Acquisition and Tenancy Act, 1950", "sections": ["143", "144", "116", "117"], "role": "CONTROLLING"}
+        ],
         "domain": "Property"
     },
     {
@@ -47,8 +51,10 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "khatian",
         "canonical": "Record of Rights (RoR)",
         "aliases": ["পর্চা", "porcha", "CS", "SA", "RS", "BS", "সিটি জরিপ", "record of rights", "ROR"],
-        "candidate_acts": ["The State Acquisition and Tenancy Act, 1950", "The Evidence Act, 1872"],
-        "candidate_sections": ["144", "144A", "144B", "35"],
+        "authorities": [
+            {"act": "The State Acquisition and Tenancy Act, 1950", "sections": ["144", "144A", "144B"], "role": "CONTROLLING"},
+            {"act": "The Evidence Act, 1872", "sections": ["35"], "role": "SUPPORTING"}
+        ],
         "domain": "Property"
     },
     {
@@ -56,8 +62,10 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "heba",
         "canonical": "Gift under Muslim Law",
         "aliases": ["হেবা দলিল", "দানপত্র", "gift deed", "hiba-bil-ewaz", "হেবা বিল এওয়াজ"],
-        "candidate_acts": ["The Registration Act, 1908", "The Transfer of Property Act, 1882"],
-        "candidate_sections": ["17(1)", "122", "123"],
+        "authorities": [
+            {"act": "The Registration Act, 1908", "sections": ["17(1)"], "role": "CONTROLLING"},
+            {"act": "The Transfer of Property Act, 1882", "sections": ["122", "123"], "role": "SUPPORTING"}
+        ],
         "domain": "Property"
     },
     {
@@ -65,8 +73,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "pre-emption",
         "canonical": "Right of Pre-emption",
         "aliases": ["হকশুফা", "shufa", "pre-emption", "preemption", "অগ্রক্রয়"],
-        "candidate_acts": ["The State Acquisition and Tenancy Act, 1950", "The Transfer of Property Act, 1882"],
-        "candidate_sections": ["96"],
+        "authorities": [
+            {"act": "The State Acquisition and Tenancy Act, 1950", "sections": ["96"], "role": "CONTROLLING"}
+        ],
         "domain": "Property"
     },
 
@@ -76,8 +85,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "naraji",
         "canonical": "Protest Petition against Police Final Report",
         "aliases": ["নারাজি পিটিশন", "naraji petition", "no-objection", "protest petition", "নারাজী"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898"],
-        "candidate_sections": ["173", "190", "200"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["173", "190", "200"], "role": "CONTROLLING"}
+        ],
         "domain": "Criminal"
     },
     {
@@ -85,8 +95,10 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "remand",
         "canonical": "Police Custody / Detention for Investigation",
         "aliases": ["পুলিশ হেফাজত", "police custody", "remand in custody", "ম্যাজিস্ট্রেট হেফাজত"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898", "The Constitution of the People's Republic of Bangladesh"],
-        "candidate_sections": ["61", "167", "33"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["61", "167"], "role": "CONTROLLING"},
+            {"act": "The Constitution of the People's Republic of Bangladesh", "sections": ["33"], "role": "SUPPORTING"}
+        ],
         "domain": "Criminal"
     },
     {
@@ -94,165 +106,200 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "bail",
         "canonical": "Bail / Anticipatory Bail",
         "aliases": ["আগাম জামিন", "anticipatory bail", "interim bail", "অন্তর্র্বতীকালীন জামিন", "bailable offence"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898"],
-        "candidate_sections": ["496", "497", "498"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["496", "497", "498"], "role": "CONTROLLING"}
+        ],
+        "domain": "Criminal"
+    },
+    {
+        "term_bn": "কোয়াশমেন্ট",
+        "term_en": "quashment",
+        "canonical": "Quashing of Criminal Proceedings (Section 561A CrPC)",
+        "aliases": ["quashing", "quash", "561A", "section 561A", "বাতিল", "খারিজ মামলা", "inherent power"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["561A", "561"], "role": "CONTROLLING"}
+        ],
         "domain": "Criminal"
     },
     {
         "term_bn": "এজাহার",
-        "term_en": "ejahar",
+        "term_en": "FIR",
         "canonical": "First Information Report (FIR)",
-        "aliases": ["এফআইআর", "FIR", "first information report", "থানায় অভিযোগ", "মামলা দায়ের"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898"],
-        "candidate_sections": ["154", "156"],
+        "aliases": ["এফআইআর", "first information report", "প্রাথমিক তথ্য বিবরণী", "থানায় মামলা", "lodging an fir"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["154", "156"], "role": "CONTROLLING"}
+        ],
         "domain": "Criminal"
     },
     {
-        "term_bn": "সিআর মামলা",
-        "term_en": "cr case",
-        "canonical": "Complaint Case before Magistrate",
-        "aliases": ["নালিশি মামলা", "court complaint", "complaint case", "সি.আর. মামলা"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898"],
-        "candidate_sections": ["200", "202", "203", "204"],
-        "domain": "Criminal"
-    },
-    {
-        "term_bn": "প্রতারণা",
-        "term_en": "cheating",
-        "canonical": "Cheating and Dishonestly Inducing Delivery of Property",
-        "aliases": ["জালিয়াতি", "চিটিং", "cheating", "fraud", "420 মামলা", "চারশো বিশ"],
-        "candidate_acts": ["The Penal Code, 1860"],
-        "candidate_sections": ["415", "420", "406"],
+        "term_bn": "১৪৪ ধারা",
+        "term_en": "section 144",
+        "canonical": "Prohibitory Injunction / Urgent Restraint Order",
+        "aliases": ["নিষেধাজ্ঞা", "curfew", "১৪৪ ধারা জারি", "জরুরি আদেশ", "prohibitory order"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["144"], "role": "CONTROLLING"}
+        ],
         "domain": "Criminal"
     },
 
-    # ── Family & Personal Law ──
+    # ── Civil Procedure & Remedies ──
+    {
+        "term_bn": "নিষেধাজ্ঞা",
+        "term_en": "injunction",
+        "canonical": "Temporary and Permanent Injunction",
+        "aliases": ["অস্থায়ী নিষেধাজ্ঞা", "temporary injunction", "status quo", "স্টে অর্ডার", "অর্ডার ৩৯"],
+        "authorities": [
+            {"act": "The Code of Civil Procedure, 1908", "sections": ["Order 39", "Order 39 Rule 1", "Order 39 Rule 2", "39"], "role": "CONTROLLING"},
+            {"act": "The Specific Relief Act, 1877", "sections": ["52", "53", "54"], "role": "SUPPORTING"}
+        ],
+        "domain": "Civil"
+    },
+    {
+        "term_bn": "আরজি খারিজ",
+        "term_en": "rejection of plaint",
+        "canonical": "Rejection of Plaint (Order 7 Rule 11 CPC)",
+        "aliases": ["rejection of plaint", "order 7 rule 11", "৭ আদেশ ১১ নিয়ম", "মামলা খারিজ", "cause of action"],
+        "authorities": [
+            {"act": "The Code of Civil Procedure, 1908", "sections": ["Order 7 Rule 11", "7", "Order 7"], "role": "CONTROLLING"}
+        ],
+        "domain": "Civil"
+    },
+    {
+        "term_bn": "একতরফা ডিক্রি বাতিল",
+        "term_en": "setting aside ex-parte decree",
+        "canonical": "Setting Aside Ex-Parte Decree (Order 9 Rule 13 CPC)",
+        "aliases": ["setting aside ex-parte", "ex-parte decree", "একতরফা ডিক্রি", "order 9 rule 13", "৯ আদেশ ১৩ নিয়ম"],
+        "authorities": [
+            {"act": "The Code of Civil Procedure, 1908", "sections": ["Order 9 Rule 13", "9", "Order 9"], "role": "CONTROLLING"}
+        ],
+        "domain": "Civil"
+    },
+
+    # ── Family Law & Dower ──
     {
         "term_bn": "দেনমোহর",
-        "term_en": "denmohor",
-        "canonical": "Dower / Mahr",
-        "aliases": ["মোহরানা", "mahr", "dower", "prompt dower", "deferred dower", "তলবি মোহরানা"],
-        "candidate_acts": ["The Muslim Family Laws Ordinance, 1961", "The Family Courts Act, 2023"],
-        "candidate_sections": ["10", "5"],
+        "term_en": "dower",
+        "canonical": "Mahr / Dower Recovery and Payment",
+        "aliases": ["mohorana", "দেনমোহরানা", "mohor", "prompt dower", "deferred dower", "দাবি দেনমোহর"],
+        "authorities": [
+            {"act": "The Muslim Family Laws Ordinance, 1961", "sections": ["10"], "role": "CONTROLLING"},
+            {"act": "Family Courts Act, 2023", "sections": ["5"], "role": "SUPPORTING"}
+        ],
+        "domain": "Family"
+    },
+    {
+        "term_bn": "খোরপোশ",
+        "term_en": "maintenance",
+        "canonical": "Maintenance of Wife and Children (Nafaqah)",
+        "aliases": ["ভরণপোষণ", "maintenance", "nafaqah", "খোরপোষ", "স্ত্রী ও সন্তানের ভরণপোষণ"],
+        "authorities": [
+            {"act": "The Muslim Family Laws Ordinance, 1961", "sections": ["9"], "role": "CONTROLLING"},
+            {"act": "Family Courts Act, 2023", "sections": ["5"], "role": "SUPPORTING"}
+        ],
         "domain": "Family"
     },
     {
         "term_bn": "তালাক",
         "term_en": "talaq",
-        "canonical": "Divorce and Dissolution of Marriage",
-        "aliases": ["ডিভোর্স", "divorce", "talaq-e-tafweez", "খোলা তালাক", "khula", "সালিশি পরিষদ", "arbitration council"],
-        "candidate_acts": ["The Muslim Family Laws Ordinance, 1961", "The Dissolution of Muslim Marriages Act, 1939", "The Family Courts Act, 2023"],
-        "candidate_sections": ["7", "8", "2", "5"],
+        "canonical": "Divorce and Notice Procedure under MFLO",
+        "aliases": ["divorce", "তালাক নোটিশ", "notice of talaq", "dissolution of marriage", "তালাকনামা"],
+        "authorities": [
+            {"act": "The Muslim Family Laws Ordinance, 1961", "sections": ["7", "8"], "role": "CONTROLLING"},
+            {"act": "The Dissolution of Muslim Marriages Act, 1939", "sections": ["2"], "role": "SUPPORTING"}
+        ],
         "domain": "Family"
     },
     {
-        "term_bn": "খোরপোষ",
-        "term_en": "maintenance",
-        "canonical": "Maintenance of Wife and Children",
-        "aliases": ["ভরণপোষণ", "maintenance", "iddat maintenance", "সন্তানের ভরণপোষণ"],
-        "candidate_acts": ["The Muslim Family Laws Ordinance, 1961", "The Family Courts Act, 2023"],
-        "candidate_sections": ["9", "5"],
+        "term_bn": "বহুবিবাহ",
+        "term_en": "polygamy",
+        "canonical": "Polygamy / Permission for Second Marriage",
+        "aliases": ["দ্বিতীয় বিবাহ", "second marriage", "permission for polygamy", "সালিশি পরিষদ"],
+        "authorities": [
+            {"act": "The Muslim Family Laws Ordinance, 1961", "sections": ["6"], "role": "CONTROLLING"}
+        ],
         "domain": "Family"
     },
     {
-        "term_bn": "সন্তানের হেফাজত",
-        "term_en": "custody of child",
-        "canonical": "Guardianship and Custody of Minors",
-        "aliases": ["হেফাজত", "হিজানত", "hizanat", "child custody", "অভিভাবকত্ব", "guardianship"],
-        "candidate_acts": ["The Guardians and Wards Act, 1890", "The Family Courts Act, 2023"],
-        "candidate_sections": ["17", "25", "5"],
+        "term_bn": "পারিবারিক আদালতের এখতিয়ার",
+        "term_en": "family court jurisdiction",
+        "canonical": "Exclusive Jurisdiction of Family Court",
+        "aliases": ["family courts act", "family court", "পারিবারিক আদালত", "jurisdiction of family court", "section 5"],
+        "authorities": [
+            {"act": "Family Courts Act, 2023", "sections": ["5"], "role": "CONTROLLING"},
+            {"act": "The Family Courts Ordinance, 1985", "sections": ["5", "6", "23"], "role": "LEGACY_CORPUS"}
+        ],
         "domain": "Family"
     },
 
-    # ── Civil Procedure & Commercial / Banking ──
-    {
-        "term_bn": "নিষেধাজ্ঞা",
-        "term_en": "injunction",
-        "canonical": "Temporary and Permanent Injunction",
-        "aliases": ["অস্থায়ী নিষেধাজ্ঞা", "temporary injunction", "stay order", "স্থিতাবস্থা", "status quo", "স্থায়ী নিষেধাজ্ঞা"],
-        "candidate_acts": ["The Code of Civil Procedure, 1908", "The Specific Relief Act, 1877"],
-        "candidate_sections": ["Order 39 Rule 1", "Order 39 Rule 2", "52", "53", "54"],
-        "domain": "Civil"
-    },
-    {
-        "term_bn": "তামাদি",
-        "term_en": "tamadi",
-        "canonical": "Law of Limitation / Expiry of Time",
-        "aliases": ["তামাদির মেয়াদ", "limitation period", "time barred", "তামাদি মওকুফ", "condonation of delay"],
-        "candidate_acts": ["The Limitation Act, 1908"],
-        "candidate_sections": ["3", "5", "14", "29"],
-        "domain": "Civil"
-    },
+    # ── Commercial, Labour & Contract Law ──
     {
         "term_bn": "চেক ডিজঅনার",
         "term_en": "cheque dishonour",
-        "canonical": "Dishonour of Cheque for Insufficiency of Funds",
-        "aliases": ["এন আই এক্ট", "NI Act case", "চেক বাউন্স", "cheque bounce", "138 মামলা"],
-        "candidate_acts": ["The Negotiable Instruments Act, 1881"],
-        "candidate_sections": ["138", "140", "141"],
+        "canonical": "Dishonour of Cheque (Section 138 NI Act)",
+        "aliases": ["চেক প্রতারণা", "cheque bounce", "bounced cheque", "138 ধারার মামলা", "এনআই এ্যাক্ট"],
+        "authorities": [
+            {"act": "The Negotiable Instruments Act, 1881", "sections": ["138", "140", "141"], "role": "CONTROLLING"}
+        ],
         "domain": "Commercial"
     },
     {
-        "term_bn": "অর্থ ঋণ",
-        "term_en": "artha rin",
-        "canonical": "Recovery of Loan by Financial Institutions",
-        "aliases": ["অর্থ ঋণ আদালত", "money loan court", "bank loan default", "ঋণখেলাপি", "অকশন সেল"],
-        "candidate_acts": ["The Artha Rin Adalat Ain, 2003"],
-        "candidate_sections": ["12", "33", "41"],
-        "domain": "Banking"
+        "term_bn": "চুক্তি ভঙ্গ ও ক্ষতিপূরণ",
+        "term_en": "breach of contract compensation",
+        "canonical": "Compensation for Loss or Damage Caused by Breach of Contract",
+        "aliases": ["breach of contract", "loss or damage", "compensation for loss", "চুক্তি ভঙ্গ", "section 73"],
+        "authorities": [
+            {"act": "The Contract Act, 1872", "sections": ["73", "74"], "role": "CONTROLLING"}
+        ],
+        "domain": "Contract"
     },
     {
-        "term_bn": "আংশিক সম্পাদন",
-        "term_en": "part performance",
-        "canonical": "Doctrine of Part Performance",
-        "aliases": ["অংশিক সম্পাদন", "part performance", "section 53a", "53a", "doctrine of part performance"],
-        "candidate_acts": ["The Transfer of Property Act, 1882"],
-        "candidate_sections": ["53A"],
+        "term_bn": "অংশ সম্পাদন নীতি",
+        "term_en": "doctrine of part performance",
+        "canonical": "Doctrine of Part Performance (Section 53A TPA)",
+        "aliases": ["part performance", "doctrine of part", "53A", "অংশ সম্পাদন", "section 53A"],
+        "authorities": [
+            {"act": "The Transfer of Property Act, 1882", "sections": ["53A", "53"], "role": "CONTROLLING"}
+        ],
         "domain": "Property"
     },
     {
-        "term_bn": "পারিবারিক আদালত",
-        "term_en": "family court",
-        "canonical": "Family Court Jurisdiction and Powers",
-        "aliases": ["পারিবারিক আদালত আইন", "family courts act", "family court jurisdiction", "exclusive jurisdiction", "section 5"],
-        "candidate_acts": ["Family Courts Act, 2023", "The Family Courts Ordinance, 1985"],
-        "candidate_sections": ["5", "6", "23"],
-        "domain": "Family"
+        "term_bn": "শ্রমিক ছাঁটাই",
+        "term_en": "retrenchment of workers",
+        "canonical": "Retrenchment and Compensation under Labour Act",
+        "aliases": ["retrenchment", "ছাঁটাই", "retrenchment of workers", "section 20", "শ্রম আইন"],
+        "authorities": [
+            {"act": "The Bangladesh Labour Act, 2006", "sections": ["20"], "role": "CONTROLLING"}
+        ],
+        "domain": "Labour"
     },
     {
-        "term_bn": "কোয়াশমেন্ট",
-        "term_en": "quashment",
-        "canonical": "Inherent Power to Quash Criminal Proceedings / Abuse of Process",
-        "aliases": ["quashing", "quash", "inherent powers", "abuse of the process", "section 561a", "561a", "561A"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898"],
-        "candidate_sections": ["561A"],
-        "domain": "Criminal"
+        "term_bn": "চাকরি অবসান বা বরখাস্ত",
+        "term_en": "termination of employment",
+        "canonical": "Termination of Employment by Employer",
+        "aliases": ["termination of employment", "notice or wages in lieu", "বিনা নোটিশে বরখাস্ত", "section 26"],
+        "authorities": [
+            {"act": "The Bangladesh Labour Act, 2006", "sections": ["26"], "role": "CONTROLLING"}
+        ],
+        "domain": "Labour"
     },
     {
-        "term_bn": "চুক্তিভঙ্গের ক্ষতিপূরণ",
-        "term_en": "breach of contract compensation",
-        "canonical": "Compensation for Loss or Damage Caused by Breach of Contract",
-        "aliases": ["breach of contract", "loss or damage caused by breach", "compensation for loss or damage", "section 73", "চুক্তিভঙ্গ"],
-        "candidate_acts": ["The Contract Act, 1872"],
-        "candidate_sections": ["73", "74"],
-        "domain": "Commercial"
-    },
-    {
-        "term_bn": "একতরফা ডিক্রি রদ",
-        "term_en": "setting aside ex-parte decree",
-        "canonical": "Setting Aside Ex-Parte Decree Against Defendant",
-        "aliases": ["ex-parte decree", "setting aside ex-parte", "order 9 rule 13", "order ix rule 13", "ex parte decree", "setting aside an ex-parte"],
-        "candidate_acts": ["The Code of Civil Procedure, 1908"],
-        "candidate_sections": ["Order 9, Rule 13", "Order 9", "9"],
-        "domain": "Civil"
+        "term_bn": "শ্রমিকের পদত্যাগ",
+        "term_en": "resignation by worker",
+        "canonical": "Resignation by Worker and Service Benefits",
+        "aliases": ["resignation by a worker", "service benefits", "পদত্যাগ", "section 27"],
+        "authorities": [
+            {"act": "The Bangladesh Labour Act, 2006", "sections": ["27"], "role": "CONTROLLING"}
+        ],
+        "domain": "Labour"
     },
     {
         "term_bn": "শ্রমিক অভিযোগ পদ্ধতি",
         "term_en": "worker grievance",
         "canonical": "Grievance Procedure for Individual Worker Complaints",
         "aliases": ["grievance procedure", "individual worker complaints", "worker complaint", "section 33", "অভিযোগ পদ্ধতি"],
-        "candidate_acts": ["The Bangladesh Labour Act, 2006"],
-        "candidate_sections": ["33", "34"],
+        "authorities": [
+            {"act": "The Bangladesh Labour Act, 2006", "sections": ["33", "34"], "role": "CONTROLLING"}
+        ],
         "domain": "Labour"
     },
     {
@@ -260,8 +307,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "consumer fine distribution",
         "canonical": "Consumer Complaint and 25% Fine Entitlement",
         "aliases": ["defective or adulterated products", "25% of the fine", "receive 25% of the fine", "section 76", "ভোক্তা অধিকার", "adulterated product"],
-        "candidate_acts": ["Consumers' Right Protection Act, 2009", "The Consumers' Right Protection Act, 2009"],
-        "candidate_sections": ["76", "71", "45"],
+        "authorities": [
+            {"act": "Consumers' Right Protection Act, 2009", "sections": ["76", "Guide-29", "45"], "role": "CONTROLLING"}
+        ],
         "domain": "Consumer"
     },
     {
@@ -269,8 +317,10 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "income tax return",
         "canonical": "Mandatory Submission of Return of Income",
         "aliases": ["income tax act", "return of income", "submission of return of income", "tax return", "আয়কর রিটার্ন", "section 166"],
-        "candidate_acts": ["Income Tax Act, 2023", "The Income Tax Act, 2023", "Income-tax Ordinance, 1984"],
-        "candidate_sections": ["166", "174", "75"],
+        "authorities": [
+            {"act": "Income Tax Act, 2023", "sections": ["166", "174", "Guide-21"], "role": "CONTROLLING"},
+            {"act": "The Income-tax Ordinance, 1984", "sections": ["166", "174"], "role": "LEGACY_CORPUS"}
+        ],
         "domain": "Taxation"
     },
     {
@@ -278,8 +328,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "protection against torture",
         "canonical": "Protection Against Torture and Degrading Punishment",
         "aliases": ["torture or cruel", "cruel, inhuman", "degrading punishment", "article 35(5)", "35(5)", "নির্যাতন"],
-        "candidate_acts": ["The Constitution of the People's Republic of Bangladesh"],
-        "candidate_sections": ["35", "35(5)"],
+        "authorities": [
+            {"act": "The Constitution of the People's Republic of Bangladesh", "sections": ["35", "35(5)"], "role": "CONTROLLING"}
+        ],
         "domain": "Constitutional"
     },
     {
@@ -287,26 +338,20 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "recovery of possession without consent",
         "canonical": "Suit by Person Dispossessed of Immovable Property without Consent",
         "aliases": ["dispossessed without consent", "recovery of possession", "section 9", "সুনির্দিষ্ট প্রতিকার", "বেদখল"],
-        "candidate_acts": ["The Specific Relief Act, 1877"],
-        "candidate_sections": ["9", "8"],
+        "authorities": [
+            {"act": "The Specific Relief Act, 1877", "sections": ["9", "8"], "role": "CONTROLLING"}
+        ],
         "domain": "Property"
-    },
-    {
-        "term_bn": "গ্রেফতার ও আটক সংক্রান্ত রক্ষাকবচ",
-        "term_en": "safeguards as to arrest",
-        "canonical": "Safeguards as to Arrest and Detention and Right to Consult Legal Practitioner",
-        "aliases": ["safeguards as to arrest", "arrest and detention", "right to consult", "article 33", "আটক সংক্রান্ত রক্ষাকবচ"],
-        "candidate_acts": ["The Constitution of the People's Republic of Bangladesh"],
-        "candidate_sections": ["33"],
-        "domain": "Constitutional"
     },
     {
         "term_bn": "ওয়ারেন্ট ছাড়া গ্রেফতার",
         "term_en": "arrest without warrant",
         "canonical": "Arrest without Warrant by Police",
         "aliases": ["arrest without a warrant", "arrest without", "without a warrant", "without warrant", "arrest a person", "বিনা পরোয়ানায় গ্রেপ্তার", "বিনা পরোয়ানায় গ্রেফতার", "police arrest conditions"],
-        "candidate_acts": ["The Code of Criminal Procedure, 1898", "The Constitution of the People's Republic of Bangladesh"],
-        "candidate_sections": ["54", "76", "55", "46", "61", "33"],
+        "authorities": [
+            {"act": "The Code of Criminal Procedure, 1898", "sections": ["54", "76", "55", "46", "61"], "role": "CONTROLLING"},
+            {"act": "The Constitution of the People's Republic of Bangladesh", "sections": ["33"], "role": "SUPPORTING"}
+        ],
         "domain": "Criminal"
     },
     {
@@ -314,8 +359,9 @@ LEGAL_DICTIONARY: list[dict] = [
         "term_en": "adulterated goods penalty",
         "canonical": "Penalties for Adulterated or Expired Goods",
         "aliases": ["adulterated goods", "expired goods", "ভেজাল পণ্য", "মেয়াদোত্তীর্ণ পণ্য", "selling adulterated", "selling expired"],
-        "candidate_acts": ["Consumers' Right Protection Act, 2009"],
-        "candidate_sections": ["45", "Guide-29", "76"],
+        "authorities": [
+            {"act": "Consumers' Right Protection Act, 2009", "sections": ["45", "Guide-29", "76"], "role": "CONTROLLING"}
+        ],
         "domain": "Consumer"
     }
 ]
@@ -393,8 +439,8 @@ def extract_legal_dictionary_matches(query: str) -> list[dict]:
 
 def expand_query_with_dictionary(query: str) -> dict:
     """
-    Expands a raw query with normalized concepts, candidate Acts, and suggested sections.
-    This acts as a retrieval helper, never as unverified legal authority.
+    Expands a raw query with normalized concepts, candidate Acts, and structured per-Act sections.
+    Guarantees non-Cartesian binding between Acts and specific sections.
     """
     normalized_q = normalize_bengali_text(query)
     matches = extract_legal_dictionary_matches(normalized_q)
@@ -402,25 +448,35 @@ def expand_query_with_dictionary(query: str) -> dict:
     candidate_acts: list[str] = []
     candidate_sections: list[str] = []
     act_to_sections: dict[str, list[str]] = {}
+    structured_authorities: list[dict] = []
     domains: set[str] = set()
     concepts: list[str] = []
 
     for m in matches:
         concepts.append(m["canonical"])
         domains.add(m.get("domain", "General"))
-        acts = m.get("candidate_acts", [])
-        secs = m.get("candidate_sections", [])
-        for act in acts:
+        authorities = m.get("authorities", [])
+        for auth in authorities:
+            act = auth["act"]
+            secs = auth.get("sections", [])
+            role = auth.get("role", "SUPPORTING")
+
             if act not in candidate_acts:
                 candidate_acts.append(act)
             if act not in act_to_sections:
                 act_to_sections[act] = []
-            for sec in secs:
-                if sec not in act_to_sections[act]:
-                    act_to_sections[act].append(sec)
-        for sec in secs:
-            if sec not in candidate_sections:
-                candidate_sections.append(sec)
+            for s in secs:
+                if s not in act_to_sections[act]:
+                    act_to_sections[act].append(s)
+                if s not in candidate_sections:
+                    candidate_sections.append(s)
+
+            structured_authorities.append({
+                "act": act,
+                "sections": secs,
+                "role": role,
+                "concept": m["canonical"]
+            })
 
     return {
         "original_query": query,
@@ -430,4 +486,5 @@ def expand_query_with_dictionary(query: str) -> dict:
         "candidate_acts": candidate_acts,
         "candidate_sections": candidate_sections,
         "act_to_sections": act_to_sections,
+        "structured_authorities": structured_authorities,
     }

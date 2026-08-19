@@ -420,36 +420,41 @@ class LegalRepository:
 
         query_lower = query.lower()
         candidate_acts_lower = [a.lower() for a in (candidate_acts or [])]
+        
+        # Only search case law if query explicitly asks for case law / precedent or mentions specific citation/title
+        case_intent_keywords = {"case", "precedent", "judgment", "ruling", "dlr", "ratio", "decision", "precedents", "holding", "versus", "vs.", "vs", "রায়"}
+        has_case_intent = any(kw in query_lower for kw in case_intent_keywords)
 
         for case in cases:
             score = 0
-            # Match by governing statutes
-            gov_statutes = case.get("governing_statutes", [])
-            for gov in gov_statutes:
-                gov_act = gov.get("act_name", "").lower()
-                for cand in candidate_acts_lower:
-                    if cand in gov_act or gov_act in cand:
-                        score += 5
-                for sec in gov.get("sections", []):
-                    if sec.lower() in query_lower:
-                        score += 8
-
-            # Match by subject or ratio keywords
-            subject = case.get("subject_area", "").lower()
-            ratio = case.get("ratio_decidendi", "").lower()
             title = case.get("case_title", "").lower()
             citation = case.get("citation", "").lower()
+            ratio = case.get("ratio_decidendi", "").lower()
+            subject = case.get("subject_area", "").lower()
 
-            if any(w in query_lower for w in title.split()):
-                score += 10
-            if citation in query_lower:
+            # 1. Direct match on citation or title
+            if citation and citation in query_lower:
+                score += 25
+            if any(part in query_lower for part in title.split() if len(part) > 4):
                 score += 15
-            for word in query_lower.split():
-                if len(word) > 3:
-                    if word in subject: score += 2
-                    if word in ratio: score += 2
 
-            if score > 0:
+            # 2. If query explicitly requests case law, match specific statutory ratio
+            if has_case_intent:
+                gov_statutes = case.get("governing_statutes", [])
+                for gov in gov_statutes:
+                    gov_act = gov.get("act_name", "").lower()
+                    for cand in candidate_acts_lower:
+                        if cand and (cand in gov_act or gov_act in cand):
+                            score += 6
+                    for sec in gov.get("sections", []):
+                        if sec.lower() in query_lower:
+                            score += 8
+                for word in query_lower.split():
+                    if len(word) > 4 and word in ratio:
+                        score += 3
+
+            # Strictly require threshold of 12 (requiring direct title/citation or high-intent ratio match)
+            if score >= 12:
                 is_verified = (case.get("verification_status") == "VERIFIED_PRIMARY_JUDGMENT")
                 tier = "VERIFIED_JUDGMENT" if is_verified else "UNVERIFIED_REPORTER_CITATION"
                 

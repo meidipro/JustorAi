@@ -171,11 +171,12 @@ class EvidenceBuilder:
 
         # ── 6. Domain-Aligned Case Law / Precedent Retrieval ──
         cases_found: list[EvidenceItem] = []
-        is_legal_persona = any(
-            p in persona.lower()
-            for p in ["lawyer", "legal professional", "student"]
+        q_lower = query.lower()
+        has_case_query_intent = any(
+            kw in q_lower
+            for kw in ["case", "precedent", "judgment", "ruling", "dlr", "ratio", "decision", "versus", "vs.", "vs", "রায়"]
         )
-        if (route.needs_case_law or is_legal_persona) and len(found) > 0:
+        if (route.needs_case_law or has_case_query_intent) and len(found) > 0:
             cases_found = await self.repository.search_case_law(
                 query=query,
                 candidate_acts=candidate_acts,
