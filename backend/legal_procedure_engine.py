@@ -235,3 +235,49 @@ def calculate_limitation_period(
         "excluded_days": excluded_days,
         "starting_point_rule": rule["starting_point"]
     }
+
+
+def evaluate_procedural_intent(query: str, as_of_date: Optional[date] = None) -> Optional[dict]:
+    """
+    Evaluates whether a query requires deterministic procedural calculation
+    (e.g., registration deadline, NI Act timeline, remand caps, or limitation period).
+    """
+    q_lower = query.lower()
+    dt = as_of_date or date.today()
+
+    # 1. Baina / Contract for Sale registration (Registration Act §17A)
+    if any(k in q_lower for k in ["baina", "বায়না", "contract for sale", "agreement for sale"]) and any(k in q_lower for k in ["registration", "রেজিস্ট্রি", "deadline", "time", "period", "কত দিন", "কতদিন"]):
+        return {
+            "calculator_type": "REGISTRATION_DEADLINE",
+            "calculation": calculate_registration_deadline(dt, "baina"),
+        }
+
+    # 2. General document registration (Registration Act §23)
+    if "section 23" in q_lower or "২৩ ধারা" in q_lower or ("registration" in q_lower and "general" in q_lower):
+        return {
+            "calculator_type": "REGISTRATION_DEADLINE",
+            "calculation": calculate_registration_deadline(dt, "general"),
+        }
+
+    # 3. Police Custody & Remand (CrPC §61, §167, Const. Art. 33)
+    if any(k in q_lower for k in ["remand", "রিমান্ড", "police custody", "পুলিশ হেফাজত", "হেফাজত"]) and any(k in q_lower for k in ["limit", "period", "কত দিন", "hour", "hours", "২৪ ঘণ্টা", "24 hour", "ঘণ্টা", "ঘন্টা", "সময়", "সময়", "কত"]):
+        return {
+            "calculator_type": "POLICE_CUSTODY_LIMITS",
+            "calculation": calculate_police_custody_limits(dt),
+        }
+
+    # 4. Cheque Dishonour (NI Act §138)
+    if any(k in q_lower for k in ["138", "dishonour", "cheque", "চেক", "bounce", "ডিজঅনার"]):
+        return {
+            "calculator_type": "NI_ACT_138_TIMELINE",
+            "calculation": calculate_ni_act_138_timeline(dt),
+        }
+
+    # 5. Recovery of Possession (SRA §9 / Limitation Act Art. 3)
+    if "section 9" in q_lower and any(k in q_lower for k in ["specific relief", "dispossession", "possession", "সুনির্দিষ্ট প্রতিকার", "বেদখল"]):
+        return {
+            "calculator_type": "LIMITATION_PERIOD",
+            "calculation": calculate_limitation_period("summary_possession_sr_sec9", dt),
+        }
+
+    return None
