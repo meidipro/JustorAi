@@ -999,30 +999,32 @@ RESPONSE FORMAT — IRAC — follow this structure exactly:
 # Add a line ONLY for acts confirmed present in STEP 0b.
 ACT_NAME_MAP = {
     r'non.?agricultural tenancy|non.?agri tenancy|non.?agricultural land|tenancy act.{0,5}1949|n\.?a\.?t\.? act|nat act|rented residential plot|pucca house|section 24 pre.?emption|fixed term lease': 'The Non-Agricultural Tenancy Act, 1949',
-    r'\bsat act\b|state acquisition|sat 1950|section 96|pre.?emption|neighbor.*selling.*agricultural|record.?of.?rights|khas.*uncultivated|illegal subdivision': 'The State Acquisition and Tenancy Act, 1950',
+    r'\bsat act\b|state acquisition|sat 1950|section 96|pre.?emption|neighbor.*selling.*agricultural|record.?of.?rights|khas.*uncultivated|illegal subdivision|প্রজাস্বত্ব|নামজারি|খতিয়ান|খতিয়ান': 'The State Acquisition and Tenancy Act, 1950',
     r'land reforms act|bhumi sanskar|land reform 2023|bargadar|sharecropper|barga': 'Land Reforms Act, 2023',
-    r'verbally gift|verbal gift|oral gift|gifted me|gift of land|heba|hiba|oral transfer|gift of property|hiba bil ewaz|transfer of property act|\btpa\b|rule against perpetuity|doctrine of election|pendency of a partition suit|contract for sale|buy a flat|stamp paper.*own|unregistered sale|registered deed.*not paid|sold my land': 'The Transfer of Property Act, 1882',
+    r'verbally gift|verbal gift|oral gift|gifted me|gift of land|heba|hiba|oral transfer|gift of property|hiba bil ewaz|transfer of property act|\btpa\b|rule against perpetuity|doctrine of election|pendency of a partition suit|contract for sale|buy a flat|stamp paper.*own|unregistered sale|registered deed.*not paid|sold my land|সম্পত্তি হস্তান্তর|বায়না|বায়না': 'The Transfer of Property Act, 1882',
     r'trademarks? act|trademark 2009': 'Trademarks Act, 2009',
-    r'penal code|\bipc\b|\bpc\b|defamation': 'The Penal Code, 1860',
-    r'code of criminal procedure|\bcrpc\b': 'The Code of Criminal Procedure, 1898',
-    r'code of civil procedure|\bcpc\b': 'The Code of Civil Procedure, 1908',
-    r'evidence act': 'The Evidence Act, 1872',
-    r'limitation act': 'The Limitation Act, 1908',
-    r'labour act|labor act': 'Bangladesh Labour Act, 2006',
-    # Income Tax stored in DB as Bangla title — match both and use Bangla key
-    r'income tax act|income tax ordinance|আয়কর': '\u0986\u09df\u0995\u09b0 \u0986\u0987\u09a8, \u09e8\u09e6\u09e8\u09e9',
-    r'muslim law|muslim inheritance|muslim family|predeceased son|grandson inherit': 'The Muslim Family Laws Ordinance, 1961',
+    r'penal code|\bipc\b|\bpc\b|defamation|দণ্ডবিধি|দন্ডবিধি': 'The Penal Code, 1860',
+    r'code of criminal procedure|\bcrpc\b|ফৌজদারি|ফৌজদারী|সিআরপিসি|পুলিশ হেফাজত|রিমান্ড|এজাহার|এফআইআর': 'The Code of Criminal Procedure, 1898',
+    r'code of civil procedure|\bcpc\b|দেওয়ানী|দেওয়ানী|সিপিসি|অস্থায়ী নিষেধাজ্ঞা|আরজি প্রত্যাখ্যান': 'The Code of Civil Procedure, 1908',
+    r'constitution|সংবিধান|অনুচ্ছেদ|রিট পিটিশন|মৌলিক অধিকার': "The Constitution of the People's Republic of Bangladesh",
+    r'evidence act|সাক্ষ্য আইন': 'The Evidence Act, 1872',
+    r'limitation act|তামাদি|তামাদী': 'The Limitation Act, 1908',
+    r'labour act|labor act|শ্রম আইন|শ্রমিক ছাঁটাই': 'The Bangladesh Labour Act, 2006',
+    r'income tax act|income tax ordinance|আয়কর': 'Income Tax Act, 2023',
+    r'muslim law|muslim inheritance|muslim family|predeceased son|grandson inherit|মুসলিম পারিবারিক|তালাক|দেনমোহর|বহুবিবাহ': 'The Muslim Family Laws Ordinance, 1961',
+    r'family courts? act|পারিবারিক আদালত': 'Family Courts Act, 2023',
+    r'consumers?.?right|ভোক্তা অধিকার': "Consumers' Right Protection Act, 2009",
     r'hindu law|hindu succession|hindu woman|hindu female|hindu widow|hindu women.*property|dayabhaga|mitakshara': "The Hindu Women's Rights to Property Act, 1937",
     r'civil courts? act|classes of civil courts|jurisdiction of civil court|assistant judge|subordinate judge|joint district judge|property dispute.*crore|original civil jurisdiction': 'The Civil Courts Act, 1887',
-    r'specific relief act|\bsra\b': 'The Specific Relief Act, 1877',
-    r'contract act': 'The Contract Act, 1872',
-    r'registration act': 'The Registration Act, 1908',
-    r'negotiable instruments? act|\bni act\b': 'The Negotiable Instruments Act, 1881',
+    r'specific relief act|\bsra\b|সুনির্দিষ্ট প্রতিকার': 'The Specific Relief Act, 1877',
+    r'contract act|চুক্তি আইন': 'The Contract Act, 1872',
+    r'registration act|রেজিস্ট্রেশন|নিবন্ধন আইন': 'The Registration Act, 1908',
+    r'negotiable instruments? act|\bni act\b|হস্তান্তরযোগ্য দলিল|চেক ডিজঅনার|চেক বাউন্স': 'The Negotiable Instruments Act, 1881',
     r'ict act|information.*communication.*technology': 'The Information & Communication Technology Act, 2006',
-    r'partnership act': 'The Partnership Act, 1932',
-    r'sale of goods act': 'The Sale of Goods Act, 1930',
+    r'partnership act|অংশীদারি আইন': 'The Partnership Act, 1932',
+    r'sale of goods act|পণ্য বিক্রয়|পণ্য বিক্রয়': 'The Sale of Goods Act, 1930',
     r'hindu marriage registration|hindu marriage.*2012': 'The Hindu Marriage Registration Act, 2012',
-    r'dissolution of muslim marriage': 'The Dissolution of Muslim Marriages Act, 1939',
+    r'dissolution of muslim marriage|মুসলিম বিবাহ বিচ্ছেদ': 'The Dissolution of Muslim Marriages Act, 1939',
     r'copyright act': 'The Copyright Act, 2023',
     r'court fees? act': 'The Court Fees Act, 1870',
     r'public demands recovery|pdr act': 'The Public Demands Recovery Act, 1913',
@@ -1034,11 +1036,16 @@ ACT_NAME_MAP = {
 import json
 
 async def classify_query(query: str) -> dict:
+    from backend.legal_normalize import normalize_bengali_text
+    norm_query = normalize_bengali_text(query)
+
     section_pattern = (
         r"(?:section|sec\.?|dhara|\u09a7\u09be\u09b0\u09be|article|\u0985\u09a8\u09c1\u099a\u09cd\u099b\u09c7\u09a6|rule)"
         r"\s*(\d+[A-Za-z]?)"
     )
-    sections = re.findall(section_pattern, query, re.IGNORECASE)
+    sections = re.findall(section_pattern, norm_query, re.IGNORECASE)
+    if not sections:
+        sections = re.findall(r'\b(\d+[A-Za-z]?)\b', norm_query)
 
     prompt = f"""Return ONLY JSON, no other text.
 {{
@@ -1051,54 +1058,53 @@ A question is NOT a personal-law question just because it mentions a
 relationship (grandfather, wife) or a religion in passing. "I am Muslim,
 my grandfather gifted me land" is a property/registration question -
 the legal issue is gift formality, not religious inheritance.
-Question: {query}"""
+Question: {norm_query}"""
 
     classification = {}
     providers = [
-        ("groq", "llama-3.1-8b-instant"),
-        ("openrouter", "meta-llama/llama-3.3-70b-instruct"),
+        ("groq", "openai/gpt-oss-120b"),
+        ("groq", "openai/gpt-oss-20b"),
+        ("groq", "groq/compound"),
+        ("groq", "qwen/qwen3.6-27b"),
         ("gemini", "gemini-2.5-flash")
     ]
     for provider, model in providers:
-        for attempt in range(2):
-            try:
-                if provider == "groq" and groq_client:
-                    completion = await asyncio.to_thread(
-                        lambda: groq_client.chat.completions.create(
-                            model=model,
-                            messages=[{"role": "user", "content": prompt}],
-                            response_format={"type": "json_object"},
-                            temperature=0.0
-                        )
+        try:
+            if provider == "groq" and groq_client:
+                completion = await asyncio.to_thread(
+                    lambda: groq_client.chat.completions.create(
+                        model=model,
+                        messages=[{"role": "user", "content": prompt}],
+                        response_format={"type": "json_object"},
+                        temperature=0.0
                     )
-                    llm_response = completion.choices[0].message.content
-                elif provider == "openrouter" and openrouter_client:
-                    completion = await asyncio.to_thread(
-                        lambda: openrouter_client.chat.completions.create(
-                            model=model,
-                            messages=[{"role": "user", "content": prompt}],
-                            response_format={"type": "json_object"},
-                            temperature=0.0
-                        )
+                )
+                llm_response = completion.choices[0].message.content
+            elif provider == "openrouter" and openrouter_client:
+                completion = await asyncio.to_thread(
+                    lambda: openrouter_client.chat.completions.create(
+                        model=model,
+                        messages=[{"role": "user", "content": prompt}],
+                        response_format={"type": "json_object"},
+                        temperature=0.0
                     )
-                    llm_response = completion.choices[0].message.content
-                elif provider == "gemini" and GEMINI_API_KEY:
-                    llm_response = await asyncio.to_thread(_call_gemini_native, [{"role": "user", "content": prompt}], 0.0)
-                else:
-                    break
-                
+                )
+                llm_response = completion.choices[0].message.content
+            elif provider == "gemini" and GEMINI_API_KEY:
+                llm_response = await _call_gemini_native([{"role": "user", "content": prompt}], 0.0)
+            else:
+                continue
+            
+            if llm_response:
                 classification = json.loads(llm_response)
                 if classification:
                     break
-            except Exception as e:
-                logger.warning(f"Classifier {provider}/{model} error (attempt {attempt+1}): {e}")
-                await asyncio.sleep(1.0)
-        if classification:
-            break
+        except Exception as e:
+            continue
 
     detected_act = None
     for pattern, act_name in ACT_NAME_MAP.items():
-        if re.search(pattern, query, re.IGNORECASE):
+        if re.search(pattern, norm_query, re.IGNORECASE) or re.search(pattern, query, re.IGNORECASE):
             detected_act = act_name
             break
             
@@ -1690,33 +1696,30 @@ async def _call_gemini_native(messages: list, temperature: float = 0.1, model_na
 MODEL_CHAINS = {
     "Legal Professional": [
         ("gemini", "gemini-2.5-flash"),
-        ("gemini", "gemini-2.0-flash"),
-        ("gemini", "gemini-1.5-flash"),
-        ("groq", "llama-3.3-70b-versatile"),
-        ("groq", "llama-3.1-8b-instant"),
+        ("groq", "openai/gpt-oss-120b"),
+        ("groq", "openai/gpt-oss-20b"),
+        ("groq", "groq/compound"),
+        ("groq", "qwen/qwen3.6-27b"),
         ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "deepseek/deepseek-chat"),
-        ("groq", "qwen/qwen3.6-27b"),
     ],
     "Law Student": [
         ("gemini", "gemini-2.5-flash"),
-        ("gemini", "gemini-2.0-flash"),
-        ("gemini", "gemini-1.5-flash"),
-        ("groq", "llama-3.3-70b-versatile"),
-        ("groq", "llama-3.1-8b-instant"),
+        ("groq", "openai/gpt-oss-120b"),
+        ("groq", "openai/gpt-oss-20b"),
+        ("groq", "groq/compound"),
+        ("groq", "qwen/qwen3.6-27b"),
         ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "deepseek/deepseek-chat"),
-        ("groq", "qwen/qwen3.6-27b"),
     ],
     "General Public": [
         ("gemini", "gemini-2.5-flash"),
-        ("gemini", "gemini-2.0-flash"),
-        ("gemini", "gemini-1.5-flash"),
-        ("groq", "llama-3.3-70b-versatile"),
-        ("groq", "llama-3.1-8b-instant"),
+        ("groq", "openai/gpt-oss-120b"),
+        ("groq", "openai/gpt-oss-20b"),
+        ("groq", "groq/compound"),
+        ("groq", "qwen/qwen3.6-27b"),
         ("openrouter", "google/gemini-2.5-flash"),
         ("openrouter", "deepseek/deepseek-chat"),
-        ("groq", "qwen/qwen3.6-27b"),
     ],
 }
 
