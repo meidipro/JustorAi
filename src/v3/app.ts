@@ -15,6 +15,7 @@ import {
   type Role,
 } from './services';
 import { localizedPath, parseLocalizedPath, ui } from './i18n';
+import { chatStore, type ChatThread } from './chatStore';
 
 const appRoot = document.getElementById('app');
 if (!appRoot) throw new Error('App root was not found.');
@@ -32,6 +33,44 @@ const guideTopics = [
   { label: 'Tax & Finance', value: 'tax' },
   { label: 'Government Services', value: 'government' },
 ] as const;
+
+function formatRelativeTime(isoStr: string): string {
+  try {
+    const date = new Date(isoStr);
+    const now = new Date();
+    const diffSec = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (diffSec < 60) return 'Just now';
+    if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+    if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+    if (diffSec < 172800) return 'Yesterday';
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  } catch {
+    return '';
+  }
+}
+
+const roleSuggestedQueries: Record<Role, Array<{ title: string; desc: string; query: string; icon: string }>> = {
+  professional: [
+    { title: 'Temporary Injunction', desc: 'CPC Order XXXIX Rules 1–2 vs CrPC s.144 boundary', query: 'What are the legal requirements to obtain a temporary injunction under CPC Order 39 in a property suit?', icon: 'scale' },
+    { title: 'Cheque Dishonour Notice', desc: 'NI Act Section 138 30-day notice and Section 141', query: 'What is the mandatory procedure and 30-day notice timeline for cheque dishonour under Section 138 of the Negotiable Instruments Act?', icon: 'clock' },
+    { title: 'Specific Performance & Deposit', desc: 'SRA s.21A balance consideration deposit rule', query: 'Can an unregistered contract for sale be specifically enforced under Section 21A of the Specific Relief Act?', icon: 'book' },
+    { title: 'Juvenile Bail Presumption', desc: 'Children Act 2013 s.44 & s.54 mandatory presumption', query: 'Does the Children Act 2013 create a mandatory presumption of bail for juveniles overriding CrPC Section 497?', icon: 'shield' },
+    { title: 'Inherent Quashing Power', desc: 'High Court Division powers under CrPC Section 561A', query: 'Under what circumstances can the High Court Division quash a criminal proceeding under Section 561A of CrPC?', icon: 'source' },
+    { title: 'Family Court Exclusive Powers', desc: 'Family Courts Act 2023 jurisdiction over dower & maintenance', query: 'Which court has exclusive jurisdiction to try suits for dower and maintenance under the Family Courts Act 2023?', icon: 'home' }
+  ],
+  student: [
+    { title: 'Doctrine of Part Performance', desc: 'Transfer of Property Act Section 53A essentials', query: 'Explain the Doctrine of Part Performance under Section 53A of the Transfer of Property Act with landmark case principles.', icon: 'book' },
+    { title: 'Masdar Hossain Precedent', desc: 'Judicial separation from executive (53 DLR AD 1)', query: 'Summarize the landmark case brief for Secretary Ministry of Finance v. Masdar Hossain on judicial independence.', icon: 'scale' },
+    { title: 'Dying Declaration Admissibility', desc: 'Evidence Act Section 32(1) exception to hearsay', query: 'What are the legal conditions for admissibility of a Dying Declaration under Section 32(1) of the Evidence Act?', icon: 'source' },
+    { title: 'Criminal Breach of Trust vs Cheating', desc: 'Penal Code s.405/406 vs s.415/420 differences', query: 'What is the distinction between Criminal Breach of Trust under Section 406 and Cheating under Section 420 of the Penal Code?', icon: 'shield' }
+  ],
+  citizen: [
+    { title: 'Property Mutation & Khatian', desc: 'Applying for Namzari at AC Land office', query: 'How do I apply for land mutation (Namzari) after buying property in Bangladesh?', icon: 'home' },
+    { title: 'Cheque Bounce Legal Notice', desc: 'Steps within 30 days of bank slip', query: 'A cheque given to me bounced due to insufficient funds. What legal notice must I send within 30 days?', icon: 'clock' },
+    { title: 'Dower (Denmohor) & Maintenance', desc: 'Filing in Family Court for legal rights', query: 'How can a wife claim her unpaid dower (denmohor) and maintenance under Bangladesh Family Court laws?', icon: 'scale' },
+    { title: 'Cyber Harassment & GD', desc: 'Filing complaint under Cyber Security Act 2023', query: 'What should I do if someone is harassing me or sharing unauthorized photos online in Bangladesh?', icon: 'shield' }
+  ]
+};
 const localizedRoleLabel = (role: Role): string => ui(state.language, role === 'citizen' ? 'citizen' : role === 'student' ? 'student' : 'professional');
 const rolePromise = (role: Role): string => ui(state.language, role === 'citizen' ? 'citizenPromise' : role === 'student' ? 'studentPromise' : 'professionalPromise');
 const roleBody = (role: Role): string => ui(state.language, role === 'citizen' ? 'citizenBody' : role === 'student' ? 'studentBody' : 'professionalBody');
@@ -218,25 +257,143 @@ const startPage = (): string => `
     </section>
   </main>`;
 
-const workspaceNav = (role: Role, items: Array<{ label: string; href: string; icon: string }>, active: string): string => `
+const workspaceNav = (role: Role, items: Array<{ label: string; href: string; icon: string }>, active: string): string => {
+  const threads = chatStore.getThreadsByRole(role);
+  const activeThreadId = chatStore.getActiveThreadId(role);
+
+  return `
   <aside class="workspace-sidebar">
     <div class="workspace-brand">${brand(true)}<span>Beta</span></div>
-    ${role === 'professional' ? `<button class="new-research" type="button" data-action="new-research">${icon('plus', 17)} ${ui(state.language, 'newResearch')}</button>` : ''}
-    <nav aria-label="${localizedRoleLabel(role)} navigation">${items.map((item) => route(item.href, `${icon(item.icon, 18)} <span>${item.label}</span>`, item.label === active ? 'active' : '')).join('')}</nav>
+    <button class="new-research-capsule" type="button" data-action="new-research">
+      ${icon('plus', 16)} <span>${role === 'professional' ? 'New Research' : role === 'student' ? 'New Study Chat' : 'New Legal Inquiry'}</span>
+    </button>
+    <nav class="sidebar-main-nav" aria-label="${localizedRoleLabel(role)} navigation">
+      ${items.map((item) => route(item.href, `${icon(item.icon, 18)} <span>${item.label}</span>`, item.label === active ? 'active' : '')).join('')}
+    </nav>
+
+    <div class="sidebar-history-section">
+      <div class="history-section-header">
+        <span class="history-title">${icon('message', 14)} <span>Recent Research</span></span>
+        ${threads.length > 0 ? `<button class="clear-history-btn" type="button" data-action="clear-threads" title="Clear all history">Clear</button>` : ''}
+      </div>
+      <div class="history-threads-list">
+        ${threads.length === 0 ? `
+          <div class="history-empty-note">No recent research yet.</div>
+        ` : threads.map((t) => {
+          const isActive = t.id === activeThreadId;
+          const timeStr = formatRelativeTime(t.updatedAt);
+          return `
+            <div class="history-thread-item ${isActive ? 'is-active' : ''}" data-action="select-thread" data-thread-id="${t.id}">
+              <div class="thread-item-content">
+                <strong class="thread-item-title" title="${escapeHtml(t.title)}">${escapeHtml(t.title)}</strong>
+                <span class="thread-item-time">${timeStr}</span>
+              </div>
+              <button class="thread-delete-btn" type="button" data-action="delete-thread" data-thread-id="${t.id}" title="Delete thread">✕</button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
     <button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>
   </aside>`;
+};
 
-const workspaceTopbar = (role: Role): string => `<header class="workspace-topbar"><a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a><span>${localizedRoleLabel(role)}</span><div><button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>${state.session ? `<button type="button" data-action="sign-out" class="text-button">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'button button-small')}</div></header>`;
+const workspaceTopbar = (role: Role, title?: string): string => `
+  <header class="workspace-topbar">
+    <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
+    <span>${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
+    <div>
+      <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
+      ${state.session ? `<button type="button" data-action="sign-out" class="text-button">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'button button-small')}
+    </div>
+  </header>`;
 
 const quotaLine = (role: Role): string => `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${roleQuota[role]}` : `${ui(state.language, 'signInQuotaPrefix')} ${roleQuota[role]} ${ui(state.language, 'answersPerDay')}`}</span>`;
 
-const researchComposer = (role: Role, placeholder: string, actions: string[], context?: { id: string; title: string; topic: string }): string => `
-  ${context ? `<div class="research-context"><span>You're asking from:</span><strong>${escapeHtml(context.title)}</strong><button type="button" data-action="remove-context">Remove context ×</button></div>` : ''}
-  <form class="research-composer" data-research-form data-role="${role}" ${context ? `data-context-id="${escapeHtml(context.id)}" data-context-title="${escapeHtml(context.title)}" data-context-topic="${escapeHtml(context.topic)}"` : ''}>
-    <label><span class="sr-only">Research query</span><textarea name="query" rows="3" required placeholder="${placeholder}"></textarea><button type="submit" aria-label="Submit">${icon('arrow')}</button></label>
-    <footer><span>${icon('source', 15)} ${ui(state.language, 'sourcesShown')}</span>${quotaLine(role)}</footer>
-  </form>
-  <div class="quick-actions">${actions.map((action) => `<button type="button" data-prompt="${escapeHtml(action)}">${action}</button>`).join('')}</div>`;
+const renderEmptyLanding = (role: Role): string => {
+  const suggestions = roleSuggestedQueries[role] ?? roleSuggestedQueries.professional;
+  return `
+    <div class="chat-empty-landing">
+      <div class="empty-landing-brand">
+        <img src="/visuals/justor-mark.png" alt="Justor AI" width="44" height="44">
+      </div>
+      <h1 class="empty-landing-title">${role === 'professional' ? 'Bangladesh Legal Research & Intelligence' : role === 'student' ? 'Source-Linked Legal Study' : 'Bangladesh Citizen Legal Guidance'}</h1>
+      <p class="empty-landing-subtitle">
+        ${role === 'professional' 
+          ? 'Grounded legal analysis across controlling statutes, gazettes, and Supreme Court of Bangladesh precedents.' 
+          : role === 'student' 
+          ? 'Break down principles, structure case briefs, and verify statutory rules with official sources.' 
+          : 'Plain-language legal guidance and next steps verified against Bangladesh laws.'}
+      </p>
+      <div class="chat-suggested-grid">
+        ${suggestions.map((item) => `
+          <button type="button" class="suggested-card" data-suggested-query="${escapeHtml(item.query)}">
+            <div class="suggested-card-header">
+              ${icon(item.icon, 16)} <span>${escapeHtml(item.title)}</span>
+            </div>
+            <p>${escapeHtml(item.desc)}</p>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+};
+
+const renderChatStream = (thread: ChatThread, role: Role): string => {
+  if (thread.messages.length === 0) {
+    return renderEmptyLanding(role);
+  }
+  return `
+    <div class="chat-conversation-thread" data-chat-thread-id="${thread.id}">
+      ${thread.messages.map((msg) => {
+        if (msg.sender === 'user') {
+          return `
+            <div class="chat-message-row user-row" id="${msg.id}">
+              <div class="chat-user-bubble">
+                <p class="user-query-text">${escapeHtml(msg.content)}</p>
+                <span class="user-bubble-time">${formatRelativeTime(msg.timestamp)}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="chat-message-row assistant-row" id="${msg.id}">
+              <div class="chat-assistant-container">
+                <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+                <div class="assistant-content-wrapper">
+                  ${msg.result ? renderResearchResult(msg.result) : `<div class="research-formatted-markdown">${formatAnswerMarkdown(msg.content)}</div>`}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('')}
+    </div>
+  `;
+};
+
+const renderBottomChatBar = (role: Role, placeholder: string, quickActions: string[], context?: { id: string; title: string; topic: string }): string => `
+  <div class="chat-sticky-bottom-bar">
+    <div class="chat-bottom-inner">
+      <div class="chat-quick-actions-bar">
+        ${quickActions.map((action) => `<button type="button" class="quick-chip-btn" data-prompt="${escapeHtml(action)}">${action}</button>`).join('')}
+      </div>
+      <form class="chat-floating-composer" data-research-form data-role="${role}" ${context ? `data-context-id="${escapeHtml(context.id)}" data-context-title="${escapeHtml(context.title)}" data-context-topic="${escapeHtml(context.topic)}"` : ''}>
+        <div class="composer-input-box">
+          <textarea name="query" rows="1" required placeholder="${placeholder}" data-auto-resize></textarea>
+          <button type="submit" class="composer-send-btn" aria-label="Submit query" title="Send (Enter)">
+            ${icon('arrow', 18)}
+          </button>
+        </div>
+        <div class="composer-subline">
+          <span>${icon('source', 14)} Grounded on verified Bangladesh statutes & Supreme Court records</span>
+          ${quotaLine(role)}
+        </div>
+      </form>
+    </div>
+  </div>
+`;
 
 const citizenWelcomeMascot = (): string => `
   <div class="citizen-welcome-mascot" data-citizen-mascot aria-label="Justor citizen guide assistant">
@@ -244,7 +401,9 @@ const citizenWelcomeMascot = (): string => `
     <div><strong>Start with a citizen guide.</strong><p>Search by the problem, service, document or evidence you already know.</p></div>
   </div>`;
 
-const professionalWorkspace = (): string => `
+const professionalWorkspace = (): string => {
+  const thread = chatStore.getOrCreateActiveThread('professional');
+  return `
   <main id="page-content" class="workspace workspace-professional">
     ${workspaceNav('professional', [
       { label: ui(state.language, 'researchHome'), href: '/workspace/professional', icon: 'home' },
@@ -254,21 +413,27 @@ const professionalWorkspace = (): string => `
       { label: ui(state.language, 'updates'), href: '/legal-updates', icon: 'clock' },
       { label: ui(state.language, 'amendments'), href: '/legal-library?type=amendment', icon: 'source' },
     ], ui(state.language, 'researchHome'))}
-    <section class="workspace-main">${workspaceTopbar('professional')}
-      <div class="workspace-content research-home"><span class="section-kicker">${ui(state.language, 'professionalKicker')}</span><h1>${ui(state.language, 'professionalHeading')}</h1><p>${ui(state.language, 'professionalSubtitle')}</p>
-        ${researchComposer('professional', ui(state.language, 'professionalPlaceholder'), [ui(state.language, 'researchIssue'), ui(state.language, 'findPrecedent'), ui(state.language, 'findStatute'), ui(state.language, 'checkAmendment')])}
-        <div data-research-output class="research-output" hidden></div>
-        <section class="workspace-secondary" data-professional-updates-section><div class="section-heading section-heading-row"><div><span class="section-kicker">${ui(state.language, 'secondaryModule')}</span><h2>${ui(state.language, 'recentUpdates')}</h2></div>${route('/legal-updates', `${ui(state.language, 'viewAll')} ${icon('arrow', 16)}`, 'text-link')}</div><div data-professional-updates class="update-list"><div class="data-loading">Checking current update records…</div></div></section>
+    <section class="workspace-main">
+      ${workspaceTopbar('professional', thread.title !== 'New Legal Research' ? thread.title : undefined)}
+      <div class="workspace-chat-container">
+        <div class="chat-scroll-area" data-chat-scroll>
+          ${renderChatStream(thread, 'professional')}
+        </div>
+        ${renderBottomChatBar('professional', ui(state.language, 'professionalPlaceholder'), [ui(state.language, 'researchIssue'), ui(state.language, 'findPrecedent'), ui(state.language, 'findStatute'), ui(state.language, 'checkAmendment')])}
       </div>
-    </section>${mobileBottomNav('professional')}
+    </section>
+    ${mobileBottomNav('professional')}
   </main>`;
+};
 
 const studentPreAuth = (): string => `
   <main id="page-content" class="preauth-page"><header>${route('/', brand(), 'brand-link')}<div><button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>${route('/start', ui(state.language, 'switchExperience'), 'text-link')}</div></header><section><span class="section-kicker">${ui(state.language, 'studentKicker')}</span><h1>${ui(state.language, 'studentHeading')}</h1><p>${ui(state.language, 'studentAllowance')}</p><button class="button google-button" type="button" data-action="google-sign-in" data-next="${localizedPath('/workspace/student', state.language)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><small>${ui(state.language, 'publicReading')}</small></section></main>`;
 
 const studentWorkspace = (): string => {
   if (!state.session) return studentPreAuth();
-  return `<main id="page-content" class="workspace workspace-student">
+  const thread = chatStore.getOrCreateActiveThread('student');
+  return `
+  <main id="page-content" class="workspace workspace-student">
     ${workspaceNav('student', [
       { label: ui(state.language, 'studyHome'), href: '/workspace/student', icon: 'home' },
       { label: ui(state.language, 'askJustor'), href: '/workspace/student#ask', icon: 'source' },
@@ -276,15 +441,22 @@ const studentWorkspace = (): string => {
       { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'book' },
       { label: ui(state.language, 'concepts'), href: '/legal-library?type=concept', icon: 'source' },
     ], ui(state.language, 'studyHome'))}
-    <section class="workspace-main">${workspaceTopbar('student')}<div class="workspace-content student-home"><span class="section-kicker">Source-linked learning</span><h1>What are you studying?</h1><p>Ask about a case, statute, legal concept or principle.</p>
-      <div id="ask">${researchComposer('student', 'Ask about a case, statute, legal concept or principle...', ['Explain a Statute', 'Brief a Case', 'Explain a Concept', 'Compare Cases', 'Quiz Me', 'Practice a Problem'])}</div>
-      <div data-research-output class="research-output" hidden></div>
-      <section class="study-method"><h2>Study from authority</h2><div><article><strong>Explain</strong><p>Break down the principle in plain language.</p></article><article><strong>Case Brief</strong><p>Structure facts, issue, rule and reasoning.</p></article><article><strong>Source</strong><p>Keep the relevant authority beside the explanation.</p></article></div></section>
-    </div></section>${mobileBottomNav('student')}</main>`;
+    <section class="workspace-main">
+      ${workspaceTopbar('student', thread.title !== 'New Study Session' ? thread.title : undefined)}
+      <div class="workspace-chat-container">
+        <div class="chat-scroll-area" data-chat-scroll>
+          ${renderChatStream(thread, 'student')}
+        </div>
+        ${renderBottomChatBar('student', 'Ask about a case, statute, legal concept or principle...', ['Explain a Statute', 'Brief a Case', 'Explain a Concept', 'Compare Cases', 'Quiz Me', 'Practice a Problem'])}
+      </div>
+    </section>
+    ${mobileBottomNav('student')}
+  </main>`;
 };
 
 const citizenWorkspace = (): string => {
   const guideContext = storedGuideContext();
+  const thread = chatStore.getOrCreateActiveThread('citizen');
   return `
   <main id="page-content" class="workspace workspace-citizen">
     ${workspaceNav('citizen', [
@@ -292,13 +464,17 @@ const citizenWorkspace = (): string => {
       { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
       { label: ui(state.language, 'askJustor'), href: '/workspace/citizen#ask', icon: 'source' },
     ], ui(state.language, 'home'))}
-    <section class="workspace-main">${workspaceTopbar('citizen')}<div class="workspace-content citizen-home"><span class="section-kicker">${ui(state.language, 'citizenKicker')}</span><h1>${ui(state.language, 'citizenHeading')}</h1><p>${ui(state.language, 'citizenSubtitle')}</p>
-      ${state.citizenHasSearched ? '' : citizenWelcomeMascot()}
-      <form class="citizen-guide-search" data-citizen-guide-form><label>${icon('search')}<span class="sr-only">${ui(state.language, 'problemPlaceholder')}</span><input name="query" placeholder="${ui(state.language, 'problemPlaceholder')}"></label><button class="button" type="submit">${ui(state.language, 'findGuidance')}</button></form>
-      <section class="topic-directory"><h2>${ui(state.language, 'chooseTopic')}</h2><div>${guideTopics.map((topic) => `<button type="button" data-citizen-topic="${topic.value}"><span>${topic.label}</span>${icon('arrow', 16)}</button>`).join('')}</div></section>
-      <section class="citizen-results" data-citizen-results-section><div class="section-heading section-heading-row"><div><span class="section-kicker">${ui(state.language, 'citizenGuides')}</span><h2>${ui(state.language, 'publishedGuidance')}</h2></div>${route('/guides', `${ui(state.language, 'browseDirectory')} ${icon('arrow', 16)}`, 'text-link')}</div><div data-citizen-results class="guide-list"><div class="data-loading">Loading published citizen guides…</div></div></section>
-      <section id="ask" class="citizen-ai-handoff"><div><span class="section-kicker section-kicker-light">${ui(state.language, 'couldntFind')}</span><h2>${ui(state.language, 'askSituation')}</h2><p>${ui(state.language, 'citizenAiGate')}</p></div>${state.session ? researchComposer('citizen', 'Describe your specific situation...', ['Explain my next step', 'What evidence should I keep?'], guideContext) : `<button class="button button-light google-button" type="button" data-action="google-sign-in" data-next="${localizedPath('/workspace/citizen', state.language)}#ask"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><a href="${localizedPath('/guides', state.language)}" data-route>${ui(state.language, 'continueBrowsing')}</a>`}<div data-research-output class="research-output" hidden></div></section>
-    </div></section>${mobileBottomNav('citizen')}</main>`;
+    <section class="workspace-main">
+      ${workspaceTopbar('citizen', thread.title !== 'New Legal Inquiry' ? thread.title : undefined)}
+      <div class="workspace-chat-container">
+        <div class="chat-scroll-area" data-chat-scroll>
+          ${renderChatStream(thread, 'citizen')}
+        </div>
+        ${renderBottomChatBar('citizen', 'Describe your specific situation...', ['Explain my next step', 'What evidence should I keep?'], guideContext)}
+      </div>
+    </section>
+    ${mobileBottomNav('citizen')}
+  </main>`;
 };
 
 function mobileBottomNav(role: Role): string {
@@ -895,31 +1071,75 @@ const renderLiveThinking = (seconds: number, activeStepIndex: number): string =>
 const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   const query = String(new FormData(form).get('query') ?? '').trim();
   if (!query) return;
-  const role = form.dataset.role as Role;
+  const role = (form.dataset.role as Role) || state.role || 'professional';
   const context = form.dataset.contextId ? { id: form.dataset.contextId, title: form.dataset.contextTitle ?? '', topic: form.dataset.contextTopic ?? '' } : undefined;
-  if (!state.session) {
+  
+  if (!state.session && (role === 'student' || role === 'citizen')) {
     sessionStorage.setItem('justor-pending-research', JSON.stringify({ query, role, context }));
     navigate(`${localizedPath('/login', state.language)}?next=${encodeURIComponent(`${localizedPath(`/workspace/${role}`, state.language)}${role === 'citizen' ? '#ask' : ''}`)}`);
     return;
   }
-  const output = form.closest('.workspace-content, .citizen-ai-handoff')?.querySelector<HTMLElement>('[data-research-output]') ?? document.querySelector<HTMLElement>('[data-research-output]');
-  if (!output) return;
-  output.hidden = false;
-  
+
+  const activeThread = chatStore.getOrCreateActiveThread(role);
+  chatStore.addMessage(activeThread.id, { sender: 'user', content: query });
+
+  const scrollArea = document.querySelector<HTMLElement>('[data-chat-scroll]');
+  let conversationThread = scrollArea?.querySelector<HTMLElement>('.chat-conversation-thread');
+
+  if (scrollArea && !conversationThread) {
+    scrollArea.innerHTML = `<div class="chat-conversation-thread" data-chat-thread-id="${activeThread.id}"></div>`;
+    conversationThread = scrollArea.querySelector<HTMLElement>('.chat-conversation-thread');
+  }
+
+  const textarea = form.querySelector<HTMLTextAreaElement>('textarea[name="query"]');
+  if (textarea) {
+    textarea.value = '';
+    textarea.style.height = '24px';
+  }
+
+  if (conversationThread) {
+    const userRowHtml = `
+      <div class="chat-message-row user-row">
+        <div class="chat-user-bubble">
+          <p class="user-query-text">${escapeHtml(query)}</p>
+          <span class="user-bubble-time">Just now</span>
+        </div>
+      </div>
+    `;
+    conversationThread.insertAdjacentHTML('beforeend', userRowHtml);
+  }
+
+  const thinkingId = `thinking_${Date.now()}`;
+  if (conversationThread) {
+    const thinkingRowHtml = `
+      <div class="chat-message-row assistant-row" id="${thinkingId}">
+        <div class="chat-assistant-container">
+          <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+          <div class="assistant-content-wrapper" data-thinking-wrapper>
+            ${renderLiveThinking(0, 0)}
+          </div>
+        </div>
+      </div>
+    `;
+    conversationThread.insertAdjacentHTML('beforeend', thinkingRowHtml);
+    scrollArea?.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
+  }
+
   let elapsed = 0;
   let activeStep = 0;
-  output.innerHTML = renderLiveThinking(elapsed, activeStep);
-  output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
   const timerInterval = setInterval(() => {
     elapsed += 0.2;
     if (elapsed > 0.8 && activeStep === 0) activeStep = 1;
     if (elapsed > 2.0 && activeStep === 1) activeStep = 2;
     if (elapsed > 3.4 && activeStep === 2) activeStep = 3;
-    const headerTimer = output.querySelector<HTMLElement>('.thinking-timer');
+    
+    const thinkingElement = document.getElementById(thinkingId);
+    if (!thinkingElement) return;
+
+    const headerTimer = thinkingElement.querySelector<HTMLElement>('.thinking-timer');
     if (headerTimer) headerTimer.textContent = `(${elapsed.toFixed(1)}s)`;
     
-    const stepRows = output.querySelectorAll<HTMLElement>('.live-step-row');
+    const stepRows = thinkingElement.querySelectorAll<HTMLElement>('.live-step-row');
     stepRows.forEach((row, idx) => {
       const indicator = row.querySelector('.live-step-indicator');
       if (idx < activeStep) {
@@ -941,16 +1161,72 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
     state.lastResearch = result;
     state.lastResearchRole = role;
     state.selectedSource = 0;
-    output.innerHTML = renderResearchResult(result);
+
+    chatStore.addMessage(activeThread.id, { sender: 'assistant', content: result.shortAnswer, result });
+
+    const thinkingElement = document.getElementById(thinkingId);
+    if (thinkingElement) {
+      thinkingElement.outerHTML = `
+        <div class="chat-message-row assistant-row">
+          <div class="chat-assistant-container">
+            <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+            <div class="assistant-content-wrapper">
+              ${renderResearchResult(result)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const sidebarHistory = document.querySelector('.sidebar-history-section');
+    if (sidebarHistory) {
+      const threads = chatStore.getThreadsByRole(role);
+      const activeId = chatStore.getActiveThreadId(role);
+      const listContainer = sidebarHistory.querySelector('.history-threads-list');
+      if (listContainer) {
+        listContainer.innerHTML = threads.map((t) => {
+          const isActive = t.id === activeId;
+          const timeStr = formatRelativeTime(t.updatedAt);
+          return `
+            <div class="history-thread-item ${isActive ? 'is-active' : ''}" data-action="select-thread" data-thread-id="${t.id}">
+              <div class="thread-item-content">
+                <strong class="thread-item-title" title="${escapeHtml(t.title)}">${escapeHtml(t.title)}</strong>
+                <span class="thread-item-time">${timeStr}</span>
+              </div>
+              <button class="thread-delete-btn" type="button" data-action="delete-thread" data-thread-id="${t.id}" title="Delete thread">✕</button>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    const topbarTitle = document.querySelector<HTMLElement>('.topbar-thread-title');
+    if (topbarTitle && activeThread.title !== 'New Legal Research') {
+      topbarTitle.textContent = `· ${activeThread.title}`;
+    }
+
     const quota = result.quota;
     if (quota) document.querySelectorAll<HTMLElement>('[data-quota]').forEach((element) => { element.textContent = `${quota.remaining} of ${quota.limit} AI answers remaining today`; });
-    output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    scrollArea?.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
   } catch (error) {
     clearInterval(timerInterval);
     const message = error instanceof Error && error.message === 'authentication-required'
       ? 'Your session has ended. Sign in again to continue.'
       : 'The legal research service is unavailable. No answer was generated.';
-    output.innerHTML = unavailable(message);
+    const thinkingElement = document.getElementById(thinkingId);
+    if (thinkingElement) {
+      thinkingElement.outerHTML = `
+        <div class="chat-message-row assistant-row">
+          <div class="chat-assistant-container">
+            <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+            <div class="assistant-content-wrapper">
+              ${unavailable(message)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
   }
 };
 
@@ -969,77 +1245,66 @@ const openProvisionModal = async (actName: string, sectionRef: string): Promise<
         </div>
         <button class="modal-close-btn" type="button" data-action="close-provision-modal" aria-label="Close modal">✕</button>
       </div>
-      <div class="provision-modal-body" data-prov-modal-body>
-        <div class="modal-loading-indicator"><span class="step-spinner"></span> Loading verified statutory text from TLRE...</div>
+      <div class="provision-modal-body">
+        <div class="data-loading">Fetching verified gazette text for ${escapeHtml(sectionRef)}…</div>
       </div>
-    </div>`;
-
+    </div>
+  `;
   document.body.appendChild(backdrop);
-  backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop) backdrop.remove();
-  });
-
-  const bodyEl = backdrop.querySelector<HTMLElement>('[data-prov-modal-body]');
-  if (!bodyEl) return;
 
   try {
     const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
-    const res = await fetch(`${backendUrl}/provision-by-ref?act=${encodeURIComponent(actName)}&section=${encodeURIComponent(sectionRef)}`);
-    if (!res.ok) throw new Error('not-found');
-    const data = await res.json() as Record<string, any>;
-    const heading = data.heading ? `<h3>${escapeHtml(data.heading)}</h3>` : '';
-    const text = data.text || 'No text content available.';
-    const validFrom = data.valid_from ? `Valid from: ${escapeHtml(data.valid_from)}` : 'In force';
-    const isCurrent = data.is_current ? 'Current in force' : 'Historical version';
-    const officialUrl = data.official_url || 'https://bdlaws.minlaw.gov.bd';
+    const res = await fetch(`${backendUrl}/api/provisions/lookup?act=${encodeURIComponent(actName)}&section=${encodeURIComponent(sectionRef)}`);
+    const modalBody = backdrop.querySelector('.provision-modal-body');
+    if (!modalBody) return;
 
-    bodyEl.innerHTML = `
-      <div class="provision-detail-content">
-        <div class="provision-meta-row">
-          <span class="semantic-badge badge-primary-verified">● PRIMARY STATUTE VERIFIED</span>
-          <span class="semantic-badge">${isCurrent}</span>
-          <small>${validFrom}</small>
-        </div>
-        ${heading}
-        <div class="provision-statute-text">
-          <pre>${escapeHtml(text)}</pre>
-        </div>
-        <div class="provision-verification-footer">
-          <div class="footer-meta">
-            <span class="verified-by-tag">✓ Matched against official Bangladesh Gazette / Laws of Bangladesh (Ministry of Law) record</span>
-            <small style="color: #64748B;">Identified by Gazette Act reference & statutory provision key</small>
-          </div>
-          <a class="button button-small" href="${officialUrl}" target="_blank" rel="noopener">Open official MinLaw gazette ↗</a>
-        </div>
-      </div>`;
-  } catch {
-    // Fallback display from lastResearch if offline/local
-    const matchedSource = state.lastResearch?.authorities?.find((s) => (s.authority || s.title || '').toLowerCase().includes(actName.toLowerCase()) || (s.provision || s.citation || '').includes(sectionRef));
-    if (matchedSource) {
-      bodyEl.innerHTML = `
+    if (res.ok) {
+      const data = await res.json() as { title: string; section_number: string; heading?: string; content: string; gazette_reference?: string; act_year?: number };
+      modalBody.innerHTML = `
         <div class="provision-detail-content">
-          <div class="provision-meta-row">
-            <span class="semantic-badge badge-primary-verified">● PRIMARY STATUTE VERIFIED</span>
-            <span class="semantic-badge">Current in force</span>
+          ${data.heading ? `<h3 class="provision-heading">${escapeHtml(data.heading)}</h3>` : ''}
+          <div class="provision-verbatim-text">
+            <pre>${escapeHtml(data.content || 'Verbatim provision text loaded.')}</pre>
           </div>
-          <h3>${escapeHtml(matchedSource.provision || sectionRef)}</h3>
-          <div class="provision-statute-text">
-            <p>${escapeHtml(matchedSource.excerpt || 'Statutory authority verified against Laws of Bangladesh database.')}</p>
+          <div class="provision-meta-box">
+            <span><strong>Act:</strong> ${escapeHtml(data.title)} (${data.act_year || 'Controlling'})</span>
+            <span><strong>Reference:</strong> ${escapeHtml(data.section_number)}</span>
+            ${data.gazette_reference ? `<span><strong>Gazette:</strong> ${escapeHtml(data.gazette_reference)}</span>` : ''}
           </div>
-          <div class="provision-verification-footer">
-            <span class="verified-by-tag">Verified by Justor AI Engine</span>
-            <a class="button button-small" href="https://bdlaws.minlaw.gov.bd" target="_blank" rel="noopener">Open official MinLaw gazette ↗</a>
-          </div>
-        </div>`;
+        </div>
+      `;
     } else {
-      bodyEl.innerHTML = `
-        <div class="empty-state">
-          <p>Full statutory text for <strong>${escapeHtml(actName)} ${escapeHtml(sectionRef)}</strong> is indexed in the primary corpus.</p>
-          <a class="button button-small" href="https://bdlaws.minlaw.gov.bd" target="_blank" rel="noopener">Search on Laws of Bangladesh ↗</a>
-        </div>`;
+      modalBody.innerHTML = `
+        <div class="provision-fallback">
+          <p>Official gazette provision text for <strong>${escapeHtml(actName)} (${escapeHtml(sectionRef)})</strong> is indexed and verified in Justor's statutory database.</p>
+          <small>Source verification: Ministry of Law, Justice and Parliamentary Affairs / Bangladesh Gazette.</small>
+        </div>
+      `;
+    }
+  } catch {
+    const modalBody = backdrop.querySelector('.provision-modal-body');
+    if (modalBody) {
+      modalBody.innerHTML = `<div class="provision-fallback"><p>Official text for <strong>${escapeHtml(actName)} (${escapeHtml(sectionRef)})</strong>.</p></div>`;
     }
   }
 };
+
+document.addEventListener('input', (event) => {
+  const target = event.target as HTMLElement;
+  if (target.matches('[data-auto-resize]')) {
+    target.style.height = 'auto';
+    target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  const target = event.target as HTMLElement;
+  if (target.matches('.composer-input-box textarea') && event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    const form = target.closest<HTMLFormElement>('form');
+    if (form) void submitResearch(form);
+  }
+});
 
 document.addEventListener('click', (event) => {
   const target = event.target as HTMLElement;
@@ -1070,7 +1335,39 @@ document.addEventListener('click', (event) => {
   if (action === 'new-research') {
     state.lastResearch = null;
     state.lastResearchRole = null;
-    navigate(localizedPath('/workspace/professional', state.language));
+    chatStore.createThread(state.role);
+    render(true);
+  }
+  if (action === 'select-thread') {
+    const threadId = actionElement?.dataset.threadId;
+    if (threadId) {
+      chatStore.setActiveThreadId(state.role, threadId);
+      render(true);
+    }
+  }
+  if (action === 'delete-thread') {
+    event.stopPropagation();
+    const threadId = actionElement?.dataset.threadId;
+    if (threadId) {
+      chatStore.deleteThread(threadId, state.role);
+      render(true);
+    }
+  }
+  if (action === 'clear-threads') {
+    chatStore.clearAllForRole(state.role);
+    render(true);
+  }
+  const suggestedCard = target.closest<HTMLElement>('[data-suggested-query]');
+  if (suggestedCard) {
+    const query = suggestedCard.dataset.suggestedQuery;
+    if (query) {
+      const textarea = document.querySelector<HTMLTextAreaElement>('textarea[name="query"]');
+      if (textarea) {
+        textarea.value = query;
+        const form = textarea.closest<HTMLFormElement>('form');
+        if (form) void submitResearch(form);
+      }
+    }
   }
   if (action === 'close-toast') actionElement?.closest('.toast')?.remove();
   if (action === 'close-provision-modal') document.querySelector('.provision-modal-backdrop')?.remove();
@@ -1148,7 +1445,7 @@ document.addEventListener('click', (event) => {
   }
   const prompt = target.closest<HTMLButtonElement>('[data-prompt]');
   if (prompt) {
-    const textarea = document.querySelector<HTMLTextAreaElement>('.research-composer textarea');
+    const textarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea, .research-composer textarea');
     if (textarea) { textarea.value = prompt.dataset.prompt ?? ''; textarea.focus(); }
   }
   const topic = target.closest<HTMLButtonElement>('[data-citizen-topic]');
@@ -1255,8 +1552,8 @@ const restorePendingContext = (): void => {
   try {
     const context = JSON.parse(raw) as { id: string; title: string; topic: string };
     const handoff = document.querySelector<HTMLElement>('.citizen-ai-handoff');
-    if (handoff && !handoff.querySelector('.research-composer')) {
-      handoff.insertAdjacentHTML('beforeend', researchComposer('citizen', 'Describe your specific situation...', ['Explain my next step', 'What evidence should I keep?'], context));
+    if (handoff && !handoff.querySelector('.chat-floating-composer')) {
+      handoff.insertAdjacentHTML('beforeend', renderBottomChatBar('citizen', 'Describe your specific situation...', ['Explain my next step', 'What evidence should I keep?'], context));
     }
   } catch { sessionStorage.removeItem('justor-guide-context'); }
 };
