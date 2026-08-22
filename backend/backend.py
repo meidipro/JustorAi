@@ -3,6 +3,8 @@ import re
 import logging
 import asyncio
 import json
+import uuid
+from datetime import datetime, date
 import urllib.request
 from typing import List, Optional, Dict, Any, cast
 
@@ -425,7 +427,93 @@ def resolve_request_role(req: ChatRequest) -> str:
 class FeedbackRequest(BaseModel):
     query_run_id: str
     rating: Optional[Any] = None
+    category: Optional[str] = None
     comment: Optional[str] = None
+    query: Optional[str] = None
+    answer_preview: Optional[str] = None
+    user_id: Optional[str] = None
+
+
+def resolve_provision_text(act_name: str, section_ref: str, as_of_date: Optional[str] = None) -> Optional[dict]:
+    """
+    TLRE resolver: queries legal_instruments, legal_provisions, and provision_versions
+    to fetch the exact temporally valid, officially verified statutory text.
+    """
+    if not supabase:
+        return None
+    try:
+        norm_ref = section_ref.strip()
+        clean_act = re.sub(r'[,()"\']', '', act_name).strip()
+        
+        # 1. Look up legal_instrument
+        inst = None
+        # Try direct canonical_title match
+        r1 = supabase.table("legal_instruments").select("id, canonical_title, short_title, year, status, official_url, official_source_verified").ilike("canonical_title", f"%{clean_act}%").limit(1).execute()
+        if r1.data:
+            inst = r1.data[0]
+        else:
+            # Try short_title
+            r2 = supabase.table("legal_instruments").select("id, canonical_title, short_title, year, status, official_url, official_source_verified").ilike("short_title", f"%{clean_act}%").limit(1).execute()
+            if r2.data:
+                inst = r2.data[0]
+            else:
+                # Try alias
+                norm_alias = re.sub(r'[^a-zA-Z0-9\u0980-\u09FF]', '', act_name.lower())
+                r3 = supabase.table("legal_instrument_aliases").select("instrument_id, legal_instruments(id, canonical_title, short_title, year, status, official_url, official_source_verified)").ilike("normalized_alias", f"%{norm_alias}%").limit(1).execute()
+                if r3.data and r3.data[0].get("legal_instruments"):
+                    inst = r3.data[0]["legal_instruments"]
+
+        if not inst:
+            return None
+
+        # 2. Look up legal_provision
+        sec_clean = norm_ref.replace("Section", "").replace("Sec.", "").replace("ধারা", "").strip()
+        p_res = supabase.table("legal_provisions").select("id, section_number, heading, canonical_key").eq("instrument_id", inst["id"]).ilike("section_number", f"%{sec_clean}%").limit(1).execute()
+        
+        if not p_res.data:
+            # Fallback exact
+            p_res = supabase.table("legal_provisions").select("id, section_number, heading, canonical_key").eq("instrument_id", inst["id"]).ilike("section_number", f"%{norm_ref}%").limit(1).execute()
+
+        if not p_res.data:
+            return None
+
+        prov = p_res.data[0]
+        query_date = as_of_date or datetime.utcnow().date().isoformat()
+
+        # 3. Query version valid for this date
+        ver_res = (
+            supabase.table("provision_versions")
+            .select("id, version_number, legal_text, valid_from, valid_to, is_current, status, source_hash, official_source_verified, verified_by")
+            .eq("provision_id", prov["id"])
+            .lte("valid_from", query_date)
+            .order("version_number", desc=True)
+            .limit(1)
+            .execute()
+        )
+
+        if not ver_res.data:
+            return None
+
+        ver = ver_res.data[0]
+        return {
+            "instrument_id": inst["id"],
+            "act_title": inst["canonical_title"],
+            "short_title": inst.get("short_title"),
+            "provision_id": prov["id"],
+            "section": prov["section_number"],
+            "heading": prov.get("heading"),
+            "text": ver.get("legal_text"),
+            "valid_from": ver.get("valid_from"),
+            "valid_to": ver.get("valid_to"),
+            "is_current": ver.get("is_current"),
+            "verification_status": "PRIMARY_VERIFIED" if ver.get("official_source_verified") else "PENDING_VERIFICATION",
+            "source_hash": ver.get("source_hash"),
+            "verified_by": ver.get("verified_by"),
+            "official_url": inst.get("official_url") or "https://bdlaws.minlaw.gov.bd"
+        }
+    except Exception as e:
+        logger.warning(f"TLRE resolve_provision_text error: {e}")
+        return None
 
 
 def get_current_user(request: Request) -> Optional[dict]:
@@ -2207,31 +2295,142 @@ async def chat(request: ChatRequest, req: Request):
         raise HTTPException(500, "An internal server error occurred while processing your query.")
 
 
-@app.post("/feedback", tags=["Chat"])
+@app.post("/feedback", tags=["Feedback"])
+@app.post("/api/feedback", tags=["Feedback"])
 async def submit_feedback(fb: FeedbackRequest):
-    """Link user feedback directly to exact query_run_id telemetry log."""
+    """
+    Structured feedback capture with 7-category error taxonomy:
+    wrong_law, wrong_citation, outdated_law, missing_authority,
+    incomplete_answer, misunderstood_question, other.
+    """
     if not supabase:
         raise HTTPException(503, "Supabase not available.")
     try:
         def update_log():
+            log_payload = {
+                "query_run_id": fb.query_run_id,
+                "feedback": str(fb.rating),
+                "feedback_category": fb.category,
+                "feedback_note": fb.comment,
+                "user_id": fb.user_id,
+                "created_at": datetime.utcnow().isoformat()
+            }
             try:
-                return supabase.table("pilot_query_log").update({
+                # Try update first
+                r = supabase.table("pilot_query_log").update({
                     "feedback": str(fb.rating),
+                    "feedback_category": fb.category,
                     "feedback_note": fb.comment
                 }).eq("query_run_id", fb.query_run_id).execute()
+                if not r.data:
+                    supabase.table("pilot_query_log").insert(log_payload).execute()
             except Exception as inner_e:
-                logger.warning(f"Feedback query_run_id fallback triggered: {inner_e}")
-                return supabase.table("pilot_query_log").insert({
-                    "query_run_id": fb.query_run_id,
-                    "feedback": str(fb.rating),
-                    "feedback_note": fb.comment
-                }).execute()
-            
-        res = await asyncio.to_thread(update_log)
-        return {"message": "Feedback recorded successfully.", "query_run_id": fb.query_run_id}
+                logger.warning(f"Feedback logging fallback: {inner_e}")
+                try:
+                    supabase.table("pilot_query_log").insert({
+                        "query_run_id": fb.query_run_id,
+                        "feedback": str(fb.rating),
+                        "feedback_note": f"[{fb.category or 'GENERAL'}] {fb.comment or ''}".strip()
+                    }).execute()
+                except Exception:
+                    pass
+
+        await asyncio.to_thread(update_log)
+        return {"message": "Feedback recorded successfully.", "query_run_id": fb.query_run_id, "category": fb.category}
     except Exception as e:
-        logger.warning(f"Feedback recording note: {e}")
+        logger.warning(f"Feedback recording error: {e}")
         return {"message": "Feedback accepted.", "query_run_id": fb.query_run_id}
+
+
+# ─── TLRE Endpoints ───────────────────────────────────────────────────────────
+
+@app.get("/provision/{provision_id}", tags=["TLRE"])
+async def get_provision_detail(provision_id: str):
+    """Retrieve full canonical provision, metadata, and complete version timeline."""
+    if not supabase:
+        raise HTTPException(503, "Database not available.")
+    try:
+        def fetch():
+            prov_r = (
+                supabase.table("legal_provisions")
+                .select("id, section_number, subsection, clause, heading, canonical_key, instrument_id, legal_instruments(canonical_title, short_title, year, status, official_url)")
+                .eq("id", provision_id)
+                .limit(1)
+                .execute()
+            )
+            if not prov_r.data:
+                return None
+            
+            prov = prov_r.data[0]
+            vers_r = (
+                supabase.table("provision_versions")
+                .select("id, version_number, legal_text, valid_from, valid_to, is_current, status, source_hash, official_source_verified, verified_by, verified_at")
+                .eq("provision_id", provision_id)
+                .order("version_number", desc=True)
+                .execute()
+            )
+            return {"provision": prov, "versions": vers_r.data or []}
+
+        res = await asyncio.to_thread(fetch)
+        if not res:
+            raise HTTPException(404, "Provision not found.")
+        return res
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching provision {provision_id}: {e}")
+        raise HTTPException(500, "Internal error retrieving provision.")
+
+
+@app.get("/provision-by-ref", tags=["TLRE"])
+async def get_provision_by_ref(
+    act: str = Query(..., description="Act name or alias (e.g. 'NI Act', 'CPC')"),
+    section: str = Query(..., description="Section or Rule ref (e.g. '138', 'Order XXXIX Rule 1')"),
+    as_of_date: Optional[str] = Query(None, description="Date in YYYY-MM-DD format (default: today)")
+):
+    """Resolve exact temporally valid and officially verified statutory text for a citation reference."""
+    resolved = resolve_provision_text(act_name=act, section_ref=section, as_of_date=as_of_date)
+    if not resolved:
+        raise HTTPException(404, f"Provision '{section}' in '{act}' could not be resolved in TLRE.")
+    return resolved
+
+
+@app.get("/amendment-coverage", tags=["TLRE"])
+async def get_amendment_coverage():
+    """Returns statutory coverage metrics for the Temporal Legal Reasoning Engine (TLRE)."""
+    if not supabase:
+        raise HTTPException(503, "Database not available.")
+    try:
+        def fetch_coverage():
+            acts = supabase.table("legal_instruments").select("id, canonical_title, short_title, year, status").eq("status", "active").order("year").execute()
+            coverage_list = []
+            for a in acts.data or []:
+                p_res = supabase.table("legal_provisions").select("id").eq("instrument_id", a["id"]).execute()
+                p_ids = [p["id"] for p in p_res.data or []]
+                v_count = 0
+                if p_ids:
+                    v_res = supabase.table("provision_versions").select("id").eq("official_source_verified", True).in_("provision_id", p_ids).execute()
+                    v_count = len(set(x["id"] for x in v_res.data or []))
+                coverage_list.append({
+                    "id": a["id"],
+                    "act_name": a["canonical_title"],
+                    "short_title": a.get("short_title") or a["canonical_title"],
+                    "year": a.get("year"),
+                    "total_provisions": len(p_ids),
+                    "verified_versions": v_count,
+                    "coverage_status": "complete" if v_count > 0 and v_count >= len(p_ids) else ("partial" if v_count > 0 else "pending")
+                })
+            return coverage_list
+
+        items = await asyncio.to_thread(fetch_coverage)
+        return {
+            "total_acts": len(items),
+            "acts": items,
+            "tlre_version": "1.0-verified"
+        }
+    except Exception as e:
+        logger.error(f"Error fetching amendment coverage: {e}")
+        raise HTTPException(500, "Internal error retrieving amendment coverage.")
 
 
 @app.get("/documents", tags=["Knowledge Base"])

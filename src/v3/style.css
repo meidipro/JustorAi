@@ -998,23 +998,301 @@ svg { flex: 0 0 auto; }
 .shimmer-line.line-2 { width: 75%; }
 .shimmer-line.line-3 { width: 60%; }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+/* ─── 4-Tier Verification Status Badges ───────────────────────────────────── */
+.badge-primary-verified {
+  background: #ECFDF3 !important;
+  color: #027A48 !important;
+  border: 1px solid #A6F4C5 !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
-@keyframes pulseGlow {
-  0%, 100% { transform: scale(1); opacity: 0.9; }
-  50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 6px rgba(0, 32, 160, 0.4)); }
+.badge-reporter-verified {
+  background: #FFFAEB !important;
+  color: #B54708 !important;
+  border: 1px solid #FEDF89 !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.badge-pending-verified {
+  background: #F8F9FC !important;
+  color: #475467 !important;
+  border: 1px solid #D0D5DD !important;
+  font-weight: 600;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+.badge-conflict-verified {
+  background: #FEF3F2 !important;
+  color: #B42318 !important;
+  border: 1px solid #FECDCA !important;
+  font-weight: 700;
 }
+
+/* ─── Inline Citation Chips ─────────────────────────────────────────────────── */
+.inline-citation-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  margin: 0 3px;
+  border-radius: 4px;
+  background: #EEF2FF;
+  color: var(--accent, #0020A0);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #C7D2FE;
+  cursor: pointer;
+  vertical-align: baseline;
+  transition: all 120ms ease;
+}
+
+.inline-citation-chip:hover {
+  background: var(--accent, #0020A0);
+  color: #FFFFFF;
+  border-color: var(--accent, #0020A0);
+  transform: translateY(-1px);
+}
+
+/* ─── Authority Panel Actions & Ref ─────────────────────────────────────────── */
+.authority-provision-ref {
+  margin: 6px 0 10px;
+  font-size: 14px;
+  color: var(--dark-ink, #0F172A);
+}
+
+.authority-panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.open-prov-btn {
+  width: 100%;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* ─── Answer Feedback Widget ────────────────────────────────────────────────── */
+.answer-feedback-card {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.feedback-prompt {
+  font-size: 13px;
+  color: #475467;
+  font-weight: 500;
+}
+
+.feedback-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.feedback-thumb-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #D0D5DD;
+  background: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  color: #344054;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.feedback-thumb-btn:hover {
+  background: #F2F4F7;
+  border-color: #98A2B3;
+}
+
+.feedback-drawer {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback-form label {
+  font-size: 13px;
+  color: #1D2939;
+}
+
+.feedback-form select,
+.feedback-form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #D0D5DD;
+  font-size: 13px;
+  background: #FFFFFF;
+}
+
+.feedback-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.feedback-submitted-success {
+  font-size: 13px;
+  color: #027A48;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─── Provision Modal Drawer ────────────────────────────────────────────────── */
+.provision-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 14, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.2s ease;
+}
+
+.provision-modal-drawer {
+  width: min(640px, 100%);
+  height: 100%;
+  background: #FFFFFF;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.provision-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #EAECF0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.provision-modal-header h2 {
+  font-size: 18px;
+  margin: 4px 0 0;
+  color: #101828;
+}
+
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #EAECF0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #667085;
+}
+
+.modal-close-btn:hover {
+  background: #F2F4F7;
+  color: #101828;
+}
+
+.provision-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.provision-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.provision-meta-row small {
+  color: #667085;
+  font-size: 12px;
+}
+
+.provision-detail-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1D2939;
+  margin-bottom: 14px;
+}
+
+.provision-statute-text {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.provision-statute-text pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #1E293B;
+}
+
+.provision-verification-footer {
+  padding-top: 16px;
+  border-top: 1px solid #EAECF0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.checksum-badge {
+  font-family: monospace;
+  font-size: 11px;
+  color: #475467;
+  background: #EAECF0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.verified-by-tag {
+  font-size: 12px;
+  color: #027A48;
+  font-weight: 500;
+}
+
 
 
