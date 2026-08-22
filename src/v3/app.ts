@@ -160,7 +160,7 @@ const footer = (): string => `
       <div>${brand(true)}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
       <nav aria-label="Product"><strong>Product</strong>${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}${route('/workspace/citizen', 'Citizen')}${route('/start', 'Start Justor')}</nav>
       <nav aria-label="Resources"><strong>Resources</strong>${route('/legal-library', ui(state.language, 'library'))}${route('/guides', ui(state.language, 'guides'))}${route('/legal-updates', ui(state.language, 'updates'))}${route('/trust', ui(state.language, 'trust'))}</nav>
-      <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}</nav>
+      <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
       <nav aria-label="Legal"><strong>Legal</strong>${route('/privacy', 'Privacy')}${route('/terms', 'Terms')}${route('/disclaimer', 'Disclaimer')}<a href="mailto:tajuddinahamed.contact@gmail.com">Email us</a></nav>
     </div>
     <div class="footer-bottom"><span>© 2026 Justor AI</span><span>General legal information. Not a substitute for individual legal advice.</span><a href="tel:+8801764662967">+880 1764-662967</a></div>
@@ -385,6 +385,41 @@ const hydrateHeroVisual = (): void => {
   image.src = source;
 };
 
+const feedbackPage = (): string => `
+  <main id="page-content" class="inner-page">
+    <section class="compact-hero section-shell">
+      <span class="section-kicker">Quality & Accuracy Telemetry</span>
+      <h1>Legal Research Feedback & Issue Reporting</h1>
+      <p>Report incorrect citations, outdated law, missing controlling authorities, or factual misunderstandings. Every report is reviewed by our legal team.</p>
+    </section>
+    <article class="section-shell" style="max-width: 680px; margin-top: 24px; padding-bottom: 60px;">
+      <form class="public-search" style="flex-direction: column; gap: 16px; background: #FFF; padding: 24px; border-radius: 12px; border: 1px solid #E2E8F0;" data-action="submit-qa-feedback">
+        <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1E293B;">
+          Legal Question or Topic
+          <input name="query" placeholder="e.g. Can an unregistered contract for sale be enforced under SRA s.21A?" required style="width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px;">
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1E293B;">
+          Issue Category
+          <select name="category" required style="width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px; background: #FFF;">
+            <option value="">Select category...</option>
+            <option value="wrong_law">Wrong law or statute applied</option>
+            <option value="wrong_citation">Incorrect section or case citation</option>
+            <option value="outdated_law">Outdated or superseded legal text</option>
+            <option value="missing_authority">Missed a mandatory controlling authority</option>
+            <option value="incomplete_answer">Incomplete legal analysis</option>
+            <option value="misunderstood_question">Misunderstood facts / scenario</option>
+            <option value="other">Other issue</option>
+          </select>
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1E293B;">
+          What should the correct answer or authority be?
+          <textarea name="comment" rows="4" placeholder="Mention the exact Section, Act, or Supreme Court judgment (e.g. Must require deposit of balance consideration under s.21A)..." required style="width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px;"></textarea>
+        </label>
+        <button class="button" type="submit" style="align-self: flex-start; margin-top: 8px;">Submit Report ↗</button>
+      </form>
+    </article>
+  </main>`;
+
 const pageForPath = (path: string): string => {
   if (path === '/') return homePage();
   if (path === '/start') return startPage();
@@ -404,6 +439,7 @@ const pageForPath = (path: string): string => {
   if (path === '/privacy') return policyPage('privacy');
   if (path === '/terms') return policyPage('terms');
   if (path === '/disclaimer') return policyPage('disclaimer');
+  if (path === '/feedback') return feedbackPage();
   if (path === '/amendment-admin') return '<div id="amendment-admin-mount"></div>';
   return notFoundPage();
 };
