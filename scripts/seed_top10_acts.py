@@ -137,22 +137,38 @@ CORE_ACTS = [
     {
         "canonical_title": "The Constitution of the People's Republic of Bangladesh",
         "short_title": "Constitution",
-        "act_number": None,
+        "act_number": "Constitutional Instrument",
         "year": 1972,
         "instrument_type": "constitution",
         "effective_from": "1972-12-16",
         "status": "active",
-        "aliases": ["Constitution", "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধান", "বাংলাদেশ সংবিধান", "সংবিধান"]
+        "aliases": ["Constitution", "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধান", "বাংলাদেশ সংবিধান", "সংবিধান", "Article 111", "অনুচ্ছেদ ১১১"]
     },
     {
         "canonical_title": "Family Courts Act, 2023",
-        "short_title": "Family Courts Act",
-        "act_number": None,
+        "short_title": "Family Courts Act 2023",
+        "act_number": "Act No. 38 of 2023",
         "year": 2023,
         "instrument_type": "principal_act",
-        "effective_from": "2023-09-01",
+        "effective_from": "2023-09-18",
         "status": "active",
-        "aliases": ["Family Courts Act", "পারিবারিক আদালত আইন", "পারিবারিক আদালত আইন ২০২৩"]
+        "aliases": [
+            "Family Courts Act",
+            "পারিবারিক আদালত আইন",
+            "পারিবারিক আদালত আইন ২০২৩",
+            "Family Courts Ordinance 1985 (Repealed by Act 38 of 2023)",
+            "পারিবারিক আদালত অধ্যাদেশ ১৯৮৫"
+        ]
+    },
+    {
+        "canonical_title": "Children Act, 2013",
+        "short_title": "Children Act 2013",
+        "act_number": "Act No. 24 of 2013",
+        "year": 2013,
+        "instrument_type": "principal_act",
+        "effective_from": "2013-06-20",
+        "status": "active",
+        "aliases": ["Children Act", "শিশু আইন", "শিশু আইন ২০১৩", "Juvenile Justice"]
     },
     {
         "canonical_title": "The Muslim Family Laws Ordinance, 1961",

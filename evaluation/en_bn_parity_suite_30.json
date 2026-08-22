@@ -1,0 +1,302 @@
+[
+  {
+    "id": "PARITY-01",
+    "topic": "Temporary Injunction in Civil Dispute",
+    "en_query": "My neighbor is unlawfully constructing a boundary wall on my titled land. Can I seek a temporary injunction in civil court?",
+    "bn_query": "আমার জমিতে প্রতিবেশী জোর করে সীমানা প্রাচীর তুলছে। আমি কি দেওয়ানী আদালতে অস্থায়ী নিষেধাজ্ঞা চাইতে পারি?",
+    "expected_domain": "Civil",
+    "mandatory_statute": "The Code of Civil Procedure, 1908",
+    "mandatory_provision": "Order XXXIX Rules 1-2",
+    "forbidden_fallback": "Section 144 CrPC"
+  },
+  {
+    "id": "PARITY-02",
+    "topic": "Cheque Dishonour Statutory Notice Timeline",
+    "en_query": "What is the statutory timeline to issue legal notice after a bank dishonours a cheque in Bangladesh?",
+    "bn_query": "ব্যাংক থেকে চেক ডিজঅনার হওয়ার পর লিগ্যাল নোটিশ পাঠানোর আইনি সময়সীমা কতদিন?",
+    "expected_domain": "Commercial / Criminal",
+    "mandatory_statute": "The Negotiable Instruments Act, 1881",
+    "mandatory_provision": "Section 138",
+    "key_statutory_rule": "30 days from dishonour to send notice, 30 days to pay, 1 month to file complaint"
+  },
+  {
+    "id": "PARITY-03",
+    "topic": "Specific Performance of Unregistered Contract for Sale",
+    "en_query": "Can an unregistered contract for sale (Bayanapatra) of land be enforced through a suit for specific performance?",
+    "bn_query": "জমির বায়নাপত্র রেজিস্ট্রি করা না থাকলে সুনির্দিষ্ট প্রতিকার আইনে চুক্তি প্রবীকরণের মামলা করা যাবে কি?",
+    "expected_domain": "Civil / Property",
+    "mandatory_statute": "The Specific Relief Act, 1877",
+    "mandatory_provision": "Section 21A",
+    "key_statutory_rule": "Registration mandatory under s.17A Registration Act and balance consideration deposit required"
+  },
+  {
+    "id": "PARITY-04",
+    "topic": "Sale vs Contract for Sale Transfer",
+    "en_query": "Does an agreement to sell land transfer ownership title to the purchaser under Bangladesh law?",
+    "bn_query": "জমি বিক্রির বায়না চুক্তি কি ক্রেতার নিকট স্বত্ব বা মালিকানা হস্তান্তর করে?",
+    "expected_domain": "Civil / Property",
+    "mandatory_statute": "The Transfer of Property Act, 1882",
+    "mandatory_provision": "Section 54",
+    "key_statutory_rule": "Contract for sale does not of itself create any interest or charge on property"
+  },
+  {
+    "id": "PARITY-05",
+    "topic": "Binding Nature of Appellate Division Judgments",
+    "en_query": "Under which constitutional provision is the law declared by the Appellate Division binding on all courts in Bangladesh?",
+    "bn_query": "সংবিধানের কোন অনুচ্ছেদ অনুযায়ী আপিল বিভাগের ঘোষিত আইন সকল আদালতের জন্য বাধ্যতামূলক?",
+    "expected_domain": "Constitutional",
+    "mandatory_statute": "The Constitution of the People's Republic of Bangladesh",
+    "mandatory_provision": "Article 111",
+    "key_statutory_rule": "Law declared by Appellate Division binding on High Court Division and all subordinate courts"
+  },
+  {
+    "id": "PARITY-06",
+    "topic": "Juvenile Bail Statutory Overlay",
+    "en_query": "What legal provisions govern the grant of bail to a 15-year-old child accused in a criminal case?",
+    "bn_query": "ফৌজদারি মামলায় অভিযুক্ত ১৫ বছর বয়সী শিশুর জামিনের ক্ষেত্রে কোন আইন প্রযোজ্য?",
+    "expected_domain": "Criminal / Special",
+    "mandatory_statute": "Children Act, 2013",
+    "mandatory_provision": "Section 44 / Section 54",
+    "key_statutory_rule": "Children Act 2013 supersedes ordinary CrPC s.497 bail"
+  },
+  {
+    "id": "PARITY-07",
+    "topic": "Arrest without Warrant and Remand Guidelines",
+    "en_query": "What Supreme Court guidelines protect citizens against arbitrary arrest without warrant and police remand under CrPC 54 and 167?",
+    "bn_query": "ওয়ারেন্ট ছাড়া গ্রেফতার (৫৪ ধারা) ও রিমান্ড (১৬৭ ধারা) নিয়ন্ত্রণে সুপ্রিম কোর্টের কোন নির্দেশনা রয়েছে?",
+    "expected_domain": "Criminal / Constitutional",
+    "mandatory_statute": "The Code of Criminal Procedure, 1898",
+    "mandatory_provision": "Section 54 / Section 167",
+    "key_statutory_rule": "BLAST v Bangladesh guidelines (55 DLR HCD 363)"
+  },
+  {
+    "id": "PARITY-08",
+    "topic": "Divorce Notice and 90-Day Arbitration",
+    "en_query": "What is the mandatory legal procedure for a husband or wife to execute a valid divorce under Muslim family law?",
+    "bn_query": "মুসলিম পারিবারিক আইন অনুযায়ী তালাক কার্যকর করতে চেয়ারম্যানকে নোটিশ দেওয়ার নিয়ম কী?",
+    "expected_domain": "Family",
+    "mandatory_statute": "The Muslim Family Laws Ordinance, 1961",
+    "mandatory_provision": "Section 7",
+    "key_statutory_rule": "Written notice to Chairman with copy to spouse, 90 days cooling period for Arbitration Council"
+  },
+  {
+    "id": "PARITY-09",
+    "topic": "Family Court Jurisdiction over Dower and Maintenance",
+    "en_query": "Which court has exclusive jurisdiction to entertain suits for dower (denmohor) and wife maintenance in Bangladesh?",
+    "bn_query": "দেনমোহর ও স্ত্রীর ভরণপোষণের মামলা কোন আদালতে দায়ের করতে হয়?",
+    "expected_domain": "Family",
+    "mandatory_statute": "Family Courts Act, 2023",
+    "mandatory_provision": "Section 4 / Section 5",
+    "key_statutory_rule": "Exclusive jurisdiction vested in Family Courts under Act 38 of 2023"
+  },
+  {
+    "id": "PARITY-10",
+    "topic": "Termination of Permanent Worker Notice & Compensation",
+    "en_query": "What notice or wages in lieu of notice must an employer provide to terminate a permanent worker under the Labour Act?",
+    "bn_query": "শ্রম আইন অনুযায়ী স্থায়ী শ্রমিককে চাকরিচ্যুত করতে কতদিনের নোটিশ বা মজুরি দিতে হয়?",
+    "expected_domain": "Labour",
+    "mandatory_statute": "The Bangladesh Labour Act, 2006",
+    "mandatory_provision": "Section 26 / Section 27",
+    "key_statutory_rule": "120 days notice for monthly rated worker or wages in lieu + 30 days compensation per year of service"
+  },
+  {
+    "id": "PARITY-11",
+    "topic": "Condonation of Delay in Filing Appeals",
+    "en_query": "Can a delay in filing an appeal be condoned if sufficient cause is shown under the Limitation Act?",
+    "bn_query": "যুক্তিসঙ্গত কারণ দেখালে তামাদি আইনের কোন ধারা অনুযায়ী আপিল দায়েরের বিলম্ব মওকুফ করা যায়?",
+    "expected_domain": "Civil / Procedure",
+    "mandatory_statute": "The Limitation Act, 1908",
+    "mandatory_provision": "Section 5",
+    "key_statutory_rule": "Section 5 allows condonation of delay in appeals and applications upon showing sufficient cause (does not apply to original suits)"
+  },
+  {
+    "id": "PARITY-12",
+    "topic": "Cyber Online Harassment & Defamation",
+    "en_query": "Under which statute are online cyber harassment and unauthorized transmission of intimate photos prosecuted?",
+    "bn_query": "অনলাইনে হেনস্থা ও ছবি ছড়িয়ে দেওয়ার অপরাধ কোন আইনের অধীনে বিচারযোগ্য?",
+    "expected_domain": "Criminal / Special",
+    "mandatory_statute": "Cyber Security Act, 2023",
+    "mandatory_provision": "Cyber Security Act / Penal Code",
+    "key_statutory_rule": "Governed by Cyber Security legislation repealing DSA 2018"
+  },
+  {
+    "id": "PARITY-13",
+    "topic": "Dying Declaration Admissibility",
+    "en_query": "Under which section of the Evidence Act is a statement made by a deceased person regarding the cause of death admissible?",
+    "bn_query": "সাক্ষ্য আইনের কত ধারা অনুযায়ী মৃত্যুর কারণ সম্পর্কে মৃত ব্যক্তির মৃত্যুর পূর্ববর্তী বক্তব্য (ডাইং ডিক্লারেশন) গ্রহণযোগ্য?",
+    "expected_domain": "Evidence / Criminal",
+    "mandatory_statute": "The Evidence Act, 1872",
+    "mandatory_provision": "Section 32(1)",
+    "key_statutory_rule": "Section 32 clause 1 admissibility of statements relating to cause of death"
+  },
+  {
+    "id": "PARITY-14",
+    "topic": "Compulsory Registration of Land Documents",
+    "en_query": "Which land transfer documents are compulsorily registerable under the Registration Act in Bangladesh?",
+    "bn_query": "রেজিস্ট্রেশন আইনের কোন ধারা অনুযায়ী জমি বিক্রয়, হেবা ও বায়না দলিল রেজিস্ট্রি করা বাধ্যতামূলক?",
+    "expected_domain": "Civil / Property",
+    "mandatory_statute": "The Registration Act, 1908",
+    "mandatory_provision": "Section 17 / Section 17A",
+    "key_statutory_rule": "Section 17 and Section 17A make sale deeds and agreements for sale compulsorily registrable"
+  },
+  {
+    "id": "PARITY-15",
+    "topic": "Minor Agreement Validity",
+    "en_query": "Is a contract entered into by a minor legally enforceable under the Contract Act 1872?",
+    "bn_query": "নাবালকের সাথে সম্পাদিত চুক্তি কি আইনত বলবৎযোগ্য?",
+    "expected_domain": "Commercial / Civil",
+    "mandatory_statute": "The Contract Act, 1872",
+    "mandatory_provision": "Section 11",
+    "key_statutory_rule": "Agreement with minor is void ab initio (Mohori Bibee principle)"
+  },
+  {
+    "id": "PARITY-16",
+    "topic": "Criminal Breach of Trust vs Cheating",
+    "en_query": "What is the legal difference between criminal breach of trust under s.406 and cheating under s.420 of Penal Code?",
+    "bn_query": "দণ্ডবিধির ৪০৬ ধারার বিশ্বাসভঙ্গ এবং ৪২০ ধারার প্রতারণার মধ্যে মূল আইনি পার্থক্য কী?",
+    "expected_domain": "Criminal",
+    "mandatory_statute": "The Penal Code, 1860",
+    "mandatory_provision": "Section 405/406 vs Section 415/420",
+    "key_statutory_rule": "Entrustment precedes breach in 406; dishonest intention exists from inception in 420"
+  },
+  {
+    "id": "PARITY-17",
+    "topic": "Right of Pre-emption by Co-sharer Tenant",
+    "en_query": "How can a co-sharer by inheritance claim the right of pre-emption when agricultural land is sold to a stranger?",
+    "bn_query": "ওয়ারিশ সূত্রে শরিক কৃষি জমি তৃতীয় পক্ষের কাছে বিক্রি করলে অন্য শরিক কীভাবে অগ্রক্রয় (প্রি-এমপশন) দাবি করতে পারে?",
+    "expected_domain": "Property / Tenancy",
+    "mandatory_statute": "The State Acquisition and Tenancy Act, 1950",
+    "mandatory_provision": "Section 96",
+    "key_statutory_rule": "Application under SAT Act s.96 within limitation period with consideration money deposit"
+  },
+  {
+    "id": "PARITY-18",
+    "topic": "Succession of Orphaned Grandchildren",
+    "en_query": "Do grandchildren whose father died before their grandfather inherit from their grandfather's estate under Muslim law in Bangladesh?",
+    "bn_query": "পিতা জীবিত না থাকলে দাদা মারা গেলে কি এতিম নাতি-নাতনি দাদার সম্পত্তিতে অংশ পাবে?",
+    "expected_domain": "Family / Succession",
+    "mandatory_statute": "The Muslim Family Laws Ordinance, 1961",
+    "mandatory_provision": "Section 4",
+    "key_statutory_rule": "Section 4 provides right of representation to predeceased children's offspring"
+  },
+  {
+    "id": "PARITY-19",
+    "topic": "High Court Division Writ Jurisdiction",
+    "en_query": "Under which constitutional article can an aggrieved citizen file a writ petition against unlawful administrative action?",
+    "bn_query": "প্রশাসনের বেআইনি সিদ্ধান্তের বিরুদ্ধে সংক্ষুব্ধ নাগরিক সংবিধানের কোন অনুচ্ছেদ অনুযায়ী হাইকোর্টে রিট পিটিশন করতে পারেন?",
+    "expected_domain": "Constitutional",
+    "mandatory_statute": "The Constitution of the People's Republic of Bangladesh",
+    "mandatory_provision": "Article 102",
+    "key_statutory_rule": "Article 102 confers writ jurisdiction (Mandamus, Certiorari, Prohibition, Habeas Corpus, Quo Warranto)"
+  },
+  {
+    "id": "PARITY-20",
+    "topic": "Consumer Complaint Limitation & Forum",
+    "en_query": "Where and within what timeframe must an aggrieved consumer file a complaint for defective goods or overcharging?",
+    "bn_query": "ভেজাল পণ্য বা অতিরিক্ত মূল্যের বিরুদ্ধে ভোক্তা অধিকার সংরক্ষণ অধিদপ্তরে কতদিনের মধ্যে অভিযোগ করতে হয়?",
+    "expected_domain": "Commercial / Consumer",
+    "mandatory_statute": "Consumers' Right Protection Act, 2009",
+    "mandatory_provision": "Section 60 / Section 76",
+    "key_statutory_rule": "Complaint within 30 days of cause of action to Director General or authorized officer"
+  },
+  {
+    "id": "PARITY-21",
+    "topic": "Quashing of Criminal Proceedings",
+    "en_query": "Under which CrPC provision can the High Court Division quash a criminal proceeding to prevent abuse of the process of court?",
+    "bn_query": "আদালতের প্রক্রিয়ার অপব্যবহার রোধে ফৌজদারি কার্যবিধির কোন ধারা অনুযায়ী মামলা বাতিলের (কোয়াশমেন্ট) আবেদন করা যায়?",
+    "expected_domain": "Criminal / Inherent Power",
+    "mandatory_statute": "The Code of Criminal Procedure, 1898",
+    "mandatory_provision": "Section 561A",
+    "key_statutory_rule": "Inherent power of High Court Division under s.561A to prevent abuse of process or secure ends of justice"
+  },
+  {
+    "id": "PARITY-22",
+    "topic": "Anticipatory Bail Jurisdiction",
+    "en_query": "Which court has jurisdiction to grant anticipatory bail to an apprehension of arrest in Bangladesh?",
+    "bn_query": "গ্রেফতারের আশঙ্কায় আগাম জামিনের আবেদন কোন আদালতে করতে হয়?",
+    "expected_domain": "Criminal",
+    "mandatory_statute": "The Code of Criminal Procedure, 1898",
+    "mandatory_provision": "Section 498",
+    "key_statutory_rule": "High Court Division / Sessions Court jurisdiction under CrPC s.498 with strict guidelines"
+  },
+  {
+    "id": "PARITY-23",
+    "topic": "Civil Revision vs Appeal",
+    "en_query": "When no appeal lies against an order of a civil court, what remedy is available under Section 115 of CPC?",
+    "bn_query": "দেওয়ানী আদালতের আদেশের বিরুদ্ধে আপিলের সুযোগ না থাকলে ১১৫ ধারা মতে কী প্রতিকার চাওয়া যায়?",
+    "expected_domain": "Civil / Procedure",
+    "mandatory_statute": "The Code of Civil Procedure, 1908",
+    "mandatory_provision": "Section 115",
+    "key_statutory_rule": "Civil revision lies before High Court Division or District Judge on jurisdictional errors"
+  },
+  {
+    "id": "PARITY-24",
+    "topic": "Recovery of Possession of Immovable Property",
+    "en_query": "Within what time must a person dispossessed of land without consent file a suit under Section 9 of the Specific Relief Act?",
+    "bn_query": "জমি থেকে বেআইনিভাবে বেদখল হলে সুনির্দিষ্ট প্রতিকার আইনের ৯ ধারা মতে কতদিনের মধ্যে মামলা করতে হয়?",
+    "expected_domain": "Civil / Property",
+    "mandatory_statute": "The Specific Relief Act, 1877",
+    "mandatory_provision": "Section 9",
+    "key_statutory_rule": "Suit must be filed within 6 months of dispossession without needing to prove title"
+  },
+  {
+    "id": "PARITY-25",
+    "topic": "FIR Lodging under Section 154 CrPC",
+    "en_query": "What is the statutory duty of an Officer-in-Charge of a police station when cognizable offence information is reported?",
+    "bn_query": "আমলযোগ্য অপরাধের সংবাদ পেলে থানার ভারপ্রাপ্ত কর্মকর্তার আইনি দায়িত্ব কী?",
+    "expected_domain": "Criminal",
+    "mandatory_statute": "The Code of Criminal Procedure, 1898",
+    "mandatory_provision": "Section 154",
+    "key_statutory_rule": "Mandatory to record First Information Report (FIR) in prescribed register"
+  },
+  {
+    "id": "PARITY-26",
+    "topic": "Doctrine of Part Performance",
+    "en_query": "How does Section 53A of the Transfer of Property Act protect a transferee who has taken possession under an unregistered written contract?",
+    "bn_query": "অংশিক সম্পাদন নীতি (Part Performance) অনুযায়ী সম্পত্তি হস্তান্তর আইনের ৫৩ক ধারা ক্রেতাকে কীভাবে সুরক্ষা দেয়?",
+    "expected_domain": "Property / Civil",
+    "mandatory_statute": "The Transfer of Property Act, 1882",
+    "mandatory_provision": "Section 53A",
+    "key_statutory_rule": "Shield of defence against transferor dispossessing transferee in lawful possession"
+  },
+  {
+    "id": "PARITY-27",
+    "topic": "Dower Debt Prompt vs Deferred",
+    "en_query": "When is prompt dower (Mu'ajjal) payable to a Muslim wife upon marriage in Bangladesh?",
+    "bn_query": "মুসলিম বিবাহে দেনমোহরের 'মুয়াজ্জল' (তাৎক্ষণিক) অংশ স্ত্রী কখন দাবি করতে পারেন?",
+    "expected_domain": "Family",
+    "mandatory_statute": "Family Courts Act, 2023 / MFLO",
+    "mandatory_provision": "MFLO Section 10 / Family Courts Act",
+    "key_statutory_rule": "Prompt dower is payable immediately upon demand by the wife"
+  },
+  {
+    "id": "PARITY-28",
+    "topic": "Admissibility of Unregistered Sale Deed",
+    "en_query": "What is the evidentiary effect of an unregistered document that was compulsorily registrable under Section 49 Registration Act?",
+    "bn_query": "বাধ্যতামূলক রেজিস্ট্রেশনযোগ্য দলিল রেজিস্ট্রি না করলে সাক্ষ্য হিসেবে তার গ্রহণযোগ্যতা কী থাকে?",
+    "expected_domain": "Property / Evidence",
+    "mandatory_statute": "The Registration Act, 1908",
+    "mandatory_provision": "Section 49",
+    "key_statutory_rule": "Does not affect immovable property and cannot be received as evidence of any transaction affecting property"
+  },
+  {
+    "id": "PARITY-29",
+    "topic": "Contempt of Court Jurisdiction",
+    "en_query": "Which constitutional court has the power to punish for contempt of itself under Article 108 of the Bangladesh Constitution?",
+    "bn_query": "আদালত অবমাননার দায়ে শাস্তি দেওয়ার ক্ষমতা সংবিধানের কোন অনুচ্ছেদ অনুযায়ী সুপ্রিম কোর্টকে দেওয়া হয়েছে?",
+    "expected_domain": "Constitutional",
+    "mandatory_statute": "The Constitution of the People's Republic of Bangladesh",
+    "mandatory_provision": "Article 108",
+    "key_statutory_rule": "Supreme Court is a Court of Record and has power to investigate and punish for contempt of itself"
+  },
+  {
+    "id": "PARITY-30",
+    "topic": "Mutation in Land Revenue Records",
+    "en_query": "Under which provision of the State Acquisition and Tenancy Act is mutation (Namzari) of land records conducted by the Assistant Commissioner (Land)?",
+    "bn_query": "সহকারী কমিশনার (ভূমি) রাষ্ট্রীয় অধিগ্রহণ ও প্রজাস্বত্ব আইনের কোন ধারা মতে খারিজ বা নামজারি করেন?",
+    "expected_domain": "Property / Revenue",
+    "mandatory_statute": "The State Acquisition and Tenancy Act, 1950",
+    "mandatory_provision": "Section 143",
+    "key_statutory_rule": "Section 143 empowers revenue officers to maintain and update the Record of Rights"
+  }
+]

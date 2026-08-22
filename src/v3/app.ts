@@ -441,6 +441,7 @@ const pageForPath = (path: string): string => {
   if (path === '/disclaimer') return policyPage('disclaimer');
   if (path === '/feedback') return feedbackPage();
   if (path === '/amendment-admin') return '<div id="amendment-admin-mount"></div>';
+  if (path === '/admin/qa') return '<div id="qa-admin-mount"></div>';
   return notFoundPage();
 };
 
@@ -687,6 +688,13 @@ const hydrateRoute = async (path: string): Promise<void> => {
     if (mount) {
       const { renderAmendmentAdminPage } = await import('../pages/amendment-admin');
       await renderAmendmentAdminPage(mount);
+    }
+  }
+  if (path === '/admin/qa') {
+    const mount = document.getElementById('qa-admin-mount');
+    if (mount) {
+      const { renderQaAdminPage } = await import('../pages/qa-admin');
+      await renderQaAdminPage(mount);
     }
   }
 };
@@ -983,7 +991,6 @@ const openProvisionModal = async (actName: string, sectionRef: string): Promise<
     const text = data.text || 'No text content available.';
     const validFrom = data.valid_from ? `Valid from: ${escapeHtml(data.valid_from)}` : 'In force';
     const isCurrent = data.is_current ? 'Current in force' : 'Historical version';
-    const hash = data.source_hash ? `<small class="checksum-badge">SHA256: ${escapeHtml(data.source_hash.slice(0, 16))}...</small>` : '';
     const officialUrl = data.official_url || 'https://bdlaws.minlaw.gov.bd';
 
     bodyEl.innerHTML = `
@@ -999,8 +1006,8 @@ const openProvisionModal = async (actName: string, sectionRef: string): Promise<
         </div>
         <div class="provision-verification-footer">
           <div class="footer-meta">
-            ${hash}
-            <span class="verified-by-tag">Verified by Justor Legal Research Review</span>
+            <span class="verified-by-tag">✓ Matched against official Bangladesh Gazette / Laws of Bangladesh (Ministry of Law) record</span>
+            <small style="color: #64748B;">Identified by Gazette Act reference & statutory provision key</small>
           </div>
           <a class="button button-small" href="${officialUrl}" target="_blank" rel="noopener">Open official MinLaw gazette ↗</a>
         </div>

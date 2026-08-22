@@ -245,9 +245,16 @@ Provided further that under the Children Act, 2013, mandatory child bail conside
     # ── Family Courts Act 2023 ──
     {
         "act": "Family Courts Act, 2023",
+        "section": "Section 4",
+        "heading": "Establishment of Family Courts",
+        "valid_from": "2023-09-18",
+        "text": """There shall be one or more Family Courts in each district and metropolitan area established by the Government in consultation with the Supreme Court."""
+    },
+    {
+        "act": "Family Courts Act, 2023",
         "section": "Section 5",
         "heading": "Jurisdiction of Family Courts",
-        "valid_from": "2023-09-01",
+        "valid_from": "2023-09-18",
         "text": """Subject to the provisions of this Act, a Family Court shall have exclusive jurisdiction to entertain, try and dispose of any suit relating to or arising out of all or any of the following matters, namely:—
 (a) dissolution of marriage;
 (b) restitution of conjugal rights;
@@ -266,6 +273,54 @@ Provided further that under the Children Act, 2013, mandatory child bail conside
 (2) Whoever contravenes the provisions of sub-section (1) shall be punishable with simple imprisonment for a term which may extend to one year or with fine which may extend to ten thousand taka or with both.
 (3) Save as provided in sub-section (5), a talaq unless revoked earlier, expressly or otherwise, shall not be effective until the expiration of ninety days from the day on which notice under sub-section (1) is delivered to the Chairman.
 (4) Within thirty days of the receipt of notice under sub-section (1), the Chairman shall constitute an Arbitration Council for the purpose of bringing about a reconciliation between the parties."""
+    },
+
+    # ── Additional Criminal & Procedural Core Provisions ──
+    {
+        "act": "The Penal Code, 1860",
+        "section": "Section 405",
+        "heading": "Criminal breach of trust",
+        "valid_from": "1860-10-06",
+        "text": """Whoever, being in any manner entrusted with property, or with any dominion over property, dishonestly misappropriates or converts to his own use that property, or dishonestly uses or disposes of that property in violation of any direction of law prescribing the mode in which such trust is to be discharged, commits criminal breach of trust."""
+    },
+    {
+        "act": "The Penal Code, 1860",
+        "section": "Section 420",
+        "heading": "Cheating and dishonestly inducing delivery of property",
+        "valid_from": "1860-10-06",
+        "text": """Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine."""
+    },
+    {
+        "act": "The Code of Criminal Procedure, 1898",
+        "section": "Section 154",
+        "heading": "Information in cognizable cases (FIR)",
+        "valid_from": "1898-07-01",
+        "text": """Every information relating to the commission of a cognizable offence if given orally to an officer in charge of a police station, shall be reduced to writing by him or under his direction, and be read over to the informant; and every such information, whether given in writing or reduced to writing as aforesaid, shall be signed by the person giving it, and the substance thereof shall be entered in a book to be kept by such officer in such form as the Government may prescribe in this behalf."""
+    },
+    {
+        "act": "The Code of Criminal Procedure, 1898",
+        "section": "Section 498",
+        "heading": "Power to direct admission to bail or reduction of bail (Anticipatory Bail)",
+        "valid_from": "1898-07-01",
+        "text": """The amount of every bond executed under this Chapter shall be fixed with due regard to the circumstances of the case, and shall not be excessive; and the High Court Division or Court of Session may, in any case, whether there be an appeal on conviction or not, direct that any person be admitted to bail, or that the bail required by a police-officer or Magistrate be reduced."""
+    },
+    {
+        "act": "The Code of Civil Procedure, 1908",
+        "section": "Section 115",
+        "heading": "Revision",
+        "valid_from": "1909-01-01",
+        "text": """(1) The High Court Division may call for the record of any case which has been decided by any Court subordinate to the High Court Division, and in which no appeal lies thereto, if such subordinate Court appears—
+(a) to have exercised a jurisdiction not vested in it by law, or
+(b) to have failed to exercise a jurisdiction so vested, or
+(c) to have acted in the exercise of its jurisdiction illegally or with material irregularity,
+the High Court Division may make such order in the case as it thinks fit."""
+    },
+    {
+        "act": "The Constitution of the People's Republic of Bangladesh",
+        "section": "Article 108",
+        "heading": "Supreme Court as Court of Record / Contempt Power",
+        "valid_from": "1972-12-16",
+        "text": """The Supreme Court shall be a court of record and shall have all the powers of such a court including the power, subject to law, to make an order for the investigation of or punishment for any contempt of itself."""
     }
 ]
 
