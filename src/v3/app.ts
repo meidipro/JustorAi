@@ -2,7 +2,6 @@ import type { Session } from '@supabase/supabase-js';
 import {
   authService,
   publicData,
-  runResearch,
   streamResearch,
   type GuideDetailRecord,
   type GuideRecord,
@@ -15,7 +14,7 @@ import {
   type ResourceState,
   type Role,
 } from './services';
-import { localizedPath, parseLocalizedPath, ui } from './i18n';
+import { computeStatusBanner, localizedPath, parseLocalizedPath, ui, type CopyKey } from './i18n';
 import { chatStore, type ChatThread } from './chatStore';
 
 const appRoot = document.getElementById('app');
@@ -751,10 +750,10 @@ const navigate = (href: string, preserveScroll = false, preservedQuery = ''): vo
   if (url.hash) window.setTimeout(() => document.querySelector(url.hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30);
 };
 
-const showToast = (title: string, message: string, tone: 'neutral' | 'warning' = 'neutral'): void => {
+const showToast = (title: string, message: string, tone: 'neutral' | 'warning' | 'positive' = 'neutral'): void => {
   const region = document.querySelector<HTMLElement>('.toast-region');
   if (!region) return;
-  region.innerHTML = `<div class="toast ${tone === 'warning' ? 'toast-warning' : ''}"><span>${icon(tone === 'warning' ? 'shield' : 'check', 18)}</span><div><strong>${escapeHtml(title)}</strong><p>${escapeHtml(message)}</p></div><button type="button" data-action="close-toast" aria-label="Close">${icon('close', 16)}</button></div>`;
+  region.innerHTML = `<div class="toast ${tone === 'warning' ? 'toast-warning' : tone === 'positive' ? 'toast-positive' : ''}"><span>${icon(tone === 'warning' ? 'shield' : 'check', 18)}</span><div><strong>${escapeHtml(title)}</strong><p>${escapeHtml(message)}</p></div><button type="button" data-action="close-toast" aria-label="Close">${icon('close', 16)}</button></div>`;
 };
 
 const verificationBadge = (status?: string): string => {
@@ -1247,6 +1246,7 @@ const printChambersLegalMemo = (result: ResearchResult, role: Role, language: La
           <div><strong>Reference:</strong> ${memoId}</div>
           <div><strong>Date:</strong> ${nowStr}</div>
           <div><strong>Practice Level:</strong> ${role.toUpperCase()}</div>
+          <div><strong>Language:</strong> ${language.toUpperCase()}</div>
           <div><strong>Verification:</strong> 7-Gate Evidence Engine Verified ✓</div>
         </div>
       </div>

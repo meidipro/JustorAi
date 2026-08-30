@@ -126,7 +126,7 @@ export const authService = {
   },
   subscribe(callback: (session: Session | null) => void): () => void {
     if (!supabase) return () => undefined;
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => callback(session));
+    const { data } = supabase.auth.onAuthStateChange((_event: any, session: Session | null) => callback(session));
     return () => data.subscription.unsubscribe();
   },
 };
