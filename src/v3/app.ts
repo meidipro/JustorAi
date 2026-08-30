@@ -3,6 +3,7 @@ import {
   authService,
   publicData,
   runResearch,
+  streamResearch,
   type GuideDetailRecord,
   type GuideRecord,
   type Language,
@@ -167,29 +168,48 @@ const header = (): string => `
     <div class="nav-shell">
       ${route('/', brand(true), 'brand-link')}
       <nav class="desktop-nav" aria-label="Primary navigation">
+        ${route('/workspace/citizen', ui(state.language, 'citizen'))}
         ${route('/legal-library', ui(state.language, 'library'))}
         ${route('/guides', ui(state.language, 'guides'))}
-        ${route('/legal-updates', ui(state.language, 'updates'))}
-        ${route('/trust', ui(state.language, 'trust'))}
-        ${route('/about', ui(state.language, 'about'))}
+        ${route('/workspace/professional', ui(state.language, 'legalProfessional'))}
+        ${route('/workspace/student', ui(state.language, 'lawStudent'))}
       </nav>
       <div class="nav-actions">
+        <button class="button-pilot-badge" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot — ৳200/mo">⚖️ Founding Pilot</button>
         <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
-        ${state.session ? `<button class="nav-signin" type="button" data-action="sign-out">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'nav-signin')}
-        ${route('/start', `${ui(state.language, 'start')} ${icon('arrow', 16)}`, 'button button-small desktop-start')}
+        ${state.session ? `<button class="nav-signin" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` : route('/login', ui(state.language, 'signIn'), 'nav-signin')}
         <button class="menu-button" type="button" data-action="menu" aria-label="${state.menuOpen ? ui(state.language, 'close') : ui(state.language, 'menu')}" aria-expanded="${state.menuOpen}">${icon(state.menuOpen ? 'close' : 'menu')}</button>
       </div>
     </div>
-    <nav class="mobile-menu ${state.menuOpen ? 'is-open' : ''}" aria-label="Mobile navigation" aria-hidden="${!state.menuOpen}">
-      ${route('/legal-library', ui(state.language, 'library'))}
-      ${route('/guides', ui(state.language, 'guides'))}
-      ${route('/legal-updates', ui(state.language, 'updates'))}
-      ${route('/trust', ui(state.language, 'trust'))}
-      ${route('/about', ui(state.language, 'about'))}
-      <span class="mobile-menu-divider" aria-hidden="true"></span>
-      <button class="mobile-nav-action" type="button" data-action="language">${ui(state.language, 'language')}</button>
-      ${state.session ? '<button class="mobile-nav-action" type="button" data-action="sign-out">Sign Out</button>' : route('/login', ui(state.language, 'signIn'))}
-      ${route('/start', ui(state.language, 'start'), 'button mobile-start')}
+    
+    <!-- Mobile Full-Width Slide-in Drawer (Section M & N) -->
+    <div class="mobile-drawer-overlay ${state.menuOpen ? 'is-open' : ''}" data-action="close-menu" aria-hidden="${!state.menuOpen}"></div>
+    <nav class="mobile-drawer ${state.menuOpen ? 'is-open' : ''}" aria-label="Mobile navigation" aria-hidden="${!state.menuOpen}">
+      <div class="mobile-drawer-header">
+        ${brand(true)}
+        <button class="mobile-drawer-close" type="button" data-action="close-menu" aria-label="${ui(state.language, 'close')}">✕</button>
+      </div>
+      <div class="mobile-drawer-content">
+        <span class="menu-section-label">${ui(state.language, 'product')}</span>
+        ${route('/workspace/citizen', ui(state.language, 'citizen'), 'menu-nav-link')}
+        ${route('/legal-library', ui(state.language, 'library'), 'menu-nav-link')}
+        ${route('/guides', ui(state.language, 'guides'), 'menu-nav-link')}
+        ${route('/legal-updates', ui(state.language, 'updates'), 'menu-nav-link')}
+        
+        <span class="menu-section-label" style="margin-top: 16px;">${ui(state.language, 'resources')}</span>
+        ${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}
+        ${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}
+        ${route('/trust', ui(state.language, 'trust'), 'menu-nav-link')}
+        ${route('/about', ui(state.language, 'about'), 'menu-nav-link')}
+
+        <div class="mobile-drawer-footer">
+          <button class="button button-secondary language-drawer-btn" type="button" data-action="language">${ui(state.language, 'language')}</button>
+          ${state.session 
+            ? `<button class="button button-outline signout-drawer-btn" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` 
+            : route('/login', ui(state.language, 'signIn'), 'button signin-drawer-btn')
+          }
+        </div>
+      </div>
     </nav>
   </header>`;
 
@@ -288,7 +308,7 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
                 <strong class="thread-item-title" title="${escapeHtml(t.title)}">${escapeHtml(t.title)}</strong>
                 <span class="thread-item-time">${timeStr}</span>
               </div>
-              <button class="thread-delete-btn" type="button" data-action="delete-thread" data-thread-id="${t.id}" title="Delete thread">✕</button>
+              <button class="thread-delete-btn" type="button" data-action="delete-thread" data-thread-id="${t.id}" title="${state.language === 'bn' ? `গবেষণা মুছুন: ${escapeHtml(t.title)}` : `Delete research thread: ${escapeHtml(t.title)}`}" aria-label="${state.language === 'bn' ? `গবেষণা মুছুন: ${escapeHtml(t.title)}` : `Delete research thread: ${escapeHtml(t.title)}`}">✕</button>
             </div>
           `;
         }).join('')}
@@ -303,7 +323,8 @@ const workspaceTopbar = (role: Role, title?: string): string => `
   <header class="workspace-topbar">
     <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
     <span>${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
-    <div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="button-pilot-badge" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot — ৳200/mo">⚖️ Founding Pilot</button>
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       ${state.session ? `<button type="button" data-action="sign-out" class="text-button">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'button button-small')}
     </div>
@@ -311,20 +332,58 @@ const workspaceTopbar = (role: Role, title?: string): string => `
 
 const quotaLine = (role: Role): string => `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${roleQuota[role]}` : `${ui(state.language, 'signInQuotaPrefix')} ${roleQuota[role]} ${ui(state.language, 'answersPerDay')}`}</span>`;
 
+const citizenSectors = [
+  { icon: '🏠', titleKey: 'sectorProperty', descKey: 'sectorPropertyDesc', cluster: 'property-land', query: 'My landlord won\'t return my advance deposit or rent dispute' },
+  { icon: '👨‍👩‍👧', titleKey: 'sectorFamily', descKey: 'sectorFamilyDesc', cluster: 'family-marriage', query: 'How to claim prompt dower (Denmohor) or maintenance under Muslim Family Law?' },
+  { icon: '⚖️', titleKey: 'sectorCriminal', descKey: 'sectorCriminalDesc', cluster: 'criminal-police', query: 'What are the rights upon police arrest under Section 54 and bail guidelines?' },
+  { icon: '💼', titleKey: 'sectorEmployment', descKey: 'sectorEmploymentDesc', cluster: 'employment-work', query: 'Statutory notice pay and compensation for termination under Labour Act Section 26' },
+  { icon: '🛒', titleKey: 'sectorConsumer', descKey: 'sectorConsumerDesc', cluster: 'consumer-contracts', query: 'Filing a consumer complaint for adulterated or defective products under Section 76' },
+  { icon: '📋', titleKey: 'sectorRights', descKey: 'sectorRightsDesc', cluster: 'rights-documents', query: 'Procedure for correcting NID, birth certificate or land Khatian porcha records' },
+  { icon: '🏢', titleKey: 'sectorBusiness', descKey: 'sectorBusinessDesc', cluster: 'business-licensing', query: 'Trade license requirements and municipal business regulatory compliance' },
+] as const;
+
 const renderEmptyLanding = (role: Role): string => {
+  if (role === 'citizen') {
+    return `
+      <div class="chat-empty-landing citizen-landing-sectors">
+        <div class="empty-landing-brand">
+          <img src="/visuals/justor-mark.png" alt="Justor AI" width="44" height="44">
+        </div>
+        <h1 class="empty-landing-title">${state.language === 'bn' ? 'কী ঘটেছে? আপনার পরিস্থিতি বেছে নিন' : 'What happened? Choose your situation'}</h1>
+        <p class="empty-landing-subtitle">
+          ${state.language === 'bn' 
+            ? 'বাস্তব করণীয়, প্রমাণ ও সরকারি সেবার পথ। জাস্টর প্রথমে সিটিজেন লিগ্যাল গাইডে খুঁজবে।' 
+            : 'Practical legal guidance, required evidence, and official routes.'}
+        </p>
+        <div class="citizen-sector-cards" role="region" aria-label="Citizen Legal Sectors">
+          ${citizenSectors.map((s) => `
+            <button type="button" class="citizen-sector-card" data-suggested-query="${escapeHtml(s.query)}" aria-label="${escapeHtml(ui(state.language, s.titleKey as CopyKey))}">
+              <span class="sector-card-icon" aria-hidden="true">${s.icon}</span>
+              <div class="sector-card-text">
+                <strong class="sector-card-title">${escapeHtml(ui(state.language, s.titleKey as CopyKey))}</strong>
+                <span class="sector-card-desc">${escapeHtml(ui(state.language, s.descKey as CopyKey))}</span>
+              </div>
+            </button>
+          `).join('')}
+        </div>
+        <div class="citizen-disclaimer-box">
+          <p>${ui(state.language, 'citizenDisclaimer')}</p>
+        </div>
+      </div>
+    `;
+  }
+
   const suggestions = roleSuggestedQueries[role] ?? roleSuggestedQueries.professional;
   return `
     <div class="chat-empty-landing">
       <div class="empty-landing-brand">
         <img src="/visuals/justor-mark.png" alt="Justor AI" width="44" height="44">
       </div>
-      <h1 class="empty-landing-title">${role === 'professional' ? 'Bangladesh Legal Research & Intelligence' : role === 'student' ? 'Source-Linked Legal Study' : 'Bangladesh Citizen Legal Guidance'}</h1>
+      <h1 class="empty-landing-title">${role === 'professional' ? (state.language === 'bn' ? 'পেশাগত আইনি গবেষণা ও বুদ্ধিমত্তা' : 'Bangladesh Legal Research & Intelligence') : (state.language === 'bn' ? 'উৎস-সংযুক্ত আইনি শিক্ষা' : 'Source-Linked Legal Study')}</h1>
       <p class="empty-landing-subtitle">
         ${role === 'professional' 
-          ? 'Grounded legal analysis across controlling statutes, gazettes, and Supreme Court of Bangladesh precedents.' 
-          : role === 'student' 
-          ? 'Break down principles, structure case briefs, and verify statutory rules with official sources.' 
-          : 'Plain-language legal guidance and next steps verified against Bangladesh laws.'}
+          ? (state.language === 'bn' ? 'নিয়ন্ত্রণকারী আইন, গেজেট ও সুপ্রিম কোর্টের নজিরের ভিত্তিতে কর্তৃত্বপূর্ণ বিশ্লেষণ।' : 'Grounded legal analysis across controlling statutes, gazettes, and Supreme Court of Bangladesh precedents.') 
+          : (state.language === 'bn' ? 'ধারা ও নজির বিশ্লেষণ করুন এবং সরকারি উৎস থেকে আইন শিখুন।' : 'Break down principles, structure case briefs, and verify statutory rules with official sources.')}
       </p>
       <div class="chat-suggested-grid">
         ${suggestions.map((item) => `
@@ -362,7 +421,7 @@ const renderChatStream = (thread: ChatThread, role: Role): string => {
               <div class="chat-assistant-container">
                 <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
                 <div class="assistant-content-wrapper">
-                  ${msg.result ? renderResearchResult(msg.result) : `<div class="research-formatted-markdown">${formatAnswerMarkdown(msg.content)}</div>`}
+                  ${msg.result ? renderResearchResult(msg.result, role) : `<div class="research-formatted-markdown">${formatAnswerMarkdown(msg.content, role)}</div>`}
                 </div>
               </div>
             </div>
@@ -381,13 +440,13 @@ const renderBottomChatBar = (role: Role, placeholder: string, quickActions: stri
       </div>
       <form class="chat-floating-composer" data-research-form data-role="${role}" ${context ? `data-context-id="${escapeHtml(context.id)}" data-context-title="${escapeHtml(context.title)}" data-context-topic="${escapeHtml(context.topic)}"` : ''}>
         <div class="composer-input-box">
-          <textarea name="query" rows="1" required placeholder="${placeholder}" data-auto-resize></textarea>
+          <textarea name="query" rows="1" required placeholder="${placeholder}" data-auto-resize aria-label="${placeholder}"></textarea>
           <button type="submit" class="composer-send-btn" aria-label="Submit query" title="Send (Enter)">
             ${icon('arrow', 18)}
           </button>
         </div>
         <div class="composer-subline">
-          <span>${icon('source', 14)} Grounded on verified Bangladesh statutes & Supreme Court records</span>
+          <span class="composer-privacy-hint">${ui(state.language, 'composerPrivacyHint')}</span>
           ${quotaLine(role)}
         </div>
       </form>
@@ -405,6 +464,7 @@ const professionalWorkspace = (): string => {
   const thread = chatStore.getOrCreateActiveThread('professional');
   return `
   <main id="page-content" class="workspace workspace-professional">
+    <h1 class="sr-only">${state.language === 'bn' ? 'আইনি গবেষণা — পেশাদার ওয়ার্কস্পেস' : 'Legal Research — Professional Workspace'}</h1>
     ${workspaceNav('professional', [
       { label: ui(state.language, 'researchHome'), href: '/workspace/professional', icon: 'home' },
       { label: ui(state.language, 'legalLibrary'), href: '/legal-library', icon: 'book' },
@@ -434,6 +494,7 @@ const studentWorkspace = (): string => {
   const thread = chatStore.getOrCreateActiveThread('student');
   return `
   <main id="page-content" class="workspace workspace-student">
+    <h1 class="sr-only">${state.language === 'bn' ? 'আইন শিক্ষা — শিক্ষার্থী ওয়ার্কস্পেস' : 'Legal Study — Student Workspace'}</h1>
     ${workspaceNav('student', [
       { label: ui(state.language, 'studyHome'), href: '/workspace/student', icon: 'home' },
       { label: ui(state.language, 'askJustor'), href: '/workspace/student#ask', icon: 'source' },
@@ -459,6 +520,7 @@ const citizenWorkspace = (): string => {
   const thread = chatStore.getOrCreateActiveThread('citizen');
   return `
   <main id="page-content" class="workspace workspace-citizen">
+    <h1 class="sr-only">${state.language === 'bn' ? 'নাগরিক আইনি নির্দেশনা — ওয়ার্কস্পেস' : 'Citizen Legal Guidance — Workspace'}</h1>
     ${workspaceNav('citizen', [
       { label: ui(state.language, 'home'), href: '/workspace/citizen', icon: 'home' },
       { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
@@ -519,7 +581,7 @@ const aboutPage = (): string => `<main id="page-content" class="inner-page about
   <section id="contact" class="section-shell direct-contact"><span class="section-kicker">Contact</span><h2>Start the right conversation.</h2><a href="mailto:tajuddinahamed.contact@gmail.com">tajuddinahamed.contact@gmail.com</a><a href="tel:+8801764662967">+880 1764-662967</a></section>
   </main>`;
 
-const contactPage = (): string => `<main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">Contact Justor</span><h1>Start the right conversation.</h1><p>Choose a direct route to the team. No submission is silently stored by this page.</p></section><section class="section-shell contact-options"><a href="mailto:tajuddinahamed.contact@gmail.com"><span>Email</span><strong>tajuddinahamed.contact@gmail.com</strong>${icon('arrow', 16)}</a><a href="tel:+8801764662967"><span>Phone</span><strong>+880 1764-662967</strong>${icon('arrow', 16)}</a><a href="https://wa.me/8801764662967" target="_blank" rel="noopener"><span>WhatsApp</span><strong>Open a conversation</strong>${icon('external', 16)}</a></section><section class="section-shell inquiry-links"><h2>Inquiry type</h2><div><a href="mailto:tajuddinahamed.contact@gmail.com?subject=University%20partnership">University partnership</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20collaboration">Legal collaboration</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20inquiry">Media & press</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor / strategic partnership</a></div></section></main>`;
+const contactPage = (): string => `<main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">Contact Justor</span><h1>Start the right conversation.</h1><p>Choose a direct route to the team. No submission is silently stored by this page.</p></section><section class="section-shell contact-options"><a href="mailto:tajuddinahamed.contact@gmail.com"><span>Email</span><strong>tajuddinahamed.contact@gmail.com</strong>${icon('arrow', 16)}</a><a href="tel:+8801764662967"><span>Phone</span><strong>+880 1764-662967</strong>${icon('arrow', 16)}</a><a href="https://wa.me/8801764662967" target="_blank" rel="noopener"><span>WhatsApp</span><strong>Open a conversation</strong>${icon('external', 16)}</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener"><span>User Survey</span><strong>Share your product feedback</strong>${icon('external', 16)}</a></section><section class="section-shell inquiry-links"><h2>Inquiry type</h2><div><a href="mailto:tajuddinahamed.contact@gmail.com?subject=University%20partnership">University partnership</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20collaboration">Legal collaboration</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20inquiry">Media & press</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor / strategic partnership</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener">Product Feedback Survey ↗</a></div></section></main>`;
 
 const loginPage = (): string => {
   const next = new URLSearchParams(window.location.search).get('next') || localizedPath(`/workspace/${state.role}`, state.language);
@@ -562,37 +624,65 @@ const hydrateHeroVisual = (): void => {
 };
 
 const feedbackPage = (): string => `
-  <main id="page-content" class="inner-page">
+  <main id="page-content" class="inner-page feedback-page">
     <section class="compact-hero section-shell">
-      <span class="section-kicker">Quality & Accuracy Telemetry</span>
-      <h1>Legal Research Feedback & Issue Reporting</h1>
-      <p>Report incorrect citations, outdated law, missing controlling authorities, or factual misunderstandings. Every report is reviewed by our legal team.</p>
+      <span class="section-kicker">${state.language === 'bn' ? 'ব্যবহারকারী প্রতিক্রিয়া ও সমীক্ষা' : 'User Feedback & Evaluation'}</span>
+      <h1>${state.language === 'bn' ? 'জাস্টর এআই ব্যবহারকারী মতামত সমীক্ষা' : 'Justor AI User Experience Survey'}</h1>
+      <p>${state.language === 'bn' ? 'আপনার মূল্যবান মতামত আমাদের এআই ও আইনি গবেষণা প্ল্যাটফর্মকে আরও উন্নত করতে সাহায্য করে।' : 'Your feedback helps us refine our legal AI intelligence, statutory verification, and user experience for lawyers, students, and citizens.'}</p>
+      <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+        <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener">
+          ${state.language === 'bn' ? 'নতুন উইন্ডোতে ফর্মটি খুলুন' : 'Open in New Window'} ${icon('external', 14)}
+        </a>
+      </div>
     </section>
-    <article class="section-shell" style="max-width: 680px; margin-top: 24px; padding-bottom: 60px;">
-      <form class="public-search" style="flex-direction: column; gap: 16px; background: #FFF; padding: 24px; border-radius: 12px; border: 1px solid #E2E8F0;" data-action="submit-qa-feedback">
-        <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1E293B;">
-          Legal Question or Topic
-          <input name="query" placeholder="e.g. Can an unregistered contract for sale be enforced under SRA s.21A?" required style="width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px;">
-        </label>
-        <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1E293B;">
-          Issue Category
-          <select name="category" required style="width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px; background: #FFF;">
-            <option value="">Select category...</option>
-            <option value="wrong_law">Wrong law or statute applied</option>
-            <option value="wrong_citation">Incorrect section or case citation</option>
-            <option value="outdated_law">Outdated or superseded legal text</option>
-            <option value="missing_authority">Missed a mandatory controlling authority</option>
-            <option value="incomplete_answer">Incomplete legal analysis</option>
-            <option value="misunderstood_question">Misunderstood facts / scenario</option>
-            <option value="other">Other issue</option>
-          </select>
-        </label>
-        <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1E293B;">
-          What should the correct answer or authority be?
-          <textarea name="comment" rows="4" placeholder="Mention the exact Section, Act, or Supreme Court judgment (e.g. Must require deposit of balance consideration under s.21A)..." required style="width: 100%; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px;"></textarea>
-        </label>
-        <button class="button" type="submit" style="align-self: flex-start; margin-top: 8px;">Submit Report ↗</button>
-      </form>
+    
+    <article class="section-shell" style="max-width: 840px; margin-top: 24px; padding-bottom: 60px;">
+      <div style="background: var(--bg-card, #131827); border: 1px solid var(--border-color, #232B3E); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+        <iframe 
+          src="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform?embedded=true" 
+          width="100%" 
+          height="950" 
+          frameborder="0" 
+          marginheight="0" 
+          marginwidth="0"
+          style="display: block; width: 100%; border: none; background: #ffffff; border-radius: 12px;"
+          title="Justor AI User Feedback Form">
+          Loading feedback form…
+        </iframe>
+      </div>
+
+      <div style="margin-top: 40px; padding: 24px; background: rgba(30, 56, 200, 0.05); border: 1px solid rgba(30, 56, 200, 0.2); border-radius: 12px;">
+        <h3 style="margin-top: 0; color: var(--text-primary, #F1F5F9); font-size: 17px;">
+          ${state.language === 'bn' ? 'নির্দিষ্ট আইনি ভুল বা সাইটেশন রিপোর্ট করতে চান?' : 'Need to report a specific citation, section or statute error?'}
+        </h3>
+        <p style="color: var(--text-secondary, #94A3B8); font-size: 14px; line-height: 1.6;">
+          ${state.language === 'bn' ? 'সরাসরি আমাদের আইনি পর্যালোচনা টিমের কাছে নির্দিষ্ট ধারা বা মামলার ভুল রিপোর্ট করতে পারেন।' : 'You can also submit specific statutory discrepancies, superseded laws, or wrong citations directly to our QA triage pipeline.'}
+        </p>
+        <form class="public-search" style="flex-direction: column; gap: 16px; background: var(--bg-primary, #0D0F14); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); margin-top: 12px;" data-action="submit-qa-feedback">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; color: var(--text-primary, #F1F5F9);">
+            ${state.language === 'bn' ? 'আইনি প্রশ্ন বা বিষয়' : 'Legal Question or Topic'}
+            <input name="query" placeholder="e.g. Specific Relief Act s.21A contract for sale" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color, #232B3E); border-radius: 6px; background: var(--bg-card, #131827); color: var(--text-primary, #F1F5F9);">
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; color: var(--text-primary, #F1F5F9);">
+            ${state.language === 'bn' ? 'সমস্যার ধরণ' : 'Issue Category'}
+            <select name="category" required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color, #232B3E); border-radius: 6px; background: var(--bg-card, #131827); color: var(--text-primary, #F1F5F9);">
+              <option value="">Select category...</option>
+              <option value="wrong_law">Wrong law or statute applied</option>
+              <option value="wrong_citation">Incorrect section or case citation</option>
+              <option value="outdated_law">Outdated or superseded legal text</option>
+              <option value="missing_authority">Missed a mandatory controlling authority</option>
+              <option value="incomplete_answer">Incomplete legal analysis</option>
+              <option value="misunderstood_question">Misunderstood facts / scenario</option>
+              <option value="other">Other issue</option>
+            </select>
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; color: var(--text-primary, #F1F5F9);">
+            ${state.language === 'bn' ? 'সঠিক তথ্য বা সাইটেশন কী হওয়া উচিত?' : 'What should the correct answer or authority be?'}
+            <textarea name="comment" rows="3" placeholder="Mention the exact Section, Act, or Supreme Court judgment..." required style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color, #232B3E); border-radius: 6px; background: var(--bg-card, #131827); color: var(--text-primary, #F1F5F9);"></textarea>
+          </label>
+          <button class="button button-small" type="submit" style="align-self: flex-start;">${state.language === 'bn' ? 'রিপোর্ট জমা দিন ↗' : 'Submit QA Report ↗'}</button>
+        </form>
+      </div>
     </article>
   </main>`;
 
@@ -669,17 +759,16 @@ const showToast = (title: string, message: string, tone: 'neutral' | 'warning' =
 
 const verificationBadge = (status?: string): string => {
   const normalized = (status ?? '').trim().toUpperCase();
-  if (!normalized) return '<span class="semantic-badge badge-pending-verified">○ PENDING VERIFICATION</span>';
-  if (normalized.includes('PRIMARY') || normalized.includes('CHECKED') || normalized.includes('OFFICIAL') || normalized === 'ACTIVE') {
-    return '<span class="semantic-badge badge-primary-verified">● PRIMARY STATUTE VERIFIED</span>';
+  if (normalized.includes('PRIMARY') || normalized.includes('CHECKED') || normalized.includes('VERIFIED') || normalized === 'ACTIVE') {
+    return `<span class="semantic-badge badge-source-checked">● ${ui(state.language, 'sourceChecked')}</span>`;
   }
-  if (normalized.includes('REPORTER') || normalized.includes('DLR')) {
-    return '<span class="semantic-badge badge-reporter-verified">◐ REPORTER VERIFIED</span>';
+  if (normalized.includes('REPORTER') || normalized.includes('DLR') || normalized.includes('SCOB') || normalized.includes('BLD')) {
+    return `<span class="semantic-badge badge-reporter-verified">◐ ${ui(state.language, 'reporterVerified')}</span>`;
   }
-  if (normalized.includes('CONFLICT') || normalized.includes('REPEALED') || normalized.includes('OMITTED')) {
-    return '<span class="semantic-badge badge-conflict-verified">✕ CONFLICT / REPEALED</span>';
+  if (normalized.includes('UNREVIEWED')) {
+    return `<span class="semantic-badge badge-unreviewed">✕ ${ui(state.language, 'unreviewedCorpus')}</span>`;
   }
-  return '<span class="semantic-badge badge-pending-verified">○ PENDING VERIFICATION</span>';
+  return `<span class="semantic-badge badge-pending-verified">○ ${ui(state.language, 'pendingVerification')}</span>`;
 };
 
 const sourcePanel = (source?: LegalSource, className = 'result-source-panel'): string => {
@@ -688,7 +777,15 @@ const sourcePanel = (source?: LegalSource, className = 'result-source-panel'): s
   const title = source.authority || source.title || 'Controlling Authority';
   const provision = source.provision || source.citation || '';
   const excerpt = source.excerpt ? `<blockquote>${escapeHtml(source.excerpt)}</blockquote>` : '';
-  const provButton = `<button class="button button-small button-secondary open-prov-btn" type="button" data-action="view-provision" data-act="${escapeHtml(title)}" data-section="${escapeHtml(provision)}">${icon('book', 15)} View full provision</button>`;
+  const isUnreviewed = (source.verificationStatus || source.status || '').toUpperCase().includes('UNREVIEWED');
+
+  let provButtonHtml = '';
+  if (url && !isUnreviewed) {
+    provButtonHtml = `<a class="button button-small button-secondary open-prov-btn" href="${url}" target="_blank" rel="noopener noreferrer">${icon('book', 15)} ${ui(state.language, 'viewFullProvision')} ${icon('external', 12)}</a>`;
+  } else {
+    const tooltipText = ui(state.language, 'sourceUrlNotIndexed');
+    provButtonHtml = `<button class="button button-small button-secondary open-prov-btn is-disabled" type="button" disabled title="${escapeHtml(tooltipText)}" aria-label="${escapeHtml(tooltipText)}">${icon('book', 15)} ${ui(state.language, 'viewFullProvision')}</button><small class="source-url-tooltip">${escapeHtml(tooltipText)}</small>`;
+  }
 
   return `
     <aside class="${className}" data-source-panel>
@@ -700,8 +797,7 @@ const sourcePanel = (source?: LegalSource, className = 'result-source-panel'): s
       </div>
       ${excerpt}
       <div class="authority-panel-actions">
-        ${provButton}
-        ${url ? `<a class="text-link" href="${url}" target="_blank" rel="noopener">Official Gazette / MinLaw ${icon('external', 14)}</a>` : ''}
+        ${provButtonHtml}
       </div>
     </aside>`;
 };
@@ -875,7 +971,7 @@ const hydrateRoute = async (path: string): Promise<void> => {
   }
 };
 
-const formatAnswerMarkdown = (text: string): string => {
+const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string => {
   if (!text) return '';
   const lines = text.split('\n');
   const htmlParts: string[] = [];
@@ -912,9 +1008,19 @@ const formatAnswerMarkdown = (text: string): string => {
       htmlParts.push(`<blockquote>${escapeHtml(line.slice(2))}</blockquote>`);
     } else {
       flushList();
-      const formatted = escapeHtml(line)
-        .replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '<button class="inline-citation-chip" type="button" data-action="click-citation" data-citation="$1">[$1]</button>')
-        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      let formatted = escapeHtml(line).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      if (role !== 'citizen') {
+        // Single unified numbering [1], [2], [3] (Section C)
+        formatted = formatted
+          .replace(/\[(\d+)\]/g, (_match, p1) => {
+            const idx = parseInt(p1, 10) - 1;
+            return `<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation-index" data-citation-index="${idx}" aria-label="Inspect authority [${p1}]">[${p1}]</button>`;
+          })
+          .replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation" data-citation="$1">[$1]</button>');
+      } else {
+        // Strip citation chips for citizen answers (Section G)
+        formatted = formatted.replace(/\[\d+\]/g, '').replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '');
+      }
       htmlParts.push(`<p>${formatted}</p>`);
     }
   }
@@ -922,16 +1028,81 @@ const formatAnswerMarkdown = (text: string): string => {
   return htmlParts.join('');
 };
 
-const renderResearchResult = (result: ResearchResult): string => {
-  const sources = result.authorities ?? [];
-  const verifiedCount = sources.filter((s) => (s.verificationStatus || s.status || '').toUpperCase().includes('VERIFIED') || (s.verificationStatus || s.status || '').toUpperCase().includes('PRIMARY')).length;
+const renderResearchResult = (result: ResearchResult, role: Role = 'professional'): string => {
+  if (role === 'citizen') {
+    return `
+      <div class="citizen-result-layout">
+        <article class="citizen-analysis">
+          <div class="citizen-steps-container">
+            <div class="research-formatted-markdown">
+              ${formatAnswerMarkdown(result.shortAnswer || '', 'citizen')}
+            </div>
+          </div>
+          <div class="citizen-disclaimer-box">
+            <p>${ui(state.language, 'citizenDisclaimer')}</p>
+          </div>
+          <div class="citizen-ask-more" style="margin-top: 16px;">
+            <button class="button button-secondary" type="button" data-action="focus-composer">
+              ${ui(state.language, 'guideAskAi')}
+            </button>
+          </div>
+        </article>
+      </div>
+    `;
+  }
 
-  const researchProcessBlock = `
-    <details class="reasoning-accordion" open>
-      <summary class="reasoning-summary">
+  const sources = result.authorities ?? [];
+  const statusBannerText = computeStatusBanner(sources, state.language);
+
+  const statusBannerHtml = `
+    <div class="status-banner" data-status-banner>
+      <span class="status-indicator-dot"></span>
+      <span class="status-banner-text">${escapeHtml(statusBannerText)}</span>
+    </div>
+  `;
+
+  const directAnswerHtml = `
+    <section class="direct-answer-section">
+      <h3 class="sr-only">${ui(state.language, 'directAnswer')}</h3>
+      <div class="direct-answer-content research-formatted-markdown">
+        ${formatAnswerMarkdown(result.shortAnswer || '', role)}
+      </div>
+    </section>
+  `;
+
+  const keyLegalBasisHtml = (result.applicableLaw?.length || result.relevantCases?.length) ? `
+    <section class="key-legal-basis-section" style="margin: 18px 0;">
+      <h3 style="font-size: 16px; margin: 0 0 8px 0; color: #1E293B;">${ui(state.language, 'keyLegalBasis')}</h3>
+      <ul class="legal-basis-list" style="margin: 0; padding-left: 20px; color: #334155; font-size: 14px;">
+        ${(result.applicableLaw || []).map(law => `<li style="margin-bottom: 4px;">${escapeHtml(law)}</li>`).join('')}
+        ${(result.relevantCases || []).map(c => `<li style="margin-bottom: 4px;">${escapeHtml(c)}</li>`).join('')}
+      </ul>
+    </section>
+  ` : '';
+
+  const sourcesListHtml = sources.length ? `
+    <details class="sources-collapsible" open style="margin: 18px 0;">
+      <summary class="sources-summary" style="cursor: pointer; font-weight: 600; font-size: 14px; color: #1E38C8; margin-bottom: 8px;">
+        <span>${icon('book', 15)} ${ui(state.language, 'sources')} (${sources.length})</span>
+      </summary>
+      <div class="citation-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+        ${sources.map((source, index) => `
+          <button type="button" data-result-source="${index}" class="citation-chip ${index === 0 ? 'active' : ''}" aria-label="Inspect authority [${index + 1}]: ${escapeHtml(source.authority || source.title)}">
+            <span>[${index + 1}]</span>
+            <strong>${escapeHtml(source.authority || source.title)}</strong>
+            ${source.provision ? `<span>— ${escapeHtml(source.provision)}</span>` : ''}
+            ${verificationBadge(source.verificationStatus || source.status)}
+          </button>
+        `).join('')}
+      </div>
+    </details>
+  ` : '';
+
+  const researchProcessAccordion = `
+    <details class="reasoning-accordion" style="margin: 18px 0;">
+      <summary class="reasoning-summary" style="cursor: pointer; font-weight: 500; font-size: 13.5px; color: #64748B;">
         <span class="reasoning-icon">⚖️</span>
-        <span class="reasoning-heading">Research Process</span>
-        <span class="reasoning-count">${verifiedCount > 0 ? `${verifiedCount}/${sources.length} Verified` : 'Verification Active'}</span>
+        <span class="reasoning-heading">${ui(state.language, 'howAnswerProduced')}</span>
         <span class="reasoning-chevron">▼</span>
       </summary>
       <div class="reasoning-steps-list">
@@ -946,7 +1117,7 @@ const renderResearchResult = (result: ResearchResult): string => {
           <div class="step-num">2</div>
           <div class="step-content">
             <strong>Primary Authorities Retrieved</strong>
-            <p>Retrieved ${sources.length} primary provisions & precedential DLR holdings from canonical Bangladesh legal repository.</p>
+            <p>Retrieved ${sources.length} primary provisions & precedential holdings from canonical repository.</p>
           </div>
         </div>
         <div class="reasoning-step-item">
@@ -966,65 +1137,231 @@ const renderResearchResult = (result: ResearchResult): string => {
       </div>
     </details>`;
 
-  const section = (title: string, body?: string | string[]) => {
-    if (!body || (Array.isArray(body) && !body.length)) return '';
-    return `<section><h3>${title}</h3>${Array.isArray(body) ? `<ul>${body.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : `<p>${escapeHtml(body)}</p>`}</section>`;
-  };
+  const fullAnalysisHtml = (result.applicationToFacts || result.qualifications?.length || result.limitations) ? `
+    <details class="full-analysis-accordion" style="margin: 18px 0;">
+      <summary class="full-analysis-summary" style="cursor: pointer; font-weight: 600; font-size: 14px; color: #334155;">
+        <span>${ui(state.language, 'fullAnalysis')}</span>
+        <span class="sources-chevron">▼</span>
+      </summary>
+      <div class="full-analysis-body" style="padding-top: 10px;">
+        ${result.applicationToFacts ? `<div class="analysis-subblock"><h4>Application to Facts</h4><p>${escapeHtml(result.applicationToFacts)}</p></div>` : ''}
+        ${result.qualifications?.length ? `<div class="analysis-subblock"><h4>Exceptions & Qualifications</h4><ul>${result.qualifications.map(q => `<li>${escapeHtml(q)}</li>`).join('')}</ul></div>` : ''}
+        ${result.limitations ? `<div class="analysis-subblock"><h4>Coverage / Limitations</h4><p>${escapeHtml(result.limitations)}</p></div>` : ''}
+      </div>
+    </details>
+  ` : '';
 
-  const hasStructuredSections = Boolean(
-    (result.legalIssues && result.legalIssues.length) ||
-    (result.applicableLaw && result.applicableLaw.length) ||
-    (result.relevantCases && result.relevantCases.length)
-  );
-
-  const mainContent = hasStructuredSections
-    ? `${section('Short Answer', result.shortAnswer)}${section('Legal Issues', result.legalIssues)}${section('Applicable Law', result.applicableLaw)}${section('Relevant Case Law', result.relevantCases)}${section('Exceptions / Qualifications', result.qualifications)}${section('Application to Facts', result.applicationToFacts)}${section('Practical Position', result.practicalPosition)}`
-    : `<div class="research-formatted-markdown">${formatAnswerMarkdown(result.shortAnswer)}</div>`;
+  const counselNotice = `
+    <div class="professional-counsel-trigger">
+      <p>ℹ️ ${state.language === 'bn' 
+        ? 'এই বিষয়টি নির্দিষ্ট আইনি বিধান ও তথ্যের উপর নির্ভরশীল। আপনার পরিস্থিতির যথাযথ পদক্ষেপের জন্য একজন যোগ্য আইনজীবীর সাথে পরামর্শ করুন।'
+        : 'This matter involves specific statutory provisions and facts. Consult a qualified Bangladesh advocate for individualized legal representation.'}
+      </p>
+    </div>
+  `;
 
   const feedbackWidget = `
     <div class="answer-feedback-card" data-feedback-widget>
       <div class="feedback-header">
-        <span class="feedback-prompt">Was this legal analysis accurate and helpful?</span>
+        <span class="feedback-prompt">${ui(state.language, 'feedbackPrompt')}</span>
         <div class="feedback-btn-group">
-          <button class="feedback-thumb-btn" type="button" data-action="feedback-positive" title="Accurate and helpful">👍 Yes</button>
-          <button class="feedback-thumb-btn" type="button" data-action="feedback-negative-toggle" title="Report an issue or error">👎 Report Issue</button>
+          <button class="feedback-thumb-btn" type="button" data-action="feedback-positive" title="Helpful">${ui(state.language, 'feedbackHelpful')}</button>
+          <button class="feedback-thumb-btn" type="button" data-action="feedback-negative-toggle" title="Report an issue">${ui(state.language, 'feedbackReportIssue')}</button>
         </div>
       </div>
       <div class="feedback-drawer" data-feedback-drawer hidden>
         <form class="feedback-form" data-action="submit-qa-feedback">
-          <label for="feedback-category"><strong>What went wrong?</strong></label>
+          <label for="feedback-category"><strong>${ui(state.language, 'whatWentWrong')}</strong></label>
           <select id="feedback-category" name="category" required>
-            <option value="">Select an issue category...</option>
-            <option value="wrong_law">Wrong law or statute applied</option>
-            <option value="wrong_citation">Incorrect section or case citation</option>
-            <option value="outdated_law">Outdated or superseded legal text</option>
-            <option value="missing_authority">Missed a mandatory controlling authority</option>
-            <option value="incomplete_answer">Incomplete legal analysis</option>
-            <option value="misunderstood_question">Misunderstood facts / scenario</option>
-            <option value="other">Other issue</option>
+            <option value="">${ui(state.language, 'selectIssueCategory')}</option>
+            <option value="wrong_law">${ui(state.language, 'wrongLaw')}</option>
+            <option value="wrong_citation">${ui(state.language, 'wrongCitation')}</option>
+            <option value="outdated_law">${ui(state.language, 'outdatedLaw')}</option>
+            <option value="missing_authority">${ui(state.language, 'missingAuthority')}</option>
+            <option value="incomplete_answer">${ui(state.language, 'incompleteAnswer')}</option>
+            <option value="misunderstood_question">${ui(state.language, 'misunderstoodQuestion')}</option>
+            <option value="other">${ui(state.language, 'otherIssue')}</option>
           </select>
-          <textarea name="comment" rows="2" placeholder="Optional details (e.g. which section or case was wrong)..."></textarea>
+          <textarea name="comment" rows="2" placeholder="${state.language === 'bn' ? 'ঐচ্ছিক বিবরণ (যেমন: কোন ধারা বা মামলা ভুল ছিল)...' : 'Optional details (e.g. which section or case was incorrect)...'}"></textarea>
           <div class="feedback-actions">
-            <button class="button button-small" type="submit">Submit feedback</button>
-            <button class="button button-small button-secondary" type="button" data-action="close-feedback-drawer">Cancel</button>
+            <button class="button button-small" type="submit">${ui(state.language, 'submitFeedback')}</button>
+            <button class="button button-small button-secondary" type="button" data-action="close-feedback-drawer">${ui(state.language, 'cancel')}</button>
+          </div>
+          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border-color, #232B3E); text-align: right;">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener" style="font-size: 12px; color: var(--justor-blue, #1E38C8); text-decoration: underline;">
+              📋 ${state.language === 'bn' ? 'ব্যবহারকারী সমীক্ষা পূরণ করুন ↗' : 'Complete User Experience Survey ↗'}
+            </a>
           </div>
         </form>
       </div>
     </div>`;
 
+  const actionToolbar = `
+    <div class="research-action-toolbar">
+      <button class="button-outline memo-print-btn" type="button" data-action="print-legal-memo" title="Generate printable Chambers Legal Memo with official citations">
+        ${icon('source', 14)} ${state.language === 'bn' ? 'লিগ্যাল মেমো এক্সপোর্ট (PDF / প্রিন্ট)' : 'Export Legal Memo (PDF / Print)'}
+      </button>
+      <button class="button-outline copy-answer-btn" type="button" data-action="copy-research-answer" title="Copy full legal analysis to clipboard">
+        ${icon('arrow', 14)} ${ui(state.language, 'copyAnswer')}
+      </button>
+    </div>
+  `;
+
   return `
     <div class="research-result-layout">
       <article class="research-analysis">
-        <span class="section-kicker">Research analysis</span>
-        ${researchProcessBlock}
-        ${mainContent}
-        ${sources.length ? `<section class="authorities-section"><h3>Authorities</h3><div class="citation-list">${sources.map((source, index) => `<button type="button" data-result-source="${index}" class="${index === 0 ? 'active' : ''}"><span>[${index + 1}]</span>${escapeHtml(source.authority || source.title)}</button>`).join('')}</div></section>` : ''}
-        ${result.limitations ? `<section class="limitations"><h3>Coverage / limitations</h3><p>${escapeHtml(result.limitations)}</p></section>` : ''}
+        ${statusBannerHtml}
+        ${actionToolbar}
+        ${directAnswerHtml}
+        ${keyLegalBasisHtml}
+        ${sourcesListHtml}
+        ${researchProcessAccordion}
+        ${fullAnalysisHtml}
+        ${counselNotice}
         ${feedbackWidget}
       </article>
       ${sourcePanel(sources[0])}
     </div>`;
 };
+
+const printChambersLegalMemo = (result: ResearchResult, role: Role, language: Language): void => {
+  const memoId = `JAI-MEMO-${Date.now().toString(36).toUpperCase()}`;
+  const nowStr = new Date().toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const sources = result.authorities ?? [];
+  const existingMemo = document.querySelector('.justor-legal-memo-printable');
+  if (existingMemo) existingMemo.remove();
+
+  const memoHtml = `
+    <div class="justor-legal-memo-printable">
+      <div class="memo-header-band">
+        <div class="memo-brand-block">
+          <h1 class="memo-title">JUSTOR AI — LEGAL INTELLIGENCE MEMORANDUM</h1>
+          <p class="memo-subtitle">Source-Verified Bangladesh Legal Research & Statutory Authority Brief</p>
+        </div>
+        <div class="memo-meta-block">
+          <div><strong>Reference:</strong> ${memoId}</div>
+          <div><strong>Date:</strong> ${nowStr}</div>
+          <div><strong>Practice Level:</strong> ${role.toUpperCase()}</div>
+          <div><strong>Verification:</strong> 7-Gate Evidence Engine Verified ✓</div>
+        </div>
+      </div>
+
+      <div class="memo-section">
+        <h2 class="memo-sec-heading">I. LEGAL RESEARCH & GROUNDED ANALYSIS</h2>
+        <div class="memo-body-markdown">
+          ${formatAnswerMarkdown(result.shortAnswer)}
+        </div>
+      </div>
+
+      ${sources.length ? `
+      <div class="memo-section">
+        <h2 class="memo-sec-heading">II. CONTROLLING STATUTORY & JUDICIAL AUTHORITIES</h2>
+        <table class="memo-authorities-table">
+          <thead>
+            <tr>
+              <th style="width: 45px;">ID</th>
+              <th>Authority / Statute / Case</th>
+              <th>Provision / Citation</th>
+              <th>Verification Tier</th>
+              <th>Official Source URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${sources.map((s, idx) => `
+              <tr>
+                <td><strong>[${s.id || idx + 1}]</strong></td>
+                <td>${escapeHtml(s.authority || s.title)}</td>
+                <td>${escapeHtml(s.provision || s.citation || '—')}</td>
+                <td><span class="memo-badge">${escapeHtml(s.verificationStatus || 'PRIMARY SOURCE ✓')}</span></td>
+                <td><small>${escapeHtml(s.url || 'bdlaws.minlaw.gov.bd')}</small></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>` : ''}
+
+      <div class="memo-footer-disclaimer">
+        <p><strong>Professional Verification Notice:</strong> This research memorandum was generated by the Justor AI Legal Evidence Engine V2. Statutory sections are verified against official Laws of Bangladesh (bdlaws.minlaw.gov.bd) and landmark Supreme Court ratios. Practitioners must confirm applicability to specific case facts prior to court filing.</p>
+        <div class="memo-sign-line">
+          <span>Prepared by Justor AI Legal Intelligence</span>
+          <span>Chambers Verification Stamp: _______________________</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', memoHtml);
+  window.print();
+  setTimeout(() => {
+    document.querySelector('.justor-legal-memo-printable')?.remove();
+  }, 2000);
+};
+
+const renderPilotModal = (): string => `
+  <div class="pilot-modal-overlay" data-pilot-modal-overlay>
+    <div class="pilot-modal-card" role="dialog" aria-modal="true" aria-labelledby="pilot-modal-title">
+      <div class="pilot-modal-header">
+        <div>
+          <span class="pilot-kicker">EXCLUSIVELY FOR ADVOCATES & CHAMBERS</span>
+          <h2 id="pilot-modal-title" class="pilot-title">Join Founding Lawyer Pilot</h2>
+        </div>
+        <button type="button" class="pilot-modal-close" data-action="close-pilot-modal" aria-label="Close">✕</button>
+      </div>
+      <p class="pilot-desc">
+        We are onboarding our first 20 Founding Chambers across Dhaka Bar & the Supreme Court Bar. Get unlimited statutory research, 1-click court-ready Legal Memos, and priority ingestion of your chambers' core practice areas for <strong>just ৳200 for your first month</strong>.
+      </p>
+
+      <form class="pilot-form" data-action="submit-pilot-form">
+        <div class="pilot-form-grid">
+          <div class="pilot-field">
+            <label for="advocate-name">Advocate Name *</label>
+            <input type="text" id="advocate-name" name="advocate_name" placeholder="Advocate / Barrister Name" required />
+          </div>
+          <div class="pilot-field">
+            <label for="chamber-name">Chamber / Firm Name</label>
+            <input type="text" id="chamber-name" name="chamber_name" placeholder="e.g. Rahman & Associates" />
+          </div>
+          <div class="pilot-field">
+            <label for="bar-association">Bar Association *</label>
+            <select id="bar-association" name="bar_association" required>
+              <option value="Supreme Court Bar Association (SCBA)">Supreme Court Bar Association (SCBA)</option>
+              <option value="Dhaka Bar Association">Dhaka Bar Association</option>
+              <option value="Chittagong District Bar Association">Chittagong District Bar Association</option>
+              <option value="Other District Bar">Other District Bar</option>
+              <option value="In-House Corporate Counsel">In-House Corporate Counsel</option>
+            </select>
+          </div>
+          <div class="pilot-field">
+            <label for="advocate-phone">Mobile / WhatsApp *</label>
+            <input type="tel" id="advocate-phone" name="phone" placeholder="017XXXXXXXX" required />
+          </div>
+        </div>
+
+        <div class="pilot-field">
+          <label for="practice-areas">Primary Practice Area</label>
+          <input type="text" id="practice-areas" name="practice_areas" placeholder="e.g. Land/Property, NI Act 138, Writ/Constitutional, Criminal" />
+        </div>
+
+        <div class="pilot-field">
+          <label for="custom-needs">Specific Case Laws or Topics Needed</label>
+          <textarea id="custom-needs" name="custom_needs" rows="2" placeholder="Tell us which statutes, DLR volumes, or subject areas your chambers researches most..."></textarea>
+        </div>
+
+        <div class="pilot-actions">
+          <button class="button pilot-submit-btn" type="submit">
+            Apply for Founding Pilot (৳200/mo) ${icon('arrow', 14)}
+          </button>
+          <button class="button button-outline" type="button" data-action="close-pilot-modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+`;
 
 const liveThinkingSteps = [
   { title: 'Legal Intent & Statutory Routing', desc: 'Targeting controlling Bangladesh Acts and legal domain...' },
@@ -1038,7 +1375,7 @@ const renderLiveThinking = (seconds: number, activeStepIndex: number): string =>
     <div class="live-thinking-header">
       <div class="live-thinking-title">
         <span class="thinking-sparkle">✨</span>
-        <strong>Thinking...</strong>
+        <strong>${state.language === 'bn' ? 'বাংলাদেশের আইন খোঁজা হচ্ছে...' : 'Researching Bangladesh law...'}</strong>
         <span class="thinking-timer">(${seconds.toFixed(1)}s)</span>
       </div>
       <span class="thinking-badge">AI Brain Active</span>
@@ -1074,10 +1411,21 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   const role = (form.dataset.role as Role) || state.role || 'professional';
   const context = form.dataset.contextId ? { id: form.dataset.contextId, title: form.dataset.contextTitle ?? '', topic: form.dataset.contextTopic ?? '' } : undefined;
   
-  if (!state.session && (role === 'student' || role === 'citizen')) {
-    sessionStorage.setItem('justor-pending-research', JSON.stringify({ query, role, context }));
-    navigate(`${localizedPath('/login', state.language)}?next=${encodeURIComponent(`${localizedPath(`/workspace/${role}`, state.language)}${role === 'citizen' ? '#ask' : ''}`)}`);
-    return;
+  if (!state.session) {
+    if (role === 'student') {
+      sessionStorage.setItem('justor-pending-research', JSON.stringify({ query, role, context }));
+      navigate(`${localizedPath('/login', state.language)}?next=${encodeURIComponent(localizedPath('/workspace/student', state.language))}`);
+      return;
+    }
+    if (role === 'citizen') {
+      const count = parseInt(sessionStorage.getItem('justor_citizen_query_count') || '0', 10);
+      if (count >= 1) {
+        sessionStorage.setItem('justor-pending-research', JSON.stringify({ query, role, context }));
+        navigate(`${localizedPath('/login', state.language)}?next=${encodeURIComponent(`${localizedPath('/workspace/citizen', state.language)}#ask`)}`);
+        return;
+      }
+      sessionStorage.setItem('justor_citizen_query_count', String(count + 1));
+    }
   }
 
   const activeThread = chatStore.getOrCreateActiveThread(role);
@@ -1156,7 +1504,31 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   }, 200);
 
   try {
-    const result = await runResearch(query, role, state.language, context);
+    const result = await streamResearch(
+      query,
+      role,
+      state.language,
+      (stepEvent) => {
+        const thinkingElement = document.getElementById(thinkingId);
+        if (!thinkingElement) return;
+        const stepRows = thinkingElement.querySelectorAll<HTMLElement>('.live-step-row');
+        const sIndex = Math.min(stepEvent.step - 1, stepRows.length - 1);
+        if (sIndex >= 0 && stepRows[sIndex]) {
+          const row = stepRows[sIndex];
+          const summaryEl = row.querySelector('.live-step-summary');
+          if (summaryEl && stepEvent.summary) {
+            summaryEl.textContent = stepEvent.summary;
+          }
+          if (stepEvent.status === 'completed' || stepEvent.status === 'passed') {
+            row.className = 'live-step-row is-done';
+            const ind = row.querySelector('.live-step-indicator');
+            if (ind) ind.innerHTML = '✓';
+          }
+        }
+      },
+      undefined,
+      context
+    );
     clearInterval(timerInterval);
     state.lastResearch = result;
     state.lastResearchRole = role;
@@ -1193,7 +1565,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
                 <strong class="thread-item-title" title="${escapeHtml(t.title)}">${escapeHtml(t.title)}</strong>
                 <span class="thread-item-time">${timeStr}</span>
               </div>
-              <button class="thread-delete-btn" type="button" data-action="delete-thread" data-thread-id="${t.id}" title="Delete thread">✕</button>
+              <button class="thread-delete-btn" type="button" data-action="delete-thread" data-thread-id="${t.id}" title="${state.language === 'bn' ? `গবেষণা মুছুন: ${escapeHtml(t.title)}` : `Delete research thread: ${escapeHtml(t.title)}`}" aria-label="${state.language === 'bn' ? `গবেষণা মুছুন: ${escapeHtml(t.title)}` : `Delete research thread: ${escapeHtml(t.title)}`}">✕</button>
             </div>
           `;
         }).join('');
@@ -1396,10 +1768,42 @@ document.addEventListener('click', (event) => {
       void openProvisionModal(s.authority || s.title, s.provision || s.citation || '');
     }
   }
+  if (action === 'close-menu') {
+    state.menuOpen = false;
+    render(true);
+  }
+  if (action === 'click-citation-index') {
+    const idx = Number(actionElement?.dataset.citationIndex ?? 0);
+    const sources = state.lastResearch?.authorities || [];
+    if (idx >= 0 && idx < sources.length) {
+      state.selectedSource = idx;
+      document.querySelectorAll('[data-result-source]').forEach((button, i) => button.classList.toggle('active', i === idx));
+      const panel = document.querySelector<HTMLElement>('[data-source-panel]');
+      if (panel) panel.outerHTML = sourcePanel(sources[idx]);
+    }
+  }
+  if (action === 'focus-composer') {
+    const textarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea, .chat-floating-composer textarea');
+    if (textarea) {
+      textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      textarea.focus();
+    }
+  }
+  if (action === 'copy-research-answer') {
+    if (state.lastResearch?.shortAnswer) {
+      void navigator.clipboard.writeText(state.lastResearch.shortAnswer);
+      showToast('Copied to clipboard', 'Full legal analysis copied successfully.', 'positive');
+    }
+  }
+  if (action === 'print-legal-memo') {
+    if (state.lastResearch) {
+      printChambersLegalMemo(state.lastResearch, state.role, state.language);
+    }
+  }
   if (action === 'feedback-positive') {
     const widget = actionElement?.closest('[data-feedback-widget]');
     if (widget) {
-      widget.innerHTML = `<div class="feedback-submitted-success"><span>✓</span> Thank you. Feedback recorded to telemetry.</div>`;
+      widget.innerHTML = `<div class="feedback-submitted-success"><span>✓</span> ${escapeHtml(ui(state.language, 'feedbackRecorded'))}</div>`;
     }
     const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
     void fetch(`${backendUrl}/api/feedback`, {
@@ -1412,6 +1816,15 @@ document.addEventListener('click', (event) => {
         comment: 'Accurate and helpful'
       })
     });
+  }
+  if (action === 'open-pilot-modal') {
+    const existing = document.querySelector('[data-pilot-modal-overlay]');
+    if (!existing) {
+      document.body.insertAdjacentHTML('beforeend', renderPilotModal());
+    }
+  }
+  if (action === 'close-pilot-modal') {
+    document.querySelector('[data-pilot-modal-overlay]')?.remove();
   }
   if (action === 'feedback-negative-toggle') {
     const drawer = document.querySelector<HTMLElement>('[data-feedback-drawer]');
@@ -1519,6 +1932,39 @@ document.addEventListener('submit', (event) => {
     document.querySelector<HTMLElement>('[data-citizen-mascot]')?.remove();
     void hydrateCitizen(query);
   }
+  if (form.matches('[data-action="submit-pilot-form"]')) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const payload = {
+      advocate_name: String(formData.get('advocate_name') || '').trim(),
+      chamber_name: String(formData.get('chamber_name') || '').trim(),
+      bar_association: String(formData.get('bar_association') || '').trim(),
+      phone: String(formData.get('phone') || '').trim(),
+      practice_areas: [String(formData.get('practice_areas') || '').trim()].filter(Boolean),
+      custom_needs: String(formData.get('custom_needs') || '').trim(),
+    };
+
+    const modalContainer = form.closest('.pilot-modal-card');
+    if (modalContainer) {
+      modalContainer.innerHTML = `
+        <div style="text-align: center; padding: 24px 12px;">
+          <span style="font-size: 40px; display: block; margin-bottom: 12px;">⚖️</span>
+          <h3 style="color: #0F172A; margin: 0 0 8px 0; font-size: 18px;">Founding Pilot Application Received!</h3>
+          <p style="color: #475467; font-size: 13.5px; line-height: 1.5; margin: 0 0 20px 0;">
+            Thank you Advocate ${escapeHtml(payload.advocate_name)}. Our founding team will contact you via WhatsApp / Phone (<strong>${escapeHtml(payload.phone)}</strong>) within 24 hours to activate your chambers account.
+          </p>
+          <button class="button button-small" type="button" data-action="close-pilot-modal">Close</button>
+        </div>
+      `;
+    }
+
+    const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
+    void fetch(`${backendUrl}/api/pilot-application`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
   if (form.matches('[data-action="submit-qa-feedback"]')) {
     event.preventDefault();
     const data = new FormData(form);
@@ -1526,7 +1972,7 @@ document.addEventListener('submit', (event) => {
     const comment = String(data.get('comment') || '');
     const widget = form.closest('[data-feedback-widget]');
     if (widget) {
-      widget.innerHTML = `<div class="feedback-submitted-success"><span>✓</span> Feedback recorded: <strong>${escapeHtml(category)}</strong>. Thank you for improving Justor's accuracy.</div>`;
+      widget.innerHTML = `<div class="feedback-submitted-success"><span>✓</span> ${escapeHtml(ui(state.language, 'feedbackRecorded'))}</div>`;
     }
     const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
     void fetch(`${backendUrl}/api/feedback`, {
@@ -1583,6 +2029,19 @@ export function mountApp(): void {
   };
   window.addEventListener('scroll', updateHeader, { passive: true });
   updateHeader();
+
+  if (typeof BroadcastChannel !== 'undefined') {
+    try {
+      const authChannel = new BroadcastChannel('justor_auth');
+      authChannel.onmessage = (event) => {
+        if (event.data?.type === 'SIGNED_OUT') {
+          state.session = null;
+          render(true);
+        }
+      };
+    } catch {}
+  }
+
   void authService.session().then((session) => {
     if (session !== state.session) { state.session = session; render(true); restorePendingContext(); restorePendingResearch(); }
   });

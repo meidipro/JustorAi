@@ -4,7 +4,11 @@
     "total_statutory_act_chunks": 46757,
     "total_unique_statutes": 29,
     "total_live_supreme_court_dlr_chunks": 14,
-    "total_staged_supreme_court_benchmark_cases": 25
+    "total_staged_supreme_court_benchmark_cases": 25,
+    "total_supreme_court_cases_in_legal_cases": 295,
+    "total_verified_landmark_cases": 50,
+    "total_scraped_high_court_cases": 245,
+    "last_case_sync": "2026-08-27T22:09:53.555902Z"
   },
   "statutory_acts_stored": [
     {

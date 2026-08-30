@@ -1,0 +1,30 @@
+[
+  {
+    "advocate_name": "Advocate M. H. Rahman",
+    "chamber_name": "Rahman & Partners",
+    "bar_association": "Supreme Court Bar Association (SCBA)",
+    "phone": "01711000000",
+    "email": "rahman@example.com",
+    "practice_areas": [
+      "Property & Land Law",
+      "Specific Performance"
+    ],
+    "custom_needs": "Need High Court division land appeal precedents",
+    "applied_at": "2026-08-27T21:51:47.355008",
+    "status": "APPLIED_PENDING_ONBOARDING"
+  },
+  {
+    "advocate_name": "Advocate M. H. Rahman",
+    "chamber_name": "Rahman & Partners",
+    "bar_association": "Supreme Court Bar Association (SCBA)",
+    "phone": "01711000000",
+    "email": "rahman@example.com",
+    "practice_areas": [
+      "Property & Land Law",
+      "Specific Performance"
+    ],
+    "custom_needs": "Need High Court division land appeal precedents",
+    "applied_at": "2026-08-27T21:51:57.639219",
+    "status": "APPLIED_PENDING_ONBOARDING"
+  }
+]

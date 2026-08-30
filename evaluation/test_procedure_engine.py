@@ -49,10 +49,10 @@ class TestProcedureEngine(unittest.TestCase):
         self.assertEqual(res_baina["deadline"], "2026-03-02")
         self.assertTrue(res_baina["is_mandatory_unregistered_void"])
 
-        # Section 23 General Document (4 months)
+        # Section 23 General Document (3 months under 2004 Amendment)
         res_gen = calculate_registration_deadline(exec_date, "general deed of partition")
         self.assertEqual(res_gen["section"], "Section 23")
-        self.assertEqual(res_gen["deadline"], "2026-05-01")
+        self.assertEqual(res_gen["deadline"], "2026-04-01")
 
     def test_ni_act_138_timeline(self):
         # Cheque dishonoured 2026-02-01

@@ -1,20 +1,43 @@
 :root {
   color-scheme: light;
   font-family: "IBM Plex Sans", Inter, -apple-system, system-ui, sans-serif;
-  --accent: #0020a0;
-  --accent-rgb: 0, 32, 160;
-  --accent-hover: #001d90;
-  --accent-press: #001980;
-  --accent-dim: rgba(0, 32, 160, .12);
-  --accent-focus: rgba(0, 32, 160, .30);
-  --dark-canvas: #06080e;
-  --dark-surface-1: #0c1118;
-  --dark-surface-2: #101820;
-  --dark-hairline: #1c2430;
-  --dark-hairline-strong: #283040;
-  --dark-ink: #eff3ff;
-  --dark-ink-muted: #8892a4;
-  --dark-ink-subtle: #505a6b;
+  --accent: #1E38C8;
+  --accent-rgb: 30, 56, 200;
+  --accent-hover: #2545E8;
+  --accent-press: #172EAA;
+  --accent-dim: rgba(30, 56, 200, .12);
+  --accent-focus: rgba(30, 56, 200, .30);
+  
+  /* Brand Tokens (Section U) */
+  --justor-navy: #1C2D44;
+  --justor-blue: #1E38C8;
+  --bg-primary: #0D0F14;
+  --bg-card: #131827;
+  --bg-card-hover: #1A2035;
+  --bg-role-card: #1A2240;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-disabled: #374151;
+  --text-on-light-primary: #0F172A;
+  --text-on-light-secondary: #475569;
+  --accent-blue-light: #E8EEFF;
+  --accent-blue-muted: #3B5BDB;
+  
+  /* Status Colors */
+  --status-verified: #22C55E;
+  --status-pending: #EAB308;
+  --status-unreviewed: #6B7280;
+  --status-conflict: #EF4444;
+
+  --dark-canvas: #0D0F14;
+  --dark-surface-1: #131827;
+  --dark-surface-2: #1A2035;
+  --dark-hairline: #1E2535;
+  --dark-hairline-strong: #2A3550;
+  --dark-ink: #F1F5F9;
+  --dark-ink-muted: #94A3B8;
+  --dark-ink-subtle: #64748B;
   --light-canvas: #fafbfc;
   --light-surface-1: #f2f4f7;
   --light-surface-2: #e8ebf0;
@@ -31,10 +54,10 @@
   --border: var(--light-hairline);
   --surface: var(--light-surface-1);
   --white: #ffffff;
-  --current: #027a48;
-  --amended: #b54708;
-  --repealed: #b42318;
-  --pending: #175cd3;
+  --current: #22C55E;
+  --amended: #EAB308;
+  --repealed: #EF4444;
+  --pending: #EAB308;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -42,9 +65,13 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { scroll-behavior: smooth; background: var(--light-canvas); }
-html[lang="bn"], :lang(bn), .bangla, [lang="bn"] { font-family: "Noto Sans Bengali", sans-serif; }
+html[lang="bn"], :lang(bn), .bangla, [lang="bn"] {
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', 'SolaimanLipi', sans-serif;
+  line-height: 1.7;
+}
 body { margin: 0; min-width: 0; color: var(--light-ink); background: var(--light-canvas); font-size: 16px; line-height: 1.6; letter-spacing: .01em; }
 button, input, textarea, select { font: inherit; }
+input, textarea, select { font-size: 16px !important; } /* Prevents iOS auto-zoom (Section B) */
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-decoration: none; }
 button { color: inherit; }
@@ -1715,5 +1742,584 @@ svg { flex: 0 0 auto; }
   font-weight: 500;
 }
 
+/* ─── Legal Memo Action Bar & Print Layout ───────────────────────────── */
+.research-action-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 16px;
+  flex-wrap: wrap;
+}
 
+.button-outline {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color, #D0D5DD);
+  color: var(--ink, #0F172A);
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
+.button-outline:hover {
+  background: #F8FAFC;
+  border-color: var(--accent, #0020A0);
+  color: var(--accent, #0020A0);
+}
+
+.justor-legal-memo-printable {
+  display: none;
+}
+
+@media print {
+  body > *:not(.justor-legal-memo-printable) {
+    display: none !important;
+  }
+
+  .justor-legal-memo-printable {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #FFFFFF;
+    color: #111827;
+    font-family: 'Times New Roman', Times, Georgia, serif;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+
+  .memo-header-band {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #1E293B;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .memo-title {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #0F172A;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.5px;
+  }
+
+  .memo-subtitle {
+    font-size: 10pt;
+    color: #475467;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .memo-meta-block {
+    text-align: right;
+    font-size: 9.5pt;
+    color: #334155;
+    line-height: 1.4;
+  }
+
+  .memo-sec-heading {
+    font-size: 12pt;
+    font-weight: bold;
+    border-bottom: 1px solid #CBD5E1;
+    padding-bottom: 4px;
+    margin: 18px 0 10px;
+    text-transform: uppercase;
+    color: #0F172A;
+  }
+
+  .memo-body-markdown {
+    font-size: 11pt;
+    color: #1F2937;
+    line-height: 1.6;
+  }
+
+  .memo-body-markdown h2, .memo-body-markdown h3 {
+    font-size: 12pt;
+    margin: 14px 0 6px;
+    font-weight: bold;
+  }
+
+  .memo-body-markdown p {
+    margin: 0 0 10px 0;
+  }
+
+  .memo-authorities-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px;
+    font-size: 9.5pt;
+  }
+
+  .memo-authorities-table th, .memo-authorities-table td {
+    border: 1px solid #CBD5E1;
+    padding: 6px 8px;
+    text-align: left;
+  }
+
+  .memo-authorities-table th {
+    background: #F1F5F9;
+    font-weight: bold;
+  }
+
+  .memo-badge {
+    display: inline-block;
+    font-size: 8pt;
+    font-weight: bold;
+    padding: 2px 4px;
+    border: 1px solid #10B981;
+    color: #047857;
+    border-radius: 3px;
+  }
+
+  .memo-footer-disclaimer {
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px dashed #94A3B8;
+    font-size: 8.5pt;
+    color: #64748B;
+  }
+
+  .memo-sign-line {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+    font-weight: bold;
+    color: #334155;
+  }
+}
+
+/* ─── Founding Lawyer Pilot Modal & Header Badge ────────────────────── */
+.button-pilot-badge {
+  background: linear-gradient(135deg, #0020A0 0%, #1E3A8A 100%);
+  color: #FFFFFF !important;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 32, 160, 0.25);
+  transition: all 0.2s ease;
+}
+
+.button-pilot-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 32, 160, 0.35);
+  background: linear-gradient(135deg, #001A80 0%, #172554 100%);
+}
+
+.pilot-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.pilot-modal-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  max-width: 580px;
+  width: 100%;
+  padding: 24px 28px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #E2E8F0;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.pilot-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.pilot-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent, #0020A0);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.pilot-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.pilot-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #64748B;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.pilot-modal-close:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+.pilot-desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #475467;
+  margin: 0 0 16px 0;
+}
+
+.pilot-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pilot-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 540px) {
+  .pilot-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pilot-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pilot-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.pilot-field input, .pilot-field select, .pilot-field textarea {
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #0F172A;
+  background: #FFFFFF;
+  transition: border-color 0.2s ease;
+}
+
+.pilot-field input:focus, .pilot-field select:focus, .pilot-field textarea:focus {
+  outline: none;
+  border-color: var(--accent, #0020A0);
+  box-shadow: 0 0 0 2px rgba(0, 32, 160, 0.1);
+}
+
+.pilot-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.pilot-submit-btn {
+  background: var(--accent, #0020A0);
+  color: #FFFFFF;
+  font-weight: 600;
+  flex: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Justor AI — Master A-Z UI/UX Guide Compliance Styles
+   ───────────────────────────────────────────────────────────── */
+
+/* Section A & K: Touch Target & Accessibility Enforcements */
+.citation-chip, .inline-citation-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 12px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E38C8;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 120ms ease;
+  vertical-align: middle;
+}
+.citation-chip::before, .inline-citation-chip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: -6px;
+  right: -6px;
+}
+.citation-chip:hover, .inline-citation-chip:hover {
+  background: #DBEAFE;
+  border-color: #93C5FD;
+}
+.citation-chip.active {
+  background: #1E38C8;
+  color: #FFFFFF;
+  border-color: #1E38C8;
+}
+.quick-chip-btn {
+  min-height: 44px !important;
+  padding: 10px 16px !important;
+}
+.composer-send-btn {
+  min-height: 44px !important;
+  min-width: 44px !important;
+}
+.feedback-thumb-btn {
+  min-height: 44px !important;
+  padding: 8px 14px !important;
+}
+
+/* Section T & W: Computed Status Banner */
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #1E293B;
+}
+.status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+/* 4-Tier Semantic Badges (Section T) */
+.badge-source-checked {
+  color: #166534 !important;
+  background: #DCFCE7 !important;
+  border: 1px solid #BBF7D0 !important;
+}
+.badge-reporter-verified {
+  color: #1E40AF !important;
+  background: #DBEAFE !important;
+  border: 1px solid #BFDBFE !important;
+}
+.badge-pending-verified {
+  color: #854D0E !important;
+  background: #FEF9C3 !important;
+  border: 1px solid #FEF08A !important;
+}
+.badge-unreviewed {
+  color: #374151 !important;
+  background: #F3F4F6 !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+/* Section M & N: Full-Width Mobile Slide-in Drawer */
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+.mobile-drawer-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(340px, 85vw);
+  background: #0D0F14;
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  border-left: 1px solid #1E2535;
+}
+.mobile-drawer.is-open {
+  transform: translateX(0);
+}
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #1E2535;
+}
+.mobile-drawer-close {
+  background: transparent;
+  border: 1px solid #2A3550;
+  color: #F1F5F9;
+  border-radius: 6px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+.mobile-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.menu-section-label {
+  color: #64748B;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.menu-nav-link {
+  color: #F1F5F9;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 0;
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.menu-nav-link:hover {
+  color: #FFFFFF;
+}
+.mobile-drawer-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Section U: Assistant Icon Color */
+.assistant-avatar-badge {
+  background-color: #E8EEFF !important;
+  color: #1E38C8 !important;
+  border-radius: 50%;
+  padding: 6px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* Section G: Citizen Sector Cards */
+.citizen-sector-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+.citizen-sector-card {
+  min-height: 80px;
+  padding: 16px 20px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 140ms ease;
+  text-decoration: none;
+  color: #0F172A;
+}
+.citizen-sector-card:hover {
+  border-color: #1E38C8;
+  box-shadow: 0 4px 12px rgba(30, 56, 200, 0.08);
+}
+.sector-card-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.sector-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  display: block;
+}
+.sector-card-desc {
+  font-size: 13px;
+  color: #64748B;
+  display: block;
+}
+.citizen-disclaimer-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* Section C: View Full Provision Tooltip & Actions */
+.open-prov-btn.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.source-url-tooltip {
+  display: block;
+  font-size: 11.5px;
+  color: #64748B;
+  margin-top: 4px;
+}
+.professional-counsel-trigger {
+  background: #EFF6FF;
+  border-left: 3px solid #1E38C8;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 13.5px;
+  color: #1E293B;
+  line-height: 1.5;
+}
+.composer-privacy-hint {
+  font-size: 11.5px;
+  color: var(--dark-ink-muted, #94A3B8);
+}

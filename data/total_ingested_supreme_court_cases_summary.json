@@ -1,0 +1,106 @@
+{
+  "export_date": "2026-08-27T22:09:53.555136Z",
+  "total_supreme_court_cases_ingested": 295,
+  "verified_landmark_cases": 50,
+  "scraped_full_text_cases": 245,
+  "breakdown_by_court_division": {
+    "High Court Division": 261,
+    "Appellate Division": 34
+  },
+  "breakdown_by_ratio_type": {
+    "EDITORIAL_SUMMARY": 245,
+    "VERBATIM_EXCERPT": 50
+  },
+  "sample_cases": [
+    {
+      "id": "e27ee580-472e-443c-ae86-9552a7999662",
+      "external_case_id": "SC_HCD_0031",
+      "case_title": "Criminal Appeal(H) 1778/2011(Criminal Appeal(H) 1778/2011)",
+      "citation": "1778/2011",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "55b9c5b7-8c9f-4dfe-b04f-91a115cf41b2",
+      "external_case_id": "SC_HCD_0049",
+      "case_title": "Writ Petition 17285/2017",
+      "citation": "17285/2017",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "a9f6f932-94c0-4a57-9881-a0e687fc5cf7",
+      "external_case_id": "SC_HCD_0032",
+      "case_title": "Death Reference 54/2019",
+      "citation": "54/2019",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "62a3568b-6f27-4e15-8cd8-6dbc5f030b11",
+      "external_case_id": "SC_HCD_0013",
+      "case_title": "Civil Revision 928/2018",
+      "citation": "928/2018",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "73fead0c-6be4-4f5c-bff1-35b321396af8",
+      "external_case_id": "SC_HCD_0038",
+      "case_title": "Writ Petition 12703/2022",
+      "citation": "12703/2022",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "8eb110cf-2ef9-424b-82c1-bc0c642bcc83",
+      "external_case_id": "SC_HCD_0007",
+      "case_title": "Civil Revision 118/2023",
+      "citation": "118/2023",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "cffb3a6c-6082-49c4-8718-8ab47e1e3e48",
+      "external_case_id": "SC_HCD_0047",
+      "case_title": "Writ Petition 5073/2013",
+      "citation": "5073/2013",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "e2113a0a-1e8b-4508-a1cc-d1efd8e797a5",
+      "external_case_id": "SC_HCD_0046",
+      "case_title": "Writ Petition 1354/2016",
+      "citation": "1354/2016",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "5ee54b43-e8d8-4fc0-baf9-53f74a683702",
+      "external_case_id": "SC_HCD_0024",
+      "case_title": "Civil Revision 3390/2010",
+      "citation": "3390/2010",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    },
+    {
+      "id": "f7aa107f-d792-41fd-b734-5e61bdc76bae",
+      "external_case_id": "SC_HCD_0015",
+      "case_title": "Civil Revision 3058/2015",
+      "citation": "3058/2015",
+      "court_division": "High Court Division",
+      "human_verified": false,
+      "ratio_type": "EDITORIAL_SUMMARY"
+    }
+  ]
+}

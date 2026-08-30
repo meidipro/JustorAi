@@ -112,6 +112,16 @@ export const authService = {
     return error ? { error: error.message } : {};
   },
   async signOut(): Promise<void> {
+    try {
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('justor_') || k.startsWith('justor-') || k.startsWith('sb-'))
+        .forEach(k => localStorage.removeItem(k));
+      if (typeof BroadcastChannel !== 'undefined') {
+        const channel = new BroadcastChannel('justor_auth');
+        channel.postMessage({ type: 'SIGNED_OUT' });
+        channel.close();
+      }
+    } catch {}
     await supabase?.auth.signOut();
   },
   subscribe(callback: (session: Session | null) => void): () => void {
@@ -286,4 +296,107 @@ export async function runResearch(
   const result = normalizeResearch(payload);
   if (!result.shortAnswer) throw new Error('empty-response');
   return result;
+}
+
+export async function streamResearch(
+  query: string,
+  role: Role,
+  language: Language,
+  onStep?: (step: ReasoningStep) => void,
+  onAuthorities?: (authorities: LegalSource[]) => void,
+  context?: Record<string, string>,
+): Promise<ResearchResult> {
+  if (!backendUrl) return runResearch(query, role, language, context);
+  const session = await authService.session();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'text/event-stream, application/json',
+  };
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`;
+  }
+
+  let guestId = localStorage.getItem('justor-guest-id');
+  if (!guestId) {
+    guestId = `guest_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    localStorage.setItem('justor-guest-id', guestId);
+  }
+
+  try {
+    const response = await fetch(`${backendUrl}/chat/stream`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        query,
+        user_role: role,
+        language,
+        chat_history: [],
+        user_id: session?.user?.id || guestId,
+        context,
+      }),
+    });
+
+    if (response.status === 401) throw new Error('authentication-required');
+    if (!response.ok || !response.body) {
+      return runResearch(query, role, language, context);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let buffer = '';
+    let completeResult: ResearchResult | null = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('data:')) {
+          try {
+            const rawJson = trimmed.slice(5).trim();
+            if (!rawJson) continue;
+            const parsed = JSON.parse(rawJson);
+            if (parsed.event === 'step' && parsed.data && onStep) {
+              onStep({
+                step: Number(parsed.data.step || 1),
+                title: String(parsed.data.title || ''),
+                summary: String(parsed.data.summary || ''),
+                status: String(parsed.data.status || 'completed'),
+              });
+            } else if (parsed.event === 'authorities' && Array.isArray(parsed.data) && onAuthorities) {
+              onAuthorities(parsed.data.map((s: Record<string, unknown>, idx: number) => ({
+                id: String(s.id ?? `ACT-${idx + 1}`),
+                title: String(s.act ?? s.case_title ?? s.title ?? 'Source'),
+                authority: s.act ? String(s.act) : undefined,
+                citation: s.citation ? String(s.citation) : undefined,
+                provision: s.section ? `Section ${s.section}` : undefined,
+                status: s.status ? String(s.status) : undefined,
+                verificationStatus: s.trust_tier ? String(s.trust_tier) : undefined,
+                excerpt: s.heading ? String(s.heading) : undefined,
+                url: s.official_url ? String(s.official_url) : undefined,
+              })));
+            } else if (parsed.event === 'complete' && parsed.data) {
+              completeResult = normalizeResearch(parsed.data);
+            }
+          } catch {
+            // line parse skip
+          }
+        }
+      }
+    }
+
+    if (completeResult && completeResult.shortAnswer) {
+      return completeResult;
+    }
+    return runResearch(query, role, language, context);
+  } catch (err) {
+    if ((err as Error)?.message === 'authentication-required') {
+      throw err;
+    }
+    return runResearch(query, role, language, context);
+  }
 }

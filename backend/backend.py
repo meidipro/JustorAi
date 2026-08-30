@@ -4,12 +4,13 @@ import logging
 import asyncio
 import json
 import uuid
+import time
 from datetime import datetime, date
 import urllib.request
 from typing import List, Optional, Dict, Any, cast
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks, Request, Depends, Header, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -99,6 +100,20 @@ if SUPABASE_URL and SUPABASE_KEY:
         logger.error(f"Supabase init failed: {e}")
 else:
     logger.warning("Supabase credentials missing.")
+
+SUPABASE_CASES_URL = os.getenv("SUPABASE_CASES_URL", "").strip()
+SUPABASE_CASES_KEY = (
+    os.getenv("SUPABASE_CASES_KEY")
+    or os.getenv("SUPABASE_CASES_SERVICE_ROLE_KEY", "")
+).strip()
+
+supabase_cases: Optional[Client] = None
+if SUPABASE_CASES_URL and SUPABASE_CASES_KEY:
+    try:
+        supabase_cases = create_client(SUPABASE_CASES_URL, SUPABASE_CASES_KEY)
+        logger.info("Supabase Cases client initialized (Project 2: Cases & DLR).")
+    except Exception as e:
+        logger.warning(f"Supabase cases init failed: {e}")
 
 # ─── LLM Clients Initialization ──────────────────────────────────────────────
 GROQ_API_KEY = (os.getenv("GROQ_API_KEY") or os.getenv("VITE_GROQ_API_KEY", "")).strip()
@@ -432,6 +447,16 @@ class FeedbackRequest(BaseModel):
     query: Optional[str] = None
     answer_preview: Optional[str] = None
     user_id: Optional[str] = None
+
+
+class PilotApplicationRequest(BaseModel):
+    advocate_name: str
+    chamber_name: Optional[str] = None
+    bar_association: Optional[str] = None
+    phone: str
+    email: Optional[str] = None
+    practice_areas: Optional[List[str]] = None
+    custom_needs: Optional[str] = None
 
 
 def resolve_provision_text(act_name: str, section_ref: str, as_of_date: Optional[str] = None) -> Optional[dict]:
@@ -2488,6 +2513,88 @@ async def chat(request: ChatRequest, req: Request):
         raise HTTPException(500, "An internal server error occurred while processing your query.")
 
 
+@app.post("/chat/stream", tags=["Chat"])
+async def chat_stream(request: ChatRequest, req: Request):
+    """
+    Server-Sent Events (SSE) streaming endpoint for live research telemetry & answer generation.
+    """
+    if supabase is None:
+        raise HTTPException(503, "Supabase database client is not ready.")
+
+    query_run_id = str(uuid.uuid4())
+    authenticated_user = get_current_user(req)
+    user_id = authenticated_user["id"] if authenticated_user else (request.user_id or f"guest-{req.client.host if req.client else 'anon'}")
+    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
+    query_str = resolve_request_query(request)
+
+    if not query_str:
+        raise HTTPException(400, "Query/message cannot be empty.")
+
+    async def event_generator():
+        if is_smalltalk(query_str):
+            greeting_text = (
+                "Peace be upon you! I am **Justor AI**, your Bangladeshi Legal Intelligence Assistant.\n\n"
+                "I can help you with:\n"
+                "- **Citizen Authority Guides**: Land registration, e-Namjari (Mutation), Khatians, DNCRP consumer compensation, divorce & denmohor procedures, and labour severance.\n"
+                "- **Statutory Law Research**: Verbatim sections and provisions from the Laws of Bangladesh (`bdlaws.minlaw.gov.bd`).\n"
+                "- **Landmark Case Ratios**: Supreme Court Appellate and High Court Division principles.\n\n"
+                "How can I assist your legal inquiry today?"
+            )
+            complete_payload = {
+                "query_run_id": query_run_id,
+                "response": greeting_text,
+                "shortAnswer": greeting_text,
+                "sources_used": 0,
+                "sources": [],
+                "authorities": [],
+                "retrieval_status": "greeting",
+                "model_used": "direct-assistant",
+                "reasoning_steps": [
+                    {"step": 1, "title": "Assistant Greeting", "summary": "Identified conversational greeting.", "status": "completed"}
+                ],
+                "metadata": {"detected_act": None, "sections_found": [], "is_greeting": True}
+            }
+            yield f"data: {json.dumps({'event': 'step', 'data': {'step': 1, 'title': 'Assistant Greeting', 'summary': 'Conversational inquiry.', 'status': 'completed'}}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'event': 'complete', 'data': complete_payload}, ensure_ascii=False)}\n\n"
+            return
+
+        if legal_engine_v2:
+            try:
+                async for event in legal_engine_v2.answer_stream(query_str, user_role):
+                    if event.get("event") == "complete":
+                        cdata = event.get("data", {})
+                        complete_payload = {
+                            "query_run_id": query_run_id,
+                            "response": cdata.get("answer", ""),
+                            "shortAnswer": cdata.get("answer", ""),
+                            "sources_used": len(cdata.get("authorities", [])),
+                            "sources": cdata.get("authorities", []),
+                            "authorities": cdata.get("authorities", []),
+                            "reasoning_steps": cdata.get("reasoning_steps", []),
+                            "retrieval_status": "verified_engine_v2" if cdata.get("status") == "ok" else "abstain_verified",
+                            "model_used": "legal-engine-v2",
+                            "metadata": {
+                                "engine_version": "v2",
+                                "persona": user_role,
+                                "reason": cdata.get("reason"),
+                                "reasoning_steps": cdata.get("reasoning_steps", [])
+                            }
+                        }
+                        yield f"data: {json.dumps({'event': 'complete', 'data': complete_payload}, ensure_ascii=False)}\n\n"
+                    else:
+                        yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+                return
+            except Exception as e:
+                logger.warning(f"Streaming fallback: {e}")
+
+        # Fallback to direct chat logic
+        chat_resp = await chat(request, req)
+        content = json.loads(chat_resp.body.decode('utf-8'))
+        yield f"data: {json.dumps({'event': 'complete', 'data': content}, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+
 @app.post("/feedback", tags=["Feedback"])
 @app.post("/api/feedback", tags=["Feedback"])
 async def submit_feedback(fb: FeedbackRequest):
@@ -2533,6 +2640,65 @@ async def submit_feedback(fb: FeedbackRequest):
     except Exception as e:
         logger.warning(f"Feedback recording error: {e}")
         return {"message": "Feedback accepted.", "query_run_id": fb.query_run_id}
+
+
+@app.post("/api/pilot-application", tags=["Founding Pilot"])
+async def apply_founding_pilot(app_data: PilotApplicationRequest):
+    """
+    Captures founding advocate pilot registrations for chambers onboarding.
+    Persists to Supabase and local JSON ledger.
+    """
+    timestamp = datetime.utcnow().isoformat()
+    record = {
+        "advocate_name": app_data.advocate_name,
+        "chamber_name": app_data.chamber_name or "",
+        "bar_association": app_data.bar_association or "Supreme Court / Dhaka Bar",
+        "phone": app_data.phone,
+        "email": app_data.email or "",
+        "practice_areas": app_data.practice_areas or [],
+        "custom_needs": app_data.custom_needs or "",
+        "applied_at": timestamp,
+        "status": "APPLIED_PENDING_ONBOARDING"
+    }
+
+    # 1. Local JSON fallback log
+    try:
+        log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "evaluation", "surveys", "pilot_applications_log.json")
+        existing_apps = []
+        if os.path.exists(log_path):
+            with open(log_path, "r", encoding="utf-8") as f:
+                try:
+                    existing_apps = json.load(f)
+                except Exception:
+                    existing_apps = []
+        existing_apps.append(record)
+        with open(log_path, "w", encoding="utf-8") as f:
+            json.dump(existing_apps, f, indent=2, ensure_ascii=False)
+    except Exception as log_err:
+        logger.warning(f"Local pilot log write note: {log_err}")
+
+    # 2. Supabase storage attempt
+    if supabase:
+        try:
+            def db_insert():
+                supabase.table("pilot_applications").insert({
+                    "advocate_name": app_data.advocate_name,
+                    "chamber_name": app_data.chamber_name,
+                    "bar_association": app_data.bar_association,
+                    "phone": app_data.phone,
+                    "email": app_data.email,
+                    "notes": app_data.custom_needs,
+                    "created_at": timestamp
+                }).execute()
+            await asyncio.to_thread(db_insert)
+        except Exception as db_err:
+            logger.info(f"Supabase pilot table note: {db_err}")
+
+    return {
+        "status": "success",
+        "message": "Founding Pilot Application received! Our founding team will contact your chambers within 24 hours.",
+        "application_id": f"PILOT-{int(time.time())}"
+    }
 
 
 # ─── TLRE Endpoints ───────────────────────────────────────────────────────────

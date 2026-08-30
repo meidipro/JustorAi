@@ -405,3 +405,267 @@ class LegalAnswerEngine:
             "Practitioners should open and verify primary authorities before relying on the proposition in professional court work.*"
         )
         return "\n\n".join(output)
+
+    async def answer_stream(self, query: str, persona: str):
+        """
+        Yields real-time SSE event dictionaries:
+        - {"event": "step", "data": {...}}
+        - {"event": "authorities", "data": [...]}
+        - {"event": "complete", "data": {...}}
+        """
+        # 0. Fact Sufficiency Gate
+        yield {
+            "event": "step",
+            "data": {
+                "step": 1,
+                "title": "Legal Intent & Fact Sufficiency",
+                "summary": "Analyzing inquiry structure and mandatory material variables...",
+                "status": "running"
+            }
+        }
+        clarification = FactSufficiencyGate.evaluate_fact_sufficiency(query, persona)
+        if clarification and clarification.get("status") == "needs_clarification":
+            step_data = {
+                "step": 1,
+                "title": "Legal Intent & Fact Sufficiency",
+                "summary": f"Detected {clarification['intent']} inquiry requiring missing material variables.",
+                "status": "needs_clarification"
+            }
+            yield {"event": "step", "data": step_data}
+            complete_data = {
+                "status": "ok",
+                "answer": clarification["clarification_prompt"],
+                "reason": "FACT_CLARIFICATION_REQUIRED",
+                "authorities": [],
+                "reasoning_steps": [step_data]
+            }
+            yield {"event": "complete", "data": complete_data}
+            return
+
+        # 1. Route
+        try:
+            route = await self.router.route(query)
+            acts_target = ", ".join(getattr(route, "candidate_acts", [])[:2]) or "General Legislation"
+            yield {
+                "event": "step",
+                "data": {
+                    "step": 1,
+                    "title": "Legal Intent & Routing",
+                    "summary": f"Classified domain: {getattr(route, 'legal_domain', 'General Law')}. Targeted: {acts_target}.",
+                    "status": "completed"
+                }
+            }
+        except Exception as exc:
+            yield {
+                "event": "complete",
+                "data": {
+                    "status": "abstain",
+                    "answer": "Justor could not reliably classify this legal query.",
+                    "reason": "ROUTER_FAILURE",
+                    "debug": str(exc)
+                }
+            }
+            return
+
+        # 2. Build verified Evidence Pack
+        yield {
+            "event": "step",
+            "data": {
+                "step": 2,
+                "title": "Primary Authority Retrieval",
+                "summary": "Querying canonical statutes and Supreme Court precedents...",
+                "status": "running"
+            }
+        }
+        try:
+            pack = await self.builder.build(query=query, persona=persona, route=route)
+        except Exception as exc:
+            yield {
+                "event": "complete",
+                "data": {
+                    "status": "abstain",
+                    "answer": "Justor could not build a verified legal evidence set.",
+                    "reason": "EVIDENCE_BUILD_FAILURE",
+                    "debug": str(exc)
+                }
+            }
+            return
+
+        if not pack.authorities:
+            yield {
+                "event": "complete",
+                "data": {
+                    "status": "abstain",
+                    "answer": "Justor could not verify the controlling legal authority from its current primary-source database.",
+                    "reason": "NO_VERIFIED_EVIDENCE"
+                }
+            }
+            return
+
+        auth_cards = self._authority_cards(pack)
+        yield {
+            "event": "step",
+            "data": {
+                "step": 2,
+                "title": "Primary Authority Retrieval",
+                "summary": f"Retrieved {len(pack.authorities)} verified provisions with official citations.",
+                "status": "completed"
+            }
+        }
+        yield {"event": "authorities", "data": auth_cards}
+
+        # 3. First generation & validation
+        yield {
+            "event": "step",
+            "data": {
+                "step": 3,
+                "title": "Rule & Citation Verification",
+                "summary": "Verifying statutory quotations, numeric tokens, and 7-gate invariants...",
+                "status": "running"
+            }
+        }
+        try:
+            draft = await self._generate(pack)
+        except Exception as exc:
+            yield {
+                "event": "complete",
+                "data": {
+                    "status": "abstain",
+                    "answer": "Justor found relevant law, but generation failed.",
+                    "reason": "GENERATION_FAILURE",
+                    "authorities": auth_cards,
+                    "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
+                    "debug": str(exc)
+                }
+            }
+            return
+
+        validation = validate_draft(draft, pack)
+        if validation.passed:
+            yield {
+                "event": "step",
+                "data": {
+                    "step": 3,
+                    "title": "Rule & Citation Verification",
+                    "summary": "100% verified against primary statute text and temporal validity.",
+                    "status": "passed"
+                }
+            }
+            final_res = self._success(draft, pack, route)
+            yield {
+                "event": "step",
+                "data": {
+                    "step": 4,
+                    "title": "Grounded Legal Synthesis",
+                    "summary": "Generated structured legal analysis anchored strictly to primary sources.",
+                    "status": "completed"
+                }
+            }
+            yield {"event": "complete", "data": final_res}
+            return
+
+        # Critic and retry
+        critic_result = await self.critic.audit(draft, pack)
+        missing = await self._verify_missing_authorities(critic_result, pack)
+        if missing:
+            next_index = len(pack.authorities) + 1
+            for source in missing:
+                source.evidence_id = f"ACT-{next_index}"
+                source.role = "CONTROLLING"
+                pack.authorities.append(source)
+                next_index += 1
+            validation.passed = False
+
+        critic_pass = bool(critic_result.get("pass", False))
+        if validation.passed and critic_pass:
+            yield {
+                "event": "step",
+                "data": {
+                    "step": 3,
+                    "title": "Rule & Citation Verification",
+                    "summary": "Audit passed following secondary critic review.",
+                    "status": "passed"
+                }
+            }
+            final_res = self._success(draft, pack, route)
+            yield {
+                "event": "step",
+                "data": {
+                    "step": 4,
+                    "title": "Grounded Legal Synthesis",
+                    "summary": "Generated structured legal analysis anchored strictly to primary sources.",
+                    "status": "completed"
+                }
+            }
+            yield {"event": "complete", "data": final_res}
+            return
+
+        # Controlled regeneration
+        feedback = json.dumps({
+            "deterministic_errors": [e.model_dump() for e in validation.errors],
+            "critic_errors": critic_result.get("errors", [])
+        }, ensure_ascii=False)
+
+        try:
+            second_draft = await self._generate(pack, correction_feedback=feedback)
+        except Exception:
+            second_draft = None
+
+        if second_draft is not None:
+            second_validation = validate_draft(second_draft, pack)
+            if second_validation.passed:
+                second_critic = await self.critic.audit(second_draft, pack)
+                if bool(second_critic.get("pass", False)):
+                    yield {
+                        "event": "step",
+                        "data": {
+                            "step": 3,
+                            "title": "Rule & Citation Verification",
+                            "summary": "Verified following guided regeneration.",
+                            "status": "passed"
+                        }
+                    }
+                    final_res = self._success(second_draft, pack, route)
+                    yield {
+                        "event": "step",
+                        "data": {
+                            "step": 4,
+                            "title": "Grounded Legal Synthesis",
+                            "summary": "Generated structured legal analysis anchored strictly to primary sources.",
+                            "status": "completed"
+                        }
+                    }
+                    yield {"event": "complete", "data": final_res}
+                    return
+
+        # Fail closed
+        yield {
+            "event": "step",
+            "data": {
+                "step": 3,
+                "title": "Rule & Citation Verification",
+                "summary": "Draft did not satisfy 100% strict verification criteria. Abstaining.",
+                "status": "failed_closed"
+            }
+        }
+        abstain_res = {
+            "status": "abstain",
+            "answer": (
+                "Justor identified potentially relevant law, but the generated "
+                "analysis did not pass its evidence-checked legal verification gates. "
+                "Please review the primary authorities directly."
+            ),
+            "reason": "LEGAL_VERIFICATION_FAILED",
+            "authorities": self._authority_cards(pack),
+            "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
+        }
+        yield {
+            "event": "step",
+            "data": {
+                "step": 4,
+                "title": "Grounded Legal Synthesis",
+                "summary": "Abstained due to verification constraints.",
+                "status": "abstained"
+            }
+        }
+        yield {"event": "complete", "data": abstain_res}
