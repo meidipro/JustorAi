@@ -792,203 +792,53 @@ const profilePage = (): string => {
 
   return `
   <main id="page-content" class="inner-page profile-page">
-    <section class="compact-hero section-shell profile-hero">
-      <div class="profile-hero-header">
-        <div class="profile-avatar-large">
-          <span>${escapeHtml(initials)}</span>
-          <span class="avatar-verified-dot" title="Active Verified Session">✓</span>
-        </div>
-        <div class="profile-hero-info">
-          <div class="profile-hero-title-row">
-            <h1>${escapeHtml(profile.fullName)}</h1>
-            <span class="pilot-active-badge">⚖️ Founding Pilot Member (৳200/mo)</span>
+    <div style="max-width: 580px; margin: 40px auto; padding: 0 20px;">
+      
+      <div class="profile-simple-card" style="background: var(--bg-card, #131827); border: 1px solid var(--border-color, #232B3E); border-radius: 16px; padding: 32px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);">
+        
+        <!-- User Avatar & Title -->
+        <div style="display: flex; align-items: center; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--border-color, #232B3E); margin-bottom: 24px;">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #1E3AC8, #3B82F6); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0; box-shadow: 0 4px 12px rgba(30,56,200,0.3);">
+            <span>${escapeHtml(initials)}</span>
           </div>
-          <p class="profile-hero-email">${escapeHtml(profile.email)} · ${localizedRoleLabel(profile.role)}</p>
-          <div class="profile-badges-row">
-            <span class="semantic-badge badge-source-checked">● Google Cloud AI Partner</span>
-            <span class="semantic-badge badge-reporter-verified">◐ $2,000 Credits Active</span>
-            <span class="semantic-badge badge-source-checked">✓ 46,000+ Statutes Indexed</span>
+          <div>
+            <h1 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--text-primary, #F1F5F9);">${escapeHtml(profile.fullName)}</h1>
+            <p style="margin: 4px 0 0 0; color: var(--text-secondary, #94A3B8); font-size: 14px;">${escapeHtml(profile.email)}</p>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="section-shell profile-content-layout">
-      <div class="profile-sidebar-nav">
-        <a href="#general" class="profile-nav-item is-active">${icon('user', 16)} <span>${ui(state.language, 'personalDetails')}</span></a>
-        <a href="#cloud" class="profile-nav-item">${icon('source', 16)} <span>${ui(state.language, 'subscriptionCloud')}</span></a>
-        <a href="#preferences" class="profile-nav-item">${icon('scale', 16)} <span>${ui(state.language, 'researchPreferences')}</span></a>
-        <a href="#privacy" class="profile-nav-item">${icon('shield', 16)} <span>${ui(state.language, 'dataPrivacy')}</span></a>
-      </div>
-
-      <div class="profile-main-cards">
-        <!-- Personal & Chamber Form -->
-        <form class="profile-card" data-action="save-profile-form" id="general">
-          <div class="profile-card-header">
-            <div>
-              <h2>${ui(state.language, 'personalDetails')}</h2>
-              <p>Update your advocate profile and chamber credentials.</p>
-            </div>
-            <button class="button button-small" type="submit">${ui(state.language, 'saveSettings')}</button>
+        <!-- User Information Form -->
+        <form data-action="save-profile-form" style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="prof-fullName" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94A3B8);">${ui(state.language, 'fullName')}</label>
+            <input type="text" id="prof-fullName" name="fullName" value="${escapeHtml(profile.fullName)}" required style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); background: var(--bg-primary, #0D0F14); color: var(--text-primary, #F1F5F9); font-size: 15px;" />
           </div>
 
-          <div class="profile-form-grid">
-            <div class="profile-field">
-              <label for="prof-fullName">${ui(state.language, 'fullName')} *</label>
-              <input type="text" id="prof-fullName" name="fullName" value="${escapeHtml(profile.fullName)}" required />
-            </div>
-
-            <div class="profile-field">
-              <label for="prof-email">${ui(state.language, 'emailAddress')}</label>
-              <input type="email" id="prof-email" name="email" value="${escapeHtml(profile.email)}" readonly />
-            </div>
-
-            <div class="profile-field">
-              <label for="prof-role">Primary Justor Persona</label>
-              <select id="prof-role" name="role">
-                <option value="professional" ${profile.role === 'professional' ? 'selected' : ''}>Legal Professional (Advocate / Judge / Corporate)</option>
-                <option value="student" ${profile.role === 'student' ? 'selected' : ''}>Law Student / Bar Candidate</option>
-                <option value="citizen" ${profile.role === 'citizen' ? 'selected' : ''}>Citizen / Public Guidance</option>
-              </select>
-            </div>
-
-            <div class="profile-field">
-              <label for="prof-barAssociation">${ui(state.language, 'barAssociation')}</label>
-              <select id="prof-barAssociation" name="barAssociation">
-                <option value="Supreme Court Bar Association (SCBA)" ${profile.barAssociation === 'Supreme Court Bar Association (SCBA)' ? 'selected' : ''}>Supreme Court Bar Association (SCBA)</option>
-                <option value="Dhaka Bar Association" ${profile.barAssociation === 'Dhaka Bar Association' ? 'selected' : ''}>Dhaka Bar Association</option>
-                <option value="Chittagong District Bar Association" ${profile.barAssociation === 'Chittagong District Bar Association' ? 'selected' : ''}>Chittagong District Bar Association</option>
-                <option value="Other District Bar" ${profile.barAssociation === 'Other District Bar' ? 'selected' : ''}>Other District Bar</option>
-                <option value="Law Student / Bar Examinee" ${profile.barAssociation === 'Law Student / Bar Examinee' ? 'selected' : ''}>Law Student / Bar Examinee</option>
-                <option value="Citizen Legal Researcher" ${profile.barAssociation === 'Citizen Legal Researcher' ? 'selected' : ''}>Citizen Legal Researcher</option>
-              </select>
-            </div>
-
-            <div class="profile-field full-width">
-              <label for="prof-chamberName">${ui(state.language, 'chamberName')}</label>
-              <input type="text" id="prof-chamberName" name="chamberName" value="${escapeHtml(profile.chamberName)}" placeholder="e.g. Chambers of Advocate..." />
-            </div>
-
-            <div class="profile-field full-width">
-              <label for="prof-practiceAreas">${ui(state.language, 'practiceAreas')}</label>
-              <input type="text" id="prof-practiceAreas" name="practiceAreas" value="${escapeHtml(profile.practiceAreas)}" placeholder="e.g. Land/Property, NI Act 138, Writ/Constitutional, Criminal" />
-            </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="prof-email" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94A3B8);">${ui(state.language, 'emailAddress')}</label>
+            <input type="email" id="prof-email" name="email" value="${escapeHtml(profile.email)}" readonly style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); background: rgba(255,255,255,0.03); color: var(--text-muted, #64748B); font-size: 15px; cursor: not-allowed;" />
           </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="prof-role" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94A3B8);">${state.language === 'bn' ? 'ভূমিকা' : 'Role'}</label>
+            <select id="prof-role" name="role" style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); background: var(--bg-primary, #0D0F14); color: var(--text-primary, #F1F5F9); font-size: 15px;">
+              <option value="professional" ${profile.role === 'professional' ? 'selected' : ''}>Legal Professional</option>
+              <option value="student" ${profile.role === 'student' ? 'selected' : ''}>Law Student</option>
+              <option value="citizen" ${profile.role === 'citizen' ? 'selected' : ''}>Citizen</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 20px; border-top: 1px solid var(--border-color, #232B3E);">
+            <button class="button" type="submit" style="padding: 10px 24px; font-weight: 600; font-size: 14px;">${ui(state.language, 'saveSettings')}</button>
+            <button class="button button-secondary" type="button" data-action="sign-out" style="padding: 10px 18px; font-size: 14px; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">${ui(state.language, 'signOut')}</button>
+          </div>
+
         </form>
 
-        <!-- Google Cloud & Infrastructure Tier -->
-        <div class="profile-card" id="cloud">
-          <div class="profile-card-header">
-            <div>
-              <h2>${ui(state.language, 'subscriptionCloud')}</h2>
-              <p>High-performance legal RAG powered by Google Cloud & Vertex AI.</p>
-            </div>
-            <span class="gcp-partner-chip">☁️ Google Cloud Partner</span>
-          </div>
-
-          <div class="cloud-quota-grid">
-            <div class="quota-stat-box">
-              <span class="stat-label">Cloud Credit Tier</span>
-              <strong class="stat-value">$2,000 USD Active</strong>
-              <small class="stat-desc">NSU Startups Next Incubation Grant</small>
-            </div>
-            <div class="quota-stat-box">
-              <span class="stat-label">Legal Database</span>
-              <strong class="stat-value">46,000+ Records</strong>
-              <small class="stat-desc">Statutes, DLR, SCOB, Gazette</small>
-            </div>
-            <div class="quota-stat-box">
-              <span class="stat-label">AI Engine</span>
-              <strong class="stat-value">Evidence Engine V2</strong>
-              <small class="stat-desc">7-Gate Deterministic Verification</small>
-            </div>
-            <div class="quota-stat-box">
-              <span class="stat-label">Membership Tier</span>
-              <strong class="stat-value">Founding Pilot</strong>
-              <small class="stat-desc">৳200/mo Guaranteed Rate</small>
-            </div>
-          </div>
-        </div>
-
-        <!-- Research Preferences -->
-        <div class="profile-card" id="preferences">
-          <div class="profile-card-header">
-            <div>
-              <h2>${ui(state.language, 'researchPreferences')}</h2>
-              <p>Customize citation rendering, language, and legal reasoning display.</p>
-            </div>
-          </div>
-
-          <div class="preference-rows">
-            <div class="preference-row">
-              <div>
-                <strong>Default Research Language</strong>
-                <p>Switch primary system language between English and বাংলা.</p>
-              </div>
-              <button class="button button-small button-secondary" type="button" data-action="language">${state.language === 'bn' ? 'বাংলা (Bangla)' : 'English (EN)'}</button>
-            </div>
-
-            <div class="preference-row">
-              <div>
-                <strong>Live Thinking & Step Telemetry</strong>
-                <p>Display live statutory retrieval and 7-gate verification steps.</p>
-              </div>
-              <span class="toggle-pill is-active">Active</span>
-            </div>
-
-            <div class="preference-row">
-              <div>
-                <strong>Strict Citation Grounding</strong>
-                <p>Enforce zero ungrounded propositions and highlight missing authorities.</p>
-              </div>
-              <span class="toggle-pill is-active">Enforced</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Data Privacy & History Controls (ChatGPT Style) -->
-        <div class="profile-card" id="privacy">
-          <div class="profile-card-header">
-            <div>
-              <h2>${ui(state.language, 'dataPrivacy')}</h2>
-              <p>Control your data, export legal memos, and manage local session storage.</p>
-            </div>
-          </div>
-
-          <div class="privacy-action-rows">
-            <div class="privacy-action-row">
-              <div>
-                <strong>Export Legal Research History</strong>
-                <p>Download a complete JSON digest of all your research queries and citations.</p>
-              </div>
-              <button class="button button-small button-outline" type="button" data-action="export-chat-history">
-                ${icon('external', 14)} ${ui(state.language, 'exportData')}
-              </button>
-            </div>
-
-            <div class="privacy-action-row">
-              <div>
-                <strong>Clear Local Research Threads</strong>
-                <p>Delete all research history stored on this device for your current role.</p>
-              </div>
-              <button class="button button-small button-secondary danger-button" type="button" data-action="clear-threads-profile">
-                ${ui(state.language, 'clearAllHistory')}
-              </button>
-            </div>
-
-            <div class="privacy-action-row">
-              <div>
-                <strong>Sign Out from Session</strong>
-                <p>Safely disconnect your account and clear local authorization keys.</p>
-              </div>
-              <button class="button button-small button-secondary" type="button" data-action="sign-out">
-                ${ui(state.language, 'signOut')}
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
+
+    </div>
   </main>`;
 };
 
