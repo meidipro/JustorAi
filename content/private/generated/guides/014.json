@@ -114,14 +114,84 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "স্বামী তালাক দিতে চাইলে আইনি প্রক্রিয়া কী?",
+      "directAnswer": "For a Muslim husband, talaq is not only a spoken statement. Section 7 of the Muslim Family Laws Ordinance requires written notice to the Chairman after pronouncement and a copy to the wife. The law also contains a waiting and reconciliation framework before the talaq becomes effective.",
+      "atAGlance": {
+        "whoFor": "A Muslim spouse wants a simple explanation of the statutory talaq process.",
+        "legalBasis": "Muslim Family Laws Ordinance, 1961, section 7; Muslim Marriages and Divorces (Registration) Act, 1974.",
+        "mainRule": "The exact effective date and procedure must be calculated from the current section 7 and the facts, including pregnancy where relevant.",
+        "updateStatus": "DEADLINE/EFFECTIVE-DATE SENSITIVE. Do not publish a simplified day count without lawyer sign-off."
+      },
+      "lawMeaning": "The exact effective date and procedure must be calculated from the current section 7 and the facts, including pregnancy where relevant. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Do not rely only on an oral statement.",
+        "Prepare the required written notice.",
+        "Send notice to the legally specified Chairman and copy to the wife.",
+        "Keep proof of service.",
+        "Follow the Arbitration Council/reconciliation process.",
+        "Check the statutory waiting period.",
+        "Complete divorce registration where applicable.",
+        "Deal separately with dower, maintenance and children."
+      ],
+      "evidence": [
+        "Marriage record; talaq notice; proof of service; correspondence; divorce registration; dower information."
+      ],
+      "simpleExample": "A husband says “talaq” during an argument but sends no statutory notice. The couple should not assume that this alone completed the legal process.",
+      "commonMistakes": [
+        "Common mistakes: No written notice.",
+        "Common mistakes: wrong recipient.",
+        "Common mistakes: no proof of service.",
+        "Common mistakes: assuming marriage issues about children or dower disappear automatically.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the wife is pregnant?",
+          "answer": "The effective-date rule needs specific legal checking."
+        },
+        {
+          "question": "What if the husband is abroad?",
+          "answer": "Service and authority issues need advice."
+        },
+        {
+          "question": "What if the wife disputes receipt?",
+          "answer": "Keep reliable service evidence."
+        }
+      ],
+      "specialistTrigger": "Any contested divorce; pregnancy; foreign spouse; missing notice; large dower claim; child issues.",
+      "faqs": [
+        {
+          "question": "Is verbal talaq enough?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who must receive the notice?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When does talaq become effective?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does divorce registration matter?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What happens to dower and children?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "ef7d73f8bbb761b5dca2e7565da016c5c0a5054f9052bd42e5a9f0456dfb8794"
+    "en": "ef7d73f8bbb761b5dca2e7565da016c5c0a5054f9052bd42e5a9f0456dfb8794",
+    "bn": "9b21b3cff06dc5614c8ce1cce69b4875da67b0d17f24e88944f8a1149997add6"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

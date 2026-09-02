@@ -42,6 +42,9 @@ declare module '@supabase/supabase-js' {
     auth: {
       getSession(): Promise<{ data: { session: Session | null }; error: any }>;
       getUser(): Promise<{ data: { user: User | null }; error: any }>;
+      signUp(credentials: any): Promise<{ data: any; error: any }>;
+      signInWithPassword(credentials: any): Promise<{ data: any; error: any }>;
+      updateUser(attributes: any): Promise<{ data: any; error: any }>;
       onAuthStateChange(
         callback: (event: AuthChangeEvent, session: Session | null) => void
       ): { data: { subscription: { unsubscribe(): void } } };

@@ -113,14 +113,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "টাকা দিয়েও সেবা না পেলে কী করবেন?",
+      "directAnswer": "Keep the contract, advertisement, invoice, payment proof and promised service date. Ask the provider in writing to perform the service or explain the refund position. The Consumers’ Right Protection Act includes provisions relating to promised goods or services, but the correct remedy depends on the facts and the service.",
+      "atAGlance": {
+        "whoFor": "A consumer paid for a promised service that was not provided.",
+        "legalBasis": "Consumers’ Right Protection Act, 2009, including provisions on promised goods/services; DNCRP process.",
+        "mainRule": "Do not promise a refund in every case. Contract terms and the law both matter.",
+        "updateStatus": "Verify the exact complaint deadline and DNCRP jurisdiction before publication."
+      },
+      "lawMeaning": "Do not promise a refund in every case. Contract terms and the law both matter. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Collect the service terms.",
+        "Record what was promised.",
+        "Record what was actually delivered.",
+        "Send a written request.",
+        "Keep the response.",
+        "Check cancellation/refund terms.",
+        "Escalate through the correct consumer or sector route."
+      ],
+      "evidence": [
+        "Contract; invoice; receipt; ad; email/chat; schedule; cancellation terms; payment proof."
+      ],
+      "simpleExample": "A training company cancels a paid course and offers no new date. Students should save the course advertisement and payment receipt before asking for a refund.",
+      "commonMistakes": [
+        "Common mistakes: Relying on phone calls only.",
+        "Common mistakes: losing terms.",
+        "Common mistakes: accepting a different service without written agreement.",
+        "Common mistakes: making public accusations before facts are clear.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if part of the service was delivered?",
+          "answer": "Document the difference."
+        },
+        {
+          "question": "What if the provider says “no refunds”?",
+          "answer": "A contract term does not automatically settle every legal issue."
+        },
+        {
+          "question": "What if the service is regulated?",
+          "answer": "Use the sector complaint route too."
+        }
+      ],
+      "specialistTrigger": "High-value service; professional service; medical loss; sector regulator issue; fraud.",
+      "faqs": [
+        {
+          "question": "What if a paid service is not provided?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does “no refund” always apply?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can DNCRP help?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I keep?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if only part of the service was delivered?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "605c2838bd9943f701adc3a546590c13dc84c2aa920e24e4f90de0f356bba627"
+    "en": "605c2838bd9943f701adc3a546590c13dc84c2aa920e24e4f90de0f356bba627",
+    "bn": "b8c163f614555b8081d050d30859847a317f49e2dc9d0054f57e180f7801b772"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

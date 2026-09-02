@@ -108,14 +108,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মানহানি বা Defamation কী?",
+      "directAnswer": "Defamation law deals with statements that harm reputation, but the Penal Code also contains important exceptions. Truth, public good, good-faith opinions and protected communications can matter. Do not assume that every criticism, bad review or false statement is automatically criminal defamation.",
+      "atAGlance": {
+        "whoFor": "A citizen wants to know when a reputation-harming statement may be defamation.",
+        "legalBasis": "Penal Code, 1860, defamation provisions and exceptions; other civil law as applicable.",
+        "mainRule": "The exact words, audience, truth, purpose and good faith matter.",
+        "updateStatus": "Very high-risk. Final version should cite the exact Penal Code sections and exceptions after lawyer review."
+      },
+      "lawMeaning": "The exact words, audience, truth, purpose and good faith matter. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Save the exact words.",
+        "Save where and when they were published.",
+        "Record who could see them.",
+        "Preserve evidence of falsity or context.",
+        "Consider whether a statutory exception may apply.",
+        "Avoid retaliatory public accusations.",
+        "Get legal advice before filing or sending a legal notice."
+      ],
+      "evidence": [
+        "Post/link; screenshot; video; publication date; witnesses; evidence of actual facts; loss/damage records."
+      ],
+      "simpleExample": "A customer writes a negative but honest review. The business should not assume “negative = defamation.” The exact statement and legal exceptions need review.",
+      "commonMistakes": [
+        "Common mistakes: Threatening arrest over criticism.",
+        "Common mistakes: editing screenshots.",
+        "Common mistakes: filing before checking exceptions.",
+        "Common mistakes: publishing more allegations in response.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the statement is true?",
+          "answer": "Truth and public-good rules can matter."
+        },
+        {
+          "question": "What if it is an opinion?",
+          "answer": "Context matters."
+        },
+        {
+          "question": "What if it was sent privately?",
+          "answer": "Publication and audience still need analysis."
+        }
+      ],
+      "specialistTrigger": "Public figure; media publication; business loss; anonymous campaign; criminal complaint; urgent injunction.",
+      "faqs": [
+        {
+          "question": "What is defamation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is a negative review defamation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the statement is true?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can Facebook posts be defamatory?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence is needed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "1599b2fbda67460271f80eb5a5fc7efcc31b27caf953c9c866e63cc8b14df68d"
+    "en": "1599b2fbda67460271f80eb5a5fc7efcc31b27caf953c9c866e63cc8b14df68d",
+    "bn": "c07a6801cffdd2e87702379af53b6247580a2ee77fb0f54b1d7c66ee2612f0fa"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

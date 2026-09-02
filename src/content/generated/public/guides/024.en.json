@@ -1,39 +1,67 @@
 {
   "id": 24,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "tax",
+  "route": "tax/tin-registration",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "How to Get a TIN in Bangladesh",
-    "description": "Bangladesh citizen legal guide on How to Get a TIN in Bangladesh.",
-    "searchIntent": "How to Get a TIN in Bangladesh"
+    "title": "How to Get a TIN in Bangladesh | Justor",
+    "description": "A TIN is a Taxpayer Identification Number used in Bangladesh’s tax system. Use the official NBR e-TIN service and enter identity information exactly....",
+    "searchIntent": "A citizen wants to register for a taxpayer identification number."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK",
+    "freshnessRequirementRaw": "Re-check NBR portal URLs and any current mandatory TIN categories before publication. | - 15 August 2026: Re-check NBR portal URLs and any current mandatory TIN categories before publication."
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "National Board of Revenue",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://nbr.gov.bd/"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/form/income-tax/eng"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/uploads/acts/Incometaxact2023.pdf"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Re-check NBR portal URLs and any current mandatory TIN categories before publication."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Income Tax for Salaried People — 2026–27",
+      "route": "/guides/tax/salary-income-tax-2026-27"
+    },
+    {
+      "label": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+      "route": "/guides/tax/salary-tax-examples-2026-27"
+    },
+    {
+      "label": "Freelancer and Remote Worker Tax Guide — 2026–27",
+      "route": "/guides/tax/freelancer-tax-bangladesh"
+    },
+    {
+      "label": "How to File an e-Return — 2026–27",
+      "route": "/guides/tax/e-return-2026-27"
+    }
+  ],
   "content": {
     "en": {
       "title": "How to Get a TIN in Bangladesh",
       "directAnswer": "A TIN is a Taxpayer Identification Number used in Bangladesh’s tax system. Use the official NBR e-TIN service and enter identity information exactly. Having a TIN and having a tax payable are not the same thing. A person may also have a return-filing duty even when final tax is low or zero.",
       "atAGlance": {
         "whoFor": "A citizen wants to register for a taxpayer identification number.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "A TIN is a Taxpayer Identification Number used in Bangladesh’s tax system. Use the official NBR e-TIN service and enter ",
+        "legalBasis": "Income Tax Act, 2023; NBR e-TIN services and forms.",
+        "mainRule": "The exact list of people who must have TIN or proof of return can change, so link this guide to the current “Who must file” page.",
         "updateStatus": "Re-check NBR portal URLs and any current mandatory TIN categories before publication."
       },
-      "lawMeaning": "The exact list of people who must have TIN or proof of return can change, so link this guide to the current “Who must file” page.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "The exact list of people who must have TIN or proof of return can change, so link this guide to the current “Who must file” page. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Open the official NBR e-TIN service.",
         "Use correct NID/passport and contact data.",
@@ -44,33 +72,65 @@
         "Correct errors through the official process."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "NID/passport as applicable; mobile/email; address; business information if relevant."
       ],
       "simpleExample": "A person gets a TIN for a bank or property transaction but has no taxable income. They should still check whether the law requires a return or proof of filing because the TIN itself does not answer that question.",
       "commonMistakes": [
-        "Creating multiple TINs.",
-        "wrong NID details.",
-        "sharing passwords with agents.",
-        "thinking TIN means tax is automatically due.."
+        "Common mistakes: Creating multiple TINs.",
+        "Common mistakes: wrong NID details.",
+        "Common mistakes: sharing passwords with agents.",
+        "Common mistakes: thinking TIN means tax is automatically due.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if I forgot my TIN?",
+          "answer": "Use official recovery."
+        },
+        {
+          "question": "What if my address changed?",
+          "answer": "Update through the official system."
+        },
+        {
+          "question": "What if I no longer need it?",
+          "answer": "Follow NBR procedure rather than ignoring it."
+        }
+      ],
       "specialistTrigger": "Duplicate TIN; identity mismatch; business restructuring; foreign taxpayer issue.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who needs a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does TIN mean I must pay tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do I correct TIN information?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is e-TIN free?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "95f5192b836ba3d4"
+    "en": "a57df72b532d14cae9f388ec51811573ce2abbf48df458f30af090a7ebac8d9e"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

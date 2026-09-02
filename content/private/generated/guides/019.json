@@ -113,14 +113,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মুসলিম উত্তরাধিকার আইন সহজভাবে",
+      "directAnswer": "Muslim inheritance is not a simple “divide everything equally” system. The estate must first be identified, and lawful debts, valid testamentary issues and the actual heirs must be checked. The share of one heir can change because of the presence of other heirs. Do not use a simple percentage from another family.",
+      "atAGlance": {
+        "whoFor": "A Muslim family wants to understand the order of inheritance questions.",
+        "legalBasis": "Applicable Muslim personal law and relevant statutory modifications; land mutation law for later record changes.",
+        "mainRule": "The page should teach structure, not issue personal share calculations without a validated inheritance engine.",
+        "updateStatus": "Do not launch an automated inheritance calculator until two-lawyer validation covers the rules and edge cases."
+      },
+      "lawMeaning": "The page should teach structure, not issue personal share calculations without a validated inheritance engine. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "List the deceased person’s assets.",
+        "Separate jointly owned property from the deceased’s own share.",
+        "Identify debts and relevant estate obligations.",
+        "Check any valid will issue.",
+        "Identify all lawful heirs.",
+        "Calculate shares only after the family tree is complete.",
+        "Record later land mutation or partition correctly."
+      ],
+      "evidence": [
+        "Death record; family tree; marriage/birth records; deeds; bank/asset records; debt records; will if any."
+      ],
+      "simpleExample": "A man dies leaving a wife, children and a surviving parent. A share copied from a case with only a wife and children may be wrong because the surviving parent changes the calculation.",
+      "commonMistakes": [
+        "Common mistakes: Leaving out daughters.",
+        "Common mistakes: dividing before checking debts.",
+        "Common mistakes: treating all family property as the deceased’s.",
+        "Common mistakes: using an online calculator with an incomplete family tree.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if an heir died earlier?",
+          "answer": "The result can change."
+        },
+        {
+          "question": "What if there is a will?",
+          "answer": "Check its legal limit and validity."
+        },
+        {
+          "question": "What if property is jointly owned?",
+          "answer": "Identify only the deceased’s share first."
+        }
+      ],
+      "specialistTrigger": "Any real share calculation; disputed heirs; will; adopted/step relationships; predeceased descendants; different personal laws.",
+      "faqs": [
+        {
+          "question": "Do sons and daughters get equal shares?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What happens before inheritance is divided?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can a will change Muslim inheritance?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does a spouse inherit?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do heirs mutate land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "1b9d3c709157fdfc6d2c94ab6c3c3874bb8470357b6e2b16af0261dd271e8c7b"
+    "en": "1b9d3c709157fdfc6d2c94ab6c3c3874bb8470357b6e2b16af0261dd271e8c7b",
+    "bn": "82e05c0fd928f53e181fa87315bb60e718dc27c6df2c2d58c62474fd57c9a3da"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

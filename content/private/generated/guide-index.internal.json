@@ -8,11 +8,12 @@
     "titleBn": "বাংলাদেশে জমি রেজিস্ট্রি করবেন কীভাবে?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "c2c2f6425f3672620392fca0434b5c811fef53fea74a177f39b0cda75a4edf4b"
+      "en": "c2c2f6425f3672620392fca0434b5c811fef53fea74a177f39b0cda75a4edf4b",
+      "bn": "036d8b273717cd723ea4dadb950773aa795ba06e3ecba17d02628e7af5f584ff"
     }
   },
   {
@@ -24,11 +25,12 @@
     "titleBn": "নামজারি কী এবং কীভাবে করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA FOR TITLE WARNINGS",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "1585b8fbf4d78da763ac554d94996f705c60acd81aad0079d66731e1fe9d828c"
+      "en": "1585b8fbf4d78da763ac554d94996f705c60acd81aad0079d66731e1fe9d828c",
+      "bn": "70b497ee7515332cff2e9dff35d214c6fd46360f86a51b8bb337b140bf9e2469"
     }
   },
   {
@@ -40,11 +42,12 @@
     "titleBn": "CS, SA, RS এবং BS খতিয়ান কী?",
     "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR TITLE LANGUAGE",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "77a29acc8763ba751c7275a6d967b2fd84ffb225cfb8c720ee202e32178bf372"
+      "en": "77a29acc8763ba751c7275a6d967b2fd84ffb225cfb8c720ee202e32178bf372",
+      "bn": "b2444ef776f5c9a2ebfa1c28048e0221527820b9751bedf11bf4091d1fb2dc9b"
     }
   },
   {
@@ -56,11 +59,12 @@
     "titleBn": "জমির দলিল আসল কিনা কীভাবে যাচাই করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "5b9114af697372b8f8e5ead1692dc3741b3bbcae5d284a7392d160d0e5081993"
+      "en": "5b9114af697372b8f8e5ead1692dc3741b3bbcae5d284a7392d160d0e5081993",
+      "bn": "59ee201a5345a0358ad5baa1ba87683ce0832b6674837cad10b324ca64fad4a4"
     }
   },
   {
@@ -72,11 +76,12 @@
     "titleBn": "হেবা ও দান দলিল কীভাবে কাজ করে?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "eb8bf7bc6e8c179a95777d5c2027e981d233e7f12dd488ae11f947fd2f9ae1b4"
+      "en": "eb8bf7bc6e8c179a95777d5c2027e981d233e7f12dd488ae11f947fd2f9ae1b4",
+      "bn": "1ccfc912841d519ef7e5e9af55d035948546c27d2904b5277aed045afb231367"
     }
   },
   {
@@ -88,11 +93,12 @@
     "titleBn": "জমি কেনা-বেচার আইনি ধাপ",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "fddd355d0bcd6630ca8dbbc2b7ab5437f9fbded35f909dd04b6fd2f30c15b941"
+      "en": "fddd355d0bcd6630ca8dbbc2b7ab5437f9fbded35f909dd04b6fd2f30c15b941",
+      "bn": "f52ba276d58bf503723b102b1d87ca4a330a939fa47b722c1be5c6818d624c1e"
     }
   },
   {
@@ -104,11 +110,12 @@
     "titleBn": "জমি বন্ধক কী এবং কীভাবে কাজ করে?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "7ccdd23123cec6b13dc7b02dedc4e00b6eab9b321374a9fa4cbfb12d83166b52"
+      "en": "7ccdd23123cec6b13dc7b02dedc4e00b6eab9b321374a9fa4cbfb12d83166b52",
+      "bn": "272993656bbaa92a364f0bb3819a2c4dd574f8a12cbbace73ab25d5fe5615327"
     }
   },
   {
@@ -120,11 +127,12 @@
     "titleBn": "মৃত ব্যক্তির জমি উত্তরাধিকারীদের নামে কীভাবে নেবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "41b081e0bb6c7884db3677239e430736e69cc794b2e27e3311fa0c36326edc4a"
+      "en": "41b081e0bb6c7884db3677239e430736e69cc794b2e27e3311fa0c36326edc4a",
+      "bn": "3ff0c56629f9f1dbad896bc904dd1e000fda9528aa3f0efb192542b8ee03df1a"
     }
   },
   {
@@ -136,11 +144,12 @@
     "titleBn": "অগ্রক্রয় বা Pre-emption অধিকার কী?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "b74e64bb30844290b228c97587615a6f999fbd872f140b35796f379367507181"
+      "en": "b74e64bb30844290b228c97587615a6f999fbd872f140b35796f379367507181",
+      "bn": "b30fc7ac9a4904d878db0cce1410a58753d5f502cbda88433af043939e7e87c7"
     }
   },
   {
@@ -152,11 +161,12 @@
     "titleBn": "জমি বিরোধ হলে প্রথমে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "75426ad61500767fd387429aa1011ab789e78144d705ea7459faa809a35f4013"
+      "en": "75426ad61500767fd387429aa1011ab789e78144d705ea7459faa809a35f4013",
+      "bn": "6baeb2416d852336f4d9530180948bac6729dc78711bf1c1e3eaf483d9bcecd6"
     }
   },
   {
@@ -168,11 +178,12 @@
     "titleBn": "ভূমি উন্নয়ন কর কীভাবে দেবেন?",
     "publishGateRaw": "SOURCE CHECK",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "9bc4b1490d9a24e4d7d021d85d1d53519ba32f935b8e61cfe2ba612521e7b8e4"
+      "en": "9bc4b1490d9a24e4d7d021d85d1d53519ba32f935b8e61cfe2ba612521e7b8e4",
+      "bn": "4bd395b45b986c9911aee8e6a70bb8ae545cf5bf7ae02fa2aebc186661089140"
     }
   },
   {
@@ -184,11 +195,12 @@
     "titleBn": "নামজারি আবেদন আটকে গেলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "d94f71eae5ba81cfb12def20ccbf0ac8ab2a4e77cf8499d6b0117480ca445639"
+      "en": "d94f71eae5ba81cfb12def20ccbf0ac8ab2a4e77cf8499d6b0117480ca445639",
+      "bn": "9c52d53dcccb65d4432061e8ac53210398f029b12a45ad1e0da5d38283e5fa8c"
     }
   },
   {
@@ -200,11 +212,12 @@
     "titleBn": "মুসলিম বিবাহ নিবন্ধন কীভাবে করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "48de2f538d9e1b4654b961ab51457ee351e19f067b8feb068a814664d3843377"
+      "en": "48de2f538d9e1b4654b961ab51457ee351e19f067b8feb068a814664d3843377",
+      "bn": "1160a7221c0e261d8a97206a22b0bbecedb2bb60db77aefbd2df73b1883718c6"
     }
   },
   {
@@ -216,11 +229,12 @@
     "titleBn": "স্বামী তালাক দিতে চাইলে আইনি প্রক্রিয়া কী?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "ef7d73f8bbb761b5dca2e7565da016c5c0a5054f9052bd42e5a9f0456dfb8794"
+      "en": "ef7d73f8bbb761b5dca2e7565da016c5c0a5054f9052bd42e5a9f0456dfb8794",
+      "bn": "9b21b3cff06dc5614c8ce1cce69b4875da67b0d17f24e88944f8a1149997add6"
     }
   },
   {
@@ -232,11 +246,12 @@
     "titleBn": "মুসলিম নারী কীভাবে বিবাহ বিচ্ছেদ চাইতে পারেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "5d84becc7805aeaebd224edac12780a13341230ed20c712a95522b3564e59c03"
+      "en": "5d84becc7805aeaebd224edac12780a13341230ed20c712a95522b3564e59c03",
+      "bn": "c6a442df3709dc65343cb5ec22507a3ac59dfbe9a6707bc9f410de49e370f6ad"
     }
   },
   {
@@ -248,11 +263,12 @@
     "titleBn": "দেনমোহর বা Mehr কী?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "c0ab6d9e61ac7098ce7a374bda60ed6c3fe255fee351facaa16d6822bb83c281"
+      "en": "c0ab6d9e61ac7098ce7a374bda60ed6c3fe255fee351facaa16d6822bb83c281",
+      "bn": "459f933167fba717ac181edf13a2a4bf7f81b0174db7a8176fef720458b410ba"
     }
   },
   {
@@ -264,11 +280,12 @@
     "titleBn": "ভরণপোষণ পাওয়ার অধিকার কীভাবে কাজ করে?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "ff360ed785f7f083990f11a53ca818a771ecfcc3f47247d2d9a86ea3551e8758"
+      "en": "ff360ed785f7f083990f11a53ca818a771ecfcc3f47247d2d9a86ea3551e8758",
+      "bn": "f06f535dfa8eb960b34dc45c064d870a3181a370abeb77723d2c9f3d13f378c9"
     }
   },
   {
@@ -280,11 +297,12 @@
     "titleBn": "সন্তানের হেফাজত সম্পর্কে কী জানা দরকার?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "ab918ece5dfaaecacc21256b35e34b55997f69d3153be753e93f24c661aa964a"
+      "en": "ab918ece5dfaaecacc21256b35e34b55997f69d3153be753e93f24c661aa964a",
+      "bn": "fc109a770caa0a40d190832fa9ad0e756cbbd2a1b0885412fc49538a5e0f136c"
     }
   },
   {
@@ -296,11 +314,12 @@
     "titleBn": "মুসলিম উত্তরাধিকার আইন সহজভাবে",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "1b9d3c709157fdfc6d2c94ab6c3c3874bb8470357b6e2b16af0261dd271e8c7b"
+      "en": "1b9d3c709157fdfc6d2c94ab6c3c3874bb8470357b6e2b16af0261dd271e8c7b",
+      "bn": "82e05c0fd928f53e181fa87315bb60e718dc27c6df2c2d58c62474fd57c9a3da"
     }
   },
   {
@@ -312,11 +331,12 @@
     "titleBn": "দ্বিতীয় বিয়ে করতে আইনে কী লাগে?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "e4fc9ef090f2898bd15aa7bcb53e465d4285e65ff216188e4d0fc8200b8a5c2c"
+      "en": "e4fc9ef090f2898bd15aa7bcb53e465d4285e65ff216188e4d0fc8200b8a5c2c",
+      "bn": "7c1d0e5f44c6cf687a6558f0194757b04995e0230e7129903affb5fa1aa247fb"
     }
   },
   {
@@ -328,11 +348,12 @@
     "titleBn": "চাকরিজীবীদের আয়কর ২০২৬–২৭",
     "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "fbe247cb9e6500612fe4ba8c47b6e142f4a6a2986977d0cd626505c12c77c486"
+      "en": "fbe247cb9e6500612fe4ba8c47b6e142f4a6a2986977d0cd626505c12c77c486",
+      "bn": "921758179a6f71cc8725d114aa7b4fa145cc737556c46ea5338aa70227b2744f"
     }
   },
   {
@@ -344,11 +365,12 @@
     "titleBn": "মাসিক বেতন অনুযায়ী আয়কর উদাহরণ",
     "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "fc9734e09f235f27b174eb8f5947714680b1c48da2c9d4303ef49e24f1093c94"
+      "en": "fc9734e09f235f27b174eb8f5947714680b1c48da2c9d4303ef49e24f1093c94",
+      "bn": "b39811e15c5bd699ca1a27cedd41b78b337a4de2145b22f7e46b9bda1e8866c7"
     }
   },
   {
@@ -360,11 +382,12 @@
     "titleBn": "ফ্রিল্যান্সার ও রিমোট ওয়ার্কারদের আয়কর",
     "publishGateRaw": "TAX PROFESSIONAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "82b8ef9ed356a4afb17015dd847d5e02595373c856b7f740f589622d159a3db6"
+      "en": "82b8ef9ed356a4afb17015dd847d5e02595373c856b7f740f589622d159a3db6",
+      "bn": "dc84f7b23952612d09a4d57de4d6ce7e9c01fd1a1d5d7c4877430bec24b79cdd"
     }
   },
   {
@@ -376,11 +399,12 @@
     "titleBn": "TIN কীভাবে করবেন?",
     "publishGateRaw": "SOURCE CHECK",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "a57df72b532d14cae9f388ec51811573ce2abbf48df458f30af090a7ebac8d9e"
+      "en": "a57df72b532d14cae9f388ec51811573ce2abbf48df458f30af090a7ebac8d9e",
+      "bn": "2d86615ed17e1d11c60308c36dd63ff41969f5ed9c5dcb57db5d4b56917976fe"
     }
   },
   {
@@ -392,11 +416,12 @@
     "titleBn": "e-Return কীভাবে জমা দেবেন?",
     "publishGateRaw": "SOURCE CHECK; TAX REVIEW FOR NUMERIC CONTENT",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "033f4f5a0f92675047c8da85917f820b0f07a0464aa859ffd6f64796e67ead0f"
+      "en": "033f4f5a0f92675047c8da85917f820b0f07a0464aa859ffd6f64796e67ead0f",
+      "bn": "ad3cab52dfba0edeb0ae8e415624f4811e02359faa52d101e16e51c82ec472cc"
     }
   },
   {
@@ -408,11 +433,12 @@
     "titleBn": "কারা আয়কর রিটার্ন জমা দেবেন?",
     "publishGateRaw": "TAX PROFESSIONAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "92fb580618e90c8dec489748a53839ed40e8cc450cd12853f3098b0496c832c0"
+      "en": "92fb580618e90c8dec489748a53839ed40e8cc450cd12853f3098b0496c832c0",
+      "bn": "6ad0bf5a01e3c48d824539b512a772fbf23e0c6d7382cd2f25d2225a563e417a"
     }
   },
   {
@@ -424,11 +450,12 @@
     "titleBn": "উৎসে কর বা TDS কী?",
     "publishGateRaw": "TAX PROFESSIONAL REVIEW",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "b50650cf0534909ee70de6bd0cbe1c3a0b46207aac6b96326cbc48c8d0512410"
+      "en": "b50650cf0534909ee70de6bd0cbe1c3a0b46207aac6b96326cbc48c8d0512410",
+      "bn": "82b96b66a6e8d2d1e623693045b07aaa738ff9b6b08eef1124c041b24acbede0"
     }
   },
   {
@@ -440,11 +467,12 @@
     "titleBn": "আয়কর নোটিশ পেলে কী করবেন?",
     "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "87c872f8dbdd42b9030be3c4283a132f5bde90b658c280265e5c00d4e0948e54"
+      "en": "87c872f8dbdd42b9030be3c4283a132f5bde90b658c280265e5c00d4e0948e54",
+      "bn": "3368acd1f1a1a399ec10cb150e503c2c026efc36c5b78fa1c31d9865cc8363cd"
     }
   },
   {
@@ -456,11 +484,12 @@
     "titleBn": "নষ্ট বা ত্রুটিপূর্ণ পণ্য কিনলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "824bcb498d2d623346909dd87e55de110ab1e5192287b2f6766a2a9e80d39c52"
+      "en": "824bcb498d2d623346909dd87e55de110ab1e5192287b2f6766a2a9e80d39c52",
+      "bn": "e0380fdd424af5f066e947799f03702df40ac51a3bb2a840c21b1f3c2ef6febb"
     }
   },
   {
@@ -472,11 +501,12 @@
     "titleBn": "অনলাইন শপ টাকা নিয়েও পণ্য না দিলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "7452eb9c59abadd4bc5d6d5d81b75061675bc95ee65fd696241a59f3a6aa6c47"
+      "en": "7452eb9c59abadd4bc5d6d5d81b75061675bc95ee65fd696241a59f3a6aa6c47",
+      "bn": "3ee78186fa2aa2cca06674f22c6c15d5ac829951ca52112956e0fb7b4a158b83"
     }
   },
   {
@@ -488,11 +518,12 @@
     "titleBn": "টাকা দিয়েও সেবা না পেলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "605c2838bd9943f701adc3a546590c13dc84c2aa920e24e4f90de0f356bba627"
+      "en": "605c2838bd9943f701adc3a546590c13dc84c2aa920e24e4f90de0f356bba627",
+      "bn": "b8c163f614555b8081d050d30859847a317f49e2dc9d0054f57e180f7801b772"
     }
   },
   {
@@ -504,11 +535,12 @@
     "titleBn": "ভুল দাম ও misleading advertisement হলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "a97e8f40c556cc400a78c98518f9bce66b2ba9f8d6f0352f8d74149ef515b307"
+      "en": "a97e8f40c556cc400a78c98518f9bce66b2ba9f8d6f0352f8d74149ef515b307",
+      "bn": "470dbd4610c6e502a88e07a49715d49f520963e72089086c990d901bf797159b"
     }
   },
   {
@@ -520,11 +552,12 @@
     "titleBn": "মোবাইল, ইন্টারনেট বা subscription bill ভুল হলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "8934f9912ff4cbea20c28fe8e09f0fe20062949ffe5d51a8a077f3704a3c1481"
+      "en": "8934f9912ff4cbea20c28fe8e09f0fe20062949ffe5d51a8a077f3704a3c1481",
+      "bn": "2fb79a84c1d1a17aa1021527add514f2e4b9220f08bc63dc273b6ad63e05b7ec"
     }
   },
   {
@@ -536,11 +569,12 @@
     "titleBn": "টিকিট বা পরিবহন সেবা নিয়ে অভিযোগ করবেন কীভাবে?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "5e8cabc9042f448a923e8b15dfd640ab80592fe4b8ddc03137a5d2d643e4b291"
+      "en": "5e8cabc9042f448a923e8b15dfd640ab80592fe4b8ddc03137a5d2d643e4b291",
+      "bn": "8e6539c936df1ef07a03c54f2dc0650263e206ff5e1fbaa27bf8caf02bb6651a"
     }
   },
   {
@@ -552,11 +586,12 @@
     "titleBn": "ভোক্তা অধিকার অভিযোগ কীভাবে করবেন?",
     "publishGateRaw": "SOURCE CHECK",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "3ace8f137db57554f78aca212cf88e3b3beb4a70471608086217589e31f412e5"
+      "en": "3ace8f137db57554f78aca212cf88e3b3beb4a70471608086217589e31f412e5",
+      "bn": "1ee7cbb3140aa77e0b1357870fe817f7000f3e2a799e2c0526ac225e9205b39a"
     }
   },
   {
@@ -568,11 +603,12 @@
     "titleBn": "Appointment Letter ও Employment Contract বুঝবেন কীভাবে?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "d3a71ece28beff469bd4e88202b9dd67f192194f9879fe0c68d33dc124e2e758"
+      "en": "d3a71ece28beff469bd4e88202b9dd67f192194f9879fe0c68d33dc124e2e758",
+      "bn": "956dd35c0eef43b3f598e74a8405a09cfd1a676a099bcab6a80b033167f1697e"
     }
   },
   {
@@ -584,11 +620,12 @@
     "titleBn": "বেতন না দিলে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "2f6380c134b18de0716b232bca30a667b79a4078727b07b53295ffdbe8085e98"
+      "en": "2f6380c134b18de0716b232bca30a667b79a4078727b07b53295ffdbe8085e98",
+      "bn": "338f31276c81d86c135b9f13578858388c97ee41b087cee47af7fe57fc90b65f"
     }
   },
   {
@@ -600,11 +637,12 @@
     "titleBn": "চাকরি থেকে বাদ দিলে আপনার কী জানা দরকার?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "1e49667cd74ebfa6160b3536a4752ebca0e9b37fd3731a2f5661eff6d3456ec4"
+      "en": "1e49667cd74ebfa6160b3536a4752ebca0e9b37fd3731a2f5661eff6d3456ec4",
+      "bn": "45ff647b78383d00f1ca915dc10e4e42258d2131b7014e2daeb21fb28a4e1992"
     }
   },
   {
@@ -616,11 +654,12 @@
     "titleBn": "কর্মক্ষেত্রে হয়রানি হলে কী প্রমাণ রাখবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "db5edec427eb301bc629ae013f4961501937d5b2de3a0c2b828697bbb569fe2f"
+      "en": "db5edec427eb301bc629ae013f4961501937d5b2de3a0c2b828697bbb569fe2f",
+      "bn": "03f4d6e178d72b9e2d7dd4ba00019772aecf2dab69341a914546cadd0c578a8b"
     }
   },
   {
@@ -632,11 +671,12 @@
     "titleBn": "ছুটি, মাতৃত্বকালীন সুবিধা ও কর্মক্ষেত্রের মৌলিক অধিকার",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "3d75c06b931f1963761ed2984e859804b21bdf7dba0e0f73daa3d7da49a9442a"
+      "en": "3d75c06b931f1963761ed2984e859804b21bdf7dba0e0f73daa3d7da49a9442a",
+      "bn": "73d7ef2a68f694457b077b08287bfdff166c3afa6da370ec4306d0340d00d54f"
     }
   },
   {
@@ -648,11 +688,12 @@
     "titleBn": "অনলাইনে প্রতারণার শিকার হলে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "35c596220c259fee128b003f885cba75ac7b657fd106a0ee0708551eb40663cb"
+      "en": "35c596220c259fee128b003f885cba75ac7b657fd106a0ee0708551eb40663cb",
+      "bn": "d9551347f86b9233a4a9d0f4f3dd0f6072577a0c5324b28c49f6b4b689fb4d38"
     }
   },
   {
@@ -664,11 +705,12 @@
     "titleBn": "কেউ আপনার নামে ভুয়া online account খুললে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "936f42fd8d73e902e62986a3e532a98b0d8bbc576a379b40c939522068dacbe2"
+      "en": "936f42fd8d73e902e62986a3e532a98b0d8bbc576a379b40c939522068dacbe2",
+      "bn": "eef04eb134d45057c959d433d0166ebdde8a6670752ce8d8cbd7657b7e7d5ec7"
     }
   },
   {
@@ -680,11 +722,12 @@
     "titleBn": "অনলাইনে হুমকি বা ব্ল্যাকমেইল হলে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "9f18fa7aebeb38144c84b214fe02f5e4bc136ec58241b535ee44dfc99770f367"
+      "en": "9f18fa7aebeb38144c84b214fe02f5e4bc136ec58241b535ee44dfc99770f367",
+      "bn": "39c2dc57384d85cddc383b83e5965739946f3287767cba3ab7349f6a4ecf3bfe"
     }
   },
   {
@@ -696,11 +739,12 @@
     "titleBn": "মানহানি বা Defamation কী?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "1599b2fbda67460271f80eb5a5fc7efcc31b27caf953c9c866e63cc8b14df68d"
+      "en": "1599b2fbda67460271f80eb5a5fc7efcc31b27caf953c9c866e63cc8b14df68d",
+      "bn": "c07a6801cffdd2e87702379af53b6247580a2ee77fb0f54b1d7c66ee2612f0fa"
     }
   },
   {
@@ -712,11 +756,12 @@
     "titleBn": "GD, পুলিশ অভিযোগ ও মামলা—পার্থক্য কী?",
     "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "bbcfba2b67ea3e037628f883753bd173b64e93d838b028349361f1d0e32252bc"
+      "en": "bbcfba2b67ea3e037628f883753bd173b64e93d838b028349361f1d0e32252bc",
+      "bn": "8ab6ae735b2f6f931d52bc029695ea73d74e6dc315726208c25d59816a9f9735"
     }
   },
   {
@@ -728,11 +773,12 @@
     "titleBn": "সরকারি সেবা না পেলে কোথায় অভিযোগ করবেন?",
     "publishGateRaw": "SOURCE CHECK",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "52a22c06b97c5f85a4cff16fc2196c5645742f81eb3672801a38e3c0b9f6ae3a"
+      "en": "52a22c06b97c5f85a4cff16fc2196c5645742f81eb3672801a38e3c0b9f6ae3a",
+      "bn": "57155f4bd70167262647b7a7488edd5854842d708a837dcece74127adc987136"
     }
   },
   {
@@ -744,11 +790,12 @@
     "titleBn": "রাস্তা, ড্রেন বা ময়লার সমস্যা কোথায় জানাবেন?",
     "publishGateRaw": "SOURCE CHECK",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "661b3a7d8a01b57445d5074317af8ad820d2932c9fe9f300b0bedb44beb89416"
+      "en": "661b3a7d8a01b57445d5074317af8ad820d2932c9fe9f300b0bedb44beb89416",
+      "bn": "d81f4e676aa00508f1dc69463f17f15e82578ebf0aa111d8c641ba57cb9eedbc"
     }
   },
   {
@@ -760,11 +807,12 @@
     "titleBn": "ভূমি অফিসে দেরি হলে কোথায় অভিযোগ করবেন?",
     "publishGateRaw": "SOURCE CHECK; LEGAL QA",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "94c70d7733f88355a9cb8dbaf57793513cf340e990bdb9ffc68912afc0455a2b"
+      "en": "94c70d7733f88355a9cb8dbaf57793513cf340e990bdb9ffc68912afc0455a2b",
+      "bn": "f9487e1000b1c791a0b473bb294b11a4abcab89ab02451ce0776ad7f558f2d48"
     }
   },
   {
@@ -776,11 +824,12 @@
     "titleBn": "তথ্য অধিকার আবেদন কীভাবে করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "c28646de7d682ed0869789d96cf83eae22d192cb3825649f68fdccaff4cea233"
+      "en": "c28646de7d682ed0869789d96cf83eae22d192cb3825649f68fdccaff4cea233",
+      "bn": "f922014adb35555a80a16f280cc86ebd8ba877d32205cc4791cbd258db0e48c4"
     }
   },
   {
@@ -792,11 +841,12 @@
     "titleBn": "সরকারি Legal Aid কীভাবে পাবেন?",
     "publishGateRaw": "SOURCE CHECK; HUMAN LEGAL REVIEW FOR ELIGIBILITY LANGUAGE",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "117457ba052207d112416a86a3cdfa0763a601d2d4c7b336e6d6c47aec414fe9"
+      "en": "117457ba052207d112416a86a3cdfa0763a601d2d4c7b336e6d6c47aec414fe9",
+      "bn": "2a6a76c7fac82498c3b69cd9dcec4350e3f15b454ae1fa9b4c553fabc5d9acb7"
     }
   },
   {
@@ -808,11 +858,12 @@
     "titleBn": "ব্যাংক, পুলিশ বা সরকারি কর্মকর্তা সেজে ভুয়া কল এলে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "1f3c002edbeaa2561f6532baa3748cd29a8578cca2302aab96e43bf448eaea2d"
+      "en": "1f3c002edbeaa2561f6532baa3748cd29a8578cca2302aab96e43bf448eaea2d",
+      "bn": "293200fa88944226ffe58d9644e296a7d88ebc94792bd6076f20e328575415f3"
     }
   },
   {
@@ -824,11 +875,12 @@
     "titleBn": "OTP, PIN বা মোবাইল ফাইন্যান্সিয়াল সার্ভিস স্ক্যাম হলে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "848730d69cbc6ec6d1c21fbf5905e8f524c61a980a99db87646dc6a6a4677377"
+      "en": "848730d69cbc6ec6d1c21fbf5905e8f524c61a980a99db87646dc6a6a4677377",
+      "bn": "eb0edba6ef2ff582d54627242183a8d401e3a4b9c15128bcc89c3d7b391d06ae"
     }
   },
   {
@@ -840,11 +892,12 @@
     "titleBn": "ফিশিং লিংক, ভুয়া লগইন পেজ বা নকল ওয়েবসাইট পেলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK + HUMAN REVIEW FOR LEGAL CLAIMS",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "75e0db2e45fb65130b43d49afed68449aefad0bcbd6a080b2980608488d672aa"
+      "en": "75e0db2e45fb65130b43d49afed68449aefad0bcbd6a080b2980608488d672aa",
+      "bn": "67d4f97f14407f2964df7edc6554fae55f74f0ba0d2f58a15874a231d674a177"
     }
   },
   {
@@ -856,11 +909,12 @@
     "titleBn": "Facebook, Instagram, Gmail বা social account হ্যাক হলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR OFFENCE CHARACTERISATION",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "2190b6cf660c79d7ea03e7e8538c07e310439d4ddb4f8146ed0a4c6157e419e8"
+      "en": "2190b6cf660c79d7ea03e7e8538c07e310439d4ddb4f8146ed0a4c6157e419e8",
+      "bn": "339ee59d5bbb60e531cdc87b9bcc3e024d963dfd22f6b7164e2c35d2f90a0493"
     }
   },
   {
@@ -872,11 +926,12 @@
     "titleBn": "আপনার নামে ভুয়া Facebook, Instagram বা social account খুললে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "21fc10295c1ecfd41e25c7e6ab856ac0e24d6d68b6ac2d48f6f81a396e76c33a"
+      "en": "21fc10295c1ecfd41e25c7e6ab856ac0e24d6d68b6ac2d48f6f81a396e76c33a",
+      "bn": "9d66e0c291f426b25144ed1a8a58582ea16c157c6b6716d8394d6e8a5e03dd7f"
     }
   },
   {
@@ -888,11 +943,12 @@
     "titleBn": "অনলাইন ব্ল্যাকমেইল, sextortion বা ব্যক্তিগত ছবি ছড়িয়ে দেওয়ার হুমকি পেলে কী করবেন?",
     "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "9521ee28caf336b983980477a1e7d6b6ee3ab0299112325318c7d58fa51d05db"
+      "en": "9521ee28caf336b983980477a1e7d6b6ee3ab0299112325318c7d58fa51d05db",
+      "bn": "0e1ccec3ff50d617592d3f46000cbec7b48b48294cd017541b20a0f402fd62fa"
     }
   },
   {
@@ -904,11 +960,12 @@
     "titleBn": "Deepfake, AI voice clone বা AI দিয়ে বানানো ভুয়া ছবি/ভিডিও হলে কী করবেন?",
     "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "dbf5e9ff5120f277eb4db8c3db68e54548d0ebc8c1393ab273f4ad4151457ccb"
+      "en": "dbf5e9ff5120f277eb4db8c3db68e54548d0ebc8c1393ab273f4ad4151457ccb",
+      "bn": "0a33fbcf3aa5a4feae53a66c5c0b945f3ad4d483fa410abeaeee926039e50b08"
     }
   },
   {
@@ -920,11 +977,12 @@
     "titleBn": "আপনার NID-তে অচেনা SIM বা SIM-swap সন্দেহ হলে কী করবেন?",
     "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR CRIMINAL-LAW CLAIMS",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "b4472f0b22dbc4dd1cfc83b052f90e42b0a762615fa60d24fe1ec903abbf8854"
+      "en": "b4472f0b22dbc4dd1cfc83b052f90e42b0a762615fa60d24fe1ec903abbf8854",
+      "bn": "f48d2d0e46952f9c06548fab5bf1228070501a9d5e080760f3587abf1d448131"
     }
   },
   {
@@ -936,11 +994,12 @@
     "titleBn": "Facebook Marketplace, online seller বা advance payment scam হলে কী করবেন?",
     "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "f0e2087099609f525142c4b102e848f606c655b37623b6a0d4d379301f74f1e4"
+      "en": "f0e2087099609f525142c4b102e848f606c655b37623b6a0d4d379301f74f1e4",
+      "bn": "78fb71a437ab876f4da9995dbc8401b4dca8f95fdd3d0c9e61d36e82c1265b4d"
     }
   },
   {
@@ -952,11 +1011,12 @@
     "titleBn": "NID, ফোন নম্বর বা ব্যক্তিগত তথ্য ফাঁস বা অপব্যবহার হলে কী করবেন?",
     "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED",
     "releaseStatus": {
-      "en": "review",
-      "bn": "missing"
+      "en": "published",
+      "bn": "published"
     },
     "contentHashes": {
-      "en": "e5e583e8f2e22042b77b7267e075122d342abf25da31aba17b0ea12f814b8909"
+      "en": "e5e583e8f2e22042b77b7267e075122d342abf25da31aba17b0ea12f814b8909",
+      "bn": "464141ffa633c4393420927f1f8e9d573348f5d0e7a182e6cafa63a349fbf98e"
     }
   }
 ]

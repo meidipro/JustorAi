@@ -117,14 +117,82 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "দেনমোহর বা Mehr কী?",
+      "directAnswer": "Dower, also called mehr or moharana, is money or property promised to the wife as part of a Muslim marriage. The kabinnama is an important document. Whether an amount is due now, later or after divorce depends on the recorded terms and applicable law.",
+      "atAGlance": {
+        "whoFor": "A spouse wants to understand dower written in a Muslim marriage.",
+        "legalBasis": "Muslim personal law; Muslim marriage registration law; Dissolution of Muslim Marriages Act, 1939; Family Courts Act, 2023.",
+        "mainRule": "A divorce or dissolution does not automatically erase a lawful dower claim.",
+        "updateStatus": "Do not state a universal prompt/deferred rule without checking the kabinnama and applicable law."
+      },
+      "lawMeaning": "A divorce or dissolution does not automatically erase a lawful dower claim. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Get the kabinnama.",
+        "Read the exact dower amount and terms.",
+        "Check any amount already paid.",
+        "Keep payment or receipt evidence.",
+        "If unpaid, identify the correct legal claim route.",
+        "Do not sign a waiver you do not understand."
+      ],
+      "evidence": [
+        "Kabinnama; payment proof; settlement papers; divorce/dissolution documents; communications."
+      ],
+      "simpleExample": "A kabinnama states a dower amount, and the husband says it was paid in cash years ago. Both sides should look for receipts, witnesses and other reliable evidence.",
+      "commonMistakes": [
+        "Common mistakes: Assuming dower is symbolic.",
+        "Common mistakes: signing away a claim without advice.",
+        "Common mistakes: changing kabinnama terms informally.",
+        "Common mistakes: confusing maintenance with dower.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the husband says it was paid?",
+          "answer": "Evidence matters."
+        },
+        {
+          "question": "What if the wife seeks divorce?",
+          "answer": "The legal effect on dower depends on the route and facts."
+        },
+        {
+          "question": "What if the amount is very high?",
+          "answer": "It is still a legal-document issue, not a reason to ignore it."
+        }
+      ],
+      "specialistTrigger": "Disputed payment; waiver; settlement; death; large amount; foreign marriage documents.",
+      "faqs": [
+        {
+          "question": "What is dower?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When is dower payable?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can dower be claimed after divorce?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the husband says it was paid?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is dower the same as maintenance?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "c0ab6d9e61ac7098ce7a374bda60ed6c3fe255fee351facaa16d6822bb83c281"
+    "en": "c0ab6d9e61ac7098ce7a374bda60ed6c3fe255fee351facaa16d6822bb83c281",
+    "bn": "459f933167fba717ac181edf13a2a4bf7f81b0174db7a8176fef720458b410ba"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

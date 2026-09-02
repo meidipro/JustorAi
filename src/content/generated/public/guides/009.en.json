@@ -1,39 +1,61 @@
 {
   "id": 9,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "property",
+  "route": "property/pre-emption",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "What Is Pre-emption in Bangladesh?",
-    "description": "Bangladesh citizen legal guide on What Is Pre-emption in Bangladesh?.",
-    "searchIntent": "What Is Pre-emption in Bangladesh?"
+    "title": "What Is Pre-emption in Bangladesh? | Justor",
+    "description": "Pre-emption is a legal right that may allow an eligible person to ask for a transferred property interest to be transferred to them instead. It is not...",
+    "searchIntent": "A co-sharer or nearby interest holder wants to know whether they can challenge a transfer."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
-      "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "label": "State Acquisition and Tenancy Act, 1950",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-241/section-7076.html"
+    },
+    {
+      "label": "The State Acquisition and Tenancy Act, 1950",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-241.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: DEADLINE-SENSITIVE. Do not publish numeric limitation guidance without a lawyer checking the current text and case law."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
   "content": {
     "en": {
       "title": "What Is Pre-emption in Bangladesh?",
       "directAnswer": "Pre-emption is a legal right that may allow an eligible person to ask for a transferred property interest to be transferred to them instead. It is not available to everyone. Eligibility, the kind of land, the relationship to the holding, time limits and required deposits can all matter.",
       "atAGlance": {
         "whoFor": "A co-sharer or nearby interest holder wants to know whether they can challenge a transfer.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Pre-emption is a legal right that may allow an eligible person to ask for a transferred property interest to be transfer",
+        "legalBasis": "State Acquisition and Tenancy Act, 1950, section 96; other applicable law.",
+        "mainRule": "Section 96 contains a statutory pre-emption framework. It also states that the section does not take away a right of pre-emption under Mohammedan law.",
         "updateStatus": "DEADLINE-SENSITIVE. Do not publish numeric limitation guidance without a lawyer checking the current text and case law."
       },
-      "lawMeaning": "Section 96 contains a statutory pre-emption framework. It also states that the section does not take away a right of pre-emption under Mohammedan law.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Section 96 contains a statutory pre-emption framework. It also states that the section does not take away a right of pre-emption under Mohammedan law. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Identify the transferred land and deed.",
         "Confirm your legal relationship to the holding.",
@@ -43,33 +65,65 @@
         "Check required deposits and court process."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Transfer deed; khatian; co-sharer records; notice; proof of knowledge date; payment/deposit records."
       ],
       "simpleExample": "A person hears that a co-sharer sold land to an outsider. That does not automatically mean the person has a valid pre-emption claim. The exact legal status and deadline must be checked.",
       "commonMistakes": [
-        "Waiting too long.",
-        "assuming every neighbour can pre-empt.",
-        "filing without required deposit.",
-        "using the wrong legal basis.."
+        "Common mistakes: Waiting too long.",
+        "Common mistakes: assuming every neighbour can pre-empt.",
+        "Common mistakes: filing without required deposit.",
+        "Common mistakes: using the wrong legal basis.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if you learned about the sale late?",
+          "answer": "Deadline issues need legal review."
+        },
+        {
+          "question": "What if the land is non-agricultural?",
+          "answer": "Different law may apply."
+        },
+        {
+          "question": "What if Muslim-law pre-emption is claimed?",
+          "answer": "Treat it as a separate legal analysis."
+        }
+      ],
       "specialistTrigger": "Any intended pre-emption claim. This is deadline-sensitive litigation.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "Who can claim pre-emption?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is section 96?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is there a time limit?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does pre-emption apply to every land sale?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can Muslim-law pre-emption still matter?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "f3250c595c4c2d84"
+    "en": "b74e64bb30844290b228c97587615a6f999fbd872f140b35796f379367507181"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

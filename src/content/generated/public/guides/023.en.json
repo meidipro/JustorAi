@@ -1,39 +1,71 @@
 {
   "id": 23,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "tax",
+  "route": "tax/freelancer-tax-bangladesh",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Freelancer and Remote Worker Tax Guide — 2026–27",
-    "description": "Bangladesh citizen legal guide on Freelancer and Remote Worker Tax Guide — 2026–27.",
-    "searchIntent": "Freelancer and Remote Worker Tax Guide — 2026–27"
+    "title": "Freelancer and Remote Worker Tax Guide — 2026–27 | Justor",
+    "description": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and source of income, current...",
+    "searchIntent": "A freelancer earning locally or from abroad wants to understand tax duties."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "TAX PROFESSIONAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "NBR",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://nbr.gov.bd/uploads/acts/Incometaxact2023.pdf"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/regulations/acts/finance-acts/eng"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/regulations/sros/income-tax-sros/eng"
+    },
+    {
+      "label": "National Board of Revenue",
+      "type": "official",
+      "url": "https://nbr.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: YEARLY UPDATE. Review any 2026 freelancer/IT service SRO before publication."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Income Tax for Salaried People — 2026–27",
+      "route": "/guides/tax/salary-income-tax-2026-27"
+    },
+    {
+      "label": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+      "route": "/guides/tax/salary-tax-examples-2026-27"
+    },
+    {
+      "label": "How to Get a TIN in Bangladesh",
+      "route": "/guides/tax/tin-registration"
+    },
+    {
+      "label": "How to File an e-Return — 2026–27",
+      "route": "/guides/tax/e-return-2026-27"
+    }
+  ],
   "content": {
     "en": {
       "title": "Freelancer and Remote Worker Tax Guide — 2026–27",
       "directAnswer": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and source of income, current exemptions or concessions, and the taxpayer’s full facts. Keep bank, remittance, platform and contract records and check the current NBR rules before filing.",
       "atAGlance": {
         "whoFor": "A freelancer earning locally or from abroad wants to understand tax duties.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and sour",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; current NBR SROs and circulars.",
+        "mainRule": "Never make a blanket statement that “foreign remittance” or “freelance income” is exempt without identifying the exact current provision.",
         "updateStatus": "YEARLY UPDATE. Review any 2026 freelancer/IT service SRO before publication."
       },
-      "lawMeaning": "Never make a blanket statement that “foreign remittance” or “freelance income” is exempt without identifying the exact current provision.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Never make a blanket statement that “foreign remittance” or “freelance income” is exempt without identifying the exact current provision. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Identify the service you provide.",
         "Record where the customer and work relationship are located.",
@@ -45,33 +77,65 @@
         "File the required return."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Contracts; invoices; Upwork/Fiverr or platform statements; bank credit advice; remittance proof; expense records; TIN."
       ],
       "simpleExample": "A designer receives dollars from overseas clients. The bank describes the payment as remittance. That label alone should not be used to conclude the income is tax-free.",
       "commonMistakes": [
-        "No records.",
-        "mixing business and personal payments.",
-        "relying on Facebook tax advice.",
-        "claiming an exemption without reading the SRO.."
+        "Common mistakes: No records.",
+        "Common mistakes: mixing business and personal payments.",
+        "Common mistakes: relying on Facebook tax advice.",
+        "Common mistakes: claiming an exemption without reading the SRO.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if all clients are abroad?",
+          "answer": "Residence and source rules still matter."
+        },
+        {
+          "question": "What if income is irregular?",
+          "answer": "Use annual records."
+        },
+        {
+          "question": "What if a platform deducts tax?",
+          "answer": "Keep proof."
+        }
+      ],
       "specialistTrigger": "High income; company structure; VAT issues; foreign bank account; disputed exemption; double-tax issue.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "Do freelancers pay tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is foreign remittance tax free?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What records should a freelancer keep?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I file e-Return?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "a11d52ec926060af"
+    "en": "82b8ef9ed356a4afb17015dd847d5e02595373c856b7f740f589622d159a3db6"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

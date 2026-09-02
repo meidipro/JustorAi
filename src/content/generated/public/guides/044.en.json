@@ -1,39 +1,56 @@
 {
   "id": 44,
   "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "route": "digital/defamation",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Defamation in Bangladesh Explained Simply",
-    "description": "Bangladesh citizen legal guide on Defamation in Bangladesh Explained Simply.",
-    "searchIntent": "Defamation in Bangladesh Explained Simply"
+    "title": "Defamation in Bangladesh Explained Simply | Justor",
+    "description": "Defamation law deals with statements that harm reputation, but the Penal Code also contains important exceptions. Truth, public good, good-faith...",
+    "searchIntent": "A citizen wants to know when a reputation-harming statement may be defamation."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
-      "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "label": "The Penal Code, 1860",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Very high-risk. Final version should cite the exact Penal Code sections and exceptions after lawyer review."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "What to Do After an Online Scam",
+      "route": "/action-guides/digital/online-scam"
+    },
+    {
+      "label": "Someone Is Pretending to Be You Online",
+      "route": "/action-guides/digital/identity-impersonation"
+    },
+    {
+      "label": "Online Harassment, Threats and Blackmail: What to Do",
+      "route": "/action-guides/digital/online-harassment-blackmail"
+    },
+    {
+      "label": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+      "route": "/guides/everyday/gd-police-complaint-case"
+    }
+  ],
   "content": {
     "en": {
       "title": "Defamation in Bangladesh Explained Simply",
       "directAnswer": "Defamation law deals with statements that harm reputation, but the Penal Code also contains important exceptions. Truth, public good, good-faith opinions and protected communications can matter. Do not assume that every criticism, bad review or false statement is automatically criminal defamation.",
       "atAGlance": {
         "whoFor": "A citizen wants to know when a reputation-harming statement may be defamation.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Defamation law deals with statements that harm reputation, but the Penal Code also contains important exceptions. Truth,",
+        "legalBasis": "Penal Code, 1860, defamation provisions and exceptions; other civil law as applicable.",
+        "mainRule": "The exact words, audience, truth, purpose and good faith matter.",
         "updateStatus": "Very high-risk. Final version should cite the exact Penal Code sections and exceptions after lawyer review."
       },
-      "lawMeaning": "The exact words, audience, truth, purpose and good faith matter.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "The exact words, audience, truth, purpose and good faith matter. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Save the exact words.",
         "Save where and when they were published.",
@@ -44,33 +61,65 @@
         "Get legal advice before filing or sending a legal notice."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Post/link; screenshot; video; publication date; witnesses; evidence of actual facts; loss/damage records."
       ],
       "simpleExample": "A customer writes a negative but honest review. The business should not assume “negative = defamation.” The exact statement and legal exceptions need review.",
       "commonMistakes": [
-        "Threatening arrest over criticism.",
-        "editing screenshots.",
-        "filing before checking exceptions.",
-        "publishing more allegations in response.."
+        "Common mistakes: Threatening arrest over criticism.",
+        "Common mistakes: editing screenshots.",
+        "Common mistakes: filing before checking exceptions.",
+        "Common mistakes: publishing more allegations in response.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the statement is true?",
+          "answer": "Truth and public-good rules can matter."
+        },
+        {
+          "question": "What if it is an opinion?",
+          "answer": "Context matters."
+        },
+        {
+          "question": "What if it was sent privately?",
+          "answer": "Publication and audience still need analysis."
+        }
+      ],
       "specialistTrigger": "Public figure; media publication; business loss; anonymous campaign; criminal complaint; urgent injunction.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is defamation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is a negative review defamation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the statement is true?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can Facebook posts be defamatory?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence is needed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "71b48f41aaedb84e"
+    "en": "1599b2fbda67460271f80eb5a5fc7efcc31b27caf953c9c866e63cc8b14df68d"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

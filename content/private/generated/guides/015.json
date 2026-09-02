@@ -123,14 +123,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মুসলিম নারী কীভাবে বিবাহ বিচ্ছেদ চাইতে পারেন?",
+      "directAnswer": "A Muslim woman may have more than one legal route, depending on the marriage terms and facts. These can include a delegated right in the kabinnama, an agreed separation, or a court decree under the Dissolution of Muslim Marriages Act, 1939. The correct route should be chosen from the actual documents and circumstances.",
+      "atAGlance": {
+        "whoFor": "A Muslim woman wants to understand possible legal routes to end a marriage.",
+        "legalBasis": "Dissolution of Muslim Marriages Act, 1939; Muslim Family Laws Ordinance, 1961; Family Courts Act, 2023; marriage registration law.",
+        "mainRule": "The 1939 Act lists statutory grounds for a court dissolution. Do not turn the list into a guarantee that one fact automatically wins a case.",
+        "updateStatus": "Review against the current consolidated family laws before publication."
+      },
+      "lawMeaning": "The 1939 Act lists statutory grounds for a court dissolution. Do not turn the list into a guarantee that one fact automatically wins a case. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Get a copy of the kabinnama.",
+        "Check whether delegated divorce rights are recorded.",
+        "Write down the facts and timeline.",
+        "Save evidence of maintenance, absence, cruelty or other relevant ground.",
+        "Consider settlement if safe and lawful.",
+        "Use the correct family-court process where a decree is needed.",
+        "Deal with dower, maintenance and child matters separately."
+      ],
+      "evidence": [
+        "Kabinnama; identity documents; messages; maintenance/payment proof; medical/police documents where relevant; witness information."
+      ],
+      "simpleExample": "A woman has not received maintenance and her husband has been absent. She should not rely on a social-media checklist. Her documents and the statutory grounds should be reviewed to choose the proper route.",
+      "commonMistakes": [
+        "Common mistakes: Using the wrong divorce form.",
+        "Common mistakes: surrendering dower rights without understanding.",
+        "Common mistakes: deleting evidence.",
+        "Common mistakes: confusing a family settlement with a completed legal dissolution.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the husband agrees?",
+          "answer": "Record the lawful process properly."
+        },
+        {
+          "question": "What if he refuses?",
+          "answer": "Court dissolution may still be available if a legal ground is proved."
+        },
+        {
+          "question": "What if there is violence?",
+          "answer": "Safety and protection come first."
+        }
+      ],
+      "specialistTrigger": "Violence; child safety; large dower; foreign spouse; contested facts; missing marriage record.",
+      "faqs": [
+        {
+          "question": "Can a Muslim woman divorce?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is delegated talaq?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is the Dissolution of Muslim Marriages Act?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need a family court?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What happens to dower?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "5d84becc7805aeaebd224edac12780a13341230ed20c712a95522b3564e59c03"
+    "en": "5d84becc7805aeaebd224edac12780a13341230ed20c712a95522b3564e59c03",
+    "bn": "c6a442df3709dc65343cb5ec22507a3ac59dfbe9a6707bc9f410de49e370f6ad"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

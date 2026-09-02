@@ -113,14 +113,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "বেতন না দিলে কী করবেন?",
+      "directAnswer": "Keep proof of employment, attendance, agreed salary and earlier payments. Ask the employer or HR in writing for the unpaid amount and a payment date. If the issue is not resolved, the correct labour authority or court route depends on whether the Labour Act applies to you and the type of claim.",
+      "atAGlance": {
+        "whoFor": "A worker has unpaid wages or salary.",
+        "legalBasis": "Bangladesh Labour Act, 2006 as amended in 2026; other contract/civil law where applicable.",
+        "mainRule": "Worker classification matters. Do not promise that every salaried office employee has the same Labour Act remedy.",
+        "updateStatus": "Add the exact forum and limitation only after a labour-law reviewer checks the user category."
+      },
+      "lawMeaning": "Worker classification matters. Do not promise that every salaried office employee has the same Labour Act remedy. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Calculate the unpaid period.",
+        "Save appointment letter.",
+        "Save attendance/work proof.",
+        "Save payslips and bank statements.",
+        "Send a factual written demand.",
+        "Keep HR reply.",
+        "Use the correct statutory claim route if unpaid."
+      ],
+      "evidence": [
+        "Appointment letter; attendance; payslips; bank records; HR messages; resignation/termination record."
+      ],
+      "simpleExample": "A worker says three months are unpaid. A clean table showing month, agreed salary, paid amount and balance is stronger than a vague complaint.",
+      "commonMistakes": [
+        "Common mistakes: Quitting and deleting email immediately.",
+        "Common mistakes: threatening the employer.",
+        "Common mistakes: guessing the amount.",
+        "Common mistakes: using the wrong forum.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the company has closed?",
+          "answer": "Get advice quickly about claims and insolvency issues."
+        },
+        {
+          "question": "What if part of salary was paid cash?",
+          "answer": "Record what can be proved."
+        },
+        {
+          "question": "What if you resigned?",
+          "answer": "Unpaid earned amounts may still need to be addressed."
+        }
+      ],
+      "specialistTrigger": "Large arrears; company closure; retaliation; disputed worker status; foreign employer.",
+      "faqs": [
+        {
+          "question": "What evidence proves unpaid salary?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I complain to HR first?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does the Labour Act apply to me?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I claim after resignation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Where do I file a wage claim?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "2f6380c134b18de0716b232bca30a667b79a4078727b07b53295ffdbe8085e98"
+    "en": "2f6380c134b18de0716b232bca30a667b79a4078727b07b53295ffdbe8085e98",
+    "bn": "338f31276c81d86c135b9f13578858388c97ee41b087cee47af7fe57fc90b65f"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

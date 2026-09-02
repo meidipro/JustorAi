@@ -138,14 +138,92 @@
         }
       ],
       "disclaimer": "This page provides general legal and safety information. It does not guarantee that an account or payment can be recovered.  ---"
+    },
+    "bn": {
+      "title": "ফিশিং লিংক, ভুয়া লগইন পেজ বা নকল ওয়েবসাইট পেলে কী করবেন?",
+      "directAnswer": "If you entered a password, card number, PIN, OTP or other sensitive information on a suspicious website, treat that information as exposed. Use the real service's official website or app to change your password and secure the account. Contact the bank or payment provider if financial information was entered. Save the fake URL, message, screenshot and sender information. Do not reopen the link just to collect more evidence.",
+      "atAGlance": {
+        "whoFor": "A citizen clicked a suspicious link or entered information on a fake site.",
+        "legalBasis": "Phishing is a trick that tries to make a person reveal information or install harmful software by pretending to be a trusted organisation or person. The fake message may copy a bank, courier, job site, government portal, social platform or payment service. Bangladesh's Cyber Security Act, 2026 does not need to use the everyday word “phishing” for the conduct to be legally relevant. Depending on what happens, sections on unauthorised access, cyber forgery and cyber fraud may apply. BGD e-GOV CIRT has also published national warnings about phishing campaigns and cyber threats. Its official site provides an incident-reporting route for cyber incidents.",
+        "mainRule": "If you entered a password, card number, PIN, OTP or other sensitive information on a suspicious website, treat that information as exposed. Use the real service's official website or app to change your password and secure the account. Contact the bank or payment provider if financial information was entered. Save the fake URL, message, screenshot and sender information. Do not reopen the link just to collect more evidence.",
+        "updateStatus": "15 August 2026: Re-verified the current Cyber Security Act and official CIRT incident source."
+      },
+      "lawMeaning": "Phishing is a trick that tries to make a person reveal information or install harmful software by pretending to be a trusted organisation or person. The fake message may copy a bank, courier, job site, government portal, social platform or payment service. Bangladesh's Cyber Security Act, 2026 does not need to use the everyday word “phishing” for the conduct to be legally relevant. Depending on what happens, sections on unauthorised access, cyber forgery and cyber fraud may apply. BGD e-GOV CIRT has also published national warnings about phishing campaigns and cyber threats. Its official site provides an incident-reporting route for cyber incidents.",
+      "steps": [
+        "Step-by-step after clicking: Stop entering information.",
+        "Step-by-step after clicking: Close the page.",
+        "Step-by-step after clicking: Use a clean browser or device if you suspect malware.",
+        "Step-by-step after clicking: Open the real service by typing its official address yourself.",
+        "Step-by-step after clicking: Change the exposed password.",
+        "Step-by-step after clicking: Turn on two-factor authentication where available.",
+        "Step-by-step after clicking: Check account recovery email and phone numbers.",
+        "Step-by-step after clicking: Review recent logins and transactions.",
+        "Step-by-step after clicking: Contact your bank/MFS provider if financial information was exposed.",
+        "Step-by-step after clicking: Save the original message and URL without revisiting the page.",
+        "Step-by-step after clicking: Report serious incidents through the appropriate platform, provider, police or cyber incident channel."
+      ],
+      "evidence": [],
+      "simpleExample": "A text message says, “Your parcel is blocked. Pay ৳30 now,” and links to a page that looks like a courier website. The page asks for card details and an OTP. The user should close the page and contact the courier using its real website. If card data was entered, the bank should be contacted immediately.",
+      "commonMistakes": [
+        "Warning signs: A spelling error in the domain name.",
+        "Warning signs: A shortened or strange link.",
+        "Warning signs: “Your account will be closed in 10 minutes.”",
+        "Warning signs: A login page opened from an unexpected SMS.",
+        "Warning signs: A job or prize that asks for card or banking credentials.",
+        "Warning signs: A government page hosted on an unrelated domain.",
+        "Warning signs: A request to install an unknown APK or browser extension."
+      ],
+      "whatIf": [
+        {
+          "question": "I clicked but entered nothing. Risk is lower, but still watch for downloads, permission requests and unusual account activity.",
+          "answer": ""
+        },
+        {
+          "question": "I entered only my email. Be alert for follow-up phishing and account-reset attempts.",
+          "answer": ""
+        },
+        {
+          "question": "I entered my password. Change it immediately on the real service and anywhere else you reused it.",
+          "answer": ""
+        },
+        {
+          "question": "I downloaded an app. Remove suspicious software, review permissions and consider technical support if the device behaves strangely.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "Financial loss; business email compromise; stolen confidential data; repeated identity theft; malware affecting a company; or a dispute with a service provider about responsibility.",
+      "faqs": [
+        {
+          "question": "Is every suspicious link a crime?",
+          "answer": "No. The legal issue depends on the sender's conduct and intent. Do not label a person a criminal without evidence."
+        },
+        {
+          "question": "Can I report a cyber incident to CIRT?",
+          "answer": "BGD e-GOV CIRT's official site provides a “Report Incident” function and current contact information for cyber incidents."
+        },
+        {
+          "question": "Should I send the link to friends to ask whether it is fake?",
+          "answer": "Do not spread a suspicious link. Send a screenshot instead where possible."
+        },
+        {
+          "question": "Does HTTPS mean a website is safe?",
+          "answer": "No. HTTPS only shows that the connection is encrypted. A scam site can also use HTTPS."
+        },
+        {
+          "question": "What is the best evidence?",
+          "answer": "The original message, sender, URL, screenshot, time, transaction information and any account-security alert."
+        }
+      ],
+      "disclaimer": "This page provides general legal and safety information. It does not guarantee that an account or payment can be recovered.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "75e0db2e45fb65130b43d49afed68449aefad0bcbd6a080b2980608488d672aa"
+    "en": "75e0db2e45fb65130b43d49afed68449aefad0bcbd6a080b2980608488d672aa",
+    "bn": "67d4f97f14407f2964df7edc6554fae55f74f0ba0d2f58a15874a231d674a177"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

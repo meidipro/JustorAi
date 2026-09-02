@@ -120,14 +120,84 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "ভোক্তা অধিকার অভিযোগ কীভাবে করবেন?",
+      "directAnswer": "Use the official DNCRP complaint channel and keep proof of the purchase or service. DNCRP currently publishes hotline 16121 and complaint information. The exact filing deadline and required evidence should be re-checked from the official site before every update.",
+      "atAGlance": {
+        "whoFor": "A citizen wants the official consumer complaint steps.",
+        "legalBasis": "Consumers’ Right Protection Act, 2009; DNCRP official complaint process.",
+        "mainRule": "DNCRP’s official guidance asks for a written complaint and relevant purchase receipt/evidence.",
+        "updateStatus": "DYNAMIC PROCEDURE: verify hotline, portal, deadline and evidence rules on the publication date."
+      },
+      "lawMeaning": "DNCRP’s official guidance asks for a written complaint and relevant purchase receipt/evidence. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the business and transaction.",
+        "Write a short factual complaint.",
+        "Attach receipt/invoice and supporting evidence.",
+        "Use the official complaint system.",
+        "Save submission/reference number.",
+        "Answer follow-up requests.",
+        "Attend any required hearing/process."
+      ],
+      "evidence": [
+        "Receipt; invoice; payment proof; product/service evidence; ad; chats; seller details."
+      ],
+      "simpleExample": "A buyer writes: what was purchased, date, price, problem, seller response and requested remedy. A short factual complaint is more useful than an emotional story with no receipt.",
+      "commonMistakes": [
+        "Common mistakes: Missing receipt.",
+        "Common mistakes: filing against the wrong business.",
+        "Common mistakes: exaggerating facts.",
+        "Common mistakes: missing deadline.",
+        "Common mistakes: using unofficial social-media inbox as the only complaint.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if there is no receipt?",
+          "answer": "Check whether other evidence is accepted."
+        },
+        {
+          "question": "What if the seller is online?",
+          "answer": "Provide page/account and payment details."
+        },
+        {
+          "question": "What if the complaint is rejected?",
+          "answer": "Ask for the reason and other lawful routes."
+        }
+      ],
+      "specialistTrigger": "Injury; criminal fraud; very high-value loss; cross-border seller; limitation issue.",
+      "faqs": [
+        {
+          "question": "How do I file a DNCRP complaint?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is hotline 16121?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need a receipt?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is there a time limit?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I complain about an online shop?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "3ace8f137db57554f78aca212cf88e3b3beb4a70471608086217589e31f412e5"
+    "en": "3ace8f137db57554f78aca212cf88e3b3beb4a70471608086217589e31f412e5",
+    "bn": "1ee7cbb3140aa77e0b1357870fe817f7000f3e2a799e2c0526ac225e9205b39a"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

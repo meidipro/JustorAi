@@ -1,39 +1,70 @@
 {
   "id": 58,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "cyber",
+  "route": "cyber/unknown-sim-sim-swap",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
-    "description": "Bangladesh citizen legal guide on Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud.",
-    "searchIntent": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud"
+    "title": "Unknown SIM on Your NID or SIM-Swap Fraud: What to Do",
+    "description": "Found an unknown mobile number under your NID, or your SIM suddenly stopped working? Learn the BTRC checks and first fraud-response steps.",
+    "searchIntent": "A citizen suspects an unauthorised SIM registration or SIM takeover."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR CRIMINAL-LAW CLAIMS"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "BTRC National Equipment Identity Register (NEIR)",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://neir.btrc.gov.bd/"
+    },
+    {
+      "label": "BTRC Complaint Box",
+      "type": "official",
+      "url": "https://crm.btrc.gov.bd/"
+    },
+    {
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Section 18",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57959.html"
+    },
+    {
+      "label": "Personal Data Protection Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-details-1692.html"
     }
   ],
-  "updateHistory": [
-    "Verified and structured on 15 August 2026"
+  "updateHistory": [],
+  "relatedPages": [
+    {
+      "label": "OTP, PIN and MFS Scam",
+      "route": "/action-guides/cyber/otp-pin-mfs-scam"
+    },
+    {
+      "label": "Social Media Account Hacked",
+      "route": "/action-guides/cyber/social-media-account-hacked"
+    },
+    {
+      "label": "Personal Data or NID Information Was Leaked",
+      "route": "/action-guides/cyber/personal-data-nid-leak"
+    }
   ],
-  "relatedPages": [],
   "content": {
     "en": {
       "title": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
-      "directAnswer": "If you suspect a SIM was registered under your NID without permission, check the numbers linked to your NID through BTRC's official NEIR service. As of 15 August 2026, NEIR says you can dial **\\*16001#** from a mobile number registered with your NID and enter the last four digits of your NID to receive the list of registered numbers. If an unknown number appears, contact the mobile operator and use BTRC's complaint process if needed. If your active SIM suddenly loses service and your bank or social accounts show unusual activity, act quickly because the phone number may be linked to account recovery or OTPs.",
+      "directAnswer": "If you suspect a SIM was registered under your NID without permission, check the numbers linked to your NID through BTRC's official NEIR service. As of 15 August 2026, NEIR says you can dial \\16001# from a mobile number registered with your NID and enter the last four digits of your NID to receive the list of registered numbers. If an unknown number appears, contact the mobile operator and use BTRC's complaint process if needed. If your active SIM suddenly loses service and your bank or social accounts show unusual activity, act quickly because the phone number may be linked to account recovery or OTPs.",
       "atAGlance": {
-        "whoFor": "Citizens in Bangladesh",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "If you suspect a SIM was registered under your NID without permission, check the numbers linked to your NID through BTRC",
-        "updateStatus": "Current Bangladesh law"
+        "whoFor": "A citizen suspects an unauthorised SIM registration or SIM takeover.",
+        "legalBasis": "A phone number can be connected to banking, MFS, email and social-media recovery. If someone gains control of the number, they may try password resets or transaction verification. That does not prove a SIM-swap crime occurred, but it is a serious warning sign.",
+        "mainRule": "If you suspect a SIM was registered under your NID without permission, check the numbers linked to your NID through BTRC's official NEIR service. As of 15 August 2026, NEIR says you can dial \\16001# from a mobile number registered with your NID and enter the last four digits of your NID to receive the list of registered numbers. If an unknown number appears, contact the mobile operator and use BTRC's complaint process if needed. If your active SIM suddenly loses service and your bank or social accounts show unusual activity, act quickly because the phone number may be linked to account recovery or OTPs.",
+        "updateStatus": ""
       },
-      "lawMeaning": "",
+      "lawMeaning": "A phone number can be connected to banking, MFS, email and social-media recovery. If someone gains control of the number, they may try password resets or transaction verification. That does not prove a SIM-swap crime occurred, but it is a serious warning sign.",
       "steps": [
         "If your SIM stops working unexpectedly, restart the phone once and check network status.",
         "Contact the mobile operator using an official channel.",
@@ -46,32 +77,67 @@
         "Use BTRC's complaint box if an operator issue remains unresolved or regulatory escalation is appropriate.",
         "Preserve evidence for police reporting if fraud or identity misuse is suspected."
       ],
-      "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
-      ],
+      "evidence": [],
       "simpleExample": "A user suddenly loses mobile network service. Within an hour, the user receives email alerts that a social-media password was reset. The user should contact the mobile operator immediately, secure the email and social account, check NID-linked SIMs, and preserve all alerts.",
       "commonMistakes": [
-        "Missing statutory limitation deadlines.",
-        "Failing to retain written acknowledgments."
+        "Official BTRC check: Dial \\16001# from a number registered with your NID.",
+        "Official BTRC check: Enter the last four digits of your NID when asked.",
+        "Official BTRC check: You will receive an SMS listing mobile numbers registered under the NID."
       ],
-      "whatIf": [],
-      "specialistTrigger": "Speak to a licensed Advocate if substantial property rights, financial compensation, or criminal allegations are involved.",
-      "faqs": [],
-      "disclaimer": "This page provides general information. Telecom procedures and service codes can change; verify them on BTRC's official portal.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "whatIf": [
+        {
+          "question": "An old family SIM appears under my NID. Ask the operator how ownership records should be corrected.",
+          "answer": ""
+        },
+        {
+          "question": "My SIM works, but an unknown number appears. Report the unknown number to the operator and keep the complaint record.",
+          "answer": ""
+        },
+        {
+          "question": "Money also left my bank account. Contact the financial provider immediately and follow the financial-fraud steps.",
+          "answer": ""
+        },
+        {
+          "question": "BTRC's code changes later. Justor must update this page from NEIR before publication.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "",
+      "faqs": [
+        {
+          "question": "How can I see numbers registered under my NID?",
+          "answer": "BTRC's NEIR currently provides the \\16001# check described above."
+        },
+        {
+          "question": "Where can I complain to BTRC?",
+          "answer": "BTRC operates an official online complaint box at its CRM portal."
+        },
+        {
+          "question": "Does an unknown number prove identity theft?",
+          "answer": "No. It is a warning that should be investigated through the operator and official records."
+        },
+        {
+          "question": "Should I change my bank password if my SIM is swapped?",
+          "answer": "If the phone number is linked to account recovery or OTP, secure financial and email accounts immediately."
+        },
+        {
+          "question": "Can I check my handset IMEI too?",
+          "answer": "Yes. BTRC's NEIR portal also provides official handset/IMEI verification tools."
+        }
+      ],
+      "disclaimer": "This page provides general information. Telecom procedures and service codes can change; verify them on BTRC's official portal.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "ca9f01e6b993dbe2"
+    "en": "b4472f0b22dbc4dd1cfc83b052f90e42b0a762615fa60d24fe1ec903abbf8854"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

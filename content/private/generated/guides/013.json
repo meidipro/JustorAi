@@ -115,14 +115,84 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মুসলিম বিবাহ নিবন্ধন কীভাবে করবেন?",
+      "directAnswer": "A Muslim marriage should be properly recorded through the lawful Nikah Registrar system. Keep the kabinnama and any certified copy safely. Registration creates an official record and helps prove important terms such as the parties, date and dower.",
+      "atAGlance": {
+        "whoFor": "A Muslim couple wants to understand marriage registration and documents.",
+        "legalBasis": "Muslim Marriages and Divorces (Registration) Act, 1974; Muslim Family Laws Ordinance, 1961.",
+        "mainRule": "The registration law gives Nikah Registrars duties relating to registration of Muslim marriages and divorces.",
+        "updateStatus": "Check any current registrar forms, fees and digital services before publication."
+      },
+      "lawMeaning": "The registration law gives Nikah Registrars duties relating to registration of Muslim marriages and divorces. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Use an authorised Nikah Registrar.",
+        "Check both parties’ names, age and identity details.",
+        "Record dower clearly.",
+        "Read all terms before signing.",
+        "Complete the required registration entries.",
+        "Collect and keep the kabinnama/certified copy.",
+        "Correct errors through the proper process."
+      ],
+      "evidence": [
+        "NID/birth records as required; photographs if required; witness details; kabinnama; registrar receipt/copy."
+      ],
+      "simpleExample": "A couple notices the bride’s name is misspelled on the kabinnama. They should use the proper correction process instead of relying on an informal handwritten change.",
+      "commonMistakes": [
+        "Common mistakes: Signing blank fields.",
+        "Common mistakes: not reading dower terms.",
+        "Common mistakes: losing the kabinnama.",
+        "Common mistakes: using an unauthorised person.",
+        "Common mistakes: wrong age or identity information.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the kabinnama is lost?",
+          "answer": "Ask about an official copy."
+        },
+        {
+          "question": "What if the marriage was never registered?",
+          "answer": "Get legal advice on the correct registration/evidence route."
+        },
+        {
+          "question": "What if information is wrong?",
+          "answer": "Use the official correction procedure."
+        }
+      ],
+      "specialistTrigger": "Age/child-marriage issue; forced marriage; disputed marriage; foreign documents; identity mismatch.",
+      "faqs": [
+        {
+          "question": "Why is marriage registration important?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who can register a Muslim marriage?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is a kabinnama?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if I lose it?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can wrong information be corrected?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "48de2f538d9e1b4654b961ab51457ee351e19f067b8feb068a814664d3843377"
+    "en": "48de2f538d9e1b4654b961ab51457ee351e19f067b8feb068a814664d3843377",
+    "bn": "1160a7221c0e261d8a97206a22b0bbecedb2bb60db77aefbd2df73b1883718c6"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

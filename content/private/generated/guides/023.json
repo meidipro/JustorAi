@@ -124,14 +124,84 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "ফ্রিল্যান্সার ও রিমোট ওয়ার্কারদের আয়কর",
+      "directAnswer": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and source of income, current exemptions or concessions, and the taxpayer’s full facts. Keep bank, remittance, platform and contract records and check the current NBR rules before filing.",
+      "atAGlance": {
+        "whoFor": "A freelancer earning locally or from abroad wants to understand tax duties.",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; current NBR SROs and circulars.",
+        "mainRule": "Never make a blanket statement that “foreign remittance” or “freelance income” is exempt without identifying the exact current provision.",
+        "updateStatus": "YEARLY UPDATE. Review any 2026 freelancer/IT service SRO before publication."
+      },
+      "lawMeaning": "Never make a blanket statement that “foreign remittance” or “freelance income” is exempt without identifying the exact current provision. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the service you provide.",
+        "Record where the customer and work relationship are located.",
+        "Keep invoices/contracts.",
+        "Keep bank/remittance records.",
+        "Check tax residence.",
+        "Check any current exemption/SRO.",
+        "Calculate total annual income.",
+        "File the required return."
+      ],
+      "evidence": [
+        "Contracts; invoices; Upwork/Fiverr or platform statements; bank credit advice; remittance proof; expense records; TIN."
+      ],
+      "simpleExample": "A designer receives dollars from overseas clients. The bank describes the payment as remittance. That label alone should not be used to conclude the income is tax-free.",
+      "commonMistakes": [
+        "Common mistakes: No records.",
+        "Common mistakes: mixing business and personal payments.",
+        "Common mistakes: relying on Facebook tax advice.",
+        "Common mistakes: claiming an exemption without reading the SRO.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if all clients are abroad?",
+          "answer": "Residence and source rules still matter."
+        },
+        {
+          "question": "What if income is irregular?",
+          "answer": "Use annual records."
+        },
+        {
+          "question": "What if a platform deducts tax?",
+          "answer": "Keep proof."
+        }
+      ],
+      "specialistTrigger": "High income; company structure; VAT issues; foreign bank account; disputed exemption; double-tax issue.",
+      "faqs": [
+        {
+          "question": "Do freelancers pay tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is foreign remittance tax free?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What records should a freelancer keep?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I file e-Return?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "82b8ef9ed356a4afb17015dd847d5e02595373c856b7f740f589622d159a3db6"
+    "en": "82b8ef9ed356a4afb17015dd847d5e02595373c856b7f740f589622d159a3db6",
+    "bn": "dc84f7b23952612d09a4d57de4d6ce7e9c01fd1a1d5d7c4877430bec24b79cdd"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

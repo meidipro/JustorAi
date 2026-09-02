@@ -1,39 +1,71 @@
 {
   "id": 10,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "property",
+  "route": "property/land-dispute-first-steps",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "What Should You Do First in a Land Dispute?",
-    "description": "Bangladesh citizen legal guide on What Should You Do First in a Land Dispute?.",
-    "searchIntent": "What Should You Do First in a Land Dispute?"
+    "title": "What Should You Do First in a Land Dispute? | Justor",
+    "description": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession, boundary, inheritance, fraud,...",
+    "searchIntent": "A citizen has a land conflict and needs safe first steps."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Land Crime Prevention and Remedy Act, 2023",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1454.html"
+    },
+    {
+      "label": "Ministry of Land",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://land.gov.bd/"
+    },
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
+    },
+    {
+      "label": "The State Acquisition and Tenancy Act, 1950",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-241.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Do not publish a one-size-fits-all “file this case” instruction."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
   "content": {
     "en": {
       "title": "What Should You Do First in a Land Dispute?",
       "directAnswer": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession, boundary, inheritance, fraud, a forged deed, mortgage or a government record. Do not use force. Collect documents, make a timeline and get the correct legal route for the facts.",
       "atAGlance": {
         "whoFor": "A citizen has a land conflict and needs safe first steps.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession,",
+        "legalBasis": "Land Crime Prevention and Remedy Act, 2023; applicable civil, criminal and land laws.",
+        "mainRule": "The 2023 land-crime law contains offences relating to land fraud. A dispute can still be civil, criminal, administrative or a mix, so do not label every land disagreement as a crime.",
         "updateStatus": "Do not publish a one-size-fits-all “file this case” instruction."
       },
-      "lawMeaning": "The 2023 land-crime law contains offences relating to land fraud. A dispute can still be civil, criminal, administrative or a mix, so do not label every land disagreement as a crime.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "The 2023 land-crime law contains offences relating to land fraud. A dispute can still be civil, criminal, administrative or a mix, so do not label every land disagreement as a crime. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Stay safe and avoid confrontation.",
         "Photograph current possession and boundaries where safe.",
@@ -45,26 +77,130 @@
         "Get legal advice before filing the wrong case."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Deeds; khatians; maps; mutation; tax receipts; photos; notices; messages; witness list; court papers if any."
       ],
       "simpleExample": "A neighbour moves a boundary marker. Before fighting, the owner saves photos, gets the relevant map and records, and seeks the correct survey/legal remedy.",
       "commonMistakes": [
-        "Using violence.",
-        "destroying the other side’s property.",
-        "filing a criminal complaint only to pressure a civil opponent.",
-        "losing original documents.",
-        "posting accusations online.."
+        "Common mistakes: Using violence.",
+        "Common mistakes: destroying the other side’s property.",
+        "Common mistakes: filing a criminal complaint only to pressure a civil opponent.",
+        "Common mistakes: losing original documents.",
+        "Common mistakes: posting accusations online.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if someone forged a deed?",
+          "answer": "Preserve the document and get legal help quickly."
+        },
+        {
+          "question": "What if you are threatened?",
+          "answer": "Safety and police reporting may be necessary."
+        },
+        {
+          "question": "What if a case is already in court?",
+          "answer": "Follow the court process, not GRS."
+        }
+      ],
       "specialistTrigger": "Threats or violence; forged deed; dispossession; injunction needed; court case; large-value property; unclear title.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What evidence should I collect in a land dispute?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I do a GD?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if someone forges a land document?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I change the boundary myself?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When do I need a lawyer?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "জমি বিরোধ হলে প্রথমে কী করবেন?",
+      "directAnswer": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession, boundary, inheritance, fraud, a forged deed, mortgage or a government record. Do not use force. Collect documents, make a timeline and get the correct legal route for the facts.",
+      "atAGlance": {
+        "whoFor": "A citizen has a land conflict and needs safe first steps.",
+        "legalBasis": "Land Crime Prevention and Remedy Act, 2023; applicable civil, criminal and land laws.",
+        "mainRule": "The 2023 land-crime law contains offences relating to land fraud. A dispute can still be civil, criminal, administrative or a mix, so do not label every land disagreement as a crime.",
+        "updateStatus": "Do not publish a one-size-fits-all “file this case” instruction."
+      },
+      "lawMeaning": "The 2023 land-crime law contains offences relating to land fraud. A dispute can still be civil, criminal, administrative or a mix, so do not label every land disagreement as a crime. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Stay safe and avoid confrontation.",
+        "Photograph current possession and boundaries where safe.",
+        "Collect deeds, khatians, maps and mutation papers.",
+        "Save tax receipts and payment records.",
+        "Write a dated timeline.",
+        "Identify witnesses.",
+        "Check whether forged documents or threats are involved.",
+        "Get legal advice before filing the wrong case."
+      ],
+      "evidence": [
+        "Deeds; khatians; maps; mutation; tax receipts; photos; notices; messages; witness list; court papers if any."
+      ],
+      "simpleExample": "A neighbour moves a boundary marker. Before fighting, the owner saves photos, gets the relevant map and records, and seeks the correct survey/legal remedy.",
+      "commonMistakes": [
+        "Common mistakes: Using violence.",
+        "Common mistakes: destroying the other side’s property.",
+        "Common mistakes: filing a criminal complaint only to pressure a civil opponent.",
+        "Common mistakes: losing original documents.",
+        "Common mistakes: posting accusations online.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if someone forged a deed?",
+          "answer": "Preserve the document and get legal help quickly."
+        },
+        {
+          "question": "What if you are threatened?",
+          "answer": "Safety and police reporting may be necessary."
+        },
+        {
+          "question": "What if a case is already in court?",
+          "answer": "Follow the court process, not GRS."
+        }
+      ],
+      "specialistTrigger": "Threats or violence; forged deed; dispossession; injunction needed; court case; large-value property; unclear title.",
+      "faqs": [
+        {
+          "question": "What evidence should I collect in a land dispute?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I do a GD?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if someone forges a land document?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I change the boundary myself?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When do I need a lawyer?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "d691945a29e0af44"
+    "en": "75426ad61500767fd387429aa1011ab789e78144d705ea7459faa809a35f4013",
+    "bn": "6baeb2416d852336f4d9530180948bac6729dc78711bf1c1e3eaf483d9bcecd6"
   },
   "releaseStatus": {
     "en": "published",
@@ -73,6 +209,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

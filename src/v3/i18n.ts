@@ -220,6 +220,7 @@ export const copy = {
     loginBrandHeading: 'Continue with authority beside the answer.',
     loginBrandBody: 'Your research is encrypted and stored securely. You control what you share.',
     loginHeading: 'Sign in to Justor',
+    loginBody: 'Your research is encrypted and stored securely. You control what you share.',
     returnPublic: 'Return to public website',
     profile: 'User Profile',
     profileHeading: 'Account & Legal Research Settings',

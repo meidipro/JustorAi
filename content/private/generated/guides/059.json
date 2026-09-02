@@ -135,14 +135,87 @@
         }
       ],
       "disclaimer": "This page provides general information. A failed online sale is not automatically criminal fraud; the facts and evidence must be checked.  ---"
+    },
+    "bn": {
+      "title": "Facebook Marketplace, online seller বা advance payment scam হলে কী করবেন?",
+      "directAnswer": "Save the listing, seller profile, messages, payment proof, phone number, delivery promise and transaction ID. First identify what happened: a normal delivery dispute, defective product, misleading sale, or deliberate fraud. If it is a consumer dispute with a business, DNCRP may be relevant. If a person used cyberspace to deceive you for money, section 22 of the Cyber Security Act, 2026 and general cheating law may be relevant depending on the facts. Contact the payment provider quickly if the transfer may be fraudulent.",
+      "atAGlance": {
+        "whoFor": "A buyer or seller lost money in an online marketplace transaction.",
+        "legalBasis": "Late delivery: may be a service/consumer issue. Wrong product: may be a consumer issue. Seller disappears after taking money: may indicate fraud, but facts still need investigation. Fake payment screenshot sent to a seller: may involve cyber forgery or fraud. Account takeover: may involve hacking as well.",
+        "mainRule": "Save the listing, seller profile, messages, payment proof, phone number, delivery promise and transaction ID. First identify what happened: a normal delivery dispute, defective product, misleading sale, or deliberate fraud. If it is a consumer dispute with a business, DNCRP may be relevant. If a person used cyberspace to deceive you for money, section 22 of the Cyber Security Act, 2026 and general cheating law may be relevant depending on the facts. Contact the payment provider quickly if the transfer may be fraudulent.",
+        "updateStatus": ""
+      },
+      "lawMeaning": "Late delivery: may be a service/consumer issue. Wrong product: may be a consumer issue. Seller disappears after taking money: may indicate fraud, but facts still need investigation. Fake payment screenshot sent to a seller: may involve cyber forgery or fraud. Account takeover: may involve hacking as well.",
+      "steps": [
+        "Step-by-step for buyers: Save the listing before it is deleted.",
+        "Step-by-step for buyers: Save seller profile URL and phone number.",
+        "Step-by-step for buyers: Save the full chat.",
+        "Step-by-step for buyers: Save payment and transaction details.",
+        "Step-by-step for buyers: Save the promised product and delivery terms.",
+        "Step-by-step for buyers: Contact the seller once through the recorded channel.",
+        "Step-by-step for buyers: Contact the bank/MFS provider if fraud is suspected.",
+        "Step-by-step for buyers: If dealing with a business, check the DNCRP complaint route and receipt requirement.",
+        "Step-by-step for buyers: If deliberate fraud appears likely, preserve evidence for police reporting.",
+        "Step-by-step for sellers targeted by fake buyers: Do not rely on a screenshot of a payment.",
+        "Step-by-step for sellers targeted by fake buyers: Check your real bank/MFS balance or official transaction history.",
+        "Step-by-step for sellers targeted by fake buyers: Do not send a product based only on a message saying “payment successful.”",
+        "Step-by-step for sellers targeted by fake buyers: Save any fake receipt or payment confirmation.",
+        "Step-by-step for sellers targeted by fake buyers: Report fraudulent platform accounts where appropriate."
+      ],
+      "evidence": [],
+      "simpleExample": "A seller advertises a phone on Facebook. A buyer sends a fake MFS payment screenshot and asks the seller to hand the phone to a courier. The seller should verify the actual account balance before release. If the screenshot was falsified to deceive the seller, cyber-forgery and fraud issues may arise.",
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "The seller is a Facebook page, not a registered company. Consumer-law applicability and enforcement can depend on the facts. Preserve all business identity information.",
+          "answer": ""
+        },
+        {
+          "question": "I paid to a personal MFS number. Preserve the number and transaction ID.",
+          "answer": ""
+        },
+        {
+          "question": "I received the wrong product. Review the consumer complaint guide before calling it fraud.",
+          "answer": ""
+        },
+        {
+          "question": "The platform removed the seller account. Keep the saved URL, screenshots and payment records.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "",
+      "faqs": [
+        {
+          "question": "Can I complain to DNCRP?",
+          "answer": "Potentially, if the matter falls within consumer-protection jurisdiction. DNCRP requires supporting evidence such as purchase receipts in its complaint process."
+        },
+        {
+          "question": "Is advance payment illegal?",
+          "answer": "No. The issue is whether there was deception, non-performance, breach or another unlawful act."
+        },
+        {
+          "question": "Does section 22 cover every unpaid online purchase?",
+          "answer": "No. Section 22 concerns fraud in cyberspace. A genuine contractual dispute is not automatically criminal fraud."
+        },
+        {
+          "question": "Should I contact my MFS provider?",
+          "answer": "Yes, promptly, if you believe a transaction was induced by fraud or your account was compromised."
+        },
+        {
+          "question": "Can Justor tell me whether the seller committed a crime?",
+          "answer": "Not from a short description alone. Evidence and intent matter."
+        }
+      ],
+      "disclaimer": "This page provides general information. A failed online sale is not automatically criminal fraud; the facts and evidence must be checked.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "f0e2087099609f525142c4b102e848f606c655b37623b6a0d4d379301f74f1e4"
+    "en": "f0e2087099609f525142c4b102e848f606c655b37623b6a0d4d379301f74f1e4",
+    "bn": "78fb71a437ab876f4da9995dbc8401b4dca8f95fdd3d0c9e61d36e82c1265b4d"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

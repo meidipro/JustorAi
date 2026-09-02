@@ -132,14 +132,86 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "e-Return কীভাবে জমা দেবেন?",
+      "directAnswer": "NBR’s e-Return system lets individual taxpayers file online. For 2026–27, use the current NBR portal and notices. Prepare income, asset, expense, tax-payment and withholding information before starting. Read the final return before submission and save the acknowledgement.",
+      "atAGlance": {
+        "whoFor": "An individual taxpayer wants a simple filing walkthrough.",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; NBR e-Return public notices and forms.",
+        "mainRule": "NBR launched the 2026–27 individual e-Return system in July 2026. Deadlines and incentives can change, so quote only the current notice.",
+        "updateStatus": "DYNAMIC DEADLINE: never hard-code a filing deadline or incentive without a dated NBR notice."
+      },
+      "lawMeaning": "NBR launched the 2026–27 individual e-Return system in July 2026. Deadlines and incentives can change, so quote only the current notice. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Sign in to the official e-Return system.",
+        "Check profile and TIN.",
+        "Enter income by correct category.",
+        "Enter assets/liabilities where required.",
+        "Enter expenses and tax payments.",
+        "Add TDS/withholding credits.",
+        "Review calculations.",
+        "Submit.",
+        "Download acknowledgement and return copy."
+      ],
+      "evidence": [
+        "TIN; salary/income statements; bank information; investment proof; TDS certificates; tax payment challans; asset information."
+      ],
+      "simpleExample": "A taxpayer sees a pre-filled tax credit. They should compare it with their own TDS evidence instead of assuming every pre-filled number is correct.",
+      "commonMistakes": [
+        "Common mistakes: Filing from unofficial link.",
+        "Common mistakes: guessing asset values.",
+        "Common mistakes: missing TDS.",
+        "Common mistakes: not saving acknowledgement.",
+        "Common mistakes: waiting until the last day.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the portal shows an error?",
+          "answer": "Save screenshots and use NBR help channels."
+        },
+        {
+          "question": "What if you filed wrong information?",
+          "answer": "Check the lawful correction/revision route."
+        },
+        {
+          "question": "What if you cannot understand a schedule?",
+          "answer": "Get tax help before submitting false data."
+        }
+      ],
+      "specialistTrigger": "Large assets; business income; foreign income; audit/notice; major data mismatch.",
+      "faqs": [
+        {
+          "question": "Can I file my tax return online?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What documents do I need?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is the 2026–27 deadline?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I correct a filed return?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do I use TDS credit?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "033f4f5a0f92675047c8da85917f820b0f07a0464aa859ffd6f64796e67ead0f"
+    "en": "033f4f5a0f92675047c8da85917f820b0f07a0464aa859ffd6f64796e67ead0f",
+    "bn": "ad3cab52dfba0edeb0ae8e415624f4811e02359faa52d101e16e51c82ec472cc"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

@@ -1,39 +1,66 @@
 {
   "id": 39,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "employment",
+  "route": "employment/workplace-harassment",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "Workplace Harassment: What Evidence Should You Keep?",
-    "description": "Bangladesh citizen legal guide on Workplace Harassment: What Evidence Should You Keep?.",
-    "searchIntent": "Workplace Harassment: What Evidence Should You Keep?"
+    "title": "Workplace Harassment: What Evidence Should You Keep? | Justor",
+    "description": "If workplace conduct is harming or threatening you, protect your safety first. Keep a private factual record of dates, messages, emails, witnesses and...",
+    "searchIntent": "A worker is experiencing harassment and needs safe evidence steps."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
-      "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "label": "Bangladesh Labour Act, 2006",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-952.html"
+    },
+    {
+      "label": "Bangladesh Labour (Amendment) Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1672.html"
+    },
+    {
+      "label": "The Penal Code, 1860",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Add topic-specific legal provisions only after legal review; keep the general page evidence-first."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Read an Appointment Letter and Employment Contract",
+      "route": "/guides/employment/employment-contract"
+    },
+    {
+      "label": "Your Employer Has Not Paid Your Salary",
+      "route": "/action-guides/employment/unpaid-salary"
+    },
+    {
+      "label": "Termination and Dismissal Explained Simply",
+      "route": "/guides/employment/termination-dismissal"
+    },
+    {
+      "label": "Leave, Maternity and Basic Workplace Rights",
+      "route": "/guides/employment/leave-maternity-rights"
+    }
+  ],
   "content": {
     "en": {
       "title": "Workplace Harassment: What Evidence Should You Keep?",
       "directAnswer": "If workplace conduct is harming or threatening you, protect your safety first. Keep a private factual record of dates, messages, emails, witnesses and reports made to HR or management. The correct legal route depends on the conduct. Some cases may involve labour law, workplace policy, civil rights or criminal offences.",
       "atAGlance": {
         "whoFor": "A worker is experiencing harassment and needs safe evidence steps.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "If workplace conduct is harming or threatening you, protect your safety first. Keep a private factual record of dates, m",
+        "legalBasis": "Bangladesh Labour Act where applicable; Penal Code and other laws depending on conduct; workplace rules.",
+        "mainRule": "This page should focus on evidence and safe reporting, not make a legal finding from one short description.",
         "updateStatus": "Add topic-specific legal provisions only after legal review; keep the general page evidence-first."
       },
-      "lawMeaning": "This page should focus on evidence and safe reporting, not make a legal finding from one short description.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "This page should focus on evidence and safe reporting, not make a legal finding from one short description. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Save messages and emails lawfully.",
         "Write a dated incident log.",
@@ -44,25 +71,127 @@
         "Use police/legal help if there are threats, assault or other offences."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Messages; email; incident log; witness list; HR complaint; medical record; employment documents."
       ],
       "simpleExample": "An employee reports repeated threatening messages from a supervisor. Saving the original messages and a dated HR complaint is stronger than only telling colleagues verbally.",
       "commonMistakes": [
-        "Secretly altering evidence.",
-        "posting private company data online.",
-        "confronting a dangerous person alone.",
-        "deleting messages after screenshotting only part of the conversation.."
+        "Common mistakes: Secretly altering evidence.",
+        "Common mistakes: posting private company data online.",
+        "Common mistakes: confronting a dangerous person alone.",
+        "Common mistakes: deleting messages after screenshotting only part of the conversation.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if HR is the problem?",
+          "answer": "Use an independent senior/authority route where available."
+        },
+        {
+          "question": "What if there is physical danger?",
+          "answer": "Safety and emergency reporting come first."
+        },
+        {
+          "question": "What if you fear retaliation?",
+          "answer": "Keep copies of lawful evidence outside the work device."
+        }
+      ],
       "specialistTrigger": "Threats; sexual violence; assault; blackmail; retaliation; termination after complaint.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What counts as workplace harassment?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I complain to HR?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if my manager is the harasser?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When should I contact police?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "কর্মক্ষেত্রে হয়রানি হলে কী প্রমাণ রাখবেন?",
+      "directAnswer": "If workplace conduct is harming or threatening you, protect your safety first. Keep a private factual record of dates, messages, emails, witnesses and reports made to HR or management. The correct legal route depends on the conduct. Some cases may involve labour law, workplace policy, civil rights or criminal offences.",
+      "atAGlance": {
+        "whoFor": "A worker is experiencing harassment and needs safe evidence steps.",
+        "legalBasis": "Bangladesh Labour Act where applicable; Penal Code and other laws depending on conduct; workplace rules.",
+        "mainRule": "This page should focus on evidence and safe reporting, not make a legal finding from one short description.",
+        "updateStatus": "Add topic-specific legal provisions only after legal review; keep the general page evidence-first."
+      },
+      "lawMeaning": "This page should focus on evidence and safe reporting, not make a legal finding from one short description. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Save messages and emails lawfully.",
+        "Write a dated incident log.",
+        "Record witnesses.",
+        "Keep HR complaints and replies.",
+        "Preserve medical evidence if relevant.",
+        "Use internal complaint route when safe.",
+        "Use police/legal help if there are threats, assault or other offences."
+      ],
+      "evidence": [
+        "Messages; email; incident log; witness list; HR complaint; medical record; employment documents."
+      ],
+      "simpleExample": "An employee reports repeated threatening messages from a supervisor. Saving the original messages and a dated HR complaint is stronger than only telling colleagues verbally.",
+      "commonMistakes": [
+        "Common mistakes: Secretly altering evidence.",
+        "Common mistakes: posting private company data online.",
+        "Common mistakes: confronting a dangerous person alone.",
+        "Common mistakes: deleting messages after screenshotting only part of the conversation.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if HR is the problem?",
+          "answer": "Use an independent senior/authority route where available."
+        },
+        {
+          "question": "What if there is physical danger?",
+          "answer": "Safety and emergency reporting come first."
+        },
+        {
+          "question": "What if you fear retaliation?",
+          "answer": "Keep copies of lawful evidence outside the work device."
+        }
+      ],
+      "specialistTrigger": "Threats; sexual violence; assault; blackmail; retaliation; termination after complaint.",
+      "faqs": [
+        {
+          "question": "What counts as workplace harassment?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I complain to HR?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if my manager is the harasser?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When should I contact police?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "4db57b3826d75b14"
+    "en": "db5edec427eb301bc629ae013f4961501937d5b2de3a0c2b828697bbb569fe2f",
+    "bn": "03f4d6e178d72b9e2d7dd4ba00019772aecf2dab69341a914546cadd0c578a8b"
   },
   "releaseStatus": {
     "en": "published",
@@ -71,6 +200,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

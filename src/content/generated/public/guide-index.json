@@ -1,13 +1,13 @@
 [
   {
     "id": 1,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/land-registration-bangladesh",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Register Land in Bangladesh",
-    "titleBn": "How to Register Land in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on How to Register Land in Bangladesh.",
-    "searchIntent": "How to Register Land in Bangladesh",
+    "titleBn": "বাংলাদেশে জমি রেজিস্ট্রি করবেন কীভাবে?",
+    "metaDescription": "To register land safely, do more than sign a deed. Check the seller, the property records, the chain of ownership, tax information, and any mortgage or...",
+    "searchIntent": "A buyer or seller wants the safe legal steps for registering land.",
     "publishedLocales": [
       "en",
       "bn"
@@ -15,13 +15,13 @@
   },
   {
     "id": 2,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/mutation-namjari",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Mutation or Namjari: What Is It and How Do You Apply?",
-    "titleBn": "Mutation or Namjari: What Is It and How Do You Apply?",
-    "metaDescription": "Bangladesh citizen legal guide on Mutation or Namjari: What Is It and How Do You Apply?.",
-    "searchIntent": "Mutation or Namjari: What Is It and How Do You Apply?",
+    "titleBn": "নামজারি কী এবং কীভাবে করবেন?",
+    "metaDescription": "Mutation, also called namjari, is the process of updating the government land record after ownership changes or a record needs correction. It is not...",
+    "searchIntent": "A new owner or heir wants to update government land records.",
     "publishedLocales": [
       "en",
       "bn"
@@ -29,13 +29,13 @@
   },
   {
     "id": 3,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/khatian-types",
+    "sourceRoutePrefix": "guides",
     "titleEn": "CS, SA, RS and BS Khatian Explained Simply",
-    "titleBn": "CS, SA, RS and BS Khatian Explained Simply",
-    "metaDescription": "Bangladesh citizen legal guide on CS, SA, RS and BS Khatian Explained Simply.",
-    "searchIntent": "CS, SA, RS and BS Khatian Explained Simply",
+    "titleBn": "CS, SA, RS এবং BS খতিয়ান কী?",
+    "metaDescription": "A khatian is a government land record. Bangladesh has records from different surveys, so one property may appear in CS, SA, RS, BS or other later...",
+    "searchIntent": "A citizen wants to understand different land-record names.",
     "publishedLocales": [
       "en",
       "bn"
@@ -43,13 +43,13 @@
   },
   {
     "id": 4,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/verify-land-deed",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Check Whether a Land Deed Is Genuine",
-    "titleBn": "How to Check Whether a Land Deed Is Genuine",
-    "metaDescription": "Bangladesh citizen legal guide on How to Check Whether a Land Deed Is Genuine.",
-    "searchIntent": "How to Check Whether a Land Deed Is Genuine",
+    "titleBn": "জমির দলিল আসল কিনা কীভাবে যাচাই করবেন?",
+    "metaDescription": "A deed can look real and still be unsafe. Check the registration record, the seller’s identity, the property description, the chain of earlier deeds,...",
+    "searchIntent": "A buyer wants to reduce the risk of a fake or misleading deed.",
     "publishedLocales": [
       "en",
       "bn"
@@ -57,13 +57,13 @@
   },
   {
     "id": 5,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/gift-hiba-property",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Gift Deed and Hiba of Property in Bangladesh",
-    "titleBn": "Gift Deed and Hiba of Property in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on Gift Deed and Hiba of Property in Bangladesh.",
-    "searchIntent": "Gift Deed and Hiba of Property in Bangladesh",
+    "titleBn": "হেবা ও দান দলিল কীভাবে কাজ করে?",
+    "metaDescription": "A gift transfers property without an ordinary sale price. Hiba is a Muslim-law concept and should not be treated as the same thing as every type of...",
+    "searchIntent": "A family wants to transfer property without a normal sale.",
     "publishedLocales": [
       "en",
       "bn"
@@ -71,13 +71,13 @@
   },
   {
     "id": 6,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/buy-sell-land",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Legal Steps for Buying and Selling Land",
-    "titleBn": "Legal Steps for Buying and Selling Land",
-    "metaDescription": "Bangladesh citizen legal guide on Legal Steps for Buying and Selling Land.",
-    "searchIntent": "Legal Steps for Buying and Selling Land",
+    "titleBn": "জমি কেনা-বেচার আইনি ধাপ",
+    "metaDescription": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after registration. The largest risk...",
+    "searchIntent": "A citizen wants an end-to-end property transaction checklist.",
     "publishedLocales": [
       "en",
       "bn"
@@ -85,13 +85,13 @@
   },
   {
     "id": 7,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/land-mortgage",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Mortgage of Land Explained Simply",
-    "titleBn": "Mortgage of Land Explained Simply",
-    "metaDescription": "Bangladesh citizen legal guide on Mortgage of Land Explained Simply.",
-    "searchIntent": "Mortgage of Land Explained Simply",
+    "titleBn": "জমি বন্ধক কী এবং কীভাবে কাজ করে?",
+    "metaDescription": "A mortgage uses an interest in specific immovable property as security for a debt or other covered obligation. The exact legal effect depends on the...",
+    "searchIntent": "A borrower or buyer wants to understand a property mortgage.",
     "publishedLocales": [
       "en",
       "bn"
@@ -99,13 +99,13 @@
   },
   {
     "id": 8,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/inherited-land-transfer",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Transfer Inherited Land to the Heirs",
-    "titleBn": "How to Transfer Inherited Land to the Heirs",
-    "metaDescription": "Bangladesh citizen legal guide on How to Transfer Inherited Land to the Heirs.",
-    "searchIntent": "How to Transfer Inherited Land to the Heirs",
+    "titleBn": "মৃত ব্যক্তির জমি উত্তরাধিকারীদের নামে কীভাবে নেবেন?",
+    "metaDescription": "When a landowner dies, the heirs should first identify the lawful heirs and the property left by the deceased. They then need the required death and...",
+    "searchIntent": "Heirs want to update land records after a death.",
     "publishedLocales": [
       "en",
       "bn"
@@ -113,13 +113,13 @@
   },
   {
     "id": 9,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/pre-emption",
+    "sourceRoutePrefix": "guides",
     "titleEn": "What Is Pre-emption in Bangladesh?",
-    "titleBn": "What Is Pre-emption in Bangladesh?",
-    "metaDescription": "Bangladesh citizen legal guide on What Is Pre-emption in Bangladesh?.",
-    "searchIntent": "What Is Pre-emption in Bangladesh?",
+    "titleBn": "অগ্রক্রয় বা Pre-emption অধিকার কী?",
+    "metaDescription": "Pre-emption is a legal right that may allow an eligible person to ask for a transferred property interest to be transferred to them instead. It is not...",
+    "searchIntent": "A co-sharer or nearby interest holder wants to know whether they can challenge a transfer.",
     "publishedLocales": [
       "en",
       "bn"
@@ -127,13 +127,13 @@
   },
   {
     "id": 10,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "property",
+    "route": "property/land-dispute-first-steps",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "What Should You Do First in a Land Dispute?",
-    "titleBn": "What Should You Do First in a Land Dispute?",
-    "metaDescription": "Bangladesh citizen legal guide on What Should You Do First in a Land Dispute?.",
-    "searchIntent": "What Should You Do First in a Land Dispute?",
+    "titleBn": "জমি বিরোধ হলে প্রথমে কী করবেন?",
+    "metaDescription": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession, boundary, inheritance, fraud,...",
+    "searchIntent": "A citizen has a land conflict and needs safe first steps.",
     "publishedLocales": [
       "en",
       "bn"
@@ -141,13 +141,13 @@
   },
   {
     "id": 11,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "property",
+    "route": "property/land-development-tax",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Pay Land Development Tax",
-    "titleBn": "How to Pay Land Development Tax",
-    "metaDescription": "Bangladesh citizen legal guide on How to Pay Land Development Tax.",
-    "searchIntent": "How to Pay Land Development Tax",
+    "titleBn": "ভূমি উন্নয়ন কর কীভাবে দেবেন?",
+    "metaDescription": "Land development tax is a government land charge. Use the official Ministry of Land service, match the holding and khatian information, pay through the...",
+    "searchIntent": "A landholder wants to understand the official tax/payment process.",
     "publishedLocales": [
       "en",
       "bn"
@@ -155,13 +155,13 @@
   },
   {
     "id": 12,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "property",
+    "route": "property/mutation-delay",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Mutation Is Delayed: What Can You Do?",
-    "titleBn": "Mutation Is Delayed: What Can You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on Mutation Is Delayed: What Can You Do?.",
-    "searchIntent": "Mutation Is Delayed: What Can You Do?",
+    "titleBn": "নামজারি আবেদন আটকে গেলে কী করবেন?",
+    "metaDescription": "First check the official application status and any notice asking for information. Save your application number and payment proof. If the service is...",
+    "searchIntent": "An applicant has a pending or stalled mutation application.",
     "publishedLocales": [
       "en",
       "bn"
@@ -169,13 +169,13 @@
   },
   {
     "id": 13,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/muslim-marriage-registration",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Muslim Marriage Registration in Bangladesh",
-    "titleBn": "Muslim Marriage Registration in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on Muslim Marriage Registration in Bangladesh.",
-    "searchIntent": "Muslim Marriage Registration in Bangladesh",
+    "titleBn": "মুসলিম বিবাহ নিবন্ধন কীভাবে করবেন?",
+    "metaDescription": "A Muslim marriage should be properly recorded through the lawful Nikah Registrar system. Keep the kabinnama and any certified copy safely. Registration...",
+    "searchIntent": "A Muslim couple wants to understand marriage registration and documents.",
     "publishedLocales": [
       "en",
       "bn"
@@ -183,13 +183,13 @@
   },
   {
     "id": 14,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/talaq-procedure",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Talaq Procedure in Bangladesh",
-    "titleBn": "Talaq Procedure in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on Talaq Procedure in Bangladesh.",
-    "searchIntent": "Talaq Procedure in Bangladesh",
+    "titleBn": "স্বামী তালাক দিতে চাইলে আইনি প্রক্রিয়া কী?",
+    "metaDescription": "For a Muslim husband, talaq is not only a spoken statement. Section 7 of the Muslim Family Laws Ordinance requires written notice to the Chairman after...",
+    "searchIntent": "A Muslim spouse wants a simple explanation of the statutory talaq process.",
     "publishedLocales": [
       "en",
       "bn"
@@ -197,13 +197,13 @@
   },
   {
     "id": 15,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/divorce-women",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How Can a Muslim Woman Seek Divorce?",
-    "titleBn": "How Can a Muslim Woman Seek Divorce?",
-    "metaDescription": "Bangladesh citizen legal guide on How Can a Muslim Woman Seek Divorce?.",
-    "searchIntent": "How Can a Muslim Woman Seek Divorce?",
+    "titleBn": "মুসলিম নারী কীভাবে বিবাহ বিচ্ছেদ চাইতে পারেন?",
+    "metaDescription": "A Muslim woman may have more than one legal route, depending on the marriage terms and facts. These can include a delegated right in the kabinnama, an...",
+    "searchIntent": "A Muslim woman wants to understand possible legal routes to end a marriage.",
     "publishedLocales": [
       "en",
       "bn"
@@ -211,13 +211,13 @@
   },
   {
     "id": 16,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/dower-mehr",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Dower or Mehr: What Are Your Rights?",
-    "titleBn": "Dower or Mehr: What Are Your Rights?",
-    "metaDescription": "Bangladesh citizen legal guide on Dower or Mehr: What Are Your Rights?.",
-    "searchIntent": "Dower or Mehr: What Are Your Rights?",
+    "titleBn": "দেনমোহর বা Mehr কী?",
+    "metaDescription": "Dower, also called mehr or moharana, is money or property promised to the wife as part of a Muslim marriage. The kabinnama is an important document....",
+    "searchIntent": "A spouse wants to understand dower written in a Muslim marriage.",
     "publishedLocales": [
       "en",
       "bn"
@@ -225,13 +225,13 @@
   },
   {
     "id": 17,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/maintenance",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Maintenance Rights in Bangladesh",
-    "titleBn": "Maintenance Rights in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on Maintenance Rights in Bangladesh.",
-    "searchIntent": "Maintenance Rights in Bangladesh",
+    "titleBn": "ভরণপোষণ পাওয়ার অধিকার কীভাবে কাজ করে?",
+    "metaDescription": "Maintenance is financial support that may be required under family law. The rules depend on who is asking, the relationship, the stage of the marriage...",
+    "searchIntent": "A spouse or parent wants to understand maintenance claims.",
     "publishedLocales": [
       "en",
       "bn"
@@ -239,13 +239,13 @@
   },
   {
     "id": 18,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/child-custody",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Child Custody: What Should Parents Know?",
-    "titleBn": "Child Custody: What Should Parents Know?",
-    "metaDescription": "Bangladesh citizen legal guide on Child Custody: What Should Parents Know?.",
-    "searchIntent": "Child Custody: What Should Parents Know?",
+    "titleBn": "সন্তানের হেফাজত সম্পর্কে কী জানা দরকার?",
+    "metaDescription": "Child custody is about who cares for a child in daily life. Guardianship concerns legal authority and can involve different questions. A court can...",
+    "searchIntent": "A parent wants a basic guide to custody and guardianship.",
     "publishedLocales": [
       "en",
       "bn"
@@ -253,13 +253,13 @@
   },
   {
     "id": 19,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/muslim-inheritance",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
-    "titleBn": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
-    "metaDescription": "Bangladesh citizen legal guide on Muslim Inheritance in Bangladesh: A Beginner’s Guide.",
-    "searchIntent": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+    "titleBn": "মুসলিম উত্তরাধিকার আইন সহজভাবে",
+    "metaDescription": "Muslim inheritance is not a simple “divide everything equally” system. The estate must first be identified, and lawful debts, valid testamentary issues...",
+    "searchIntent": "A Muslim family wants to understand the order of inheritance questions.",
     "publishedLocales": [
       "en",
       "bn"
@@ -267,13 +267,13 @@
   },
   {
     "id": 20,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "family",
+    "route": "family/polygamy-bangladesh",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Second Marriage and Polygamy: What Does the Law Require?",
-    "titleBn": "Second Marriage and Polygamy: What Does the Law Require?",
-    "metaDescription": "Bangladesh citizen legal guide on Second Marriage and Polygamy: What Does the Law Require?.",
-    "searchIntent": "Second Marriage and Polygamy: What Does the Law Require?",
+    "titleBn": "দ্বিতীয় বিয়ে করতে আইনে কী লাগে?",
+    "metaDescription": "During an existing Muslim marriage, section 6 of the Muslim Family Laws Ordinance requires previous written permission from the Arbitration Council...",
+    "searchIntent": "A Muslim man or spouse wants to understand the legal permission process.",
     "publishedLocales": [
       "en",
       "bn"
@@ -281,13 +281,13 @@
   },
   {
     "id": 21,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/salary-income-tax-2026-27",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Income Tax for Salaried People — 2026–27",
-    "titleBn": "Income Tax for Salaried People — 2026–27",
-    "metaDescription": "Bangladesh citizen legal guide on Income Tax for Salaried People — 2026–27.",
-    "searchIntent": "Income Tax for Salaried People — 2026–27",
+    "titleBn": "চাকরিজীবীদের আয়কর ২০২৬–২৭",
+    "metaDescription": "For salaried people, income tax depends on the current tax-year rules, taxable salary components, exemptions, rebates, other income, tax already...",
+    "searchIntent": "A salaried person wants to know the current tax-year process.",
     "publishedLocales": [
       "en",
       "bn"
@@ -295,13 +295,13 @@
   },
   {
     "id": 22,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/salary-tax-examples-2026-27",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
-    "titleBn": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
-    "metaDescription": "Bangladesh citizen legal guide on Salary Tax Examples: ৳30,000 to ৳300,000 Per Month.",
-    "searchIntent": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+    "titleBn": "মাসিক বেতন অনুযায়ী আয়কর উদাহরণ",
+    "metaDescription": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions. A monthly salary alone is not...",
+    "searchIntent": "A citizen wants simple examples at common salary levels.",
     "publishedLocales": [
       "en",
       "bn"
@@ -309,13 +309,13 @@
   },
   {
     "id": 23,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/freelancer-tax-bangladesh",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Freelancer and Remote Worker Tax Guide — 2026–27",
-    "titleBn": "Freelancer and Remote Worker Tax Guide — 2026–27",
-    "metaDescription": "Bangladesh citizen legal guide on Freelancer and Remote Worker Tax Guide — 2026–27.",
-    "searchIntent": "Freelancer and Remote Worker Tax Guide — 2026–27",
+    "titleBn": "ফ্রিল্যান্সার ও রিমোট ওয়ার্কারদের আয়কর",
+    "metaDescription": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and source of income, current...",
+    "searchIntent": "A freelancer earning locally or from abroad wants to understand tax duties.",
     "publishedLocales": [
       "en",
       "bn"
@@ -323,13 +323,13 @@
   },
   {
     "id": 24,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/tin-registration",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Get a TIN in Bangladesh",
-    "titleBn": "How to Get a TIN in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on How to Get a TIN in Bangladesh.",
-    "searchIntent": "How to Get a TIN in Bangladesh",
+    "titleBn": "TIN কীভাবে করবেন?",
+    "metaDescription": "A TIN is a Taxpayer Identification Number used in Bangladesh’s tax system. Use the official NBR e-TIN service and enter identity information exactly....",
+    "searchIntent": "A citizen wants to register for a taxpayer identification number.",
     "publishedLocales": [
       "en",
       "bn"
@@ -337,13 +337,13 @@
   },
   {
     "id": 25,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/e-return-2026-27",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to File an e-Return — 2026–27",
-    "titleBn": "How to File an e-Return — 2026–27",
-    "metaDescription": "Bangladesh citizen legal guide on How to File an e-Return — 2026–27.",
-    "searchIntent": "How to File an e-Return — 2026–27",
+    "titleBn": "e-Return কীভাবে জমা দেবেন?",
+    "metaDescription": "NBR’s e-Return system lets individual taxpayers file online. For 2026–27, use the current NBR portal and notices. Prepare income, asset, expense,...",
+    "searchIntent": "An individual taxpayer wants a simple filing walkthrough.",
     "publishedLocales": [
       "en",
       "bn"
@@ -351,13 +351,13 @@
   },
   {
     "id": 26,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/who-must-file-return",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Who Needs to File an Income Tax Return?",
-    "titleBn": "Who Needs to File an Income Tax Return?",
-    "metaDescription": "Bangladesh citizen legal guide on Who Needs to File an Income Tax Return?.",
-    "searchIntent": "Who Needs to File an Income Tax Return?",
+    "titleBn": "কারা আয়কর রিটার্ন জমা দেবেন?",
+    "metaDescription": "Whether you must file a return depends on the current Income Tax Act and tax-year rules. It is not based only on whether tax is payable. Some people...",
+    "searchIntent": "A citizen wants to know whether they have a return duty.",
     "publishedLocales": [
       "en",
       "bn"
@@ -365,13 +365,13 @@
   },
   {
     "id": 27,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "tax",
+    "route": "tax/tds-explained",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Tax Deducted at Source (TDS) Explained Simply",
-    "titleBn": "Tax Deducted at Source (TDS) Explained Simply",
-    "metaDescription": "Bangladesh citizen legal guide on Tax Deducted at Source (TDS) Explained Simply.",
-    "searchIntent": "Tax Deducted at Source (TDS) Explained Simply",
+    "titleBn": "উৎসে কর বা TDS কী?",
+    "metaDescription": "Tax deducted at source means a payer withholds tax from a payment before giving you the balance. Depending on the current law, that deduction may count...",
+    "searchIntent": "A citizen sees tax deducted before receiving money and wants to understand it.",
     "publishedLocales": [
       "en",
       "bn"
@@ -379,13 +379,13 @@
   },
   {
     "id": 28,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "tax",
+    "route": "tax/tax-notice",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "You Received a Tax Notice: What Should You Do?",
-    "titleBn": "You Received a Tax Notice: What Should You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on You Received a Tax Notice: What Should You Do?.",
-    "searchIntent": "You Received a Tax Notice: What Should You Do?",
+    "titleBn": "আয়কর নোটিশ পেলে কী করবেন?",
+    "metaDescription": "Do not ignore a tax notice and do not pay money just because someone tells you to. First verify that the notice is genuine, identify the legal section,...",
+    "searchIntent": "A taxpayer received an NBR notice and needs safe first steps.",
     "publishedLocales": [
       "en",
       "bn"
@@ -393,13 +393,13 @@
   },
   {
     "id": 29,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "consumer",
+    "route": "consumer/defective-product",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "What to Do If You Buy a Defective Product",
-    "titleBn": "What to Do If You Buy a Defective Product",
-    "metaDescription": "Bangladesh citizen legal guide on What to Do If You Buy a Defective Product.",
-    "searchIntent": "What to Do If You Buy a Defective Product",
+    "titleBn": "নষ্ট বা ত্রুটিপূর্ণ পণ্য কিনলে কী করবেন?",
+    "metaDescription": "Keep the receipt, warranty, packaging and proof of the defect. Contact the seller in writing and ask for the remedy you believe applies. If the issue...",
+    "searchIntent": "A consumer bought a defective product and wants practical next steps.",
     "publishedLocales": [
       "en",
       "bn"
@@ -407,13 +407,13 @@
   },
   {
     "id": 30,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "consumer",
+    "route": "consumer/online-shop-no-delivery",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Facebook or Online Shop Did Not Deliver Your Product",
-    "titleBn": "Facebook or Online Shop Did Not Deliver Your Product",
-    "metaDescription": "Bangladesh citizen legal guide on Facebook or Online Shop Did Not Deliver Your Product.",
-    "searchIntent": "Facebook or Online Shop Did Not Deliver Your Product",
+    "titleBn": "অনলাইন শপ টাকা নিয়েও পণ্য না দিলে কী করবেন?",
+    "metaDescription": "Save the order, page URL, payment proof, messages and promised delivery date. First ask the seller for delivery or a lawful refund. If the facts show a...",
+    "searchIntent": "A buyer paid an online seller but did not receive the promised product.",
     "publishedLocales": [
       "en",
       "bn"
@@ -421,13 +421,13 @@
   },
   {
     "id": 31,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "consumer",
+    "route": "consumer/service-not-delivered",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "You Paid for a Service but Did Not Receive It",
-    "titleBn": "You Paid for a Service but Did Not Receive It",
-    "metaDescription": "Bangladesh citizen legal guide on You Paid for a Service but Did Not Receive It.",
-    "searchIntent": "You Paid for a Service but Did Not Receive It",
+    "titleBn": "টাকা দিয়েও সেবা না পেলে কী করবেন?",
+    "metaDescription": "Keep the contract, advertisement, invoice, payment proof and promised service date. Ask the provider in writing to perform the service or explain the...",
+    "searchIntent": "A consumer paid for a promised service that was not provided.",
     "publishedLocales": [
       "en",
       "bn"
@@ -435,13 +435,13 @@
   },
   {
     "id": 32,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "consumer",
+    "route": "consumer/misleading-advertising",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Wrong Price and Misleading Advertising: What Can You Do?",
-    "titleBn": "Wrong Price and Misleading Advertising: What Can You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on Wrong Price and Misleading Advertising: What Can You Do?.",
-    "searchIntent": "Wrong Price and Misleading Advertising: What Can You Do?",
+    "titleBn": "ভুল দাম ও misleading advertisement হলে কী করবেন?",
+    "metaDescription": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions actually offered. Ask the seller...",
+    "searchIntent": "A consumer sees a false price, hidden condition or misleading product claim.",
     "publishedLocales": [
       "en",
       "bn"
@@ -449,13 +449,13 @@
   },
   {
     "id": 33,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "consumer",
+    "route": "consumer/billing-dispute",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Mobile, Internet or Subscription Billing Dispute",
-    "titleBn": "Mobile, Internet or Subscription Billing Dispute",
-    "metaDescription": "Bangladesh citizen legal guide on Mobile, Internet or Subscription Billing Dispute.",
-    "searchIntent": "Mobile, Internet or Subscription Billing Dispute",
+    "titleBn": "মোবাইল, ইন্টারনেট বা subscription bill ভুল হলে কী করবেন?",
+    "metaDescription": "Start with the provider’s bill and package terms. Save SMS messages, app screens, usage records and payment proof. Ask the provider to explain the...",
+    "searchIntent": "A customer says a telecom or subscription charge is wrong.",
     "publishedLocales": [
       "en",
       "bn"
@@ -463,13 +463,13 @@
   },
   {
     "id": 34,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "consumer",
+    "route": "consumer/travel-ticket-complaint",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Ticket, Travel or Transport Service Complaint",
-    "titleBn": "Ticket, Travel or Transport Service Complaint",
-    "metaDescription": "Bangladesh citizen legal guide on Ticket, Travel or Transport Service Complaint.",
-    "searchIntent": "Ticket, Travel or Transport Service Complaint",
+    "titleBn": "টিকিট বা পরিবহন সেবা নিয়ে অভিযোগ করবেন কীভাবে?",
+    "metaDescription": "Keep the ticket, booking terms, payment proof, delay or cancellation notice and any communication from the operator. Ask the operator or platform for...",
+    "searchIntent": "A passenger has a cancellation, delay, refund, seat or service dispute.",
     "publishedLocales": [
       "en",
       "bn"
@@ -477,13 +477,13 @@
   },
   {
     "id": 35,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "consumer",
+    "route": "consumer/dncrp-complaint",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to File a DNCRP Consumer Complaint",
-    "titleBn": "How to File a DNCRP Consumer Complaint",
-    "metaDescription": "Bangladesh citizen legal guide on How to File a DNCRP Consumer Complaint.",
-    "searchIntent": "How to File a DNCRP Consumer Complaint",
+    "titleBn": "ভোক্তা অধিকার অভিযোগ কীভাবে করবেন?",
+    "metaDescription": "Use the official DNCRP complaint channel and keep proof of the purchase or service. DNCRP currently publishes hotline 16121 and complaint information....",
+    "searchIntent": "A citizen wants the official consumer complaint steps.",
     "publishedLocales": [
       "en",
       "bn"
@@ -491,13 +491,13 @@
   },
   {
     "id": 36,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "employment",
+    "route": "employment/employment-contract",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Read an Appointment Letter and Employment Contract",
-    "titleBn": "How to Read an Appointment Letter and Employment Contract",
-    "metaDescription": "Bangladesh citizen legal guide on How to Read an Appointment Letter and Employment Contract.",
-    "searchIntent": "How to Read an Appointment Letter and Employment Contract",
+    "titleBn": "Appointment Letter ও Employment Contract বুঝবেন কীভাবে?",
+    "metaDescription": "Read an employment document before signing. Check the job title, salary, probation, working hours, leave, benefits, notice, termination terms,...",
+    "searchIntent": "A worker wants a plain-language contract checklist.",
     "publishedLocales": [
       "en",
       "bn"
@@ -505,13 +505,13 @@
   },
   {
     "id": 37,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "employment",
+    "route": "employment/unpaid-salary",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Your Employer Has Not Paid Your Salary",
-    "titleBn": "Your Employer Has Not Paid Your Salary",
-    "metaDescription": "Bangladesh citizen legal guide on Your Employer Has Not Paid Your Salary.",
-    "searchIntent": "Your Employer Has Not Paid Your Salary",
+    "titleBn": "বেতন না দিলে কী করবেন?",
+    "metaDescription": "Keep proof of employment, attendance, agreed salary and earlier payments. Ask the employer or HR in writing for the unpaid amount and a payment date....",
+    "searchIntent": "A worker has unpaid wages or salary.",
     "publishedLocales": [
       "en",
       "bn"
@@ -519,13 +519,13 @@
   },
   {
     "id": 38,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "employment",
+    "route": "employment/termination-dismissal",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Termination and Dismissal Explained Simply",
-    "titleBn": "Termination and Dismissal Explained Simply",
-    "metaDescription": "Bangladesh citizen legal guide on Termination and Dismissal Explained Simply.",
-    "searchIntent": "Termination and Dismissal Explained Simply",
+    "titleBn": "চাকরি থেকে বাদ দিলে আপনার কী জানা দরকার?",
+    "metaDescription": "Termination, dismissal, discharge, retrenchment and resignation are not the same legal event. The correct rights depend on why the job ended, the...",
+    "searchIntent": "A worker has lost a job and wants to understand the legal terms.",
     "publishedLocales": [
       "en",
       "bn"
@@ -533,13 +533,13 @@
   },
   {
     "id": 39,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "employment",
+    "route": "employment/workplace-harassment",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Workplace Harassment: What Evidence Should You Keep?",
-    "titleBn": "Workplace Harassment: What Evidence Should You Keep?",
-    "metaDescription": "Bangladesh citizen legal guide on Workplace Harassment: What Evidence Should You Keep?.",
-    "searchIntent": "Workplace Harassment: What Evidence Should You Keep?",
+    "titleBn": "কর্মক্ষেত্রে হয়রানি হলে কী প্রমাণ রাখবেন?",
+    "metaDescription": "If workplace conduct is harming or threatening you, protect your safety first. Keep a private factual record of dates, messages, emails, witnesses and...",
+    "searchIntent": "A worker is experiencing harassment and needs safe evidence steps.",
     "publishedLocales": [
       "en",
       "bn"
@@ -547,13 +547,13 @@
   },
   {
     "id": 40,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "employment",
+    "route": "employment/leave-maternity-rights",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Leave, Maternity and Basic Workplace Rights",
-    "titleBn": "Leave, Maternity and Basic Workplace Rights",
-    "metaDescription": "Bangladesh citizen legal guide on Leave, Maternity and Basic Workplace Rights.",
-    "searchIntent": "Leave, Maternity and Basic Workplace Rights",
+    "titleBn": "ছুটি, মাতৃত্বকালীন সুবিধা ও কর্মক্ষেত্রের মৌলিক অধিকার",
+    "metaDescription": "Bangladesh labour law provides rights on matters such as leave, working conditions and maternity benefits for workers who fall within the relevant law....",
+    "searchIntent": "A worker wants an overview of leave and basic statutory rights.",
     "publishedLocales": [
       "en",
       "bn"
@@ -562,12 +562,12 @@
   {
     "id": 41,
     "cluster": "digital",
-    "route": "",
+    "route": "digital/online-scam",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "What to Do After an Online Scam",
-    "titleBn": "What to Do After an Online Scam",
-    "metaDescription": "Bangladesh citizen legal guide on What to Do After an Online Scam.",
-    "searchIntent": "What to Do After an Online Scam",
+    "titleBn": "অনলাইনে প্রতারণার শিকার হলে কী করবেন?",
+    "metaDescription": "Act quickly. Stop sending money, contact the bank or mobile financial service, secure your accounts and save the full evidence. Keep transaction IDs,...",
+    "searchIntent": "A person sent money or information to an online scammer.",
     "publishedLocales": [
       "en",
       "bn"
@@ -576,12 +576,12 @@
   {
     "id": 42,
     "cluster": "digital",
-    "route": "",
+    "route": "digital/identity-impersonation",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Someone Is Pretending to Be You Online",
-    "titleBn": "Someone Is Pretending to Be You Online",
-    "metaDescription": "Bangladesh citizen legal guide on Someone Is Pretending to Be You Online.",
-    "searchIntent": "Someone Is Pretending to Be You Online",
+    "titleBn": "কেউ আপনার নামে ভুয়া online account খুললে কী করবেন?",
+    "metaDescription": "Save the fake profile URL, screenshots and messages before reporting it. Secure your real account and warn contacts if the fake account is asking for...",
+    "searchIntent": "A person finds a fake social-media or messaging account using their identity.",
     "publishedLocales": [
       "en",
       "bn"
@@ -590,12 +590,12 @@
   {
     "id": 43,
     "cluster": "digital",
-    "route": "",
+    "route": "digital/online-harassment-blackmail",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Online Harassment, Threats and Blackmail: What to Do",
-    "titleBn": "Online Harassment, Threats and Blackmail: What to Do",
-    "metaDescription": "Bangladesh citizen legal guide on Online Harassment, Threats and Blackmail: What to Do.",
-    "searchIntent": "Online Harassment, Threats and Blackmail: What to Do",
+    "titleBn": "অনলাইনে হুমকি বা ব্ল্যাকমেইল হলে কী করবেন?",
+    "metaDescription": "Put safety first. Do not delete the messages or pay a blackmailer simply because they demand money. Save the full conversation, account links, dates,...",
+    "searchIntent": "A person is being threatened, harassed or blackmailed online.",
     "publishedLocales": [
       "en",
       "bn"
@@ -604,12 +604,12 @@
   {
     "id": 44,
     "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "route": "digital/defamation",
+    "sourceRoutePrefix": "guides",
     "titleEn": "Defamation in Bangladesh Explained Simply",
-    "titleBn": "Defamation in Bangladesh Explained Simply",
-    "metaDescription": "Bangladesh citizen legal guide on Defamation in Bangladesh Explained Simply.",
-    "searchIntent": "Defamation in Bangladesh Explained Simply",
+    "titleBn": "মানহানি বা Defamation কী?",
+    "metaDescription": "Defamation law deals with statements that harm reputation, but the Penal Code also contains important exceptions. Truth, public good, good-faith...",
+    "searchIntent": "A citizen wants to know when a reputation-harming statement may be defamation.",
     "publishedLocales": [
       "en",
       "bn"
@@ -618,12 +618,12 @@
   {
     "id": 45,
     "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "route": "everyday/gd-police-complaint-case",
+    "sourceRoutePrefix": "guides",
     "titleEn": "GD, Police Complaint and Criminal Case: What Is the Difference?",
-    "titleBn": "GD, Police Complaint and Criminal Case: What Is the Difference?",
-    "metaDescription": "Bangladesh citizen legal guide on GD, Police Complaint and Criminal Case: What Is the Difference?.",
-    "searchIntent": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+    "titleBn": "GD, পুলিশ অভিযোগ ও মামলা—পার্থক্য কী?",
+    "metaDescription": "A General Diary entry records information at a police station. A complaint reports alleged wrongdoing. A criminal case involves a formal criminal...",
+    "searchIntent": "A citizen is confused about GD, complaint and a criminal case.",
     "publishedLocales": [
       "en",
       "bn"
@@ -631,13 +631,13 @@
   },
   {
     "id": 46,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "government",
+    "route": "government/government-service-complaint",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Government Office Did Not Give You a Service: How to Complain",
-    "titleBn": "Government Office Did Not Give You a Service: How to Complain",
-    "metaDescription": "Bangladesh citizen legal guide on Government Office Did Not Give You a Service: How to Complain.",
-    "searchIntent": "Government Office Did Not Give You a Service: How to Complain",
+    "titleBn": "সরকারি সেবা না পেলে কোথায় অভিযোগ করবেন?",
+    "metaDescription": "Start with the responsible office and its service commitment. If the issue is an eligible service grievance, Bangladesh’s Government Grievance Redress...",
+    "searchIntent": "A citizen is unhappy with a government service or delay.",
     "publishedLocales": [
       "en",
       "bn"
@@ -645,13 +645,13 @@
   },
   {
     "id": 47,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "government",
+    "route": "government/local-service-complaint",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
-    "titleBn": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
-    "metaDescription": "Bangladesh citizen legal guide on Waste, Drainage or Road-Service Problem: Where Do You Complain?.",
-    "searchIntent": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+    "titleBn": "রাস্তা, ড্রেন বা ময়লার সমস্যা কোথায় জানাবেন?",
+    "metaDescription": "There is no single office for every waste, drain or road problem in Bangladesh. First identify who controls the service: city corporation,...",
+    "searchIntent": "A citizen wants to complain about an everyday local public service.",
     "publishedLocales": [
       "en",
       "bn"
@@ -659,13 +659,13 @@
   },
   {
     "id": 48,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "government",
+    "route": "property/land-office-delay",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Land Office Is Delaying Your Service",
-    "titleBn": "Land Office Is Delaying Your Service",
-    "metaDescription": "Bangladesh citizen legal guide on Land Office Is Delaying Your Service.",
-    "searchIntent": "Land Office Is Delaying Your Service",
+    "titleBn": "ভূমি অফিসে দেরি হলে কোথায় অভিযোগ করবেন?",
+    "metaDescription": "First identify the exact land service and check its official status. The Ministry of Land portal provides mutation, land development tax, records/maps...",
+    "searchIntent": "A citizen has a delay in mutation, record, map, tax or another land service.",
     "publishedLocales": [
       "en",
       "bn"
@@ -673,13 +673,13 @@
   },
   {
     "id": 49,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "government",
+    "route": "government/right-to-information",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Make a Right to Information Request",
-    "titleBn": "How to Make a Right to Information Request",
-    "metaDescription": "Bangladesh citizen legal guide on How to Make a Right to Information Request.",
-    "searchIntent": "How to Make a Right to Information Request",
+    "titleBn": "তথ্য অধিকার আবেদন কীভাবে করবেন?",
+    "metaDescription": "The Right to Information Act, 2009 gives a legal framework for requesting information from covered authorities, subject to exclusions and procedures....",
+    "searchIntent": "A citizen wants information held by a public authority.",
     "publishedLocales": [
       "en",
       "bn"
@@ -687,13 +687,13 @@
   },
   {
     "id": 50,
-    "cluster": "digital",
-    "route": "",
-    "sourceRoutePrefix": "action-guides",
+    "cluster": "government",
+    "route": "legal-help/government-legal-aid",
+    "sourceRoutePrefix": "guides",
     "titleEn": "How to Get Government Legal Aid in Bangladesh",
-    "titleBn": "How to Get Government Legal Aid in Bangladesh",
-    "metaDescription": "Bangladesh citizen legal guide on How to Get Government Legal Aid in Bangladesh.",
-    "searchIntent": "How to Get Government Legal Aid in Bangladesh",
+    "titleBn": "সরকারি Legal Aid কীভাবে পাবেন?",
+    "metaDescription": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation/department provides...",
+    "searchIntent": "A person cannot afford legal help or wants to know whether government legal aid can assist.",
     "publishedLocales": [
       "en",
       "bn"
@@ -701,13 +701,13 @@
   },
   {
     "id": 51,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/fake-bank-police-government-call",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Fake Bank, Police or Government Call: What Should You Do?",
-    "titleBn": "Fake Bank, Police or Government Call: What Should You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on Fake Bank, Police or Government Call: What Should You Do?.",
-    "searchIntent": "Fake Bank, Police or Government Call: What Should You Do?",
+    "titleBn": "ব্যাংক, পুলিশ বা সরকারি কর্মকর্তা সেজে ভুয়া কল এলে কী করবেন?",
+    "metaDescription": "A caller claims to be from a bank, police, BTRC or a government office and asks for money, OTP or personal data. Learn the safe first steps.",
+    "searchIntent": "A citizen received a suspicious call from someone pretending to be an authority.",
     "publishedLocales": [
       "en",
       "bn"
@@ -715,13 +715,13 @@
   },
   {
     "id": 52,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/otp-pin-mfs-scam",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
-    "titleBn": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on OTP, PIN and Mobile Financial Service Scam: What Should You Do?.",
-    "searchIntent": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+    "titleBn": "OTP, PIN বা মোবাইল ফাইন্যান্সিয়াল সার্ভিস স্ক্যাম হলে কী করবেন?",
+    "metaDescription": "Shared an OTP or PIN, or money left your bank or MFS account? Learn the immediate steps, evidence to save and official complaint routes.",
+    "searchIntent": "A citizen shared credentials or lost money through a bank/MFS scam.",
     "publishedLocales": [
       "en",
       "bn"
@@ -729,13 +729,13 @@
   },
   {
     "id": 53,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/phishing-link-fake-website",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
-    "titleBn": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on Phishing Link, Fake Login Page or Fake Website: What Should You Do?.",
-    "searchIntent": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+    "titleBn": "ফিশিং লিংক, ভুয়া লগইন পেজ বা নকল ওয়েবসাইট পেলে কী করবেন?",
+    "metaDescription": "Clicked a suspicious link or entered a password on a fake site? Learn how to secure your account, preserve evidence and report possible fraud.",
+    "searchIntent": "A citizen clicked a suspicious link or entered information on a fake site.",
     "publishedLocales": [
       "en",
       "bn"
@@ -743,13 +743,13 @@
   },
   {
     "id": 54,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/social-media-account-hacked",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
-    "titleBn": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
-    "metaDescription": "Bangladesh citizen legal guide on Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do.",
-    "searchIntent": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+    "titleBn": "Facebook, Instagram, Gmail বা social account হ্যাক হলে কী করবেন?",
+    "metaDescription": "Lost control of Facebook, Instagram, Gmail or another account? Secure recovery channels, preserve evidence and understand the legal options.",
+    "searchIntent": "A citizen's online account has been taken over or accessed without permission.",
     "publishedLocales": [
       "en",
       "bn"
@@ -757,13 +757,13 @@
   },
   {
     "id": 55,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/social-media-impersonation",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
-    "titleBn": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
-    "metaDescription": "Bangladesh citizen legal guide on Fake Facebook, Instagram or Social Media Account Pretending to Be You.",
-    "searchIntent": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+    "titleBn": "আপনার নামে ভুয়া Facebook, Instagram বা social account খুললে কী করবেন?",
+    "metaDescription": "Someone made a fake social profile using your name or photo. Learn how to save evidence, report impersonation and respond to fraud or harassment.",
+    "searchIntent": "A citizen discovers an account pretending to be them.",
     "publishedLocales": [
       "en",
       "bn"
@@ -771,13 +771,13 @@
   },
   {
     "id": 56,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/online-blackmail-sextortion",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Online Blackmail, Sextortion or Threat to Share Private Images",
-    "titleBn": "Online Blackmail, Sextortion or Threat to Share Private Images",
-    "metaDescription": "Bangladesh citizen legal guide on Online Blackmail, Sextortion or Threat to Share Private Images.",
-    "searchIntent": "Online Blackmail, Sextortion or Threat to Share Private Images",
+    "titleBn": "অনলাইন ব্ল্যাকমেইল, sextortion বা ব্যক্তিগত ছবি ছড়িয়ে দেওয়ার হুমকি পেলে কী করবেন?",
+    "metaDescription": "Someone threatens to publish private or sexual images unless you pay or comply. Preserve evidence, protect accounts and learn the current legal routes.",
+    "searchIntent": "A person is being threatened with disclosure of intimate/private material.",
     "publishedLocales": [
       "en",
       "bn"
@@ -785,13 +785,13 @@
   },
   {
     "id": 57,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/deepfake-ai-fake-content",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
-    "titleBn": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
-    "metaDescription": "Bangladesh citizen legal guide on Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?.",
-    "searchIntent": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+    "titleBn": "Deepfake, AI voice clone বা AI দিয়ে বানানো ভুয়া ছবি/ভিডিও হলে কী করবেন?",
+    "metaDescription": "Someone used AI to create a fake voice, photo or video of you. Learn how to preserve evidence, report the content and identify possible legal issues.",
+    "searchIntent": "A citizen discovers synthetic media using their identity or likeness.",
     "publishedLocales": [
       "en",
       "bn"
@@ -799,13 +799,13 @@
   },
   {
     "id": 58,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/unknown-sim-sim-swap",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
-    "titleBn": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
-    "metaDescription": "Bangladesh citizen legal guide on Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud.",
-    "searchIntent": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
+    "titleBn": "আপনার NID-তে অচেনা SIM বা SIM-swap সন্দেহ হলে কী করবেন?",
+    "metaDescription": "Found an unknown mobile number under your NID, or your SIM suddenly stopped working? Learn the BTRC checks and first fraud-response steps.",
+    "searchIntent": "A citizen suspects an unauthorised SIM registration or SIM takeover.",
     "publishedLocales": [
       "en",
       "bn"
@@ -813,13 +813,13 @@
   },
   {
     "id": 59,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/marketplace-advance-payment-scam",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
-    "titleBn": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
-    "metaDescription": "Bangladesh citizen legal guide on Facebook Marketplace, Online Seller or Advance-Payment Scam.",
-    "searchIntent": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+    "titleBn": "Facebook Marketplace, online seller বা advance payment scam হলে কী করবেন?",
+    "metaDescription": "Paid an online seller who disappeared, received a fake product, or were tricked through Marketplace? Learn which evidence and complaint routes matter.",
+    "searchIntent": "A buyer or seller lost money in an online marketplace transaction.",
     "publishedLocales": [
       "en",
       "bn"
@@ -827,13 +827,13 @@
   },
   {
     "id": 60,
-    "cluster": "digital",
-    "route": "",
+    "cluster": "cyber",
+    "route": "cyber/personal-data-nid-leak",
     "sourceRoutePrefix": "action-guides",
     "titleEn": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
-    "titleBn": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
-    "metaDescription": "Bangladesh citizen legal guide on Your NID, Phone Number or Personal Data Was Leaked or Misused.",
-    "searchIntent": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
+    "titleBn": "NID, ফোন নম্বর বা ব্যক্তিগত তথ্য ফাঁস বা অপব্যবহার হলে কী করবেন?",
+    "metaDescription": "Your NID, phone number, account data or other personal information was exposed. Learn the immediate safety steps and current data-protection law.",
+    "searchIntent": "A citizen's personal information was leaked, stolen, sold or used without permission.",
     "publishedLocales": [
       "en",
       "bn"

@@ -1,39 +1,66 @@
 {
   "id": 5,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "property",
+  "route": "property/gift-hiba-property",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Gift Deed and Hiba of Property in Bangladesh",
-    "description": "Bangladesh citizen legal guide on Gift Deed and Hiba of Property in Bangladesh.",
-    "searchIntent": "Gift Deed and Hiba of Property in Bangladesh"
+    "title": "Gift Deed and Hiba of Property in Bangladesh | Justor",
+    "description": "A gift transfers property without an ordinary sale price. Hiba is a Muslim-law concept and should not be treated as the same thing as every type of...",
+    "searchIntent": "A family wants to transfer property without a normal sale."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "The Transfer of Property Act, 1882",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-48.html"
+    },
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
+    },
+    {
+      "label": "Ministry of Land",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://land.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: High-risk personal-law distinctions must be reviewed before the Bangla version is published."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
   "content": {
     "en": {
       "title": "Gift Deed and Hiba of Property in Bangladesh",
       "directAnswer": "A gift transfers property without an ordinary sale price. Hiba is a Muslim-law concept and should not be treated as the same thing as every type of gift. Formal requirements can depend on the type of property, the parties and the legal form used.",
       "atAGlance": {
         "whoFor": "A family wants to transfer property without a normal sale.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "A gift transfers property without an ordinary sale price. Hiba is a Muslim-law concept and should not be treated as the ",
+        "legalBasis": "Transfer of Property Act, 1882; Registration Act, 1908; applicable personal law.",
+        "mainRule": "Do not use one standard “gift deed” answer for every family. Registration, declaration, acceptance and possession issues can matter.",
         "updateStatus": "High-risk personal-law distinctions must be reviewed before the Bangla version is published."
       },
-      "lawMeaning": "Do not use one standard “gift deed” answer for every family. Registration, declaration, acceptance and possession issues can matter.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Do not use one standard “gift deed” answer for every family. Registration, declaration, acceptance and possession issues can matter. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Confirm the donor owns the property.",
         "Identify whether the intended transfer is a statutory gift, hiba or another form.",
@@ -44,26 +71,129 @@
         "Update land records after the transfer."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Title documents; donor and recipient identity; property record; draft deed/declaration; tax and mutation records."
       ],
       "simpleExample": "A father wants to give one property to one child. Before signing anything, he should confirm title, the correct legal form and the effect on other family rights.",
       "commonMistakes": [
-        "Using a sale deed when there is no sale.",
-        "calling every gift “hiba”.",
-        "gifting property the donor does not fully own.",
-        "ignoring co-owners.",
-        "not updating records.."
+        "Common mistakes: Using a sale deed when there is no sale.",
+        "Common mistakes: calling every gift “hiba”.",
+        "Common mistakes: gifting property the donor does not fully own.",
+        "Common mistakes: ignoring co-owners.",
+        "Common mistakes: not updating records.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the recipient is a minor?",
+          "answer": "Get legal guidance on representation and acceptance."
+        },
+        {
+          "question": "What if the donor later changes their mind?",
+          "answer": "Revocation rules are fact-specific."
+        },
+        {
+          "question": "What if family members object?",
+          "answer": "Confirm the donor’s title and legal capacity."
+        }
+      ],
       "specialistTrigger": "Minor recipient; disputed title; donor is elderly or unwell; family pressure; joint property; revocation dispute.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is hiba?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is a gift deed different from a sale deed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does hiba need registration?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can gifted land be taken back?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What should I check before accepting gifted property?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "হেবা ও দান দলিল কীভাবে কাজ করে?",
+      "directAnswer": "A gift transfers property without an ordinary sale price. Hiba is a Muslim-law concept and should not be treated as the same thing as every type of gift. Formal requirements can depend on the type of property, the parties and the legal form used.",
+      "atAGlance": {
+        "whoFor": "A family wants to transfer property without a normal sale.",
+        "legalBasis": "Transfer of Property Act, 1882; Registration Act, 1908; applicable personal law.",
+        "mainRule": "Do not use one standard “gift deed” answer for every family. Registration, declaration, acceptance and possession issues can matter.",
+        "updateStatus": "High-risk personal-law distinctions must be reviewed before the Bangla version is published."
+      },
+      "lawMeaning": "Do not use one standard “gift deed” answer for every family. Registration, declaration, acceptance and possession issues can matter. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Confirm the donor owns the property.",
+        "Identify whether the intended transfer is a statutory gift, hiba or another form.",
+        "Describe the property correctly.",
+        "Check registration and document requirements.",
+        "Record acceptance and other required facts.",
+        "Complete registration where legally required.",
+        "Update land records after the transfer."
+      ],
+      "evidence": [
+        "Title documents; donor and recipient identity; property record; draft deed/declaration; tax and mutation records."
+      ],
+      "simpleExample": "A father wants to give one property to one child. Before signing anything, he should confirm title, the correct legal form and the effect on other family rights.",
+      "commonMistakes": [
+        "Common mistakes: Using a sale deed when there is no sale.",
+        "Common mistakes: calling every gift “hiba”.",
+        "Common mistakes: gifting property the donor does not fully own.",
+        "Common mistakes: ignoring co-owners.",
+        "Common mistakes: not updating records.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the recipient is a minor?",
+          "answer": "Get legal guidance on representation and acceptance."
+        },
+        {
+          "question": "What if the donor later changes their mind?",
+          "answer": "Revocation rules are fact-specific."
+        },
+        {
+          "question": "What if family members object?",
+          "answer": "Confirm the donor’s title and legal capacity."
+        }
+      ],
+      "specialistTrigger": "Minor recipient; disputed title; donor is elderly or unwell; family pressure; joint property; revocation dispute.",
+      "faqs": [
+        {
+          "question": "What is hiba?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is a gift deed different from a sale deed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does hiba need registration?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can gifted land be taken back?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What should I check before accepting gifted property?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "e1447ec67919ae84"
+    "en": "eb8bf7bc6e8c179a95777d5c2027e981d233e7f12dd488ae11f947fd2f9ae1b4",
+    "bn": "1ccfc912841d519ef7e5e9af55d035948546c27d2904b5277aed045afb231367"
   },
   "releaseStatus": {
     "en": "published",
@@ -72,6 +202,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

@@ -120,14 +120,84 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "সরকারি Legal Aid কীভাবে পাবেন?",
+      "directAnswer": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation/department provides information, district legal-aid offices, forms and online application routes. Eligibility and services depend on current law and rules.",
+      "atAGlance": {
+        "whoFor": "A person cannot afford legal help or wants to know whether government legal aid can assist.",
+        "legalBasis": "Legal Aid Services Act, 2000; Legal Aid Services (Amendment) Act, 2026; current NLASO rules and forms.",
+        "mainRule": "The legal-aid law was amended in 2026. Use current eligibility, mediation and service rules rather than older brochures.",
+        "updateStatus": "LAW UPDATED: Legal Aid Services (Amendment) Act, 2026 (Act No. 45 of 2026). Re-check current eligibility and forms before publication."
+      },
+      "lawMeaning": "The legal-aid law was amended in 2026. Use current eligibility, mediation and service rules rather than older brochures. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Visit the official legal-aid site.",
+        "Check the type of help available.",
+        "Check eligibility.",
+        "Choose the district/legal-aid office.",
+        "Complete the official form or online application.",
+        "Attach required documents.",
+        "Keep application/reference number.",
+        "Follow instructions from the legal-aid office."
+      ],
+      "evidence": [
+        "Identity; income/eligibility information; case documents; court papers; opponent information where required; contact details."
+      ],
+      "simpleExample": "A person with a pending family dispute cannot afford a private lawyer. They should check the current legal-aid eligibility and apply through the official district or online route instead of paying an unknown intermediary.",
+      "commonMistakes": [
+        "Common mistakes: Using a fake “legal aid” Facebook page.",
+        "Common mistakes: paying unofficial fees.",
+        "Common mistakes: submitting an incomplete case history.",
+        "Common mistakes: assuming every case is automatically eligible.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if a case is already in court?",
+          "answer": "Legal aid may still be relevant depending on eligibility and service."
+        },
+        {
+          "question": "What if you need mediation?",
+          "answer": "Check the current legal-aid mediation framework."
+        },
+        {
+          "question": "What if you cannot apply online?",
+          "answer": "Contact the district legal-aid office."
+        }
+      ],
+      "specialistTrigger": "Urgent arrest/detention; violence; deadline; complex appeal; eligibility dispute.",
+      "faqs": [
+        {
+          "question": "Who can get government legal aid?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Where do I apply?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is legal aid free?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can legal aid help with a court case?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What changed in 2026?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "117457ba052207d112416a86a3cdfa0763a601d2d4c7b336e6d6c47aec414fe9"
+    "en": "117457ba052207d112416a86a3cdfa0763a601d2d4c7b336e6d6c47aec414fe9",
+    "bn": "2a6a76c7fac82498c3b69cd9dcec4350e3f15b454ae1fa9b4c553fabc5d9acb7"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

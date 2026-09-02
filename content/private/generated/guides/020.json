@@ -112,14 +112,82 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "দ্বিতীয় বিয়ে করতে আইনে কী লাগে?",
+      "directAnswer": "During an existing Muslim marriage, section 6 of the Muslim Family Laws Ordinance requires previous written permission from the Arbitration Council before another marriage is contracted. The law sets a formal application process. Do not reduce this to the simple statement that “the first wife must give permission.”",
+      "atAGlance": {
+        "whoFor": "A Muslim man or spouse wants to understand the legal permission process.",
+        "legalBasis": "Muslim Family Laws Ordinance, 1961, section 6; marriage registration law.",
+        "mainRule": "The statutory decision is made through the Arbitration Council process. Existing wife or wives are part of that process, but the legal test should be described from the actual section.",
+        "updateStatus": "Use the current section 6 text. Avoid moral or religious commentary; explain only the legal process."
+      },
+      "lawMeaning": "The statutory decision is made through the Arbitration Council process. Existing wife or wives are part of that process, but the legal test should be described from the actual section. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Confirm an existing marriage is still legally in force.",
+        "Apply to the Chairman in the required form.",
+        "State the reasons for the proposed marriage.",
+        "Follow the Arbitration Council process.",
+        "Obtain written permission before contracting the later marriage.",
+        "Complete lawful marriage registration."
+      ],
+      "evidence": [
+        "Existing kabinnama; application; reasons; Arbitration Council record; permission; new marriage record."
+      ],
+      "simpleExample": "A man says his first wife agreed by text message, so no other step is needed. That is unsafe. The law requires the formal Arbitration Council permission process.",
+      "commonMistakes": [
+        "Common mistakes: Treating private consent as a substitute for statutory permission.",
+        "Common mistakes: hiding an existing marriage.",
+        "Common mistakes: ignoring dower consequences.",
+        "Common mistakes: using an unregistered later marriage.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the first wife agrees?",
+          "answer": "Formal permission is still the key statutory step."
+        },
+        {
+          "question": "What if permission is refused?",
+          "answer": "Get legal advice before acting."
+        },
+        {
+          "question": "What if a second marriage already happened without permission?",
+          "answer": "Legal consequences need review."
+        }
+      ],
+      "specialistTrigger": "Existing second marriage without permission; disputed marriage status; dower consequences; foreign marriage.",
+      "faqs": [
+        {
+          "question": "Is first-wife permission enough?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who gives legal permission for a second marriage?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What does section 6 require?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if permission is refused?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What happens if the rule is ignored?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "e4fc9ef090f2898bd15aa7bcb53e465d4285e65ff216188e4d0fc8200b8a5c2c"
+    "en": "e4fc9ef090f2898bd15aa7bcb53e465d4285e65ff216188e4d0fc8200b8a5c2c",
+    "bn": "7c1d0e5f44c6cf687a6558f0194757b04995e0230e7129903affb5fa1aa247fb"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

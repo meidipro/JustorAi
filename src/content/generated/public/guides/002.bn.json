@@ -1,39 +1,72 @@
 {
   "id": 2,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "property",
+  "route": "property/mutation-namjari",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Mutation or Namjari: What Is It and How Do You Apply?",
-    "description": "Bangladesh citizen legal guide on Mutation or Namjari: What Is It and How Do You Apply?.",
-    "searchIntent": "Mutation or Namjari: What Is It and How Do You Apply?"
+    "title": "Mutation or Namjari: What Is It and How Do You Apply? | Justor",
+    "description": "Mutation, also called namjari, is the process of updating the government land record after ownership changes or a record needs correction. It is not...",
+    "searchIntent": "A new owner or heir wants to update government land records."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA FOR TITLE WARNINGS",
+    "freshnessRequirementRaw": "DYNAMIC DATA: Re-check official fees and process notices on the day of publication. | - 15 August 2026: DYNAMIC DATA: Re-check official fees and process notices on the day of publication."
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Ministry of Land",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://mutation.land.gov.bd/"
+    },
+    {
+      "label": "e-Mutation disposal steps",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/namjari-steps"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://land.gov.bd/vumisheba-fee?lang=bn"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://land.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: DYNAMIC DATA: Re-check official fees and process notices on the day of publication."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    },
+    {
+      "label": "Gift Deed and Hiba of Property in Bangladesh",
+      "route": "/guides/property/gift-hiba-property"
+    }
+  ],
   "content": {
     "en": {
       "title": "Mutation or Namjari: What Is It and How Do You Apply?",
       "directAnswer": "Mutation, also called namjari, is the process of updating the government land record after ownership changes or a record needs correction. It is not the same as the deed itself. The Ministry of Land operates the official e-Mutation system, where citizens can apply, pay official fees and track the application.",
       "atAGlance": {
         "whoFor": "A new owner or heir wants to update government land records.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Mutation, also called namjari, is the process of updating the government land record after ownership changes or a record",
+        "legalBasis": "Ministry of Land e-Mutation rules and current land laws.",
+        "mainRule": "Use the official e-Mutation system. Official fees can change, so the page must read the current Ministry fee table on the publication date. As of the verification date, the Ministry lists a court fee of ৳20, notice fee of ৳50 and DCR fee of ৳1,100 for mutation.",
         "updateStatus": "DYNAMIC DATA: Re-check official fees and process notices on the day of publication."
       },
-      "lawMeaning": "Use the official e-Mutation system. Official fees can change, so the page must read the current Ministry fee table on the publication date. As of the verification date, the Ministry lists a court fee of ৳20, notice fee of ৳50 and DCR fee of ৳1,100 for mutation.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Use the official e-Mutation system. Official fees can change, so the page must read the current Ministry fee table on the publication date. As of the verification date, the Ministry lists a court fee of ৳20, notice fee of ৳50 and DCR fee of ৳1,100 for mutation. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Create or use the required land-service account.",
         "Select the correct land and ownership-change reason.",
@@ -45,26 +78,130 @@
         "After approval, pay the official DCR fee where required and save the order."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Deed or ownership document; old khatian; applicant identity; inheritance papers where relevant; tax records; court order if applicable; application and payment receipts."
       ],
       "simpleExample": "Hasan buys land and completes registration. He should still check whether the government record needs to be changed to his name. Mutation helps update that record, but it does not replace the registered deed.",
       "commonMistakes": [
-        "Thinking mutation alone proves title.",
-        "paying a broker without checking official fees.",
-        "entering the wrong plot.",
-        "ignoring notices.",
-        "losing the application number.."
+        "Common mistakes: Thinking mutation alone proves title.",
+        "Common mistakes: paying a broker without checking official fees.",
+        "Common mistakes: entering the wrong plot.",
+        "Common mistakes: ignoring notices.",
+        "Common mistakes: losing the application number.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the application is rejected?",
+          "answer": "Read the reason and use the review or appeal route that applies."
+        },
+        {
+          "question": "What if ownership came by inheritance?",
+          "answer": "Use the inheritance documents required by the official system."
+        },
+        {
+          "question": "What if several heirs exist?",
+          "answer": "Do not hide co-heirs."
+        }
+      ],
       "specialistTrigger": "There is a title dispute; inheritance is contested; records conflict; a court case is pending; the office rejects an application for a legal reason you do not understand.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is mutation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is mutation the same as ownership?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How much does mutation cost?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I apply online?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What can I do if mutation is delayed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "নামজারি কী এবং কীভাবে করবেন?",
+      "directAnswer": "Mutation, also called namjari, is the process of updating the government land record after ownership changes or a record needs correction. It is not the same as the deed itself. The Ministry of Land operates the official e-Mutation system, where citizens can apply, pay official fees and track the application.",
+      "atAGlance": {
+        "whoFor": "A new owner or heir wants to update government land records.",
+        "legalBasis": "Ministry of Land e-Mutation rules and current land laws.",
+        "mainRule": "Use the official e-Mutation system. Official fees can change, so the page must read the current Ministry fee table on the publication date. As of the verification date, the Ministry lists a court fee of ৳20, notice fee of ৳50 and DCR fee of ৳1,100 for mutation.",
+        "updateStatus": "DYNAMIC DATA: Re-check official fees and process notices on the day of publication."
+      },
+      "lawMeaning": "Use the official e-Mutation system. Official fees can change, so the page must read the current Ministry fee table on the publication date. As of the verification date, the Ministry lists a court fee of ৳20, notice fee of ৳50 and DCR fee of ৳1,100 for mutation. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Create or use the required land-service account.",
+        "Select the correct land and ownership-change reason.",
+        "Enter deed, inheritance or other ownership information.",
+        "Upload required records.",
+        "Pay only the official application and notice fees.",
+        "Track notices or hearing instructions.",
+        "Respond to requests for missing information.",
+        "After approval, pay the official DCR fee where required and save the order."
+      ],
+      "evidence": [
+        "Deed or ownership document; old khatian; applicant identity; inheritance papers where relevant; tax records; court order if applicable; application and payment receipts."
+      ],
+      "simpleExample": "Hasan buys land and completes registration. He should still check whether the government record needs to be changed to his name. Mutation helps update that record, but it does not replace the registered deed.",
+      "commonMistakes": [
+        "Common mistakes: Thinking mutation alone proves title.",
+        "Common mistakes: paying a broker without checking official fees.",
+        "Common mistakes: entering the wrong plot.",
+        "Common mistakes: ignoring notices.",
+        "Common mistakes: losing the application number.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the application is rejected?",
+          "answer": "Read the reason and use the review or appeal route that applies."
+        },
+        {
+          "question": "What if ownership came by inheritance?",
+          "answer": "Use the inheritance documents required by the official system."
+        },
+        {
+          "question": "What if several heirs exist?",
+          "answer": "Do not hide co-heirs."
+        }
+      ],
+      "specialistTrigger": "There is a title dispute; inheritance is contested; records conflict; a court case is pending; the office rejects an application for a legal reason you do not understand.",
+      "faqs": [
+        {
+          "question": "What is mutation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is mutation the same as ownership?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How much does mutation cost?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I apply online?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What can I do if mutation is delayed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "c2365a45f7932da3"
+    "en": "1585b8fbf4d78da763ac554d94996f705c60acd81aad0079d66731e1fe9d828c",
+    "bn": "70b497ee7515332cff2e9dff35d214c6fd46360f86a51b8bb337b140bf9e2469"
   },
   "releaseStatus": {
     "en": "published",
@@ -73,6 +210,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

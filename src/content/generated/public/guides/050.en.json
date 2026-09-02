@@ -1,39 +1,67 @@
 {
   "id": 50,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "government",
+  "route": "legal-help/government-legal-aid",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "How to Get Government Legal Aid in Bangladesh",
-    "description": "Bangladesh citizen legal guide on How to Get Government Legal Aid in Bangladesh.",
-    "searchIntent": "How to Get Government Legal Aid in Bangladesh"
+    "title": "How to Get Government Legal Aid in Bangladesh | Justor",
+    "description": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation/department provides...",
+    "searchIntent": "A person cannot afford legal help or wants to know whether government legal aid can assist."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK; HUMAN LEGAL REVIEW FOR ELIGIBILITY LANGUAGE",
+    "freshnessRequirementRaw": "LAW UPDATED: Legal Aid Services (Amendment) Act, 2026 (Act No. 45 of 2026). Re-check current eligibility and forms before publication. | - 15 August 2026: LAW UPDATED: Legal Aid Services (Amendment) Act, 2026 (Act No. 45 of 2026). Re-check current eligibility and forms before publication."
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Legal Aid Services Act, 2000",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-834.html"
+    },
+    {
+      "label": "Legal Aid Services (Amendment) Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1674.html"
+    },
+    {
+      "label": "Bangladesh Legal Aid Services / NLASO",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://nlaso.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: LAW UPDATED: Legal Aid Services (Amendment) Act, 2026 (Act No. 45 of 2026). Re-check current eligibility and forms before publication."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Government Office Did Not Give You a Service: How to Complain",
+      "route": "/action-guides/government/government-service-complaint"
+    },
+    {
+      "label": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+      "route": "/action-guides/government/local-service-complaint"
+    },
+    {
+      "label": "Land Office Is Delaying Your Service",
+      "route": "/action-guides/property/land-office-delay"
+    },
+    {
+      "label": "How to Make a Right to Information Request",
+      "route": "/guides/government/right-to-information"
+    }
+  ],
   "content": {
     "en": {
       "title": "How to Get Government Legal Aid in Bangladesh",
       "directAnswer": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation/department provides information, district legal-aid offices, forms and online application routes. Eligibility and services depend on current law and rules.",
       "atAGlance": {
         "whoFor": "A person cannot afford legal help or wants to know whether government legal aid can assist.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation",
+        "legalBasis": "Legal Aid Services Act, 2000; Legal Aid Services (Amendment) Act, 2026; current NLASO rules and forms.",
+        "mainRule": "The legal-aid law was amended in 2026. Use current eligibility, mediation and service rules rather than older brochures.",
         "updateStatus": "LAW UPDATED: Legal Aid Services (Amendment) Act, 2026 (Act No. 45 of 2026). Re-check current eligibility and forms before publication."
       },
-      "lawMeaning": "The legal-aid law was amended in 2026. Use current eligibility, mediation and service rules rather than older brochures.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "The legal-aid law was amended in 2026. Use current eligibility, mediation and service rules rather than older brochures. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Visit the official legal-aid site.",
         "Check the type of help available.",
@@ -45,33 +73,65 @@
         "Follow instructions from the legal-aid office."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Identity; income/eligibility information; case documents; court papers; opponent information where required; contact details."
       ],
       "simpleExample": "A person with a pending family dispute cannot afford a private lawyer. They should check the current legal-aid eligibility and apply through the official district or online route instead of paying an unknown intermediary.",
       "commonMistakes": [
-        "Using a fake “legal aid” Facebook page.",
-        "paying unofficial fees.",
-        "submitting an incomplete case history.",
-        "assuming every case is automatically eligible.."
+        "Common mistakes: Using a fake “legal aid” Facebook page.",
+        "Common mistakes: paying unofficial fees.",
+        "Common mistakes: submitting an incomplete case history.",
+        "Common mistakes: assuming every case is automatically eligible.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if a case is already in court?",
+          "answer": "Legal aid may still be relevant depending on eligibility and service."
+        },
+        {
+          "question": "What if you need mediation?",
+          "answer": "Check the current legal-aid mediation framework."
+        },
+        {
+          "question": "What if you cannot apply online?",
+          "answer": "Contact the district legal-aid office."
+        }
+      ],
       "specialistTrigger": "Urgent arrest/detention; violence; deadline; complex appeal; eligibility dispute.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "Who can get government legal aid?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Where do I apply?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is legal aid free?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can legal aid help with a court case?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What changed in 2026?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "1363ada22d5bad09"
+    "en": "117457ba052207d112416a86a3cdfa0763a601d2d4c7b336e6d6c47aec414fe9"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

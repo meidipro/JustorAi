@@ -122,14 +122,82 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "কারা আয়কর রিটার্ন জমা দেবেন?",
+      "directAnswer": "Whether you must file a return depends on the current Income Tax Act and tax-year rules. It is not based only on whether tax is payable. Some people must file because of income, status, transactions or other legal triggers. This page must be updated every tax year.",
+      "atAGlance": {
+        "whoFor": "A citizen wants to know whether they have a return duty.",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; current NBR SROs/notices.",
+        "mainRule": "Separate three questions: Do I need a TIN? Do I need to file a return? Do I owe tax? They are not always the same.",
+        "updateStatus": "YEARLY UPDATE REQUIRED. Publish an exact statutory list only after a tax reviewer verifies every category."
+      },
+      "lawMeaning": "Separate three questions: Do I need a TIN? Do I need to file a return? Do I owe tax? They are not always the same. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Check annual income.",
+        "Check mandatory filing categories.",
+        "Check any transaction/status that requires proof of return.",
+        "Check taxpayer category.",
+        "Check deadline.",
+        "File even if tax is zero when filing is still legally required."
+      ],
+      "evidence": [
+        "Income records; TIN; transaction records; previous return; proof-of-return needs."
+      ],
+      "simpleExample": "A person owes no final tax but needs proof of return for a legally specified transaction. “No tax” does not automatically mean “no return.”",
+      "commonMistakes": [
+        "Common mistakes: Using only a salary threshold.",
+        "Common mistakes: ignoring mandatory filing categories.",
+        "Common mistakes: confusing TIN with return.",
+        "Common mistakes: using last year’s rule.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if income is below the taxable threshold?",
+          "answer": "Filing may still be required in some categories."
+        },
+        {
+          "question": "What if you have no income now but have a TIN?",
+          "answer": "Check current filing rules."
+        },
+        {
+          "question": "What if you missed the deadline?",
+          "answer": "Use the current late-filing rules."
+        }
+      ],
+      "specialistTrigger": "Complex status; company/director links; foreign income; missed years; notice from NBR.",
+      "faqs": [
+        {
+          "question": "Who must file a return?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "If I owe no tax, do I still file?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is TIN the same as filing?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if I missed the deadline?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is proof of return?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "92fb580618e90c8dec489748a53839ed40e8cc450cd12853f3098b0496c832c0"
+    "en": "92fb580618e90c8dec489748a53839ed40e8cc450cd12853f3098b0496c832c0",
+    "bn": "6ad0bf5a01e3c48d824539b512a772fbf23e0c6d7382cd2f25d2225a563e417a"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

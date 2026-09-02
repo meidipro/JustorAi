@@ -1,62 +1,217 @@
 {
   "id": 54,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "cyber",
+  "route": "cyber/social-media-account-hacked",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
-    "description": "Bangladesh citizen legal guide on Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do.",
-    "searchIntent": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do"
+    "title": "Social Media Account Hacked in Bangladesh: What to Do",
+    "description": "Lost control of Facebook, Instagram, Gmail or another account? Secure recovery channels, preserve evidence and understand the legal options.",
+    "searchIntent": "A citizen's online account has been taken over or accessed without permission."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK; HUMAN REVIEW FOR OFFENCE CHARACTERISATION"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Section 18",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57959.html"
+    },
+    {
+      "label": "Section 21",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57962.html"
+    },
+    {
+      "label": "Section 22",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57963.html"
+    },
+    {
+      "label": "Facebook official hacked-account recovery",
+      "type": "secondary",
+      "url": "https://www.facebook.com/hacked"
+    },
+    {
+      "label": "Google official account recovery guidance",
+      "type": "secondary",
+      "url": "https://support.google.com/accounts/answer/7682439"
+    },
+    {
+      "label": "BGD e-GOV CIRT",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://www.cirt.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Current Cyber Security Act and current platform recovery sources checked."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Fake Social Media Account or Impersonation",
+      "route": "/action-guides/cyber/social-media-impersonation"
+    },
+    {
+      "label": "Phishing Link or Fake Website",
+      "route": "/action-guides/cyber/phishing-link-fake-website"
+    },
+    {
+      "label": "Online Blackmail or Sextortion",
+      "route": "/action-guides/cyber/online-blackmail-sextortion"
+    }
+  ],
   "content": {
     "en": {
       "title": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
       "directAnswer": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown devices and recovery details. Turn on two-factor authentication. Save emails showing password, email or phone changes. Warn your contacts if the attacker is sending messages from your account. If the attacker stole information, demanded money, committed fraud or continues to access the account, preserve the evidence and consider a formal report.",
       "atAGlance": {
-        "whoFor": "Citizens in Bangladesh",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown",
-        "updateStatus": "Current Bangladesh law"
+        "whoFor": "A citizen's online account has been taken over or accessed without permission.",
+        "legalBasis": "Unauthorised access to a computer, digital device, computer system or data can fall within section 18 of the Cyber Security Act, 2026 depending on the facts. If the hacked account is then used to create false digital material or deceive others, sections 21 or 22 may also become relevant. Do not write that every lost account proves “hacking.” Sometimes access is lost because of a forgotten password, shared credentials or platform action. The article must separate account recovery from legal accusation.",
+        "mainRule": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown devices and recovery details. Turn on two-factor authentication. Save emails showing password, email or phone changes. Warn your contacts if the attacker is sending messages from your account. If the attacker stole information, demanded money, committed fraud or continues to access the account, preserve the evidence and consider a formal report.",
+        "updateStatus": "15 August 2026: Current Cyber Security Act and current platform recovery sources checked."
       },
-      "lawMeaning": "",
+      "lawMeaning": "Unauthorised access to a computer, digital device, computer system or data can fall within section 18 of the Cyber Security Act, 2026 depending on the facts. If the hacked account is then used to create false digital material or deceive others, sections 21 or 22 may also become relevant. Do not write that every lost account proves “hacking.” Sometimes access is lost because of a forgotten password, shared credentials or platform action. The article must separate account recovery from legal accusation.",
       "steps": [
-        "Review the relevant official documentation.",
-        "Submit the application or complaint to the designated authority.",
-        "Retain all receipts and acknowledgment slips."
+        "Recovery steps: Use only the platform's official recovery page.",
+        "Recovery steps: Change the password.",
+        "Recovery steps: Change the password of the connected email account too.",
+        "Recovery steps: Remove unknown recovery email addresses and phone numbers.",
+        "Recovery steps: Review logged-in devices.",
+        "Recovery steps: Revoke suspicious third-party app access.",
+        "Recovery steps: Turn on 2FA.",
+        "Recovery steps: Save account-security emails.",
+        "Recovery steps: Tell close contacts not to send money to new requests from the account.",
+        "Recovery steps: Preserve fraudulent posts, messages and payment demands before they disappear."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Account URL; username; old email/phone; security alerts; changed-password emails; screenshots of fraudulent posts; attacker messages; login location alerts; payment requests; platform case number."
       ],
       "simpleExample": "A person's Facebook password stops working. Friends then receive messages asking for emergency money. The user should start Facebook's official hacked-account recovery, secure the email account connected to Facebook, warn contacts, preserve the scam messages, and report any financial fraud separately.",
-      "commonMistakes": [
-        "Missing statutory limitation deadlines.",
-        "Failing to retain written acknowledgments."
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "The hacker changed my email and phone. Use the platform's recovery process and provide the historical account information it requests.",
+          "answer": ""
+        },
+        {
+          "question": "The attacker is asking my friends for money. Tell contacts quickly and save those messages as evidence.",
+          "answer": ""
+        },
+        {
+          "question": "The platform suspended the account after the hack. Use the official appeal/recovery channel. A police complaint does not automatically restore a platform account.",
+          "answer": ""
+        },
+        {
+          "question": "My business page was taken over. Preserve administrator and business-manager records and consider specialist support because financial and customer data may also be affected.",
+          "answer": ""
+        }
       ],
-      "whatIf": [],
       "specialistTrigger": "Business account takeover; stolen client data; financial loss; repeated harassment; blackmail; intimate-image misuse; or a dispute involving contractual or commercial damage.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal and account-safety information. Platform rules and recovery procedures can change.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "Is changing the password enough?",
+          "answer": "Not always. Also check recovery email, phone, logged-in devices, linked apps and 2FA."
+        },
+        {
+          "question": "Should I pay someone on Facebook to recover my account?",
+          "answer": "Avoid unknown “recovery agents.” Use the platform's official recovery path."
+        },
+        {
+          "question": "Can police recover my Facebook account?",
+          "answer": "Police may investigate alleged offences. Platform access and recovery are controlled by the platform's own processes."
+        },
+        {
+          "question": "Is Facebook's recovery page an official legal source?",
+          "answer": "No. It is an official platform operational source. Bangladesh law remains the legal source."
+        },
+        {
+          "question": "What law may apply to unauthorised access?",
+          "answer": "Section 18 of the Cyber Security Act, 2026 may be relevant depending on the facts."
+        }
+      ],
+      "disclaimer": "This page provides general legal and account-safety information. Platform rules and recovery procedures can change.  ---"
+    },
+    "bn": {
+      "title": "Facebook, Instagram, Gmail বা social account হ্যাক হলে কী করবেন?",
+      "directAnswer": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown devices and recovery details. Turn on two-factor authentication. Save emails showing password, email or phone changes. Warn your contacts if the attacker is sending messages from your account. If the attacker stole information, demanded money, committed fraud or continues to access the account, preserve the evidence and consider a formal report.",
+      "atAGlance": {
+        "whoFor": "A citizen's online account has been taken over or accessed without permission.",
+        "legalBasis": "Unauthorised access to a computer, digital device, computer system or data can fall within section 18 of the Cyber Security Act, 2026 depending on the facts. If the hacked account is then used to create false digital material or deceive others, sections 21 or 22 may also become relevant. Do not write that every lost account proves “hacking.” Sometimes access is lost because of a forgotten password, shared credentials or platform action. The article must separate account recovery from legal accusation.",
+        "mainRule": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown devices and recovery details. Turn on two-factor authentication. Save emails showing password, email or phone changes. Warn your contacts if the attacker is sending messages from your account. If the attacker stole information, demanded money, committed fraud or continues to access the account, preserve the evidence and consider a formal report.",
+        "updateStatus": "15 August 2026: Current Cyber Security Act and current platform recovery sources checked."
+      },
+      "lawMeaning": "Unauthorised access to a computer, digital device, computer system or data can fall within section 18 of the Cyber Security Act, 2026 depending on the facts. If the hacked account is then used to create false digital material or deceive others, sections 21 or 22 may also become relevant. Do not write that every lost account proves “hacking.” Sometimes access is lost because of a forgotten password, shared credentials or platform action. The article must separate account recovery from legal accusation.",
+      "steps": [
+        "Recovery steps: Use only the platform's official recovery page.",
+        "Recovery steps: Change the password.",
+        "Recovery steps: Change the password of the connected email account too.",
+        "Recovery steps: Remove unknown recovery email addresses and phone numbers.",
+        "Recovery steps: Review logged-in devices.",
+        "Recovery steps: Revoke suspicious third-party app access.",
+        "Recovery steps: Turn on 2FA.",
+        "Recovery steps: Save account-security emails.",
+        "Recovery steps: Tell close contacts not to send money to new requests from the account.",
+        "Recovery steps: Preserve fraudulent posts, messages and payment demands before they disappear."
+      ],
+      "evidence": [
+        "Account URL; username; old email/phone; security alerts; changed-password emails; screenshots of fraudulent posts; attacker messages; login location alerts; payment requests; platform case number."
+      ],
+      "simpleExample": "A person's Facebook password stops working. Friends then receive messages asking for emergency money. The user should start Facebook's official hacked-account recovery, secure the email account connected to Facebook, warn contacts, preserve the scam messages, and report any financial fraud separately.",
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "The hacker changed my email and phone. Use the platform's recovery process and provide the historical account information it requests.",
+          "answer": ""
+        },
+        {
+          "question": "The attacker is asking my friends for money. Tell contacts quickly and save those messages as evidence.",
+          "answer": ""
+        },
+        {
+          "question": "The platform suspended the account after the hack. Use the official appeal/recovery channel. A police complaint does not automatically restore a platform account.",
+          "answer": ""
+        },
+        {
+          "question": "My business page was taken over. Preserve administrator and business-manager records and consider specialist support because financial and customer data may also be affected.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "Business account takeover; stolen client data; financial loss; repeated harassment; blackmail; intimate-image misuse; or a dispute involving contractual or commercial damage.",
+      "faqs": [
+        {
+          "question": "Is changing the password enough?",
+          "answer": "Not always. Also check recovery email, phone, logged-in devices, linked apps and 2FA."
+        },
+        {
+          "question": "Should I pay someone on Facebook to recover my account?",
+          "answer": "Avoid unknown “recovery agents.” Use the platform's official recovery path."
+        },
+        {
+          "question": "Can police recover my Facebook account?",
+          "answer": "Police may investigate alleged offences. Platform access and recovery are controlled by the platform's own processes."
+        },
+        {
+          "question": "Is Facebook's recovery page an official legal source?",
+          "answer": "No. It is an official platform operational source. Bangladesh law remains the legal source."
+        },
+        {
+          "question": "What law may apply to unauthorised access?",
+          "answer": "Section 18 of the Cyber Security Act, 2026 may be relevant depending on the facts."
+        }
+      ],
+      "disclaimer": "This page provides general legal and account-safety information. Platform rules and recovery procedures can change.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "9134cf910c6e10c9"
+    "en": "2190b6cf660c79d7ea03e7e8538c07e310439d4ddb4f8146ed0a4c6157e419e8",
+    "bn": "339ee59d5bbb60e531cdc87b9bcc3e024d963dfd22f6b7164e2c35d2f90a0493"
   },
   "releaseStatus": {
     "en": "published",
@@ -65,6 +220,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

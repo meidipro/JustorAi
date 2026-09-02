@@ -1,39 +1,66 @@
 {
   "id": 30,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "consumer",
+  "route": "consumer/online-shop-no-delivery",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "Facebook or Online Shop Did Not Deliver Your Product",
-    "description": "Bangladesh citizen legal guide on Facebook or Online Shop Did Not Deliver Your Product.",
-    "searchIntent": "Facebook or Online Shop Did Not Deliver Your Product"
+    "title": "Facebook or Online Shop Did Not Deliver Your Product | Justor",
+    "description": "Save the order, page URL, payment proof, messages and promised delivery date. First ask the seller for delivery or a lawful refund. If the facts show a...",
+    "searchIntent": "A buyer paid an online seller but did not receive the promised product."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Consumers' Right Protection Act, 2009",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1014.html"
+    },
+    {
+      "label": "Directorate of National Consumer Rights Protection",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://dncrp.gov.bd/"
+    },
+    {
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Current cyber-law references must use the 2026 Act and July 2026 amendment."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "What to Do If You Buy a Defective Product",
+      "route": "/action-guides/consumer/defective-product"
+    },
+    {
+      "label": "You Paid for a Service but Did Not Receive It",
+      "route": "/action-guides/consumer/service-not-delivered"
+    },
+    {
+      "label": "Wrong Price and Misleading Advertising: What Can You Do?",
+      "route": "/guides/consumer/misleading-advertising"
+    },
+    {
+      "label": "Mobile, Internet or Subscription Billing Dispute",
+      "route": "/action-guides/consumer/billing-dispute"
+    }
+  ],
   "content": {
     "en": {
       "title": "Facebook or Online Shop Did Not Deliver Your Product",
       "directAnswer": "Save the order, page URL, payment proof, messages and promised delivery date. First ask the seller for delivery or a lawful refund. If the facts show a consumer-rights issue, use the official DNCRP route. If the account appears fake or the payment was obtained by deception, a fraud/cyber complaint may also be relevant.",
       "atAGlance": {
         "whoFor": "A buyer paid an online seller but did not receive the promised product.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Save the order, page URL, payment proof, messages and promised delivery date. First ask the seller for delivery or a law",
+        "legalBasis": "Consumers’ Right Protection Act, 2009; DNCRP; Cyber Security Act, 2026 and other criminal law where fraud is alleged.",
+        "mainRule": "Separate an ordinary delivery dispute from deliberate fraud. Do not label every late delivery as a crime.",
         "updateStatus": "Current cyber-law references must use the 2026 Act and July 2026 amendment."
       },
-      "lawMeaning": "Separate an ordinary delivery dispute from deliberate fraud. Do not label every late delivery as a crime.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Separate an ordinary delivery dispute from deliberate fraud. Do not label every late delivery as a crime. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Save the listing and seller profile.",
         "Save payment transaction ID.",
@@ -44,25 +71,127 @@
         "If fraud indicators exist, preserve evidence for bank/MFS and police/cyber reporting."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Screenshots; profile URL; payment proof; courier details; chat; invoice; refund promise."
       ],
       "simpleExample": "A Facebook page takes payment and then deletes the page. The buyer should save any cached links, transaction ID and chat before devices or accounts are changed.",
       "commonMistakes": [
-        "Paying another “release fee”.",
-        "deleting chat.",
-        "threatening the seller.",
-        "sending NID/passwords to a fake refund agent.."
+        "Common mistakes: Paying another “release fee”.",
+        "Common mistakes: deleting chat.",
+        "Common mistakes: threatening the seller.",
+        "Common mistakes: sending NID/passwords to a fake refund agent.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the seller is only late?",
+          "answer": "Give a clear written request first."
+        },
+        {
+          "question": "What if the page disappeared?",
+          "answer": "Preserve transaction and platform evidence."
+        },
+        {
+          "question": "What if payment was through MFS?",
+          "answer": "Contact the provider quickly where appropriate."
+        }
+      ],
       "specialistTrigger": "Large fraud; multiple victims; stolen identity; threats; payment account under another person.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What if an online shop does not deliver?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I complain to DNCRP?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When is it fraud?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I contact my bank or MFS?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "অনলাইন শপ টাকা নিয়েও পণ্য না দিলে কী করবেন?",
+      "directAnswer": "Save the order, page URL, payment proof, messages and promised delivery date. First ask the seller for delivery or a lawful refund. If the facts show a consumer-rights issue, use the official DNCRP route. If the account appears fake or the payment was obtained by deception, a fraud/cyber complaint may also be relevant.",
+      "atAGlance": {
+        "whoFor": "A buyer paid an online seller but did not receive the promised product.",
+        "legalBasis": "Consumers’ Right Protection Act, 2009; DNCRP; Cyber Security Act, 2026 and other criminal law where fraud is alleged.",
+        "mainRule": "Separate an ordinary delivery dispute from deliberate fraud. Do not label every late delivery as a crime.",
+        "updateStatus": "Current cyber-law references must use the 2026 Act and July 2026 amendment."
+      },
+      "lawMeaning": "Separate an ordinary delivery dispute from deliberate fraud. Do not label every late delivery as a crime. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Save the listing and seller profile.",
+        "Save payment transaction ID.",
+        "Save order confirmation.",
+        "Ask for a clear delivery/refund date.",
+        "Keep all replies.",
+        "Check DNCRP complaint route.",
+        "If fraud indicators exist, preserve evidence for bank/MFS and police/cyber reporting."
+      ],
+      "evidence": [
+        "Screenshots; profile URL; payment proof; courier details; chat; invoice; refund promise."
+      ],
+      "simpleExample": "A Facebook page takes payment and then deletes the page. The buyer should save any cached links, transaction ID and chat before devices or accounts are changed.",
+      "commonMistakes": [
+        "Common mistakes: Paying another “release fee”.",
+        "Common mistakes: deleting chat.",
+        "Common mistakes: threatening the seller.",
+        "Common mistakes: sending NID/passwords to a fake refund agent.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the seller is only late?",
+          "answer": "Give a clear written request first."
+        },
+        {
+          "question": "What if the page disappeared?",
+          "answer": "Preserve transaction and platform evidence."
+        },
+        {
+          "question": "What if payment was through MFS?",
+          "answer": "Contact the provider quickly where appropriate."
+        }
+      ],
+      "specialistTrigger": "Large fraud; multiple victims; stolen identity; threats; payment account under another person.",
+      "faqs": [
+        {
+          "question": "What if an online shop does not deliver?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I complain to DNCRP?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When is it fraud?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Should I contact my bank or MFS?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "4a179fb158a9e1b6"
+    "en": "7452eb9c59abadd4bc5d6d5d81b75061675bc95ee65fd696241a59f3a6aa6c47",
+    "bn": "3ee78186fa2aa2cca06674f22c6c15d5ac829951ca52112956e0fb7b4a158b83"
   },
   "releaseStatus": {
     "en": "published",
@@ -71,6 +200,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

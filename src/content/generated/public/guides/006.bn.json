@@ -1,39 +1,81 @@
 {
   "id": 6,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "property",
+  "route": "property/buy-sell-land",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Legal Steps for Buying and Selling Land",
-    "description": "Bangladesh citizen legal guide on Legal Steps for Buying and Selling Land.",
-    "searchIntent": "Legal Steps for Buying and Selling Land"
+    "title": "Legal Steps for Buying and Selling Land | Justor",
+    "description": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after registration. The largest risk...",
+    "searchIntent": "A citizen wants an end-to-end property transaction checklist."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "The Transfer of Property Act, 1882",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-48.html"
+    },
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
+    },
+    {
+      "label": "Registration Directorate",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://rd.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://mutation.land.gov.bd/search-mortgage-info"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Use the current 2026 Registration Act text for all timing and registration statements."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
   "content": {
     "en": {
       "title": "Legal Steps for Buying and Selling Land",
       "directAnswer": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after registration. The largest risk usually comes from paying before ownership and property details are properly checked.",
       "atAGlance": {
         "whoFor": "A citizen wants an end-to-end property transaction checklist.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after regis",
+        "legalBasis": "Transfer of Property Act, 1882; Registration Act, 1908; Ministry of Land procedures.",
+        "mainRule": "The transaction should connect the seller, the land description, the title chain and the official records.",
         "updateStatus": "Use the current 2026 Registration Act text for all timing and registration statements."
       },
-      "lawMeaning": "The transaction should connect the seller, the land description, the title chain and the official records.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "The transaction should connect the seller, the land description, the title chain and the official records. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Verify seller.",
         "Verify title chain.",
@@ -47,27 +89,134 @@
         "Apply for mutation."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Identity; deeds; khatian; map; mutation; tax record; mortgage information; payment proof; power of attorney if used."
       ],
       "simpleExample": "Nadia pays only a small documented advance after verification begins. The final payment is linked to a verified deed and registration process. This is safer than paying most of the price before checks.",
       "commonMistakes": [
-        "Cash payment without receipt.",
-        "vague property description.",
-        "ignoring possession.",
-        "skipping mortgage check.",
-        "not reading deed.",
-        "delaying mutation.."
+        "Common mistakes: Cash payment without receipt.",
+        "Common mistakes: vague property description.",
+        "Common mistakes: ignoring possession.",
+        "Common mistakes: skipping mortgage check.",
+        "Common mistakes: not reading deed.",
+        "Common mistakes: delaying mutation.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the seller is abroad?",
+          "answer": "Check power-of-attorney validity."
+        },
+        {
+          "question": "What if the land is jointly owned?",
+          "answer": "Confirm every required owner."
+        },
+        {
+          "question": "What if the buyer is using a bank loan?",
+          "answer": "Follow lender document requirements too."
+        }
+      ],
       "specialistTrigger": "Joint title; POA; inheritance; disputed possession; minor owner; litigation; mortgage.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What should I check before buying land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When should I pay the seller?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What documents are needed for land sale?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need mutation after buying?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I buy land with only a khatian?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "জমি কেনা-বেচার আইনি ধাপ",
+      "directAnswer": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after registration. The largest risk usually comes from paying before ownership and property details are properly checked.",
+      "atAGlance": {
+        "whoFor": "A citizen wants an end-to-end property transaction checklist.",
+        "legalBasis": "Transfer of Property Act, 1882; Registration Act, 1908; Ministry of Land procedures.",
+        "mainRule": "The transaction should connect the seller, the land description, the title chain and the official records.",
+        "updateStatus": "Use the current 2026 Registration Act text for all timing and registration statements."
+      },
+      "lawMeaning": "The transaction should connect the seller, the land description, the title chain and the official records. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Verify seller.",
+        "Verify title chain.",
+        "Check khatian, plot and map.",
+        "Check mutation, tax and mortgage information.",
+        "Agree price and payment method.",
+        "Draft and read the deed.",
+        "Register within the legal time.",
+        "Keep official receipts.",
+        "Take possession lawfully.",
+        "Apply for mutation."
+      ],
+      "evidence": [
+        "Identity; deeds; khatian; map; mutation; tax record; mortgage information; payment proof; power of attorney if used."
+      ],
+      "simpleExample": "Nadia pays only a small documented advance after verification begins. The final payment is linked to a verified deed and registration process. This is safer than paying most of the price before checks.",
+      "commonMistakes": [
+        "Common mistakes: Cash payment without receipt.",
+        "Common mistakes: vague property description.",
+        "Common mistakes: ignoring possession.",
+        "Common mistakes: skipping mortgage check.",
+        "Common mistakes: not reading deed.",
+        "Common mistakes: delaying mutation.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the seller is abroad?",
+          "answer": "Check power-of-attorney validity."
+        },
+        {
+          "question": "What if the land is jointly owned?",
+          "answer": "Confirm every required owner."
+        },
+        {
+          "question": "What if the buyer is using a bank loan?",
+          "answer": "Follow lender document requirements too."
+        }
+      ],
+      "specialistTrigger": "Joint title; POA; inheritance; disputed possession; minor owner; litigation; mortgage.",
+      "faqs": [
+        {
+          "question": "What should I check before buying land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When should I pay the seller?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What documents are needed for land sale?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need mutation after buying?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I buy land with only a khatian?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "309ef047068dd60c"
+    "en": "fddd355d0bcd6630ca8dbbc2b7ab5437f9fbded35f909dd04b6fd2f30c15b941",
+    "bn": "f52ba276d58bf503723b102b1d87ca4a330a939fa47b722c1be5c6818d624c1e"
   },
   "releaseStatus": {
     "en": "published",
@@ -76,6 +225,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

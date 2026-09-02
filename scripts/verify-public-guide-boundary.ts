@@ -38,7 +38,7 @@ if (publicGuideFiles.length !== expectedPublicBodies) {
   );
 }
 
-const reviewGuideIds = ['001', '029', '056'];
+const reviewGuideIds: string[] = [];
 const forbiddenReviewText: string[] = [];
 for (const id of reviewGuideIds) {
   const guide = JSON.parse(

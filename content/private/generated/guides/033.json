@@ -112,14 +112,82 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মোবাইল, ইন্টারনেট বা subscription bill ভুল হলে কী করবেন?",
+      "directAnswer": "Start with the provider’s bill and package terms. Save SMS messages, app screens, usage records and payment proof. Ask the provider to explain the charge in writing. If the problem is not resolved, use the relevant sector regulator or consumer complaint route where applicable.",
+      "atAGlance": {
+        "whoFor": "A customer says a telecom or subscription charge is wrong.",
+        "legalBasis": "Consumer law; applicable telecom/sector rules; DNCRP where relevant.",
+        "mainRule": "This page should identify the provider’s own complaint route before escalating.",
+        "updateStatus": "Before publication, add the current sector-regulator complaint link for each telecom context."
+      },
+      "lawMeaning": "This page should identify the provider’s own complaint route before escalating. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Download the bill.",
+        "Identify the disputed charge.",
+        "Save package/offer terms.",
+        "Contact customer support and get a ticket.",
+        "Ask for written explanation.",
+        "Escalate to the sector complaint route.",
+        "Consider DNCRP if consumer law applies."
+      ],
+      "evidence": [
+        "Bill; package terms; SMS; screenshots; payment proof; support ticket; usage records."
+      ],
+      "simpleExample": "A user is charged after a “free trial.” The key evidence is the trial terms, cancellation steps and the date the paid subscription started.",
+      "commonMistakes": [
+        "Common mistakes: Cancelling a SIM/account before saving records.",
+        "Common mistakes: arguing only by phone.",
+        "Common mistakes: sharing OTPs with fake support accounts.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the provider says usage caused the charge?",
+          "answer": "Ask for detailed usage records where available."
+        },
+        {
+          "question": "What if it is an auto-renewal?",
+          "answer": "Check consent and cancellation terms."
+        },
+        {
+          "question": "What if money keeps being deducted?",
+          "answer": "Protect the payment method while the dispute is reviewed."
+        }
+      ],
+      "specialistTrigger": "Large recurring loss; identity theft; unauthorised SIM/account; regulator complaint.",
+      "faqs": [
+        {
+          "question": "How do I dispute a mobile bill?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I keep?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who do I complain to?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can auto-renewal be disputed?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can DNCRP handle telecom complaints?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "8934f9912ff4cbea20c28fe8e09f0fe20062949ffe5d51a8a077f3704a3c1481"
+    "en": "8934f9912ff4cbea20c28fe8e09f0fe20062949ffe5d51a8a077f3704a3c1481",
+    "bn": "2fb79a84c1d1a17aa1021527add514f2e4b9220f08bc63dc273b6ad63e05b7ec"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

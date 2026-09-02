@@ -126,14 +126,82 @@
         }
       ],
       "disclaimer": "This page gives general information. Whether impersonation amounts to an offence depends on the facts and use of the account.  ---"
+    },
+    "bn": {
+      "title": "আপনার নামে ভুয়া Facebook, Instagram বা social account খুললে কী করবেন?",
+      "directAnswer": "Take screenshots before the fake account disappears. Save the profile URL, username, photos used, messages sent and any request for money. Report the account through the social platform's official impersonation process. Warn people who may be targeted. If the account is being used for fraud, threats, blackmail or harmful false content, preserve that evidence and consider a formal complaint through the proper legal channel.",
+      "atAGlance": {
+        "whoFor": "A citizen discovers an account pretending to be them.",
+        "legalBasis": "Impersonation can involve different legal issues. If a fake digital identity or material is used to deceive people, section 21 on cyber forgery or section 22 on fraud in cyberspace may be relevant. If the fake account publishes defamatory statements, other laws may also require analysis. The legal character depends on what the fake account actually does. Do not state that using another person's photo is automatically a criminal offence in every situation. The purpose, consent, content and resulting conduct matter.",
+        "mainRule": "Take screenshots before the fake account disappears. Save the profile URL, username, photos used, messages sent and any request for money. Report the account through the social platform's official impersonation process. Warn people who may be targeted. If the account is being used for fraud, threats, blackmail or harmful false content, preserve that evidence and consider a formal complaint through the proper legal channel.",
+        "updateStatus": ""
+      },
+      "lawMeaning": "Impersonation can involve different legal issues. If a fake digital identity or material is used to deceive people, section 21 on cyber forgery or section 22 on fraud in cyberspace may be relevant. If the fake account publishes defamatory statements, other laws may also require analysis. The legal character depends on what the fake account actually does. Do not state that using another person's photo is automatically a criminal offence in every situation. The purpose, consent, content and resulting conduct matter.",
+      "steps": [
+        "Screenshot the profile and posts.",
+        "Copy the exact profile URL and username.",
+        "Record the date you found it.",
+        "Save messages sent from the fake account.",
+        "Ask friends who received messages to preserve them.",
+        "Report the profile using the platform's official impersonation tool.",
+        "Warn contacts if money or private information is being requested.",
+        "If fraud, threats or blackmail occur, preserve the separate evidence.",
+        "Do not publicly post sensitive ID documents unless the platform's secure official process specifically requires them."
+      ],
+      "evidence": [],
+      "simpleExample": "A fake Facebook profile copies a person's name and profile picture, then messages relatives asking for ৳10,000. The person should save the fake profile URL and messages, report the account as impersonation, warn relatives, and preserve any payment details for a fraud complaint.",
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "The fake account has no posts. Save and report it anyway if it is clearly impersonating you.",
+          "answer": ""
+        },
+        {
+          "question": "It is using my business name. Preserve trademarks, page records and customer complaints. Commercial issues may need separate advice.",
+          "answer": ""
+        },
+        {
+          "question": "It is pretending to be my friend, not me. The person being impersonated should use the platform's official reporting process where possible.",
+          "answer": ""
+        },
+        {
+          "question": "The fake account is sending sexual content. Preserve evidence carefully and review the cyber blackmail/sexual harassment guide.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "",
+      "faqs": [
+        {
+          "question": "Can I report a fake Facebook account if I do not have Facebook?",
+          "answer": "Meta's official help materials provide an impostor-account reporting route, including reporting by people without an account in some situations."
+        },
+        {
+          "question": "Should I message the impersonator?",
+          "answer": "Usually there is no need. Contact can alert them to delete evidence. Save evidence first."
+        },
+        {
+          "question": "What if they ask my friends for money?",
+          "answer": "That may raise fraud issues. Preserve payment requests, recipient details and victim transaction records."
+        },
+        {
+          "question": "What if the account uses AI-generated photos of me?",
+          "answer": "See the deepfake guide. The relevant law depends on how the synthetic material is used."
+        },
+        {
+          "question": "Can I say publicly that the account owner is a criminal?",
+          "answer": "Be careful. You may say an account appears to be fake or unauthorised based on your evidence, but avoid unsupported accusations about a person's criminal guilt."
+        }
+      ],
+      "disclaimer": "This page gives general information. Whether impersonation amounts to an offence depends on the facts and use of the account.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "21fc10295c1ecfd41e25c7e6ab856ac0e24d6d68b6ac2d48f6f81a396e76c33a"
+    "en": "21fc10295c1ecfd41e25c7e6ab856ac0e24d6d68b6ac2d48f6f81a396e76c33a",
+    "bn": "9d66e0c291f426b25144ed1a8a58582ea16c157c6b6716d8394d6e8a5e03dd7f"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

@@ -1,39 +1,66 @@
 {
   "id": 45,
   "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "route": "everyday/gd-police-complaint-case",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "GD, Police Complaint and Criminal Case: What Is the Difference?",
-    "description": "Bangladesh citizen legal guide on GD, Police Complaint and Criminal Case: What Is the Difference?.",
-    "searchIntent": "GD, Police Complaint and Criminal Case: What Is the Difference?"
+    "title": "GD, Police Complaint and Criminal Case: What Is the Difference? | Justor",
+    "description": "A General Diary entry records information at a police station. A complaint reports alleged wrongdoing. A criminal case involves a formal criminal...",
+    "searchIntent": "A citizen is confused about GD, complaint and a criminal case."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
-      "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "label": "Code of Criminal Procedure, 1898",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/"
+    },
+    {
+      "label": "The Penal Code, 1860",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11.html"
+    },
+    {
+      "label": "Laws of Bangladesh",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: LAW UPDATED: Criminal Procedure received 2026 amendments. Detailed process must be checked against the current consolidated Code."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "What to Do After an Online Scam",
+      "route": "/action-guides/digital/online-scam"
+    },
+    {
+      "label": "Someone Is Pretending to Be You Online",
+      "route": "/action-guides/digital/identity-impersonation"
+    },
+    {
+      "label": "Online Harassment, Threats and Blackmail: What to Do",
+      "route": "/action-guides/digital/online-harassment-blackmail"
+    },
+    {
+      "label": "Defamation in Bangladesh Explained Simply",
+      "route": "/guides/digital/defamation"
+    }
+  ],
   "content": {
     "en": {
       "title": "GD, Police Complaint and Criminal Case: What Is the Difference?",
       "directAnswer": "A General Diary entry records information at a police station. A complaint reports alleged wrongdoing. A criminal case involves a formal criminal process under the applicable law. The correct first step depends on what happened. Do not tell every citizen to “do a GD first” for every problem.",
       "atAGlance": {
         "whoFor": "A citizen is confused about GD, complaint and a criminal case.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "A General Diary entry records information at a police station. A complaint reports alleged wrongdoing. A criminal case i",
+        "legalBasis": "Code of Criminal Procedure, 1898 as currently amended; Police rules/practice; Penal Code and special laws.",
+        "mainRule": "Criminal procedure was amended in 2026, so any detailed FIR, investigation or court-process statement must use the current code.",
         "updateStatus": "LAW UPDATED: Criminal Procedure received 2026 amendments. Detailed process must be checked against the current consolidated Code."
       },
-      "lawMeaning": "Criminal procedure was amended in 2026, so any detailed FIR, investigation or court-process statement must use the current code.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Criminal procedure was amended in 2026, so any detailed FIR, investigation or court-process statement must use the current code. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Identify whether you lost something, received a threat or allege an offence.",
         "Save evidence.",
@@ -43,33 +70,65 @@
         "For cognizable offence or urgent safety matters, get legal/police guidance rather than relying on a generic GD template."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Identity; written facts; screenshots; photos; witnesses; lost-document information; medical evidence where relevant."
       ],
       "simpleExample": "A person loses an ID card. That is different from being assaulted. The same police document or process should not be assumed for both events.",
       "commonMistakes": [
-        "Using GD as a substitute for reporting a serious offence.",
-        "making false allegations.",
-        "changing the story.",
-        "losing reference number.."
+        "Common mistakes: Using GD as a substitute for reporting a serious offence.",
+        "Common mistakes: making false allegations.",
+        "Common mistakes: changing the story.",
+        "Common mistakes: losing reference number.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if police refuse to receive a complaint?",
+          "answer": "Get legal advice on escalation routes."
+        },
+        {
+          "question": "What if the issue is civil?",
+          "answer": "Police process may not resolve it."
+        },
+        {
+          "question": "What if there is immediate danger?",
+          "answer": "Seek urgent safety help."
+        }
+      ],
       "specialistTrigger": "Violence; sexual offence; arrest risk; serious fraud; police refusal; child victim.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is a GD?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is a GD the same as a case?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When should I complain to police?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if police do not act?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can a land dispute be a criminal case?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "1aa24b96f044e784"
+    "en": "bbcfba2b67ea3e037628f883753bd173b64e93d838b028349361f1d0e32252bc"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

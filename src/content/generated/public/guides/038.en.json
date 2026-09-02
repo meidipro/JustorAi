@@ -1,39 +1,66 @@
 {
   "id": 38,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "employment",
+  "route": "employment/termination-dismissal",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Termination and Dismissal Explained Simply",
-    "description": "Bangladesh citizen legal guide on Termination and Dismissal Explained Simply.",
-    "searchIntent": "Termination and Dismissal Explained Simply"
+    "title": "Termination and Dismissal Explained Simply | Justor",
+    "description": "Termination, dismissal, discharge, retrenchment and resignation are not the same legal event. The correct rights depend on why the job ended, the...",
+    "searchIntent": "A worker has lost a job and wants to understand the legal terms."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
-      "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "label": "Bangladesh Labour Act, 2006",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-952.html"
+    },
+    {
+      "label": "Bangladesh Labour (Amendment) Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1672.html"
+    },
+    {
+      "label": "Bangladesh EPZ Labour Act, 2019",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1285.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Current law changed in 2026. Do not use pre-2026 termination summaries without checking the amended sections."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Read an Appointment Letter and Employment Contract",
+      "route": "/guides/employment/employment-contract"
+    },
+    {
+      "label": "Your Employer Has Not Paid Your Salary",
+      "route": "/action-guides/employment/unpaid-salary"
+    },
+    {
+      "label": "Workplace Harassment: What Evidence Should You Keep?",
+      "route": "/action-guides/employment/workplace-harassment"
+    },
+    {
+      "label": "Leave, Maternity and Basic Workplace Rights",
+      "route": "/guides/employment/leave-maternity-rights"
+    }
+  ],
   "content": {
     "en": {
       "title": "Termination and Dismissal Explained Simply",
       "directAnswer": "Termination, dismissal, discharge, retrenchment and resignation are not the same legal event. The correct rights depend on why the job ended, the worker’s legal status, notice, misconduct process, length of service and applicable law. Keep the termination letter and do not sign a settlement you do not understand.",
       "atAGlance": {
         "whoFor": "A worker has lost a job and wants to understand the legal terms.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Termination, dismissal, discharge, retrenchment and resignation are not the same legal event. The correct rights depend ",
+        "legalBasis": "Bangladesh Labour Act, 2006 as amended by Act No. 43 of 2026; contract law; EPZ Labour Act where relevant.",
+        "mainRule": "Use the exact legal category from the employer’s document. Do not call every job loss “dismissal.”",
         "updateStatus": "Current law changed in 2026. Do not use pre-2026 termination summaries without checking the amended sections."
       },
-      "lawMeaning": "Use the exact legal category from the employer’s document. Do not call every job loss “dismissal.”\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Use the exact legal category from the employer’s document. Do not call every job loss “dismissal.” This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Get the written decision.",
         "Identify the stated reason.",
@@ -44,33 +71,65 @@
         "Check challenge deadline and forum."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Appointment letter; policies; warning letters; show-cause notice; termination letter; payslips; attendance; settlement."
       ],
       "simpleExample": "An employer labels a letter “termination” but also accuses the worker of misconduct. The worker should get the legal effect reviewed instead of relying only on the heading.",
       "commonMistakes": [
-        "Signing “full and final” without reading.",
-        "deleting work records.",
-        "missing appeal/claim deadline.",
-        "making public accusations.."
+        "Common mistakes: Signing “full and final” without reading.",
+        "Common mistakes: deleting work records.",
+        "Common mistakes: missing appeal/claim deadline.",
+        "Common mistakes: making public accusations.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if you are on probation?",
+          "answer": "Different terms may apply."
+        },
+        {
+          "question": "What if there was no notice?",
+          "answer": "Check the legal category and remedy."
+        },
+        {
+          "question": "What if misconduct is alleged?",
+          "answer": "Procedure and evidence matter."
+        }
+      ],
       "specialistTrigger": "Misconduct; discrimination/retaliation claim; large severance; senior executive status; EPZ.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is the difference between termination and dismissal?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I get notice?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if I am on probation?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What dues should I receive?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I challenge the decision?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "33085bdb210fa955"
+    "en": "1e49667cd74ebfa6160b3536a4752ebca0e9b37fd3731a2f5661eff6d3456ec4"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

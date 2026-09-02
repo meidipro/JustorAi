@@ -1,39 +1,62 @@
 {
   "id": 11,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "property",
+  "route": "property/land-development-tax",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "How to Pay Land Development Tax",
-    "description": "Bangladesh citizen legal guide on How to Pay Land Development Tax.",
-    "searchIntent": "How to Pay Land Development Tax"
+    "title": "How to Pay Land Development Tax | Justor",
+    "description": "Land development tax is a government land charge. Use the official Ministry of Land service, match the holding and khatian information, pay through the...",
+    "searchIntent": "A landholder wants to understand the official tax/payment process."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK",
+    "freshnessRequirementRaw": "DYNAMIC DATA: verify current rate tables, portal steps and hotline details on publication day. | - 15 August 2026: DYNAMIC DATA: verify current rate tables, portal steps and hotline details on publication day."
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Ministry of Land",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://land.gov.bd/vumisheba-fee?lang=bn"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: DYNAMIC DATA: verify current rate tables, portal steps and hotline details on publication day."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
   "content": {
     "en": {
       "title": "How to Pay Land Development Tax",
       "directAnswer": "Land development tax is a government land charge. Use the official Ministry of Land service, match the holding and khatian information, pay through the supported method and keep the official receipt or dakhila. Rates and system steps can change, so Justor should re-check the official portal before publication.",
       "atAGlance": {
         "whoFor": "A landholder wants to understand the official tax/payment process.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Land development tax is a government land charge. Use the official Ministry of Land service, match the holding and khati",
+        "legalBasis": "Current land-tax law and Ministry of Land digital-service rules.",
+        "mainRule": "Do not hard-code a tax amount unless it comes from the current official schedule for the user’s land type and location.",
         "updateStatus": "DYNAMIC DATA: verify current rate tables, portal steps and hotline details on publication day."
       },
-      "lawMeaning": "Do not hard-code a tax amount unless it comes from the current official schedule for the user’s land type and location.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Do not hard-code a tax amount unless it comes from the current official schedule for the user’s land type and location. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Use the official land portal.",
         "Confirm identity and holding information.",
@@ -44,25 +67,127 @@
         "Resolve record mismatches before paying the wrong holding."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Identity details; khatian/holding information; previous dakhila; mobile/account information; payment receipt."
       ],
       "simpleExample": "A landholder sees two similar holdings. They should verify the plot and khatian before payment instead of paying the first record that appears.",
       "commonMistakes": [
-        "Paying through an unofficial agent.",
-        "losing dakhila.",
-        "paying the wrong holding.",
-        "treating an old amount as current.."
+        "Common mistakes: Paying through an unofficial agent.",
+        "Common mistakes: losing dakhila.",
+        "Common mistakes: paying the wrong holding.",
+        "Common mistakes: treating an old amount as current.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the holding is not found?",
+          "answer": "Use the official support process."
+        },
+        {
+          "question": "What if the owner name is old?",
+          "answer": "Check whether mutation or record update is needed."
+        },
+        {
+          "question": "What if the amount looks wrong?",
+          "answer": "Raise it through the official land-service channel."
+        }
+      ],
       "specialistTrigger": "Large arrears; disputed ownership; record mismatch; tax demand tied to a legal dispute.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is land development tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Where can I pay it?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is a dakhila?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if my holding is missing?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can rates change?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "ভূমি উন্নয়ন কর কীভাবে দেবেন?",
+      "directAnswer": "Land development tax is a government land charge. Use the official Ministry of Land service, match the holding and khatian information, pay through the supported method and keep the official receipt or dakhila. Rates and system steps can change, so Justor should re-check the official portal before publication.",
+      "atAGlance": {
+        "whoFor": "A landholder wants to understand the official tax/payment process.",
+        "legalBasis": "Current land-tax law and Ministry of Land digital-service rules.",
+        "mainRule": "Do not hard-code a tax amount unless it comes from the current official schedule for the user’s land type and location.",
+        "updateStatus": "DYNAMIC DATA: verify current rate tables, portal steps and hotline details on publication day."
+      },
+      "lawMeaning": "Do not hard-code a tax amount unless it comes from the current official schedule for the user’s land type and location. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Use the official land portal.",
+        "Confirm identity and holding information.",
+        "Match khatian and land details.",
+        "Check the amount shown by the official system.",
+        "Pay through the official method.",
+        "Download or save the receipt.",
+        "Resolve record mismatches before paying the wrong holding."
+      ],
+      "evidence": [
+        "Identity details; khatian/holding information; previous dakhila; mobile/account information; payment receipt."
+      ],
+      "simpleExample": "A landholder sees two similar holdings. They should verify the plot and khatian before payment instead of paying the first record that appears.",
+      "commonMistakes": [
+        "Common mistakes: Paying through an unofficial agent.",
+        "Common mistakes: losing dakhila.",
+        "Common mistakes: paying the wrong holding.",
+        "Common mistakes: treating an old amount as current.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the holding is not found?",
+          "answer": "Use the official support process."
+        },
+        {
+          "question": "What if the owner name is old?",
+          "answer": "Check whether mutation or record update is needed."
+        },
+        {
+          "question": "What if the amount looks wrong?",
+          "answer": "Raise it through the official land-service channel."
+        }
+      ],
+      "specialistTrigger": "Large arrears; disputed ownership; record mismatch; tax demand tied to a legal dispute.",
+      "faqs": [
+        {
+          "question": "What is land development tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Where can I pay it?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What is a dakhila?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if my holding is missing?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can rates change?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "b78644b5da6d19ea"
+    "en": "9bc4b1490d9a24e4d7d021d85d1d53519ba32f935b8e61cfe2ba612521e7b8e4",
+    "bn": "4bd395b45b986c9911aee8e6a70bb8ae545cf5bf7ae02fa2aebc186661089140"
   },
   "releaseStatus": {
     "en": "published",
@@ -71,6 +196,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

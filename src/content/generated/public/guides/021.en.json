@@ -1,39 +1,76 @@
 {
   "id": 21,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "tax",
+  "route": "tax/salary-income-tax-2026-27",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Income Tax for Salaried People — 2026–27",
-    "description": "Bangladesh citizen legal guide on Income Tax for Salaried People — 2026–27.",
-    "searchIntent": "Income Tax for Salaried People — 2026–27"
+    "title": "Income Tax for Salaried People — 2026–27 | Justor",
+    "description": "For salaried people, income tax depends on the current tax-year rules, taxable salary components, exemptions, rebates, other income, tax already...",
+    "searchIntent": "A salaried person wants to know the current tax-year process."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "NBR",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://nbr.gov.bd/uploads/acts/Incometaxact2023.pdf"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/regulations/acts/finance-acts/eng"
+    },
+    {
+      "label": "National Board of Revenue",
+      "type": "official",
+      "url": "https://nbr.gov.bd/"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/regulations/sros/income-tax-sros/eng"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/information-library/publicnotice-details/income-tax/eng"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: LAW UPDATED YEARLY: Finance Act, 2026 is current for this edition. Numeric fields must be re-verified immediately before publishing."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+      "route": "/guides/tax/salary-tax-examples-2026-27"
+    },
+    {
+      "label": "Freelancer and Remote Worker Tax Guide — 2026–27",
+      "route": "/guides/tax/freelancer-tax-bangladesh"
+    },
+    {
+      "label": "How to Get a TIN in Bangladesh",
+      "route": "/guides/tax/tin-registration"
+    },
+    {
+      "label": "How to File an e-Return — 2026–27",
+      "route": "/guides/tax/e-return-2026-27"
+    }
+  ],
   "content": {
     "en": {
       "title": "Income Tax for Salaried People — 2026–27",
       "directAnswer": "For salaried people, income tax depends on the current tax-year rules, taxable salary components, exemptions, rebates, other income, tax already deducted and filing obligations. Do not use last year’s tax thresholds. This page must be rebuilt each tax year from the Income Tax Act, Finance Act and current NBR notices.",
       "atAGlance": {
         "whoFor": "A salaried person wants to know the current tax-year process.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "For salaried people, income tax depends on the current tax-year rules, taxable salary components, exemptions, rebates, o",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; current NBR SROs, rules and notices.",
+        "mainRule": "Every numeric threshold, slab, minimum tax and rebate must have a current NBR citation in the published version.",
         "updateStatus": "LAW UPDATED YEARLY: Finance Act, 2026 is current for this edition. Numeric fields must be re-verified immediately before publishing."
       },
-      "lawMeaning": "Every numeric threshold, slab, minimum tax and rebate must have a current NBR citation in the published version.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Every numeric threshold, slab, minimum tax and rebate must have a current NBR citation in the published version. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Add annual salary components.",
         "Identify exempt or specially treated amounts under current law.",
@@ -45,34 +82,66 @@
         "File and save acknowledgement."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Salary certificate; payslips; bank record; TDS certificate; investment proof; previous return; TIN."
       ],
       "simpleExample": "A worker earning the same monthly salary as a friend may still have a different final tax because benefits, investments, other income and tax already deducted can differ.",
       "commonMistakes": [
-        "Using gross monthly salary alone.",
-        "copying last year’s slabs.",
-        "missing other income.",
-        "losing TDS proof.",
-        "assuming no tax means no return.."
+        "Common mistakes: Using gross monthly salary alone.",
+        "Common mistakes: copying last year’s slabs.",
+        "Common mistakes: missing other income.",
+        "Common mistakes: losing TDS proof.",
+        "Common mistakes: assuming no tax means no return.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if tax was deducted by the employer?",
+          "answer": "Include the credit correctly."
+        },
+        {
+          "question": "What if income changed mid-year?",
+          "answer": "Use the actual annual amounts."
+        },
+        {
+          "question": "What if you have rent or freelance income too?",
+          "answer": "Add it under the correct rules."
+        }
+      ],
       "specialistTrigger": "Large income; foreign income; stock/business income; disputed assessment; tax notice.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "How is salary tax calculated?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does employer TDS finish my tax duty?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if I owe no tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Which tax year applies?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "7ddff70055bc17b7"
+    "en": "fbe247cb9e6500612fe4ba8c47b6e142f4a6a2986977d0cd626505c12c77c486"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

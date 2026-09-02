@@ -155,14 +155,94 @@
         }
       ],
       "disclaimer": "This page provides general legal information. Data-protection rights, remedies and complaint procedures may depend on current implementing rules and the facts of the incident.  --- # Legal Update Register — V1 These update flags should appear in the CMS so a page can be re-reviewed when a law changes. # CMS fields Justor should store for every page # Publishing order Batch 1: 01 Land registration; 02 Mutation; 03 Khatian; 04 Deed verification; 35 DNCRP complaint. Batch 2: 06 Property sale; 11 Land tax; 12 Mutation delay; 13 Marriage registration; 14 Talaq; 21 Salary tax; 25 e-Return; 29 Defective product; 30 Online shop; 46 Government complaint. Batch 3: Complete remaining property, family, tax and consumer pages. Batch 4: Employment. Batch 5: Digital/cyber pages 41–60 and the most interpretation-sensitive pages after the legal-review workflow is stable. Prioritize 51 Fake calls, 52 OTP/MFS fraud, 53 Phishing, 54 Account hacked and 58 SIM/NID checks first because they have clear citizen action value. # Translation rule Translate meaning, not legal names. Keep the official English title of an Act in brackets where it helps source verification. Do not make a Bangla translation stronger than the English master. If a legal term has no safe plain-language equivalent, keep the legal term and add a short Bangla explanation."
+    },
+    "bn": {
+      "title": "NID, ফোন নম্বর বা ব্যক্তিগত তথ্য ফাঁস বা অপব্যবহার হলে কী করবেন?",
+      "directAnswer": "First identify what information was exposed and what accounts depend on it. Change passwords if login data was involved. Secure email, bank, MFS and social accounts. Check mobile numbers registered under your NID if SIM misuse is possible. Save proof of where the data appeared and any message showing misuse. Bangladesh now has the Personal Data Protection Act, 2026, so older guidance based only on the 2025 ordinance should be updated before publication.",
+      "atAGlance": {
+        "whoFor": "A citizen's personal information was leaked, stolen, sold or used without permission.",
+        "legalBasis": "The Personal Data Protection Act, 2026 is a current primary law concerning protection and processing of personal data. Its section 35 addresses recovery of compensation and refers to complaints to the relevant authority. The exact right, remedy and complaint route depends on the type of data, controller/processor, harm and current implementation framework. If leaked data is then used to hack an account, forge digital information, commit fraud or blackmail someone, the Cyber Security Act, 2026 may also become relevant. Do not promise compensation merely because data was exposed. The statutory requirements and facts must be checked.",
+        "mainRule": "First identify what information was exposed and what accounts depend on it. Change passwords if login data was involved. Secure email, bank, MFS and social accounts. Check mobile numbers registered under your NID if SIM misuse is possible. Save proof of where the data appeared and any message showing misuse. Bangladesh now has the Personal Data Protection Act, 2026, so older guidance based only on the 2025 ordinance should be updated before publication.",
+        "updateStatus": "10 April 2026: Personal Data Protection Act, 2026 became the current primary data-protection statute listed in Laws of Bangladesh."
+      },
+      "lawMeaning": "The Personal Data Protection Act, 2026 is a current primary law concerning protection and processing of personal data. Its section 35 addresses recovery of compensation and refers to complaints to the relevant authority. The exact right, remedy and complaint route depends on the type of data, controller/processor, harm and current implementation framework. If leaked data is then used to hack an account, forge digital information, commit fraud or blackmail someone, the Cyber Security Act, 2026 may also become relevant. Do not promise compensation merely because data was exposed. The statutory requirements and facts must be checked.",
+      "steps": [
+        "Identify exactly what data was exposed.",
+        "Save evidence of the leak or misuse.",
+        "Do not publicly repost the full leaked document.",
+        "Change compromised passwords.",
+        "Turn on 2FA.",
+        "Secure the primary email account first.",
+        "Contact bank/MFS provider if financial information was involved.",
+        "Check NID-linked SIMs through BTRC NEIR if SIM misuse is possible.",
+        "Ask the organisation that held the data for its formal privacy/security contact or complaint process where available.",
+        "Consider legal or regulatory complaint routes based on the current Personal Data Protection Act and implementing system.",
+        "Report fraud, hacking, threats or blackmail separately where applicable."
+      ],
+      "evidence": [
+        "What information may be sensitive in practice?: NID number or image.",
+        "What information may be sensitive in practice?: Passport details.",
+        "What information may be sensitive in practice?: Bank or MFS account information.",
+        "What information may be sensitive in practice?: Phone number tied to OTPs.",
+        "What information may be sensitive in practice?: Email and password.",
+        "What information may be sensitive in practice?: Home address.",
+        "What information may be sensitive in practice?: Biometrics.",
+        "What information may be sensitive in practice?: Medical or other sensitive personal information.",
+        "What information may be sensitive in practice?: Copies of identity documents."
+      ],
+      "simpleExample": "A person finds a photo of their NID posted in a public Facebook group. The person should save the post URL and screenshot, ask the platform to remove the image, secure accounts that use NID or phone verification, and monitor for suspicious SIM, banking or account activity. If the NID is then used for fraud, preserve that separate evidence too.",
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "Only my phone number leaked. Risk may be lower than a password leak, but watch for phishing, SIM fraud and account-reset attempts.",
+          "answer": ""
+        },
+        {
+          "question": "My NID image leaked. Avoid reposting it publicly. Check for unknown SIMs and suspicious account activity.",
+          "answer": ""
+        },
+        {
+          "question": "A company leaked customer data. Preserve evidence and check the current complaint/remedy framework under the Personal Data Protection Act.",
+          "answer": ""
+        },
+        {
+          "question": "Someone is selling my data online. Save the listing or message carefully and seek legal guidance about the correct complaint route.",
+          "answer": ""
+        }
+      ],
+      "specialistTrigger": "Large-scale data leak; financial loss; identity theft; employer/customer database breach; sensitive medical/biometric data; repeated misuse; refusal by a data-holding organisation to respond; or a compensation claim.",
+      "faqs": [
+        {
+          "question": "Is the 2025 Personal Data Protection Ordinance still the main law?",
+          "answer": "No. The current Laws of Bangladesh database lists the Personal Data Protection Act, 2026. Justor should use the 2026 Act as the current primary statute."
+        },
+        {
+          "question": "Can I claim compensation automatically?",
+          "answer": "No. Section 35 provides a compensation framework, but eligibility and procedure depend on the law and facts."
+        },
+        {
+          "question": "How do I check for unknown SIMs under my NID?",
+          "answer": "BTRC's NEIR currently provides the \\16001# check described in Justor's SIM guide."
+        },
+        {
+          "question": "If my data was used for fraud, which law applies?",
+          "answer": "The Personal Data Protection Act may be relevant to the data issue, while the Cyber Security Act and other laws may apply to the fraud or unauthorised access. The facts determine the legal route."
+        },
+        {
+          "question": "Should I publish the leaked data to warn others?",
+          "answer": "No. Warn others without spreading your own or another person's sensitive personal data."
+        }
+      ],
+      "disclaimer": "This page provides general legal information. Data-protection rights, remedies and complaint procedures may depend on current implementing rules and the facts of the incident.  --- # Legal Update Register — V1 These update flags should appear in the CMS so a page can be re-reviewed when a law changes. # CMS fields Justor should store for every page # Publishing order Batch 1: 01 Land registration; 02 Mutation; 03 Khatian; 04 Deed verification; 35 DNCRP complaint. Batch 2: 06 Property sale; 11 Land tax; 12 Mutation delay; 13 Marriage registration; 14 Talaq; 21 Salary tax; 25 e-Return; 29 Defective product; 30 Online shop; 46 Government complaint. Batch 3: Complete remaining property, family, tax and consumer pages. Batch 4: Employment. Batch 5: Digital/cyber pages 41–60 and the most interpretation-sensitive pages after the legal-review workflow is stable. Prioritize 51 Fake calls, 52 OTP/MFS fraud, 53 Phishing, 54 Account hacked and 58 SIM/NID checks first because they have clear citizen action value. # Translation rule Translate meaning, not legal names. Keep the official English title of an Act in brackets where it helps source verification. Do not make a Bangla translation stronger than the English master. If a legal term has no safe plain-language equivalent, keep the legal term and add a short Bangla explanation."
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "e5e583e8f2e22042b77b7267e075122d342abf25da31aba17b0ea12f814b8909"
+    "en": "e5e583e8f2e22042b77b7267e075122d342abf25da31aba17b0ea12f814b8909",
+    "bn": "464141ffa633c4393420927f1f8e9d573348f5d0e7a182e6cafa63a349fbf98e"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

@@ -137,14 +137,91 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Contact your financial provider immediately if an account may be compromised.  ---"
+    },
+    "bn": {
+      "title": "OTP, PIN বা মোবাইল ফাইন্যান্সিয়াল সার্ভিস স্ক্যাম হলে কী করবেন?",
+      "directAnswer": "If you shared an OTP, PIN or other banking credential, or an unauthorised transaction appears, contact your bank or MFS provider immediately through its official channel. Ask whether the account or transaction can be secured, restricted or investigated. Change exposed credentials. Preserve every transaction ID, phone number, SMS and screenshot. If the provider does not resolve the complaint, Bangladesh Bank has a formal escalation process for banks, finance companies and MFS providers.",
+      "atAGlance": {
+        "whoFor": "A citizen shared credentials or lost money through a bank/MFS scam.",
+        "legalBasis": "Depending on the conduct, a digital financial scam may involve fraud in cyberspace under section 22 of the Cyber Security Act, 2026, cyber forgery under section 21, hacking or unauthorised access under section 18, and general cheating provisions in the Penal Code. The correct provision depends on how the money or account access was obtained. Bangladesh Bank's Customer Interest Protection Centre states that customers should first complain to their own bank, finance company or MFS provider, then use that provider's complaint cell, and then escalate unresolved complaints to Bangladesh Bank CIPC.",
+        "mainRule": "If you shared an OTP, PIN or other banking credential, or an unauthorised transaction appears, contact your bank or MFS provider immediately through its official channel. Ask whether the account or transaction can be secured, restricted or investigated. Change exposed credentials. Preserve every transaction ID, phone number, SMS and screenshot. If the provider does not resolve the complaint, Bangladesh Bank has a formal escalation process for banks, finance companies and MFS providers.",
+        "updateStatus": "15 August 2026: Verified current CIPC complaint sequence and current Cyber Security Act sources."
+      },
+      "lawMeaning": "Depending on the conduct, a digital financial scam may involve fraud in cyberspace under section 22 of the Cyber Security Act, 2026, cyber forgery under section 21, hacking or unauthorised access under section 18, and general cheating provisions in the Penal Code. The correct provision depends on how the money or account access was obtained. Bangladesh Bank's Customer Interest Protection Centre states that customers should first complain to their own bank, finance company or MFS provider, then use that provider's complaint cell, and then escalate unresolved complaints to Bangladesh Bank CIPC.",
+      "steps": [
+        "Immediate action checklist: Contact the official bank/MFS support channel now.",
+        "Immediate action checklist: Ask to secure or restrict the account if necessary.",
+        "Immediate action checklist: Change PIN/password through the official app or service.",
+        "Immediate action checklist: Sign out other devices if the service allows it.",
+        "Immediate action checklist: Check recent transactions.",
+        "Immediate action checklist: Save transaction ID, recipient number and time.",
+        "Immediate action checklist: Save scam messages and caller information.",
+        "Immediate action checklist: Make a formal complaint with the provider.",
+        "Immediate action checklist: If criminal fraud is suspected, preserve evidence for police reporting.",
+        "Immediate action checklist: Escalate an unresolved provider complaint through Bangladesh Bank CIPC where applicable."
+      ],
+      "evidence": [
+        "Transaction ID; sender and recipient numbers; account statements; SMS; OTP message; call logs; chat history; screenshots; provider ticket number; police complaint reference where available."
+      ],
+      "simpleExample": "A person receives a call from someone claiming to be an MFS employee. The caller says the account needs “verification” and asks for an OTP. After the OTP is shared, money leaves the account. The victim should contact the MFS provider immediately, preserve the OTP message and transaction ID, file a provider complaint, and report suspected fraud through the proper channel.",
+      "commonMistakes": [
+        "What not to do: Do not share another OTP to “reverse” the first transaction.",
+        "What not to do: Do not pay a recovery agent who contacts you unexpectedly.",
+        "What not to do: Do not delete the SMS that contains the transaction reference.",
+        "What not to do: Do not keep using the same exposed PIN.",
+        "What not to do: Do not rely only on a Facebook comment claiming to be customer support."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the money has already been cashed out?",
+          "answer": "Report it immediately anyway. Recovery is not guaranteed, but delay can make investigation harder."
+        },
+        {
+          "question": "What if I sent the money myself because I was tricked?",
+          "answer": "It can still be a fraud issue. Explain exactly how you were deceived."
+        },
+        {
+          "question": "What if the provider says the transaction used my PIN?",
+          "answer": "Record the provider's response and ask for the formal complaint process. Liability can depend on facts and terms."
+        },
+        {
+          "question": "What if the scammer is using another person's MFS account?",
+          "answer": "Preserve the recipient number and transaction ID. Do not contact or threaten the account holder yourself."
+        }
+      ],
+      "specialistTrigger": "Large loss; disputed provider responsibility; identity theft; repeated account takeover; business account loss; court or criminal process; or a provider complaint that remains unresolved after formal escalation.",
+      "faqs": [
+        {
+          "question": "Does Bangladesh Bank accept MFS complaints?",
+          "answer": "Yes. Bangladesh Bank's CIPC states that it handles complaints related to banks, finance companies and MFS providers within its jurisdiction."
+        },
+        {
+          "question": "What is the CIPC hotline?",
+          "answer": "The current CIPC page lists 16236 during office hours on working days. Re-check before publication."
+        },
+        {
+          "question": "Should I contact police first or the provider first?",
+          "answer": "For account security, contact the provider immediately. A police report may also be appropriate when fraud or another offence is suspected."
+        },
+        {
+          "question": "Can Justor promise the money will be recovered?",
+          "answer": "No. Recovery depends on the facts, timing, transaction path and investigation."
+        },
+        {
+          "question": "Is an OTP the same as a PIN?",
+          "answer": "No. Both are sensitive. A PIN is usually a secret code you choose or receive for account access. An OTP is a temporary one-time code used to verify a login or transaction."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Contact your financial provider immediately if an account may be compromised.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "848730d69cbc6ec6d1c21fbf5905e8f524c61a980a99db87646dc6a6a4677377"
+    "en": "848730d69cbc6ec6d1c21fbf5905e8f524c61a980a99db87646dc6a6a4677377",
+    "bn": "eb0edba6ef2ff582d54627242183a8d401e3a4b9c15128bcc89c3d7b391d06ae"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

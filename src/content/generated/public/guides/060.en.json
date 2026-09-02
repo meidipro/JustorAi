@@ -1,39 +1,92 @@
 {
   "id": 60,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "cyber",
+  "route": "cyber/personal-data-nid-leak",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
-    "description": "Bangladesh citizen legal guide on Your NID, Phone Number or Personal Data Was Leaked or Misused.",
-    "searchIntent": "Your NID, Phone Number or Personal Data Was Leaked or Misused"
+    "title": "NID or Personal Data Leaked in Bangladesh: What to Do",
+    "description": "Your NID, phone number, account data or other personal information was exposed. Learn the immediate safety steps and current data-protection law.",
+    "searchIntent": "A citizen's personal information was leaked, stolen, sold or used without permission."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HIGH-RISK — HUMAN LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Personal Data Protection Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-details-1692.html"
+    },
+    {
+      "label": "Personal Data Protection Act, 2026, section 35",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1692/section-57301.html"
+    },
+    {
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Section 18",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57959.html"
+    },
+    {
+      "label": "Section 21",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57962.html"
+    },
+    {
+      "label": "Section 22",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57963.html"
+    },
+    {
+      "label": "BTRC NEIR",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://neir.btrc.gov.bd/"
+    },
+    {
+      "label": "BGD e-GOV CIRT",
+      "type": "official",
+      "url": "https://www.cirt.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "10 April 2026: Personal Data Protection Act, 2026 became the current primary data-protection statute listed in Laws of Bangladesh.",
+    "15 August 2026: Current Personal Data Protection Act and Cyber Security Act sources verified for this draft."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Unknown SIM or SIM-Swap Fraud",
+      "route": "/action-guides/cyber/unknown-sim-sim-swap"
+    },
+    {
+      "label": "Social Media Account Hacked",
+      "route": "/action-guides/cyber/social-media-account-hacked"
+    },
+    {
+      "label": "Phishing Link or Fake Website",
+      "route": "/action-guides/cyber/phishing-link-fake-website"
+    },
+    {
+      "label": "Online Blackmail or Sextortion",
+      "route": "/action-guides/cyber/online-blackmail-sextortion"
+    }
+  ],
   "content": {
     "en": {
       "title": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
-      "directAnswer": "First identify what information was exposed and what accounts depend on it. Change passwords if login data was involved. Secure email, bank, MFS and social accounts. Check mobile numbers registered under your NID if SIM misuse is possible. Save proof of where the data appeared and any message showing misuse. Bangladesh now has the **Personal Data Protection Act, 2026**, so older guidance based only on the 2025 ordinance should be updated before publication.",
+      "directAnswer": "First identify what information was exposed and what accounts depend on it. Change passwords if login data was involved. Secure email, bank, MFS and social accounts. Check mobile numbers registered under your NID if SIM misuse is possible. Save proof of where the data appeared and any message showing misuse. Bangladesh now has the Personal Data Protection Act, 2026, so older guidance based only on the 2025 ordinance should be updated before publication.",
       "atAGlance": {
-        "whoFor": "Citizens in Bangladesh",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "First identify what information was exposed and what accounts depend on it. Change passwords if login data was involved.",
-        "updateStatus": "Current Bangladesh law"
+        "whoFor": "A citizen's personal information was leaked, stolen, sold or used without permission.",
+        "legalBasis": "The Personal Data Protection Act, 2026 is a current primary law concerning protection and processing of personal data. Its section 35 addresses recovery of compensation and refers to complaints to the relevant authority. The exact right, remedy and complaint route depends on the type of data, controller/processor, harm and current implementation framework. If leaked data is then used to hack an account, forge digital information, commit fraud or blackmail someone, the Cyber Security Act, 2026 may also become relevant. Do not promise compensation merely because data was exposed. The statutory requirements and facts must be checked.",
+        "mainRule": "First identify what information was exposed and what accounts depend on it. Change passwords if login data was involved. Secure email, bank, MFS and social accounts. Check mobile numbers registered under your NID if SIM misuse is possible. Save proof of where the data appeared and any message showing misuse. Bangladesh now has the Personal Data Protection Act, 2026, so older guidance based only on the 2025 ordinance should be updated before publication.",
+        "updateStatus": "10 April 2026: Personal Data Protection Act, 2026 became the current primary data-protection statute listed in Laws of Bangladesh."
       },
-      "lawMeaning": "",
+      "lawMeaning": "The Personal Data Protection Act, 2026 is a current primary law concerning protection and processing of personal data. Its section 35 addresses recovery of compensation and refers to complaints to the relevant authority. The exact right, remedy and complaint route depends on the type of data, controller/processor, harm and current implementation framework. If leaked data is then used to hack an account, forge digital information, commit fraud or blackmail someone, the Cyber Security Act, 2026 may also become relevant. Do not promise compensation merely because data was exposed. The statutory requirements and facts must be checked.",
       "steps": [
         "Identify exactly what data was exposed.",
         "Save evidence of the leak or misuse.",
@@ -48,31 +101,72 @@
         "Report fraud, hacking, threats or blackmail separately where applicable."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "What information may be sensitive in practice?: NID number or image.",
+        "What information may be sensitive in practice?: Passport details.",
+        "What information may be sensitive in practice?: Bank or MFS account information.",
+        "What information may be sensitive in practice?: Phone number tied to OTPs.",
+        "What information may be sensitive in practice?: Email and password.",
+        "What information may be sensitive in practice?: Home address.",
+        "What information may be sensitive in practice?: Biometrics.",
+        "What information may be sensitive in practice?: Medical or other sensitive personal information.",
+        "What information may be sensitive in practice?: Copies of identity documents."
       ],
       "simpleExample": "A person finds a photo of their NID posted in a public Facebook group. The person should save the post URL and screenshot, ask the platform to remove the image, secure accounts that use NID or phone verification, and monitor for suspicious SIM, banking or account activity. If the NID is then used for fraud, preserve that separate evidence too.",
-      "commonMistakes": [
-        "Missing statutory limitation deadlines.",
-        "Failing to retain written acknowledgments."
+      "commonMistakes": [],
+      "whatIf": [
+        {
+          "question": "Only my phone number leaked. Risk may be lower than a password leak, but watch for phishing, SIM fraud and account-reset attempts.",
+          "answer": ""
+        },
+        {
+          "question": "My NID image leaked. Avoid reposting it publicly. Check for unknown SIMs and suspicious account activity.",
+          "answer": ""
+        },
+        {
+          "question": "A company leaked customer data. Preserve evidence and check the current complaint/remedy framework under the Personal Data Protection Act.",
+          "answer": ""
+        },
+        {
+          "question": "Someone is selling my data online. Save the listing or message carefully and seek legal guidance about the correct complaint route.",
+          "answer": ""
+        }
       ],
-      "whatIf": [],
       "specialistTrigger": "Large-scale data leak; financial loss; identity theft; employer/customer database breach; sensitive medical/biometric data; repeated misuse; refusal by a data-holding organisation to respond; or a compensation claim.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information. Data-protection rights, remedies and complaint procedures may depend on current implementing rules and the facts of the incident.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---\n\n# Legal Update Register — V1\n\nThese update flags should appear in the CMS so a page can be re-reviewed when a law changes.\n\n1. **Registration:** Registration (Amendment) Act, 2026, Act No. 14 of 2026. The current Registration Act shows the section 23 presentation period as three months.\n2. **Tax:** Finance Act, 2026 and 2026–27 NBR notices/SROs. All numbers are dynamic.\n3. **Labour:** Bangladesh Labour (Amendment) Act, 2026, Act No. 43 of 2026. The 2025 amendment ordinance is not the current amendment instrument.\n4. **Cyber:** Cyber Security Act, 2026, Act No. 81 of 2026, plus Cyber Security (Amendment) Act, 2026, Act No. 99 of 2026 dated 1 July 2026. Section 20 is repealed. Pages 41–60 must not use the repealed 2018/2023/2025 cyber statutes as the current primary authority.\n5. **Personal data:** Personal Data Protection Act, 2026 is the current primary data-protection statute. Re-check implementing rules, authority procedures and remedies before publishing page 60.\n6. **Financial fraud:** Bangladesh Bank CIPC complaint procedure is dynamic. Re-check hotline, email, portal and escalation steps on publication date.\n7. **SIM/telecom:** BTRC NEIR currently provides the *16001# NID-linked number check and BTRC maintains an online complaint box. Re-check these operational details before publication.\n8. **RTI:** Right to Information (Amendment) Ordinance, 2026, dated 9 February 2026.\n9. **Legal Aid:** Legal Aid Services (Amendment) Act, 2026, Act No. 45 of 2026.\n10. **Family courts:** Family Courts Act, 2023 replaced the Family Courts Ordinance, 1985.\n11. **Land:** Land Crime Prevention and Remedy Act, 2023 and Land Reform Act, 2023 are important newer land statutes for selected topics.\n\n# CMS fields Justor should store for every page\n\n- `title_en`\n- `title_bn`\n- `slug`\n- `content_type`\n- `cluster`\n- `primary_search_intent`\n- `seo_title`\n- `meta_description`\n- `law_names[]`\n- `provisions[]`\n- `primary_sources[]`\n- `source_checked_at`\n- `source_checked_by`\n- `human_review_status`\n- `human_reviewer`\n- `human_reviewed_at`\n- `law_version_date`\n- `next_review_at`\n- `dynamic_fields[]`\n- `change_log[]`\n- `related_pages[]`\n- `risk_level`\n- `publish_status`\n\n# Publishing order\n\n**Batch 1:** 01 Land registration; 02 Mutation; 03 Khatian; 04 Deed verification; 35 DNCRP complaint.  \n**Batch 2:** 06 Property sale; 11 Land tax; 12 Mutation delay; 13 Marriage registration; 14 Talaq; 21 Salary tax; 25 e-Return; 29 Defective product; 30 Online shop; 46 Government complaint.  \n**Batch 3:** Complete remaining property, family, tax and consumer pages.  \n**Batch 4:** Employment.  \n**Batch 5:** Digital/cyber pages 41–60 and the most interpretation-sensitive pages after the legal-review workflow is stable. Prioritize 51 Fake calls, 52 OTP/MFS fraud, 53 Phishing, 54 Account hacked and 58 SIM/NID checks first because they have clear citizen action value.\n\n# Translation rule\n\nTranslate meaning, not legal names. Keep the official English title of an Act in brackets where it helps source verification. Do not make a Bangla translation stronger than the English master. If a legal term has no safe plain-language equivalent, keep the legal term and add a short Bangla explanation."
+      "faqs": [
+        {
+          "question": "Is the 2025 Personal Data Protection Ordinance still the main law?",
+          "answer": "No. The current Laws of Bangladesh database lists the Personal Data Protection Act, 2026. Justor should use the 2026 Act as the current primary statute."
+        },
+        {
+          "question": "Can I claim compensation automatically?",
+          "answer": "No. Section 35 provides a compensation framework, but eligibility and procedure depend on the law and facts."
+        },
+        {
+          "question": "How do I check for unknown SIMs under my NID?",
+          "answer": "BTRC's NEIR currently provides the \\16001# check described in Justor's SIM guide."
+        },
+        {
+          "question": "If my data was used for fraud, which law applies?",
+          "answer": "The Personal Data Protection Act may be relevant to the data issue, while the Cyber Security Act and other laws may apply to the fraud or unauthorised access. The facts determine the legal route."
+        },
+        {
+          "question": "Should I publish the leaked data to warn others?",
+          "answer": "No. Warn others without spreading your own or another person's sensitive personal data."
+        }
+      ],
+      "disclaimer": "This page provides general legal information. Data-protection rights, remedies and complaint procedures may depend on current implementing rules and the facts of the incident.  --- # Legal Update Register — V1 These update flags should appear in the CMS so a page can be re-reviewed when a law changes. # CMS fields Justor should store for every page # Publishing order Batch 1: 01 Land registration; 02 Mutation; 03 Khatian; 04 Deed verification; 35 DNCRP complaint. Batch 2: 06 Property sale; 11 Land tax; 12 Mutation delay; 13 Marriage registration; 14 Talaq; 21 Salary tax; 25 e-Return; 29 Defective product; 30 Online shop; 46 Government complaint. Batch 3: Complete remaining property, family, tax and consumer pages. Batch 4: Employment. Batch 5: Digital/cyber pages 41–60 and the most interpretation-sensitive pages after the legal-review workflow is stable. Prioritize 51 Fake calls, 52 OTP/MFS fraud, 53 Phishing, 54 Account hacked and 58 SIM/NID checks first because they have clear citizen action value. # Translation rule Translate meaning, not legal names. Keep the official English title of an Act in brackets where it helps source verification. Do not make a Bangla translation stronger than the English master. If a legal term has no safe plain-language equivalent, keep the legal term and add a short Bangla explanation."
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "b533639110b1d8f3"
+    "en": "e5e583e8f2e22042b77b7267e075122d342abf25da31aba17b0ea12f814b8909"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

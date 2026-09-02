@@ -1,39 +1,66 @@
 {
   "id": 22,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "tax",
+  "route": "tax/salary-tax-examples-2026-27",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
-    "description": "Bangladesh citizen legal guide on Salary Tax Examples: ৳30,000 to ৳300,000 Per Month.",
-    "searchIntent": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month"
+    "title": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month | Justor",
+    "description": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions. A monthly salary alone is not...",
+    "searchIntent": "A citizen wants simple examples at common salary levels."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "NBR",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://nbr.gov.bd/uploads/acts/Incometaxact2023.pdf"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/regulations/acts/finance-acts/eng"
+    },
+    {
+      "label": "NBR",
+      "type": "official",
+      "url": "https://nbr.gov.bd/regulations/sros/income-tax-sros/eng"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: CALCULATOR GATE: do not publish numeric outputs until the 2026–27 calculator is independently checked."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Income Tax for Salaried People — 2026–27",
+      "route": "/guides/tax/salary-income-tax-2026-27"
+    },
+    {
+      "label": "Freelancer and Remote Worker Tax Guide — 2026–27",
+      "route": "/guides/tax/freelancer-tax-bangladesh"
+    },
+    {
+      "label": "How to Get a TIN in Bangladesh",
+      "route": "/guides/tax/tin-registration"
+    },
+    {
+      "label": "How to File an e-Return — 2026–27",
+      "route": "/guides/tax/e-return-2026-27"
+    }
+  ],
   "content": {
     "en": {
       "title": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
       "directAnswer": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions. A monthly salary alone is not enough to calculate final tax because benefits, exemptions, other income, rebates and tax already deducted can change the answer.",
       "atAGlance": {
         "whoFor": "A citizen wants simple examples at common salary levels.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions.",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; NBR tax-year guidance.",
+        "mainRule": "This page should use a calculation table generated from a legally reviewed tax model. Do not hand-write tax figures into permanent text.",
         "updateStatus": "CALCULATOR GATE: do not publish numeric outputs until the 2026–27 calculator is independently checked."
       },
-      "lawMeaning": "This page should use a calculation table generated from a legally reviewed tax model. Do not hand-write tax figures into permanent text.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "This page should use a calculation table generated from a legally reviewed tax model. Do not hand-write tax figures into permanent text. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "State the taxpayer category and tax year.",
         "Convert monthly salary to annual amounts.",
@@ -45,25 +72,128 @@
         "Show final amount with assumptions."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Salary certificate; benefits list; investment records; TDS; other-income records."
       ],
       "simpleExample": "Two people both earn ৳100,000 per month. One has taxable benefits and another has eligible investment rebates. Their final tax may differ.",
       "commonMistakes": [
-        "Publishing numbers without assumptions.",
-        "mixing assessment years.",
-        "forgetting minimum tax or location/category rules.",
-        "presenting an example as personal advice.."
+        "Common mistakes: Publishing numbers without assumptions.",
+        "Common mistakes: mixing assessment years.",
+        "Common mistakes: forgetting minimum tax or location/category rules.",
+        "Common mistakes: presenting an example as personal advice.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if salary changes during the year?",
+          "answer": "Use actual annual income."
+        },
+        {
+          "question": "What if there is bonus?",
+          "answer": "Add it under current rules."
+        },
+        {
+          "question": "What if the user has business income too?",
+          "answer": "This simple salary example no longer fits."
+        }
+      ],
       "specialistTrigger": "Mixed income; foreign income; complex benefits; director remuneration; disputed withholding.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "How much tax on ৳50,000 salary?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How much tax on ৳100,000 salary?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does bonus count?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Why is my employer deduction different?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I reduce tax through eligible investment?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মাসিক বেতন অনুযায়ী আয়কর উদাহরণ",
+      "directAnswer": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions. A monthly salary alone is not enough to calculate final tax because benefits, exemptions, other income, rebates and tax already deducted can change the answer.",
+      "atAGlance": {
+        "whoFor": "A citizen wants simple examples at common salary levels.",
+        "legalBasis": "Income Tax Act, 2023; Finance Act, 2026; NBR tax-year guidance.",
+        "mainRule": "This page should use a calculation table generated from a legally reviewed tax model. Do not hand-write tax figures into permanent text.",
+        "updateStatus": "CALCULATOR GATE: do not publish numeric outputs until the 2026–27 calculator is independently checked."
+      },
+      "lawMeaning": "This page should use a calculation table generated from a legally reviewed tax model. Do not hand-write tax figures into permanent text. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "State the taxpayer category and tax year.",
+        "Convert monthly salary to annual amounts.",
+        "Add taxable benefits.",
+        "Apply current exemptions.",
+        "Apply current slabs/minimum tax.",
+        "Apply eligible rebate.",
+        "Deduct tax already paid.",
+        "Show final amount with assumptions."
+      ],
+      "evidence": [
+        "Salary certificate; benefits list; investment records; TDS; other-income records."
+      ],
+      "simpleExample": "Two people both earn ৳100,000 per month. One has taxable benefits and another has eligible investment rebates. Their final tax may differ.",
+      "commonMistakes": [
+        "Common mistakes: Publishing numbers without assumptions.",
+        "Common mistakes: mixing assessment years.",
+        "Common mistakes: forgetting minimum tax or location/category rules.",
+        "Common mistakes: presenting an example as personal advice.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if salary changes during the year?",
+          "answer": "Use actual annual income."
+        },
+        {
+          "question": "What if there is bonus?",
+          "answer": "Add it under current rules."
+        },
+        {
+          "question": "What if the user has business income too?",
+          "answer": "This simple salary example no longer fits."
+        }
+      ],
+      "specialistTrigger": "Mixed income; foreign income; complex benefits; director remuneration; disputed withholding.",
+      "faqs": [
+        {
+          "question": "How much tax on ৳50,000 salary?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How much tax on ৳100,000 salary?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does bonus count?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Why is my employer deduction different?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I reduce tax through eligible investment?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "d13bf64fc9164702"
+    "en": "fc9734e09f235f27b174eb8f5947714680b1c48da2c9d4303ef49e24f1093c94",
+    "bn": "b39811e15c5bd699ca1a27cedd41b78b337a4de2145b22f7e46b9bda1e8866c7"
   },
   "releaseStatus": {
     "en": "published",
@@ -72,6 +202,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

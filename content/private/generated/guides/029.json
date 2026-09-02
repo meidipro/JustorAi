@@ -118,14 +118,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "নষ্ট বা ত্রুটিপূর্ণ পণ্য কিনলে কী করবেন?",
+      "directAnswer": "Keep the receipt, warranty, packaging and proof of the defect. Contact the seller in writing and ask for the remedy you believe applies. If the issue falls within Bangladesh consumer law, you can check the official DNCRP complaint route. Do not throw away the product or evidence before the dispute is recorded.",
+      "atAGlance": {
+        "whoFor": "A consumer bought a defective product and wants practical next steps.",
+        "legalBasis": "Consumers’ Right Protection Act, 2009; DNCRP official complaint process.",
+        "mainRule": "DNCRP’s official complaint guidance requires a written complaint and purchase evidence such as the receipt for the relevant goods or services.",
+        "updateStatus": "Verify current DNCRP filing deadline, complaint portal and required attachments before publishing."
+      },
+      "lawMeaning": "DNCRP’s official complaint guidance requires a written complaint and purchase evidence such as the receipt for the relevant goods or services. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Stop using an unsafe product.",
+        "Photograph/video the defect.",
+        "Keep receipt and warranty.",
+        "Contact seller in writing.",
+        "Save the seller’s reply.",
+        "Check manufacturer/warranty process.",
+        "Use DNCRP where legally appropriate."
+      ],
+      "evidence": [
+        "Receipt; invoice; warranty; product photos; packaging; advertisement; seller messages; payment proof."
+      ],
+      "simpleExample": "A new blender stops working after one day. The buyer keeps the receipt and records the fault before returning it, rather than handing it over with no proof.",
+      "commonMistakes": [
+        "Common mistakes: Throwing away receipt.",
+        "Common mistakes: repairing the item before documenting the defect.",
+        "Common mistakes: making false public accusations.",
+        "Common mistakes: waiting until evidence disappears.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if there is no receipt?",
+          "answer": "Other proof may help, but the official complaint process should be checked."
+        },
+        {
+          "question": "What if the product caused injury?",
+          "answer": "Preserve medical evidence and get legal advice."
+        },
+        {
+          "question": "What if the seller blocks you?",
+          "answer": "Save the communication."
+        }
+      ],
+      "specialistTrigger": "Injury; high-value loss; suspected counterfeit; repeated business fraud; expired statutory complaint deadline.",
+      "faqs": [
+        {
+          "question": "What evidence proves a defective product?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I complain to DNCRP?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do I need a receipt?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the seller refuses a refund?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the product caused injury?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "824bcb498d2d623346909dd87e55de110ab1e5192287b2f6766a2a9e80d39c52"
+    "en": "824bcb498d2d623346909dd87e55de110ab1e5192287b2f6766a2a9e80d39c52",
+    "bn": "e0380fdd424af5f066e947799f03702df40ac51a3bb2a840c21b1f3c2ef6febb"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

@@ -118,14 +118,82 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "উৎসে কর বা TDS কী?",
+      "directAnswer": "Tax deducted at source means a payer withholds tax from a payment before giving you the balance. Depending on the current law, that deduction may count toward your final tax or have another treatment. Always keep the certificate or proof because rates and treatment differ by payment type.",
+      "atAGlance": {
+        "whoFor": "A citizen sees tax deducted before receiving money and wants to understand it.",
+        "legalBasis": "Income Tax Act, 2023; Withholding Tax Rules and current NBR SROs.",
+        "mainRule": "Do not publish a universal TDS rate. Salary, professional fees, bank interest, contracts and other payments can have different rules.",
+        "updateStatus": "DYNAMIC RATES: link to current Withholding Tax Rules/SROs instead of hard-coding."
+      },
+      "lawMeaning": "Do not publish a universal TDS rate. Salary, professional fees, bank interest, contracts and other payments can have different rules. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the payment type.",
+        "Check the current withholding rule.",
+        "Confirm the amount deducted.",
+        "Get the certificate/statement.",
+        "Match it to the e-Return record where applicable.",
+        "Claim credit only when legally allowed."
+      ],
+      "evidence": [
+        "TDS certificate; payer statement; bank statement; invoice; contract; tax portal record."
+      ],
+      "simpleExample": "A consultant receives ৳90,000 after tax was deducted from a ৳100,000 invoice. The consultant should keep the withholding proof and report the income and credit under the correct rule.",
+      "commonMistakes": [
+        "Common mistakes: Assuming all deductions are final tax.",
+        "Common mistakes: losing certificates.",
+        "Common mistakes: using an old rate.",
+        "Common mistakes: claiming a credit that does not belong to the taxpayer.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the payer deducted too much?",
+          "answer": "Use the current adjustment/refund route."
+        },
+        {
+          "question": "What if no certificate is provided?",
+          "answer": "Ask the payer and keep communication."
+        },
+        {
+          "question": "What if the portal record differs?",
+          "answer": "Reconcile before filing."
+        }
+      ],
+      "specialistTrigger": "Large mismatch; refund claim; non-resident payment; business withholding dispute.",
+      "faqs": [
+        {
+          "question": "What is TDS?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is TDS my final tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do I get TDS credit?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if too much was deducted?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Why are TDS rates different?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "b50650cf0534909ee70de6bd0cbe1c3a0b46207aac6b96326cbc48c8d0512410"
+    "en": "b50650cf0534909ee70de6bd0cbe1c3a0b46207aac6b96326cbc48c8d0512410",
+    "bn": "82b96b66a6e8d2d1e623693045b07aaa738ff9b6b08eef1124c041b24acbede0"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

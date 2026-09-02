@@ -1,39 +1,61 @@
 {
   "id": 28,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "tax",
+  "route": "tax/tax-notice",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "You Received a Tax Notice: What Should You Do?",
-    "description": "Bangladesh citizen legal guide on You Received a Tax Notice: What Should You Do?.",
-    "searchIntent": "You Received a Tax Notice: What Should You Do?"
+    "title": "You Received a Tax Notice: What Should You Do? | Justor",
+    "description": "Do not ignore a tax notice and do not pay money just because someone tells you to. First verify that the notice is genuine, identify the legal section,...",
+    "searchIntent": "A taxpayer received an NBR notice and needs safe first steps."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "TAX PROFESSIONAL/LEGAL REVIEW REQUIRED"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "NBR",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://nbr.gov.bd/uploads/acts/Incometaxact2023.pdf"
+    },
+    {
+      "label": "National Board of Revenue",
+      "type": "official",
+      "url": "https://nbr.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Deadline-sensitive. Final page should tell users to read the exact section instead of giving one response template."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "Income Tax for Salaried People — 2026–27",
+      "route": "/guides/tax/salary-income-tax-2026-27"
+    },
+    {
+      "label": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+      "route": "/guides/tax/salary-tax-examples-2026-27"
+    },
+    {
+      "label": "Freelancer and Remote Worker Tax Guide — 2026–27",
+      "route": "/guides/tax/freelancer-tax-bangladesh"
+    },
+    {
+      "label": "How to Get a TIN in Bangladesh",
+      "route": "/guides/tax/tin-registration"
+    }
+  ],
   "content": {
     "en": {
       "title": "You Received a Tax Notice: What Should You Do?",
       "directAnswer": "Do not ignore a tax notice and do not pay money just because someone tells you to. First verify that the notice is genuine, identify the legal section, note the deadline, collect the return and supporting records, and understand what NBR is asking. Get professional help if the notice involves an assessment, penalty, audit or major mismatch.",
       "atAGlance": {
         "whoFor": "A taxpayer received an NBR notice and needs safe first steps.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Do not ignore a tax notice and do not pay money just because someone tells you to. First verify that the notice is genui",
+        "legalBasis": "Income Tax Act, 2023; current NBR procedures.",
+        "mainRule": "The legal effect depends on the exact notice section and facts. This guide must not pretend every notice is the same.",
         "updateStatus": "Deadline-sensitive. Final page should tell users to read the exact section instead of giving one response template."
       },
-      "lawMeaning": "The legal effect depends on the exact notice section and facts. This guide must not pretend every notice is the same.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "The legal effect depends on the exact notice section and facts. This guide must not pretend every notice is the same. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Verify the notice source.",
         "Read the section and deadline.",
@@ -45,34 +67,66 @@
         "Submit through the correct channel and keep proof."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Notice; return; TIN; bank statements; salary/business records; TDS; challans; asset documents."
       ],
       "simpleExample": "A taxpayer gets a message asking for payment to a personal mobile number. They should verify through NBR channels before sending any money.",
       "commonMistakes": [
-        "Ignoring deadline.",
-        "calling an unofficial “fixer”.",
-        "deleting records.",
-        "submitting invented documents.",
-        "paying to a personal account.."
+        "Common mistakes: Ignoring deadline.",
+        "Common mistakes: calling an unofficial “fixer”.",
+        "Common mistakes: deleting records.",
+        "Common mistakes: submitting invented documents.",
+        "Common mistakes: paying to a personal account.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the notice is fake?",
+          "answer": "Report the fraud and protect your accounts."
+        },
+        {
+          "question": "What if you disagree with NBR?",
+          "answer": "Use the statutory response/appeal route."
+        },
+        {
+          "question": "What if the deadline is close?",
+          "answer": "Get tax help immediately."
+        }
+      ],
       "specialistTrigger": "Assessment; penalty; search/audit; large mismatch; appeal deadline; suspected fake notice.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "How do I know a tax notice is real?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What documents should I collect?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I ignore a notice?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if I disagree?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "When do I need a tax lawyer?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "977a14c1e107f595"
+    "en": "87c872f8dbdd42b9030be3c4283a132f5bde90b658c280265e5c00d4e0948e54"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

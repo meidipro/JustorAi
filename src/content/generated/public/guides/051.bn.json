@@ -1,39 +1,88 @@
 {
   "id": 51,
-  "cluster": "digital",
-  "route": "",
+  "cluster": "cyber",
+  "route": "cyber/fake-bank-police-government-call",
   "sourceRoutePrefix": "action-guides",
   "seo": {
-    "title": "Fake Bank, Police or Government Call: What Should You Do?",
-    "description": "Bangladesh citizen legal guide on Fake Bank, Police or Government Call: What Should You Do?.",
-    "searchIntent": "Fake Bank, Police or Government Call: What Should You Do?"
+    "title": "Fake Bank or Police Call in Bangladesh: What to Do | Justor",
+    "description": "A caller claims to be from a bank, police, BTRC or a government office and asks for money, OTP or personal data. Learn the safe first steps.",
+    "searchIntent": "A citizen received a suspicious call from someone pretending to be an authority."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "freshnessRequirementRaw": "10 April 2026: Cyber Security Act, 2026 became the current primary cyber statute. | - 10 April 2026: Cyber Security Act, 2026 became the current primary cyber statute. - 1 July 2026: Cyber Security (Amendment) Act, 2026 amended the Act and repealed section 20. Re-check current consolidated text before publication."
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Cyber Security Act, 2026",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710.html"
+    },
+    {
+      "label": "Section 22",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57963.html"
+    },
+    {
+      "label": "Section 21",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1710/section-57962.html"
+    },
+    {
+      "label": "Penal Code, 1860, section 415",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11/section-3291.html"
+    },
+    {
+      "label": "Penal Code, 1860, section 420",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-11/section-3366.html"
+    },
+    {
+      "label": "Bangladesh Bank Customer Interest Protection Centre (CIPC)",
+      "type": "secondary",
+      "url": "https://www.bb.org.bd/en/index.php/services/cipcprocedure"
+    },
+    {
+      "label": "Bangladesh Police",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://www.police.gov.bd/en/%E0%A6%85%E0%A6%AD%E0%A6%BF%E0%A6%AF%E0%A7%8B%E0%A6%97%E0%A6%A6%E0%A6%BE%E0%A6%96%E0%A6%BF%E0%A6%B2%28%E0%A6%85%E0%A6%A8%E0%A6%B2%E0%A6%BE%E0%A6%87%E0%A6%A8%E0%A6%86%E0%A6%AC%E0%A7%87%E0%A6%A6%E0%A6%A8%29"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "10 April 2026: Cyber Security Act, 2026 became the current primary cyber statute.",
+    "1 July 2026: Cyber Security (Amendment) Act, 2026 amended the Act and repealed section 20. Re-check current consolidated text before publication."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "What to Do After an Online Scam",
+      "route": "/action-guides/digital/online-scam"
+    },
+    {
+      "label": "OTP, PIN and MFS Scam: What to Do",
+      "route": "/action-guides/cyber/otp-pin-mfs-scam"
+    },
+    {
+      "label": "Phishing Link or Fake Website: What to Do",
+      "route": "/action-guides/cyber/phishing-link-fake-website"
+    },
+    {
+      "label": "Personal Data or NID Information Was Leaked",
+      "route": "/action-guides/cyber/personal-data-nid-leak"
+    }
+  ],
   "content": {
     "en": {
       "title": "Fake Bank, Police or Government Call: What Should You Do?",
       "directAnswer": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says they are from a bank, police, BTRC, court or government office. End the call if you are unsure. Then contact the organisation using a phone number or website that you find independently from its official source. If the caller tried to take money or obtain access to an account, save the evidence and report the incident through the correct channel.",
       "atAGlance": {
-        "whoFor": "Citizens in Bangladesh",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says th",
-        "updateStatus": "Current Bangladesh law"
+        "whoFor": "A citizen received a suspicious call from someone pretending to be an authority.",
+        "legalBasis": "A fake call is not a separate offence simply because it is fake. The legal issue depends on what the caller does. If the caller uses cyberspace to deceive someone for money or another benefit, the Cyber Security Act, 2026 may be relevant, including section 22 on fraud in cyberspace. If false digital material is created or used, section 21 on cyber forgery may also become relevant. General cheating provisions in the Penal Code, 1860, including sections 415 and 420, may apply depending on the facts. Do not write that every fake call automatically falls under one section. The facts, medium, intention and loss matter.",
+        "mainRule": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says they are from a bank, police, BTRC, court or government office. End the call if you are unsure. Then contact the organisation using a phone number or website that you find independently from its official source. If the caller tried to take money or obtain access to an account, save the evidence and report the incident through the correct channel.",
+        "updateStatus": "10 April 2026: Cyber Security Act, 2026 became the current primary cyber statute."
       },
-      "lawMeaning": "A fake call is not a separate offence simply because it is fake. The legal issue depends on what the caller does. If the caller uses cyberspace to deceive someone for money or another benefit, the **Cyber Security Act, 2026** may be relevant, including section 22 on fraud in cyberspace. If false digital material is created or used, section 21 on cyber forgery may also become relevant. General cheating provisions in the **Penal Code, 1860**, including sections 415 and 420, may apply depending on the facts.\n\nDo not write that every fake call automatically falls under one section. The facts, medium, intention and loss matter.",
+      "lawMeaning": "A fake call is not a separate offence simply because it is fake. The legal issue depends on what the caller does. If the caller uses cyberspace to deceive someone for money or another benefit, the Cyber Security Act, 2026 may be relevant, including section 22 on fraud in cyberspace. If false digital material is created or used, section 21 on cyber forgery may also become relevant. General cheating provisions in the Penal Code, 1860, including sections 415 and 420, may apply depending on the facts. Do not write that every fake call automatically falls under one section. The facts, medium, intention and loss matter.",
       "steps": [
         "End the call if the caller pressures or threatens you.",
         "Do not call back using a number sent by the caller.",
@@ -46,30 +95,157 @@
         "If the issue concerns a bank, finance company or MFS provider and remains unresolved, follow Bangladesh Bank's CIPC complaint process."
       ],
       "evidence": [
-        "Caller number.",
-        "Date and time.",
-        "SMS or WhatsApp messages.",
-        "Name and title claimed by the caller.",
-        "Payment account or MFS number.",
-        "Transaction ID.",
-        "Screenshots.",
-        "Email or website links sent by the caller.",
-        "Bank or provider complaint number."
+        "Evidence to keep: Caller number.",
+        "Evidence to keep: Date and time.",
+        "Evidence to keep: SMS or WhatsApp messages.",
+        "Evidence to keep: Name and title claimed by the caller.",
+        "Evidence to keep: Payment account or MFS number.",
+        "Evidence to keep: Transaction ID.",
+        "Evidence to keep: Screenshots.",
+        "Evidence to keep: Email or website links sent by the caller.",
+        "Evidence to keep: Bank or provider complaint number."
       ],
       "simpleExample": "A caller says, “I am from your bank. Your account will be blocked today. Tell me the six-digit OTP.” The safest action is to end the call. Then contact the bank using its official app, website or card number. If you already shared the OTP, immediately tell the bank that the account may be compromised.",
       "commonMistakes": [
-        "Missing statutory limitation deadlines.",
-        "Failing to retain written acknowledgments."
+        "Common warning signs: “Act now or your account will be frozen.”",
+        "Common warning signs: “You have a police case. Pay now.”",
+        "Common warning signs: “Give me the OTP to cancel a transaction.”",
+        "Common warning signs: “Send ৳500 first to confirm your identity.”",
+        "Common warning signs: “Install this screen-sharing app.”",
+        "Common warning signs: “Do not tell anyone about this call.”"
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the caller knows my NID number?",
+          "answer": "Knowing personal information does not prove the caller is genuine."
+        },
+        {
+          "question": "What if the number looks official?",
+          "answer": "Caller ID can be misleading. Verify through the organisation's official contact details."
+        },
+        {
+          "question": "What if the caller says police will arrest me?",
+          "answer": "Do not pay money or give account access because of a phone threat. Verify the matter independently."
+        },
+        {
+          "question": "What if I already sent money?",
+          "answer": "Contact the bank/MFS provider immediately, preserve the transaction details and report the suspected fraud."
+        }
+      ],
       "specialistTrigger": "Get legal help if there is a large financial loss, identity misuse, a threat of arrest based on a real legal notice, repeated harassment, blackmail, or a dispute about liability after a financial provider rejects your complaint.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures and reporting channels can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "Can a real bank ask for my OTP on a phone call?",
+          "answer": "Treat any request for a transaction or login OTP as highly sensitive. Verify directly with your bank or MFS provider through its official channel before doing anything."
+        },
+        {
+          "question": "The caller knew my address. Does that make the call real?",
+          "answer": "No. Personal information can be obtained from many sources. Verify the caller independently."
+        },
+        {
+          "question": "Can I block the number?",
+          "answer": "Yes, after saving the evidence you may block the number. Blocking does not replace reporting where money, threats or identity misuse are involved."
+        },
+        {
+          "question": "Where do I complain about a bank or MFS issue?",
+          "answer": "Start with the bank/MFS provider. If unresolved, Bangladesh Bank's CIPC currently accepts complaints and lists hotline 16236, email and an online complaint form."
+        },
+        {
+          "question": "Should I delete the messages?",
+          "answer": "No. Preserve the original messages, numbers and transaction details if you may need to report the incident."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures and reporting channels can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "ব্যাংক, পুলিশ বা সরকারি কর্মকর্তা সেজে ভুয়া কল এলে কী করবেন?",
+      "directAnswer": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says they are from a bank, police, BTRC, court or government office. End the call if you are unsure. Then contact the organisation using a phone number or website that you find independently from its official source. If the caller tried to take money or obtain access to an account, save the evidence and report the incident through the correct channel.",
+      "atAGlance": {
+        "whoFor": "A citizen received a suspicious call from someone pretending to be an authority.",
+        "legalBasis": "A fake call is not a separate offence simply because it is fake. The legal issue depends on what the caller does. If the caller uses cyberspace to deceive someone for money or another benefit, the Cyber Security Act, 2026 may be relevant, including section 22 on fraud in cyberspace. If false digital material is created or used, section 21 on cyber forgery may also become relevant. General cheating provisions in the Penal Code, 1860, including sections 415 and 420, may apply depending on the facts. Do not write that every fake call automatically falls under one section. The facts, medium, intention and loss matter.",
+        "mainRule": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says they are from a bank, police, BTRC, court or government office. End the call if you are unsure. Then contact the organisation using a phone number or website that you find independently from its official source. If the caller tried to take money or obtain access to an account, save the evidence and report the incident through the correct channel.",
+        "updateStatus": "10 April 2026: Cyber Security Act, 2026 became the current primary cyber statute."
+      },
+      "lawMeaning": "A fake call is not a separate offence simply because it is fake. The legal issue depends on what the caller does. If the caller uses cyberspace to deceive someone for money or another benefit, the Cyber Security Act, 2026 may be relevant, including section 22 on fraud in cyberspace. If false digital material is created or used, section 21 on cyber forgery may also become relevant. General cheating provisions in the Penal Code, 1860, including sections 415 and 420, may apply depending on the facts. Do not write that every fake call automatically falls under one section. The facts, medium, intention and loss matter.",
+      "steps": [
+        "End the call if the caller pressures or threatens you.",
+        "Do not call back using a number sent by the caller.",
+        "Open the official website or app of the claimed organisation.",
+        "Call the official customer-service or office number.",
+        "Ask whether the request is genuine.",
+        "If banking information was exposed, change credentials and contact the provider immediately.",
+        "Save screenshots of SMS, WhatsApp messages, caller ID and payment instructions.",
+        "If money was taken or a crime is suspected, make the appropriate complaint to police or another competent authority.",
+        "If the issue concerns a bank, finance company or MFS provider and remains unresolved, follow Bangladesh Bank's CIPC complaint process."
+      ],
+      "evidence": [
+        "Evidence to keep: Caller number.",
+        "Evidence to keep: Date and time.",
+        "Evidence to keep: SMS or WhatsApp messages.",
+        "Evidence to keep: Name and title claimed by the caller.",
+        "Evidence to keep: Payment account or MFS number.",
+        "Evidence to keep: Transaction ID.",
+        "Evidence to keep: Screenshots.",
+        "Evidence to keep: Email or website links sent by the caller.",
+        "Evidence to keep: Bank or provider complaint number."
+      ],
+      "simpleExample": "A caller says, “I am from your bank. Your account will be blocked today. Tell me the six-digit OTP.” The safest action is to end the call. Then contact the bank using its official app, website or card number. If you already shared the OTP, immediately tell the bank that the account may be compromised.",
+      "commonMistakes": [
+        "Common warning signs: “Act now or your account will be frozen.”",
+        "Common warning signs: “You have a police case. Pay now.”",
+        "Common warning signs: “Give me the OTP to cancel a transaction.”",
+        "Common warning signs: “Send ৳500 first to confirm your identity.”",
+        "Common warning signs: “Install this screen-sharing app.”",
+        "Common warning signs: “Do not tell anyone about this call.”"
+      ],
+      "whatIf": [
+        {
+          "question": "What if the caller knows my NID number?",
+          "answer": "Knowing personal information does not prove the caller is genuine."
+        },
+        {
+          "question": "What if the number looks official?",
+          "answer": "Caller ID can be misleading. Verify through the organisation's official contact details."
+        },
+        {
+          "question": "What if the caller says police will arrest me?",
+          "answer": "Do not pay money or give account access because of a phone threat. Verify the matter independently."
+        },
+        {
+          "question": "What if I already sent money?",
+          "answer": "Contact the bank/MFS provider immediately, preserve the transaction details and report the suspected fraud."
+        }
+      ],
+      "specialistTrigger": "Get legal help if there is a large financial loss, identity misuse, a threat of arrest based on a real legal notice, repeated harassment, blackmail, or a dispute about liability after a financial provider rejects your complaint.",
+      "faqs": [
+        {
+          "question": "Can a real bank ask for my OTP on a phone call?",
+          "answer": "Treat any request for a transaction or login OTP as highly sensitive. Verify directly with your bank or MFS provider through its official channel before doing anything."
+        },
+        {
+          "question": "The caller knew my address. Does that make the call real?",
+          "answer": "No. Personal information can be obtained from many sources. Verify the caller independently."
+        },
+        {
+          "question": "Can I block the number?",
+          "answer": "Yes, after saving the evidence you may block the number. Blocking does not replace reporting where money, threats or identity misuse are involved."
+        },
+        {
+          "question": "Where do I complain about a bank or MFS issue?",
+          "answer": "Start with the bank/MFS provider. If unresolved, Bangladesh Bank's CIPC currently accepts complaints and lists hotline 16236, email and an online complaint form."
+        },
+        {
+          "question": "Should I delete the messages?",
+          "answer": "No. Preserve the original messages, numbers and transaction details if you may need to report the incident."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures and reporting channels can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "59f5296859279617"
+    "en": "1f3c002edbeaa2561f6532baa3748cd29a8578cca2302aab96e43bf448eaea2d",
+    "bn": "293200fa88944226ffe58d9644e296a7d88ebc94792bd6076f20e328575415f3"
   },
   "releaseStatus": {
     "en": "published",
@@ -78,6 +254,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

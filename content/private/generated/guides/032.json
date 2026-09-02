@@ -111,14 +111,81 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "ভুল দাম ও misleading advertisement হলে কী করবেন?",
+      "directAnswer": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions actually offered. Ask the seller to explain the difference. Consumer law may apply to misleading acts, but not every typo or misunderstanding creates the same legal remedy.",
+      "atAGlance": {
+        "whoFor": "A consumer sees a false price, hidden condition or misleading product claim.",
+        "legalBasis": "Consumers’ Right Protection Act, 2009; DNCRP guidance.",
+        "mainRule": "Evidence should show the exact advertisement and what the seller actually charged or provided.",
+        "updateStatus": "Use careful wording. The article should not decide that an advertisement is unlawful without the full facts."
+      },
+      "lawMeaning": "Evidence should show the exact advertisement and what the seller actually charged or provided. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Screenshot the full ad and date.",
+        "Save terms and conditions.",
+        "Keep receipt or checkout screen.",
+        "Ask the seller to explain.",
+        "Save the reply.",
+        "Use DNCRP where the facts fit consumer law."
+      ],
+      "evidence": [
+        "Ad screenshot; link; receipt; product packaging; seller communication; terms."
+      ],
+      "simpleExample": "A store advertises a price but adds a hidden mandatory charge only at payment. The buyer should save both screens and the final receipt.",
+      "commonMistakes": [
+        "Common mistakes: Cropping screenshots so context is lost.",
+        "Common mistakes: assuming every promotion applies to every customer.",
+        "Common mistakes: confusing tax/delivery charges with deception without reading terms.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if the ad has “conditions apply”?",
+          "answer": "Read the conditions."
+        },
+        {
+          "question": "What if the product claim concerns health?",
+          "answer": "Other regulators may also be relevant."
+        },
+        {
+          "question": "What if the ad is deleted?",
+          "answer": "Preserve earlier screenshots and URL."
+        }
+      ],
+      "specialistTrigger": "Large financial loss; medical/safety claim; repeated deceptive scheme; sector-regulated product.",
+      "faqs": [
+        {
+          "question": "What is misleading advertising?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can a shop charge a different price?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I complain to DNCRP?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do hidden conditions matter?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "a97e8f40c556cc400a78c98518f9bce66b2ba9f8d6f0352f8d74149ef515b307"
+    "en": "a97e8f40c556cc400a78c98518f9bce66b2ba9f8d6f0352f8d74149ef515b307",
+    "bn": "470dbd4610c6e502a88e07a49715d49f520963e72089086c990d901bf797159b"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

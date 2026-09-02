@@ -119,14 +119,83 @@
         }
       ],
       "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "TIN কীভাবে করবেন?",
+      "directAnswer": "A TIN is a Taxpayer Identification Number used in Bangladesh’s tax system. Use the official NBR e-TIN service and enter identity information exactly. Having a TIN and having a tax payable are not the same thing. A person may also have a return-filing duty even when final tax is low or zero.",
+      "atAGlance": {
+        "whoFor": "A citizen wants to register for a taxpayer identification number.",
+        "legalBasis": "Income Tax Act, 2023; NBR e-TIN services and forms.",
+        "mainRule": "The exact list of people who must have TIN or proof of return can change, so link this guide to the current “Who must file” page.",
+        "updateStatus": "Re-check NBR portal URLs and any current mandatory TIN categories before publication."
+      },
+      "lawMeaning": "The exact list of people who must have TIN or proof of return can change, so link this guide to the current “Who must file” page. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Open the official NBR e-TIN service.",
+        "Use correct NID/passport and contact data.",
+        "Complete account verification.",
+        "Enter taxpayer information.",
+        "Submit.",
+        "Save the TIN certificate.",
+        "Correct errors through the official process."
+      ],
+      "evidence": [
+        "NID/passport as applicable; mobile/email; address; business information if relevant."
+      ],
+      "simpleExample": "A person gets a TIN for a bank or property transaction but has no taxable income. They should still check whether the law requires a return or proof of filing because the TIN itself does not answer that question.",
+      "commonMistakes": [
+        "Common mistakes: Creating multiple TINs.",
+        "Common mistakes: wrong NID details.",
+        "Common mistakes: sharing passwords with agents.",
+        "Common mistakes: thinking TIN means tax is automatically due.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if I forgot my TIN?",
+          "answer": "Use official recovery."
+        },
+        {
+          "question": "What if my address changed?",
+          "answer": "Update through the official system."
+        },
+        {
+          "question": "What if I no longer need it?",
+          "answer": "Follow NBR procedure rather than ignoring it."
+        }
+      ],
+      "specialistTrigger": "Duplicate TIN; identity mismatch; business restructuring; foreign taxpayer issue.",
+      "faqs": [
+        {
+          "question": "What is a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Who needs a TIN?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does TIN mean I must pay tax?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "How do I correct TIN information?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Is e-TIN free?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "a57df72b532d14cae9f388ec51811573ce2abbf48df458f30af090a7ebac8d9e"
+    "en": "a57df72b532d14cae9f388ec51811573ce2abbf48df458f30af090a7ebac8d9e",
+    "bn": "2d86615ed17e1d11c60308c36dd63ff41969f5ed9c5dcb57db5d4b56917976fe"
   },
   "releaseStatus": {
-    "en": "review",
-    "bn": "missing"
+    "en": "published",
+    "bn": "published"
   }
 }

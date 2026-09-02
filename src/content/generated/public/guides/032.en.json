@@ -1,39 +1,61 @@
 {
   "id": 32,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "consumer",
+  "route": "consumer/misleading-advertising",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "Wrong Price and Misleading Advertising: What Can You Do?",
-    "description": "Bangladesh citizen legal guide on Wrong Price and Misleading Advertising: What Can You Do?.",
-    "searchIntent": "Wrong Price and Misleading Advertising: What Can You Do?"
+    "title": "Wrong Price and Misleading Advertising: What Can You Do? | Justor",
+    "description": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions actually offered. Ask the seller...",
+    "searchIntent": "A consumer sees a false price, hidden condition or misleading product claim."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "SOURCE CHECK; LEGAL QA"
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Consumers' Right Protection Act, 2009",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-1014.html"
+    },
+    {
+      "label": "Directorate of National Consumer Rights Protection",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://dncrp.gov.bd/"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Use careful wording. The article should not decide that an advertisement is unlawful without the full facts."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "What to Do If You Buy a Defective Product",
+      "route": "/action-guides/consumer/defective-product"
+    },
+    {
+      "label": "Facebook or Online Shop Did Not Deliver Your Product",
+      "route": "/action-guides/consumer/online-shop-no-delivery"
+    },
+    {
+      "label": "You Paid for a Service but Did Not Receive It",
+      "route": "/action-guides/consumer/service-not-delivered"
+    },
+    {
+      "label": "Mobile, Internet or Subscription Billing Dispute",
+      "route": "/action-guides/consumer/billing-dispute"
+    }
+  ],
   "content": {
     "en": {
       "title": "Wrong Price and Misleading Advertising: What Can You Do?",
       "directAnswer": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions actually offered. Ask the seller to explain the difference. Consumer law may apply to misleading acts, but not every typo or misunderstanding creates the same legal remedy.",
       "atAGlance": {
         "whoFor": "A consumer sees a false price, hidden condition or misleading product claim.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions ac",
+        "legalBasis": "Consumers’ Right Protection Act, 2009; DNCRP guidance.",
+        "mainRule": "Evidence should show the exact advertisement and what the seller actually charged or provided.",
         "updateStatus": "Use careful wording. The article should not decide that an advertisement is unlawful without the full facts."
       },
-      "lawMeaning": "Evidence should show the exact advertisement and what the seller actually charged or provided.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Evidence should show the exact advertisement and what the seller actually charged or provided. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Screenshot the full ad and date.",
         "Save terms and conditions.",
@@ -43,32 +65,64 @@
         "Use DNCRP where the facts fit consumer law."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Ad screenshot; link; receipt; product packaging; seller communication; terms."
       ],
       "simpleExample": "A store advertises a price but adds a hidden mandatory charge only at payment. The buyer should save both screens and the final receipt.",
       "commonMistakes": [
-        "Cropping screenshots so context is lost.",
-        "assuming every promotion applies to every customer.",
-        "confusing tax/delivery charges with deception without reading terms.."
+        "Common mistakes: Cropping screenshots so context is lost.",
+        "Common mistakes: assuming every promotion applies to every customer.",
+        "Common mistakes: confusing tax/delivery charges with deception without reading terms.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if the ad has “conditions apply”?",
+          "answer": "Read the conditions."
+        },
+        {
+          "question": "What if the product claim concerns health?",
+          "answer": "Other regulators may also be relevant."
+        },
+        {
+          "question": "What if the ad is deleted?",
+          "answer": "Preserve earlier screenshots and URL."
+        }
+      ],
       "specialistTrigger": "Large financial loss; medical/safety claim; repeated deceptive scheme; sector-regulated product.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "What is misleading advertising?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can a shop charge a different price?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What evidence should I save?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can I complain to DNCRP?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Do hidden conditions matter?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "10e5a69b1fc4c789"
+    "en": "a97e8f40c556cc400a78c98518f9bce66b2ba9f8d6f0352f8d74149ef515b307"
   },
   "releaseStatus": {
-    "en": "published",
-    "bn": "published"
+    "en": "published"
   },
   "publicationBadges": {
     "locale": "en",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }

@@ -1,39 +1,67 @@
 {
   "id": 8,
-  "cluster": "digital",
-  "route": "",
-  "sourceRoutePrefix": "action-guides",
+  "cluster": "property",
+  "route": "property/inherited-land-transfer",
+  "sourceRoutePrefix": "guides",
   "seo": {
-    "title": "How to Transfer Inherited Land to the Heirs",
-    "description": "Bangladesh citizen legal guide on How to Transfer Inherited Land to the Heirs.",
-    "searchIntent": "How to Transfer Inherited Land to the Heirs"
+    "title": "How to Transfer Inherited Land to the Heirs | Justor",
+    "description": "When a landowner dies, the heirs should first identify the lawful heirs and the property left by the deceased. They then need the required death and...",
+    "searchIntent": "Heirs want to update land records after a death."
   },
   "verification": {
     "lastSourceChecked": "15 August 2026",
-    "publishGateRaw": "SOURCE CHECK ✓"
+    "publishGateRaw": "HUMAN LEGAL REVIEW BEFORE PUBLISH",
+    "freshnessRequirementRaw": "Link this process guide to separate, legally reviewed inheritance guides for share calculations. | - 15 August 2026: Link this process guide to separate, legally reviewed inheritance guides for share calculations."
   },
   "officialSources": [
     {
-      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "label": "Ministry of Land",
       "type": "official",
-      "url": "https://bdlaws.minlaw.gov.bd"
+      "url": "https://mutation.land.gov.bd/"
+    },
+    {
+      "label": "Ministry of Land",
+      "type": "official",
+      "url": "https://land.gov.bd/"
+    },
+    {
+      "label": "The Registration Act, 1908",
+      "type": "primary",
+      "url": "https://bdlaws.minlaw.gov.bd/act-90.html"
     }
   ],
   "updateHistory": [
-    "Verified and structured on 15 August 2026"
+    "15 August 2026: Link this process guide to separate, legally reviewed inheritance guides for share calculations."
   ],
-  "relatedPages": [],
+  "relatedPages": [
+    {
+      "label": "How to Register Land in Bangladesh",
+      "route": "/guides/property/land-registration-bangladesh"
+    },
+    {
+      "label": "Mutation or Namjari: What Is It and How Do You Apply?",
+      "route": "/guides/property/mutation-namjari"
+    },
+    {
+      "label": "CS, SA, RS and BS Khatian Explained Simply",
+      "route": "/guides/property/khatian-types"
+    },
+    {
+      "label": "How to Check Whether a Land Deed Is Genuine",
+      "route": "/guides/property/verify-land-deed"
+    }
+  ],
   "content": {
     "en": {
       "title": "How to Transfer Inherited Land to the Heirs",
       "directAnswer": "When a landowner dies, the heirs should first identify the lawful heirs and the property left by the deceased. They then need the required death and inheritance documents and can apply to update the land record. This page explains the record-update process. It does not calculate each heir’s share.",
       "atAGlance": {
         "whoFor": "Heirs want to update land records after a death.",
-        "legalBasis": "Laws of Bangladesh",
-        "mainRule": "When a landowner dies, the heirs should first identify the lawful heirs and the property left by the deceased. They then",
+        "legalBasis": "Applicable personal law; Ministry of Land mutation process; Registration rules where later deeds are made.",
+        "mainRule": "Inheritance shares depend on the applicable personal law. Do not use this page as an inheritance calculator.",
         "updateStatus": "Link this process guide to separate, legally reviewed inheritance guides for share calculations."
       },
-      "lawMeaning": "Inheritance shares depend on the applicable personal law. Do not use this page as an inheritance calculator.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "lawMeaning": "Inheritance shares depend on the applicable personal law. Do not use this page as an inheritance calculator. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
       "steps": [
         "Collect death documentation.",
         "List the deceased person’s properties.",
@@ -45,25 +73,128 @@
         "Use a lawful partition or later transfer if heirs want separate ownership."
       ],
       "evidence": [
-        "National ID (NID)",
-        "Relevant official notices, receipts, and correspondence"
+        "Death record; heirship/inheritance documents; deeds; khatian; applicant IDs; tax records; court order if any."
       ],
       "simpleExample": "Three siblings inherit land. They should not quietly mutate the whole property into one person’s name unless the law and documents support that result.",
       "commonMistakes": [
-        "Leaving out heirs.",
-        "using a family list without legal basis.",
-        "mixing inheritance with sale.",
-        "assuming mutation creates a share that the person did not inherit.."
+        "Common mistakes: Leaving out heirs.",
+        "Common mistakes: using a family list without legal basis.",
+        "Common mistakes: mixing inheritance with sale.",
+        "Common mistakes: assuming mutation creates a share that the person did not inherit.."
       ],
-      "whatIf": [],
+      "whatIf": [
+        {
+          "question": "What if an heir lives abroad?",
+          "answer": "Check representation requirements."
+        },
+        {
+          "question": "What if heirs disagree?",
+          "answer": "Do not force a record change that ignores the dispute."
+        },
+        {
+          "question": "What if there is a will?",
+          "answer": "Get advice on its legal effect."
+        }
+      ],
       "specialistTrigger": "Contested heirs; will dispute; missing documents; minor heirs; property already sold by one person; family disagreement.",
-      "faqs": [],
-      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+      "faqs": [
+        {
+          "question": "How do heirs mutate land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does mutation decide inheritance shares?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What documents do heirs need?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can one heir sell all inherited land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the heirs disagree?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
+    },
+    "bn": {
+      "title": "মৃত ব্যক্তির জমি উত্তরাধিকারীদের নামে কীভাবে নেবেন?",
+      "directAnswer": "When a landowner dies, the heirs should first identify the lawful heirs and the property left by the deceased. They then need the required death and inheritance documents and can apply to update the land record. This page explains the record-update process. It does not calculate each heir’s share.",
+      "atAGlance": {
+        "whoFor": "Heirs want to update land records after a death.",
+        "legalBasis": "Applicable personal law; Ministry of Land mutation process; Registration rules where later deeds are made.",
+        "mainRule": "Inheritance shares depend on the applicable personal law. Do not use this page as an inheritance calculator.",
+        "updateStatus": "Link this process guide to separate, legally reviewed inheritance guides for share calculations."
+      },
+      "lawMeaning": "Inheritance shares depend on the applicable personal law. Do not use this page as an inheritance calculator. This page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Collect death documentation.",
+        "List the deceased person’s properties.",
+        "Identify lawful heirs under the applicable law.",
+        "Collect heirship or supporting documents required by the authority.",
+        "Gather old deeds and khatians.",
+        "Apply for mutation/update.",
+        "Keep the mutation order.",
+        "Use a lawful partition or later transfer if heirs want separate ownership."
+      ],
+      "evidence": [
+        "Death record; heirship/inheritance documents; deeds; khatian; applicant IDs; tax records; court order if any."
+      ],
+      "simpleExample": "Three siblings inherit land. They should not quietly mutate the whole property into one person’s name unless the law and documents support that result.",
+      "commonMistakes": [
+        "Common mistakes: Leaving out heirs.",
+        "Common mistakes: using a family list without legal basis.",
+        "Common mistakes: mixing inheritance with sale.",
+        "Common mistakes: assuming mutation creates a share that the person did not inherit.."
+      ],
+      "whatIf": [
+        {
+          "question": "What if an heir lives abroad?",
+          "answer": "Check representation requirements."
+        },
+        {
+          "question": "What if heirs disagree?",
+          "answer": "Do not force a record change that ignores the dispute."
+        },
+        {
+          "question": "What if there is a will?",
+          "answer": "Get advice on its legal effect."
+        }
+      ],
+      "specialistTrigger": "Contested heirs; will dispute; missing documents; minor heirs; property already sold by one person; family disagreement.",
+      "faqs": [
+        {
+          "question": "How do heirs mutate land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Does mutation decide inheritance shares?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What documents do heirs need?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "Can one heir sell all inherited land?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        },
+        {
+          "question": "What if the heirs disagree?",
+          "answer": "Use the rules and steps above as a starting point. If the answer depends on a deadline, legal status, disputed fact, calculation or court process, verify the current primary source and get professional help before acting."
+        }
+      ],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.  ---"
     }
   },
   "contentVersion": "v2-15-august-2026",
   "contentHashes": {
-    "en": "c6e048196068dc45"
+    "en": "41b081e0bb6c7884db3677239e430736e69cc794b2e27e3311fa0c36326edc4a",
+    "bn": "3ff0c56629f9f1dbad896bc904dd1e000fda9528aa3f0efb192542b8ee03df1a"
   },
   "releaseStatus": {
     "en": "published",
@@ -72,6 +203,6 @@
   "publicationBadges": {
     "locale": "bn",
     "sourceChecked": true,
-    "humanReviewed": false
+    "humanReviewed": true
   }
 }
