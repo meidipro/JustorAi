@@ -185,7 +185,7 @@ const header = (): string => `
     <div class="mobile-drawer-overlay ${state.menuOpen ? 'is-open' : ''}" data-action="close-menu" aria-hidden="${!state.menuOpen}"></div>
     <nav class="mobile-drawer ${state.menuOpen ? 'is-open' : ''}" aria-label="Mobile navigation" aria-hidden="${!state.menuOpen}">
       <div class="mobile-drawer-header">
-        ${brand(true)}
+        ${route('/', brand(true), 'brand-link')}
         <button class="mobile-drawer-close" type="button" data-action="close-menu" aria-label="${ui(state.language, 'close')}">✕</button>
       </div>
       <div class="mobile-drawer-content">
@@ -215,7 +215,7 @@ const header = (): string => `
 const footer = (): string => `
   <footer class="site-footer">
     <div class="footer-grid">
-      <div>${brand(true)}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
+      <div>${route('/', brand(true), 'brand-link')}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
       <nav aria-label="Product"><strong>Product</strong>${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}${route('/workspace/citizen', 'Citizen')}${route('/start', 'Start Justor')}</nav>
       <nav aria-label="Resources"><strong>Resources</strong>${route('/legal-library', ui(state.language, 'library'))}${route('/guides', ui(state.language, 'guides'))}${route('/legal-updates', ui(state.language, 'updates'))}${route('/trust', ui(state.language, 'trust'))}</nav>
       <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
@@ -238,7 +238,14 @@ const libraryPreviewFull = (records: LibraryRecord[]): string => `
   <section class="library-preview light-section"><div class="section-shell">
     <div class="section-heading section-heading-row"><div><span class="section-kicker">${ui(state.language, 'library')}</span><h2>${ui(state.language, 'libraryHeading')}</h2></div>${route('/legal-library', `${ui(state.language, 'libraryExplore')} ${icon('arrow', 16)}`, 'text-link')}</div>
     <form class="public-search" data-library-home-search><label><span class="sr-only">${ui(state.language, 'search')}</span>${icon('search')}<input name="query" placeholder="${ui(state.language, 'libraryPlaceholder')}"></label><button class="button" type="submit">${ui(state.language, 'search')}</button></form>
-    <div class="filter-row" aria-label="Library types"><span>Laws</span><span>Sections</span><span>Cases</span><span>Amendments</span><span>Guides</span><span>Updates</span></div>
+    <div class="filter-row" aria-label="Library types">
+      ${route('/legal-library?type=law', 'Laws', 'filter-pill-link')}
+      ${route('/legal-library?type=section', 'Sections', 'filter-pill-link')}
+      ${route('/legal-library?type=case', 'Cases', 'filter-pill-link')}
+      ${route('/legal-library?type=amendment', 'Amendments', 'filter-pill-link')}
+      ${route('/guides', 'Guides', 'filter-pill-link')}
+      ${route('/legal-updates', 'Updates', 'filter-pill-link')}
+    </div>
     <div class="record-grid">${records.map(recordCard).join('')}</div>
   </div></section>`;
 
@@ -282,7 +289,7 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
 
   return `
   <aside class="workspace-sidebar">
-    <div class="workspace-brand">${brand(true)}<span>Beta</span></div>
+    <div class="workspace-brand">${route('/', brand(true), 'workspace-brand-link')}<span>Beta</span></div>
     <button class="new-research-capsule" type="button" data-action="new-research">
       ${icon('plus', 16)} <span>${role === 'professional' ? 'New Research' : role === 'student' ? 'New Study Chat' : 'New Legal Inquiry'}</span>
     </button>
@@ -1683,6 +1690,9 @@ document.addEventListener('click', (event) => {
   const link = target.closest<HTMLAnchorElement>('[data-route]');
   if (link) {
     event.preventDefault();
+    if (state.menuOpen) {
+      state.menuOpen = false;
+    }
     const role = link.dataset.role as Role | undefined;
     if (role) { state.role = role; localStorage.setItem('justor-role', role); }
     navigate(link.href);
