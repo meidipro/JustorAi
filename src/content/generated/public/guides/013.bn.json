@@ -1,0 +1,77 @@
+{
+  "id": 13,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Muslim Marriage Registration in Bangladesh",
+    "description": "Bangladesh citizen legal guide on Muslim Marriage Registration in Bangladesh.",
+    "searchIntent": "Muslim Marriage Registration in Bangladesh"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Muslim Marriage Registration in Bangladesh",
+      "directAnswer": "A Muslim marriage should be properly recorded through the lawful Nikah Registrar system. Keep the kabinnama and any certified copy safely. Registration creates an official record and helps prove important terms such as the parties, date and dower.",
+      "atAGlance": {
+        "whoFor": "A Muslim couple wants to understand marriage registration and documents.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A Muslim marriage should be properly recorded through the lawful Nikah Registrar system. Keep the kabinnama and any cert",
+        "updateStatus": "Check any current registrar forms, fees and digital services before publication."
+      },
+      "lawMeaning": "The registration law gives Nikah Registrars duties relating to registration of Muslim marriages and divorces.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Use an authorised Nikah Registrar.",
+        "Check both parties’ names, age and identity details.",
+        "Record dower clearly.",
+        "Read all terms before signing.",
+        "Complete the required registration entries.",
+        "Collect and keep the kabinnama/certified copy.",
+        "Correct errors through the proper process."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A couple notices the bride’s name is misspelled on the kabinnama. They should use the proper correction process instead of relying on an informal handwritten change.",
+      "commonMistakes": [
+        "Signing blank fields.",
+        "not reading dower terms.",
+        "losing the kabinnama.",
+        "using an unauthorised person.",
+        "wrong age or identity information.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Age/child-marriage issue; forced marriage; disputed marriage; foreign documents; identity mismatch.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "d22a40376d634918"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

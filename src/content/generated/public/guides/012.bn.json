@@ -1,0 +1,75 @@
+{
+  "id": 12,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Mutation Is Delayed: What Can You Do?",
+    "description": "Bangladesh citizen legal guide on Mutation Is Delayed: What Can You Do?.",
+    "searchIntent": "Mutation Is Delayed: What Can You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Mutation Is Delayed: What Can You Do?",
+      "directAnswer": "First check the official application status and any notice asking for information. Save your application number and payment proof. If the service is delayed, contact the responsible land office and use the official grievance route where it applies. A delay does not always mean the application should be approved.",
+      "atAGlance": {
+        "whoFor": "An applicant has a pending or stalled mutation application.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "First check the official application status and any notice asking for information. Save your application number and paym",
+        "updateStatus": "Re-check current service timelines and grievance contacts before publication."
+      },
+      "lawMeaning": "GRS handles service-related complaints but has exclusions, including matters pending before a court and matters with another specific statutory review or appeal route.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Check status online.",
+        "Read any notice or hearing instruction.",
+        "Correct missing information.",
+        "Save payment proof.",
+        "Contact the responsible office.",
+        "Use the official review/appeal route if the decision is adverse.",
+        "Use GRS for eligible service-delay complaints."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "An application shows “information required.” The applicant should provide the missing record instead of immediately filing a grievance that the office is delaying the case.",
+      "commonMistakes": [
+        "Ignoring notices.",
+        "filing anonymous complaints when tracking is important.",
+        "using GRS to challenge a matter that has its own appeal route.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Rejection based on title; pending court case; conflicting heirs; suspected corruption; repeated unexplained delay.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "7cf965073fbfcb94"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

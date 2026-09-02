@@ -1,0 +1,76 @@
+{
+  "id": 31,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "You Paid for a Service but Did Not Receive It",
+    "description": "Bangladesh citizen legal guide on You Paid for a Service but Did Not Receive It.",
+    "searchIntent": "You Paid for a Service but Did Not Receive It"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "You Paid for a Service but Did Not Receive It",
+      "directAnswer": "Keep the contract, advertisement, invoice, payment proof and promised service date. Ask the provider in writing to perform the service or explain the refund position. The Consumers’ Right Protection Act includes provisions relating to promised goods or services, but the correct remedy depends on the facts and the service.",
+      "atAGlance": {
+        "whoFor": "A consumer paid for a promised service that was not provided.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Keep the contract, advertisement, invoice, payment proof and promised service date. Ask the provider in writing to perfo",
+        "updateStatus": "Verify the exact complaint deadline and DNCRP jurisdiction before publication."
+      },
+      "lawMeaning": "Do not promise a refund in every case. Contract terms and the law both matter.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Collect the service terms.",
+        "Record what was promised.",
+        "Record what was actually delivered.",
+        "Send a written request.",
+        "Keep the response.",
+        "Check cancellation/refund terms.",
+        "Escalate through the correct consumer or sector route."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A training company cancels a paid course and offers no new date. Students should save the course advertisement and payment receipt before asking for a refund.",
+      "commonMistakes": [
+        "Relying on phone calls only.",
+        "losing terms.",
+        "accepting a different service without written agreement.",
+        "making public accusations before facts are clear.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "High-value service; professional service; medical loss; sector regulator issue; fraud.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "eb5f43fad4d4cc3f"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

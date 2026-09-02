@@ -1,0 +1,75 @@
+{
+  "id": 3,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "CS, SA, RS and BS Khatian Explained Simply",
+    "description": "Bangladesh citizen legal guide on CS, SA, RS and BS Khatian Explained Simply.",
+    "searchIntent": "CS, SA, RS and BS Khatian Explained Simply"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "CS, SA, RS and BS Khatian Explained Simply",
+      "directAnswer": "A khatian is a government land record. Bangladesh has records from different surveys, so one property may appear in CS, SA, RS, BS or other later records. These records help identify land and recorded interests, but a khatian should not be treated as the only proof of ownership in every dispute.",
+      "atAGlance": {
+        "whoFor": "A citizen wants to understand different land-record names.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A khatian is a government land record. Bangladesh has records from different surveys, so one property may appear in CS, ",
+        "updateStatus": "No single survey label should be described as automatically superior in every legal dispute."
+      },
+      "lawMeaning": "Older and newer survey records may differ. Always match owner name, mouza, plot or dag number, area and later transfer documents.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the mouza and plot.",
+        "Find which survey record is available.",
+        "Compare names and area across records.",
+        "Compare the records with registered deeds.",
+        "Check later mutation records.",
+        "Get certified records where needed."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A family has a CS record in a grandfather’s name and a later RS record in another person’s name. The difference should be explained by later transfers, inheritance, correction or another lawful event. Do not choose one record only because it helps your side.",
+      "commonMistakes": [
+        "Treating one khatian as conclusive title.",
+        "mixing dag numbers from different surveys.",
+        "ignoring maps.",
+        "using screenshots without certified copies when formal proof is needed.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "There is a serious record conflict; someone claims forged documents; the land is under litigation; a correction affects another person’s rights.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "a8f9c0179d17509a"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

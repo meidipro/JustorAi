@@ -1,0 +1,74 @@
+{
+  "id": 32,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Wrong Price and Misleading Advertising: What Can You Do?",
+    "description": "Bangladesh citizen legal guide on Wrong Price and Misleading Advertising: What Can You Do?.",
+    "searchIntent": "Wrong Price and Misleading Advertising: What Can You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Wrong Price and Misleading Advertising: What Can You Do?",
+      "directAnswer": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions actually offered. Ask the seller to explain the difference. Consumer law may apply to misleading acts, but not every typo or misunderstanding creates the same legal remedy.",
+      "atAGlance": {
+        "whoFor": "A consumer sees a false price, hidden condition or misleading product claim.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Save the advertisement before it changes. Compare the advertised claim with the price, product, service or conditions ac",
+        "updateStatus": "Use careful wording. The article should not decide that an advertisement is unlawful without the full facts."
+      },
+      "lawMeaning": "Evidence should show the exact advertisement and what the seller actually charged or provided.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Screenshot the full ad and date.",
+        "Save terms and conditions.",
+        "Keep receipt or checkout screen.",
+        "Ask the seller to explain.",
+        "Save the reply.",
+        "Use DNCRP where the facts fit consumer law."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A store advertises a price but adds a hidden mandatory charge only at payment. The buyer should save both screens and the final receipt.",
+      "commonMistakes": [
+        "Cropping screenshots so context is lost.",
+        "assuming every promotion applies to every customer.",
+        "confusing tax/delivery charges with deception without reading terms.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large financial loss; medical/safety claim; repeated deceptive scheme; sector-regulated product.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "10e5a69b1fc4c789"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

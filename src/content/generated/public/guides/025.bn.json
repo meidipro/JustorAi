@@ -1,0 +1,79 @@
+{
+  "id": 25,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "How to File an e-Return — 2026–27",
+    "description": "Bangladesh citizen legal guide on How to File an e-Return — 2026–27.",
+    "searchIntent": "How to File an e-Return — 2026–27"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "How to File an e-Return — 2026–27",
+      "directAnswer": "NBR’s e-Return system lets individual taxpayers file online. For 2026–27, use the current NBR portal and notices. Prepare income, asset, expense, tax-payment and withholding information before starting. Read the final return before submission and save the acknowledgement.",
+      "atAGlance": {
+        "whoFor": "An individual taxpayer wants a simple filing walkthrough.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "NBR’s e-Return system lets individual taxpayers file online. For 2026–27, use the current NBR portal and notices. Prepar",
+        "updateStatus": "DYNAMIC DEADLINE: never hard-code a filing deadline or incentive without a dated NBR notice."
+      },
+      "lawMeaning": "NBR launched the 2026–27 individual e-Return system in July 2026. Deadlines and incentives can change, so quote only the current notice.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Sign in to the official e-Return system.",
+        "Check profile and TIN.",
+        "Enter income by correct category.",
+        "Enter assets/liabilities where required.",
+        "Enter expenses and tax payments.",
+        "Add TDS/withholding credits.",
+        "Review calculations.",
+        "Submit.",
+        "Download acknowledgement and return copy."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A taxpayer sees a pre-filled tax credit. They should compare it with their own TDS evidence instead of assuming every pre-filled number is correct.",
+      "commonMistakes": [
+        "Filing from unofficial link.",
+        "guessing asset values.",
+        "missing TDS.",
+        "not saving acknowledgement.",
+        "waiting until the last day.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large assets; business income; foreign income; audit/notice; major data mismatch.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "6cb702b2e71755fc"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

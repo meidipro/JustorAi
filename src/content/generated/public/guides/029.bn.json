@@ -1,0 +1,76 @@
+{
+  "id": 29,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "What to Do If You Buy a Defective Product",
+    "description": "Bangladesh citizen legal guide on What to Do If You Buy a Defective Product.",
+    "searchIntent": "What to Do If You Buy a Defective Product"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "What to Do If You Buy a Defective Product",
+      "directAnswer": "Keep the receipt, warranty, packaging and proof of the defect. Contact the seller in writing and ask for the remedy you believe applies. If the issue falls within Bangladesh consumer law, you can check the official DNCRP complaint route. Do not throw away the product or evidence before the dispute is recorded.",
+      "atAGlance": {
+        "whoFor": "A consumer bought a defective product and wants practical next steps.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Keep the receipt, warranty, packaging and proof of the defect. Contact the seller in writing and ask for the remedy you ",
+        "updateStatus": "Verify current DNCRP filing deadline, complaint portal and required attachments before publishing."
+      },
+      "lawMeaning": "DNCRP’s official complaint guidance requires a written complaint and purchase evidence such as the receipt for the relevant goods or services.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Stop using an unsafe product.",
+        "Photograph/video the defect.",
+        "Keep receipt and warranty.",
+        "Contact seller in writing.",
+        "Save the seller’s reply.",
+        "Check manufacturer/warranty process.",
+        "Use DNCRP where legally appropriate."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A new blender stops working after one day. The buyer keeps the receipt and records the fault before returning it, rather than handing it over with no proof.",
+      "commonMistakes": [
+        "Throwing away receipt.",
+        "repairing the item before documenting the defect.",
+        "making false public accusations.",
+        "waiting until evidence disappears.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Injury; high-value loss; suspected counterfeit; repeated business fraud; expired statutory complaint deadline.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "ad3034d2bc23f965"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

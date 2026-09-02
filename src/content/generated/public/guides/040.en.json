@@ -1,0 +1,74 @@
+{
+  "id": 40,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Leave, Maternity and Basic Workplace Rights",
+    "description": "Bangladesh citizen legal guide on Leave, Maternity and Basic Workplace Rights.",
+    "searchIntent": "Leave, Maternity and Basic Workplace Rights"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Leave, Maternity and Basic Workplace Rights",
+      "directAnswer": "Bangladesh labour law provides rights on matters such as leave, working conditions and maternity benefits for workers who fall within the relevant law. The exact amount of leave, eligibility and procedure depend on current amended sections and the worker’s status. Do not rely on an old HR blog.",
+      "atAGlance": {
+        "whoFor": "A worker wants an overview of leave and basic statutory rights.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Bangladesh labour law provides rights on matters such as leave, working conditions and maternity benefits for workers wh",
+        "updateStatus": "LAW UPDATED: all numbers must be checked against the 2026 amended text immediately before publication."
+      },
+      "lawMeaning": "Every numeric entitlement in the final article must cite the current amended section.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify whether the Labour Act or EPZ Act applies.",
+        "Check length of service and worker category.",
+        "Read the current leave section.",
+        "Follow employer notice/document rules.",
+        "Keep leave requests and approvals.",
+        "For maternity benefit, keep required medical/employment records."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A worker reads an old article saying one number of maternity days. Justor should instead show the current amended section and verification date.",
+      "commonMistakes": [
+        "Publishing old leave numbers.",
+        "treating company policy as the law.",
+        "assuming every worker has identical coverage.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Maternity dismissal; health/safety issue; disputed worker classification; EPZ.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "5d6048188446681f"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

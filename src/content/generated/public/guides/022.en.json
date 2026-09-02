@@ -1,0 +1,77 @@
+{
+  "id": 22,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+    "description": "Bangladesh citizen legal guide on Salary Tax Examples: ৳30,000 to ৳300,000 Per Month.",
+    "searchIntent": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+      "directAnswer": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions. A monthly salary alone is not enough to calculate final tax because benefits, exemptions, other income, rebates and tax already deducted can change the answer.",
+      "atAGlance": {
+        "whoFor": "A citizen wants simple examples at common salary levels.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Use one strong article with several salary examples instead of many thin pages. Each example must state its assumptions.",
+        "updateStatus": "CALCULATOR GATE: do not publish numeric outputs until the 2026–27 calculator is independently checked."
+      },
+      "lawMeaning": "This page should use a calculation table generated from a legally reviewed tax model. Do not hand-write tax figures into permanent text.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "State the taxpayer category and tax year.",
+        "Convert monthly salary to annual amounts.",
+        "Add taxable benefits.",
+        "Apply current exemptions.",
+        "Apply current slabs/minimum tax.",
+        "Apply eligible rebate.",
+        "Deduct tax already paid.",
+        "Show final amount with assumptions."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "Two people both earn ৳100,000 per month. One has taxable benefits and another has eligible investment rebates. Their final tax may differ.",
+      "commonMistakes": [
+        "Publishing numbers without assumptions.",
+        "mixing assessment years.",
+        "forgetting minimum tax or location/category rules.",
+        "presenting an example as personal advice.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Mixed income; foreign income; complex benefits; director remuneration; disputed withholding.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "d13bf64fc9164702"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

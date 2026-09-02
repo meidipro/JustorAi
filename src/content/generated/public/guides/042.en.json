@@ -1,0 +1,76 @@
+{
+  "id": 42,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Someone Is Pretending to Be You Online",
+    "description": "Bangladesh citizen legal guide on Someone Is Pretending to Be You Online.",
+    "searchIntent": "Someone Is Pretending to Be You Online"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Someone Is Pretending to Be You Online",
+      "directAnswer": "Save the fake profile URL, screenshots and messages before reporting it. Secure your real account and warn contacts if the fake account is asking for money or information. Platform reporting may remove the account, while fraud, threats or other harm may also justify police or cyber reporting.",
+      "atAGlance": {
+        "whoFor": "A person finds a fake social-media or messaging account using their identity.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Save the fake profile URL, screenshots and messages before reporting it. Secure your real account and warn contacts if t",
+        "updateStatus": "Avoid definitive offence labels without legal review."
+      },
+      "lawMeaning": "Impersonation facts differ. The article should focus on preservation and reporting rather than naming an offence unless the elements are clear.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Copy the exact profile URL.",
+        "Take full screenshots.",
+        "Save messages sent to victims.",
+        "Report the account to the platform.",
+        "Secure your real accounts.",
+        "Warn contacts using a verified channel.",
+        "Preserve financial evidence if money was requested.",
+        "Report serious fraud or threats."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A fake account uses a person’s photo to ask friends for emergency money. The person should warn friends from the real account and preserve payment requests for reporting.",
+      "commonMistakes": [
+        "Messaging the scammer from many accounts.",
+        "deleting evidence after reporting.",
+        "sending NID to an unofficial “recovery” service.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Financial fraud; threats; sexual impersonation; repeated stalking; business reputation damage.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "e42efd48c39b401d"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

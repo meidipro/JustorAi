@@ -1,0 +1,75 @@
+{
+  "id": 45,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+    "description": "Bangladesh citizen legal guide on GD, Police Complaint and Criminal Case: What Is the Difference?.",
+    "searchIntent": "GD, Police Complaint and Criminal Case: What Is the Difference?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+      "directAnswer": "A General Diary entry records information at a police station. A complaint reports alleged wrongdoing. A criminal case involves a formal criminal process under the applicable law. The correct first step depends on what happened. Do not tell every citizen to “do a GD first” for every problem.",
+      "atAGlance": {
+        "whoFor": "A citizen is confused about GD, complaint and a criminal case.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A General Diary entry records information at a police station. A complaint reports alleged wrongdoing. A criminal case i",
+        "updateStatus": "LAW UPDATED: Criminal Procedure received 2026 amendments. Detailed process must be checked against the current consolidated Code."
+      },
+      "lawMeaning": "Criminal procedure was amended in 2026, so any detailed FIR, investigation or court-process statement must use the current code.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify whether you lost something, received a threat or allege an offence.",
+        "Save evidence.",
+        "Write a factual timeline.",
+        "Use the appropriate police reporting route.",
+        "Keep receipt/reference number.",
+        "For cognizable offence or urgent safety matters, get legal/police guidance rather than relying on a generic GD template."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A person loses an ID card. That is different from being assaulted. The same police document or process should not be assumed for both events.",
+      "commonMistakes": [
+        "Using GD as a substitute for reporting a serious offence.",
+        "making false allegations.",
+        "changing the story.",
+        "losing reference number.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Violence; sexual offence; arrest risk; serious fraud; police refusal; child victim.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "1aa24b96f044e784"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

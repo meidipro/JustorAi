@@ -1,0 +1,75 @@
+{
+  "id": 17,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Maintenance Rights in Bangladesh",
+    "description": "Bangladesh citizen legal guide on Maintenance Rights in Bangladesh.",
+    "searchIntent": "Maintenance Rights in Bangladesh"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Maintenance Rights in Bangladesh",
+      "directAnswer": "Maintenance is financial support that may be required under family law. The rules depend on who is asking, the relationship, the stage of the marriage or divorce, the needs of the person and the applicable law. There is no single amount that applies to every family.",
+      "atAGlance": {
+        "whoFor": "A spouse or parent wants to understand maintenance claims.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Maintenance is financial support that may be required under family law. The rules depend on who is asking, the relations",
+        "updateStatus": "Do not publish a calculator or fixed percentage without a separately validated legal model."
+      },
+      "lawMeaning": "Section 9 addresses failure by a husband to maintain his wife adequately. Family-court jurisdiction is also important for family claims.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify who needs support.",
+        "Collect income and expense information.",
+        "Save proof of earlier payments or non-payment.",
+        "Make a clear written request where appropriate.",
+        "Use the lawful family-court or other statutory route if agreement fails.",
+        "Keep child needs separate from adult claims."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A parent asks, “How much maintenance will the court give?” Justor should not guess a number. The amount depends on evidence, needs, means and applicable law.",
+      "commonMistakes": [
+        "Using a social-media fixed rate.",
+        "hiding income.",
+        "refusing to keep receipts.",
+        "confusing dower and maintenance.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Disputed income; enforcement of order; international payer; child with special needs; domestic violence.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "4ff0f4f062b06694"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

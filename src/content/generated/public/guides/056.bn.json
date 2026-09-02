@@ -1,0 +1,70 @@
+{
+  "id": 56,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Online Blackmail, Sextortion or Threat to Share Private Images",
+    "description": "Bangladesh citizen legal guide on Online Blackmail, Sextortion or Threat to Share Private Images.",
+    "searchIntent": "Online Blackmail, Sextortion or Threat to Share Private Images"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Online Blackmail, Sextortion or Threat to Share Private Images",
+      "directAnswer": "Do not delete the threat. Save screenshots, profile links, phone numbers, payment demands and the original messages. Secure your accounts. Do not send more private material. Paying does not guarantee that the blackmailer will stop. If there is a threat of sexual exposure, blackmail, extortion, physical harm or content involving a child, seek urgent support from the appropriate police or specialist authority. Women can also review Bangladesh Police's Police Cyber Support for Women service.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Do not delete the threat. Save screenshots, profile links, phone numbers, payment demands and the original messages. Sec",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "",
+      "steps": [
+        "Review the relevant official documentation.",
+        "Submit the application or complaint to the designated authority.",
+        "Retain all receipts and acknowledgment slips."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A person threatens to publish a private video unless the victim sends ৳20,000. The victim should preserve the threat, profile, payment number and messages, secure their accounts, avoid sending more material, and use the appropriate police/platform reporting route.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Any intimate-image blackmail; large payment demand; threat to family or employment; repeat offender; child involvement; physical threat; or uncertainty about filing a complaint.",
+      "faqs": [],
+      "disclaimer": "This page provides general information and does not replace urgent police, safety or legal assistance.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "7661c3dcf799ee7c"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

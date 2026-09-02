@@ -1,0 +1,76 @@
+{
+  "id": 47,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+    "description": "Bangladesh citizen legal guide on Waste, Drainage or Road-Service Problem: Where Do You Complain?.",
+    "searchIntent": "Waste, Drainage or Road-Service Problem: Where Do You Complain?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+      "directAnswer": "There is no single office for every waste, drain or road problem in Bangladesh. First identify who controls the service: city corporation, municipality, union/local authority, road agency, water/drainage body or another office. Save photos, dates and the exact location, then use that authority’s complaint route. GRS may help for eligible government-service complaints.",
+      "atAGlance": {
+        "whoFor": "A citizen wants to complain about an everyday local public service.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "There is no single office for every waste, drain or road problem in Bangladesh. First identify who controls the service:",
+        "updateStatus": "Add city-specific links only on local versions of this page. Keep national copy authority-neutral."
+      },
+      "lawMeaning": "The page must not send every local-service problem to the same national authority.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Record exact location.",
+        "Take dated photos.",
+        "Identify responsible authority.",
+        "Use its complaint line/app/office.",
+        "Save complaint number.",
+        "Follow up after the stated service time.",
+        "Use GRS if the authority/service falls within GRS and the grievance is eligible."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A drain overflows beside a school. The complaint should identify the exact road/location and responsible city/municipal authority, not simply say “government is responsible.”",
+      "commonMistakes": [
+        "Complaining to the wrong agency.",
+        "no location.",
+        "no photos.",
+        "creating duplicate complaints with conflicting facts.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Serious injury; dangerous infrastructure; disputed private/public responsibility; repeated ignored complaint.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "a1f7747d03bd571e"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

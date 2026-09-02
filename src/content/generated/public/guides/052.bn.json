@@ -1,0 +1,77 @@
+{
+  "id": 52,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+    "description": "Bangladesh citizen legal guide on OTP, PIN and Mobile Financial Service Scam: What Should You Do?.",
+    "searchIntent": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+      "directAnswer": "If you shared an OTP, PIN or other banking credential, or an unauthorised transaction appears, contact your bank or MFS provider immediately through its official channel. Ask whether the account or transaction can be secured, restricted or investigated. Change exposed credentials. Preserve every transaction ID, phone number, SMS and screenshot. If the provider does not resolve the complaint, Bangladesh Bank has a formal escalation process for banks, finance companies and MFS providers.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "If you shared an OTP, PIN or other banking credential, or an unauthorised transaction appears, contact your bank or MFS ",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "Depending on the conduct, a digital financial scam may involve fraud in cyberspace under section 22 of the Cyber Security Act, 2026, cyber forgery under section 21, hacking or unauthorised access under section 18, and general cheating provisions in the Penal Code. The correct provision depends on how the money or account access was obtained.\n\nBangladesh Bank's Customer Interest Protection Centre states that customers should first complain to their own bank, finance company or MFS provider, then use that provider's complaint cell, and then escalate unresolved complaints to Bangladesh Bank CIPC.",
+      "steps": [
+        "Contact the official bank/MFS support channel now.",
+        "Ask to secure or restrict the account if necessary.",
+        "Change PIN/password through the official app or service.",
+        "Sign out other devices if the service allows it.",
+        "Check recent transactions.",
+        "Save transaction ID, recipient number and time.",
+        "Save scam messages and caller information.",
+        "Make a formal complaint with the provider.",
+        "If criminal fraud is suspected, preserve evidence for police reporting.",
+        "Escalate an unresolved provider complaint through Bangladesh Bank CIPC where applicable."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A person receives a call from someone claiming to be an MFS employee. The caller says the account needs “verification” and asks for an OTP. After the OTP is shared, money leaves the account. The victim should contact the MFS provider immediately, preserve the OTP message and transaction ID, file a provider complaint, and report suspected fraud through the proper channel.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large loss; disputed provider responsibility; identity theft; repeated account takeover; business account loss; court or criminal process; or a provider complaint that remains unresolved after formal escalation.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Contact your financial provider immediately if an account may be compromised.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "e5a1470a9f41929f"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

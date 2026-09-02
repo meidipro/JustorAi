@@ -1,0 +1,77 @@
+{
+  "id": 14,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Talaq Procedure in Bangladesh",
+    "description": "Bangladesh citizen legal guide on Talaq Procedure in Bangladesh.",
+    "searchIntent": "Talaq Procedure in Bangladesh"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Talaq Procedure in Bangladesh",
+      "directAnswer": "For a Muslim husband, talaq is not only a spoken statement. Section 7 of the Muslim Family Laws Ordinance requires written notice to the Chairman after pronouncement and a copy to the wife. The law also contains a waiting and reconciliation framework before the talaq becomes effective.",
+      "atAGlance": {
+        "whoFor": "A Muslim spouse wants a simple explanation of the statutory talaq process.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "For a Muslim husband, talaq is not only a spoken statement. Section 7 of the Muslim Family Laws Ordinance requires writt",
+        "updateStatus": "DEADLINE/EFFECTIVE-DATE SENSITIVE. Do not publish a simplified day count without lawyer sign-off."
+      },
+      "lawMeaning": "The exact effective date and procedure must be calculated from the current section 7 and the facts, including pregnancy where relevant.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Do not rely only on an oral statement.",
+        "Prepare the required written notice.",
+        "Send notice to the legally specified Chairman and copy to the wife.",
+        "Keep proof of service.",
+        "Follow the Arbitration Council/reconciliation process.",
+        "Check the statutory waiting period.",
+        "Complete divorce registration where applicable.",
+        "Deal separately with dower, maintenance and children."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A husband says “talaq” during an argument but sends no statutory notice. The couple should not assume that this alone completed the legal process.",
+      "commonMistakes": [
+        "No written notice.",
+        "wrong recipient.",
+        "no proof of service.",
+        "assuming marriage issues about children or dower disappear automatically.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Any contested divorce; pregnancy; foreign spouse; missing notice; large dower claim; child issues.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "2fe267a355fa7024"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "id": 20,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Second Marriage and Polygamy: What Does the Law Require?",
+    "description": "Bangladesh citizen legal guide on Second Marriage and Polygamy: What Does the Law Require?.",
+    "searchIntent": "Second Marriage and Polygamy: What Does the Law Require?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Second Marriage and Polygamy: What Does the Law Require?",
+      "directAnswer": "During an existing Muslim marriage, section 6 of the Muslim Family Laws Ordinance requires previous written permission from the Arbitration Council before another marriage is contracted. The law sets a formal application process. Do not reduce this to the simple statement that “the first wife must give permission.”",
+      "atAGlance": {
+        "whoFor": "A Muslim man or spouse wants to understand the legal permission process.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "During an existing Muslim marriage, section 6 of the Muslim Family Laws Ordinance requires previous written permission f",
+        "updateStatus": "Use the current section 6 text. Avoid moral or religious commentary; explain only the legal process."
+      },
+      "lawMeaning": "The statutory decision is made through the Arbitration Council process. Existing wife or wives are part of that process, but the legal test should be described from the actual section.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Confirm an existing marriage is still legally in force.",
+        "Apply to the Chairman in the required form.",
+        "State the reasons for the proposed marriage.",
+        "Follow the Arbitration Council process.",
+        "Obtain written permission before contracting the later marriage.",
+        "Complete lawful marriage registration."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A man says his first wife agreed by text message, so no other step is needed. That is unsafe. The law requires the formal Arbitration Council permission process.",
+      "commonMistakes": [
+        "Treating private consent as a substitute for statutory permission.",
+        "hiding an existing marriage.",
+        "ignoring dower consequences.",
+        "using an unregistered later marriage.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Existing second marriage without permission; disputed marriage status; dower consequences; foreign marriage.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "1969ca236a4454a0"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

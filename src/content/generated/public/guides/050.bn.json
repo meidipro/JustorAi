@@ -1,0 +1,77 @@
+{
+  "id": 50,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "How to Get Government Legal Aid in Bangladesh",
+    "description": "Bangladesh citizen legal guide on How to Get Government Legal Aid in Bangladesh.",
+    "searchIntent": "How to Get Government Legal Aid in Bangladesh"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "How to Get Government Legal Aid in Bangladesh",
+      "directAnswer": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation/department provides information, district legal-aid offices, forms and online application routes. Eligibility and services depend on current law and rules.",
+      "atAGlance": {
+        "whoFor": "A person cannot afford legal help or wants to know whether government legal aid can assist.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Bangladesh has a government legal-aid system for eligible people and cases. The National Legal Aid Services organisation",
+        "updateStatus": "LAW UPDATED: Legal Aid Services (Amendment) Act, 2026 (Act No. 45 of 2026). Re-check current eligibility and forms before publication."
+      },
+      "lawMeaning": "The legal-aid law was amended in 2026. Use current eligibility, mediation and service rules rather than older brochures.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Visit the official legal-aid site.",
+        "Check the type of help available.",
+        "Check eligibility.",
+        "Choose the district/legal-aid office.",
+        "Complete the official form or online application.",
+        "Attach required documents.",
+        "Keep application/reference number.",
+        "Follow instructions from the legal-aid office."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A person with a pending family dispute cannot afford a private lawyer. They should check the current legal-aid eligibility and apply through the official district or online route instead of paying an unknown intermediary.",
+      "commonMistakes": [
+        "Using a fake “legal aid” Facebook page.",
+        "paying unofficial fees.",
+        "submitting an incomplete case history.",
+        "assuming every case is automatically eligible.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Urgent arrest/detention; violence; deadline; complex appeal; eligibility dispute.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "1363ada22d5bad09"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

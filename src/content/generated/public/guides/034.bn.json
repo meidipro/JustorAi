@@ -1,0 +1,75 @@
+{
+  "id": 34,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Ticket, Travel or Transport Service Complaint",
+    "description": "Bangladesh citizen legal guide on Ticket, Travel or Transport Service Complaint.",
+    "searchIntent": "Ticket, Travel or Transport Service Complaint"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Ticket, Travel or Transport Service Complaint",
+      "directAnswer": "Keep the ticket, booking terms, payment proof, delay or cancellation notice and any communication from the operator. Ask the operator or platform for the specific remedy available under its terms and applicable law. Do not assume every delay creates an automatic right to compensation.",
+      "atAGlance": {
+        "whoFor": "A passenger has a cancellation, delay, refund, seat or service dispute.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Keep the ticket, booking terms, payment proof, delay or cancellation notice and any communication from the operator. Ask",
+        "updateStatus": "Do not state a universal compensation right. Add sector-specific sources before publishing."
+      },
+      "lawMeaning": "The legal route may differ for rail, bus, airline, launch or ticketing platform.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Save ticket and booking ID.",
+        "Record the actual service time.",
+        "Save cancellation/delay messages.",
+        "Ask for written refund/remedy policy.",
+        "Keep complaint number.",
+        "Escalate to the transport regulator/operator route.",
+        "Check DNCRP if consumer law applies."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A passenger arrives and learns the service is delayed for hours. They should record the scheduled time, actual information provided and any refund request rather than relying only on memory later.",
+      "commonMistakes": [
+        "Assuming a refund is legally guaranteed.",
+        "losing the ticket.",
+        "blaming the ticket platform for an operator issue without checking responsibilities.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Serious injury; large consequential loss; aviation/rail statutory issue; group claim.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "3f8b3ed3f4052641"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

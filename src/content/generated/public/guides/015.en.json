@@ -1,0 +1,76 @@
+{
+  "id": 15,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "How Can a Muslim Woman Seek Divorce?",
+    "description": "Bangladesh citizen legal guide on How Can a Muslim Woman Seek Divorce?.",
+    "searchIntent": "How Can a Muslim Woman Seek Divorce?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "How Can a Muslim Woman Seek Divorce?",
+      "directAnswer": "A Muslim woman may have more than one legal route, depending on the marriage terms and facts. These can include a delegated right in the kabinnama, an agreed separation, or a court decree under the Dissolution of Muslim Marriages Act, 1939. The correct route should be chosen from the actual documents and circumstances.",
+      "atAGlance": {
+        "whoFor": "A Muslim woman wants to understand possible legal routes to end a marriage.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A Muslim woman may have more than one legal route, depending on the marriage terms and facts. These can include a delega",
+        "updateStatus": "Review against the current consolidated family laws before publication."
+      },
+      "lawMeaning": "The 1939 Act lists statutory grounds for a court dissolution. Do not turn the list into a guarantee that one fact automatically wins a case.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Get a copy of the kabinnama.",
+        "Check whether delegated divorce rights are recorded.",
+        "Write down the facts and timeline.",
+        "Save evidence of maintenance, absence, cruelty or other relevant ground.",
+        "Consider settlement if safe and lawful.",
+        "Use the correct family-court process where a decree is needed.",
+        "Deal with dower, maintenance and child matters separately."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A woman has not received maintenance and her husband has been absent. She should not rely on a social-media checklist. Her documents and the statutory grounds should be reviewed to choose the proper route.",
+      "commonMistakes": [
+        "Using the wrong divorce form.",
+        "surrendering dower rights without understanding.",
+        "deleting evidence.",
+        "confusing a family settlement with a completed legal dissolution.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Violence; child safety; large dower; foreign spouse; contested facts; missing marriage record.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "c2aa008e250cfc6d"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

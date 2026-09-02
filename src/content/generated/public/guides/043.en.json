@@ -1,0 +1,77 @@
+{
+  "id": 43,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Online Harassment, Threats and Blackmail: What to Do",
+    "description": "Bangladesh citizen legal guide on Online Harassment, Threats and Blackmail: What to Do.",
+    "searchIntent": "Online Harassment, Threats and Blackmail: What to Do"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Online Harassment, Threats and Blackmail: What to Do",
+      "directAnswer": "Put safety first. Do not delete the messages or pay a blackmailer simply because they demand money. Save the full conversation, account links, dates, phone numbers and payment demands. If there is an immediate physical threat, sexual blackmail, child-related harm or extortion, seek police and legal help quickly.",
+      "atAGlance": {
+        "whoFor": "A person is being threatened, harassed or blackmailed online.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Put safety first. Do not delete the messages or pay a blackmailer simply because they demand money. Save the full conver",
+        "updateStatus": "High-risk safety page. Add current Bangladesh Police cyber-support channels before publication."
+      },
+      "lawMeaning": "The current Cyber Security Act was amended on 1 July 2026. Any offence reference must be checked against the current consolidated text.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Save evidence.",
+        "Do not send more private material.",
+        "Do not pay without professional advice.",
+        "Secure accounts.",
+        "Tell a trusted person if safety is at risk.",
+        "Report account to platform.",
+        "Use police/cyber support for serious threats.",
+        "Preserve medical/financial evidence if harm occurred."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A blackmailer threatens to publish private photos unless money is paid. The victim should preserve the threat and seek help instead of sending more photos or money.",
+      "commonMistakes": [
+        "Deleting chat.",
+        "meeting the blackmailer alone.",
+        "forwarding private images widely as “evidence”.",
+        "paying repeated demands.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Immediate threat; sexual blackmail; child; stalking; extortion; physical violence.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "934d6abb5ae48f5c"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

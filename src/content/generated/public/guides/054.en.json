@@ -1,0 +1,70 @@
+{
+  "id": 54,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+    "description": "Bangladesh citizen legal guide on Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do.",
+    "searchIntent": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+      "directAnswer": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown devices and recovery details. Turn on two-factor authentication. Save emails showing password, email or phone changes. Warn your contacts if the attacker is sending messages from your account. If the attacker stole information, demanded money, committed fraud or continues to access the account, preserve the evidence and consider a formal report.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Use the platform's official account-recovery process first. Change the password if you still have access. Remove unknown",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "",
+      "steps": [
+        "Review the relevant official documentation.",
+        "Submit the application or complaint to the designated authority.",
+        "Retain all receipts and acknowledgment slips."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A person's Facebook password stops working. Friends then receive messages asking for emergency money. The user should start Facebook's official hacked-account recovery, secure the email account connected to Facebook, warn contacts, preserve the scam messages, and report any financial fraud separately.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Business account takeover; stolen client data; financial loss; repeated harassment; blackmail; intimate-image misuse; or a dispute involving contractual or commercial damage.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal and account-safety information. Platform rules and recovery procedures can change.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "9134cf910c6e10c9"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

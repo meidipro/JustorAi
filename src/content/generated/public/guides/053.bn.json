@@ -1,0 +1,70 @@
+{
+  "id": 53,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+    "description": "Bangladesh citizen legal guide on Phishing Link, Fake Login Page or Fake Website: What Should You Do?.",
+    "searchIntent": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+      "directAnswer": "If you entered a password, card number, PIN, OTP or other sensitive information on a suspicious website, treat that information as exposed. Use the real service's official website or app to change your password and secure the account. Contact the bank or payment provider if financial information was entered. Save the fake URL, message, screenshot and sender information. Do not reopen the link just to collect more evidence.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "If you entered a password, card number, PIN, OTP or other sensitive information on a suspicious website, treat that info",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "",
+      "steps": [
+        "Review the relevant official documentation.",
+        "Submit the application or complaint to the designated authority.",
+        "Retain all receipts and acknowledgment slips."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A text message says, “Your parcel is blocked. Pay ৳30 now,” and links to a page that looks like a courier website. The page asks for card details and an OTP. The user should close the page and contact the courier using its real website. If card data was entered, the bank should be contacted immediately.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Financial loss; business email compromise; stolen confidential data; repeated identity theft; malware affecting a company; or a dispute with a service provider about responsibility.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal and safety information. It does not guarantee that an account or payment can be recovered.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "3afabd9ab4ef2727"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": 57,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+    "description": "Bangladesh citizen legal guide on Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?.",
+    "searchIntent": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+      "directAnswer": "Save the original post URL, account name, date, screenshots and any message that shows why the fake content was made. Report the content to the platform. If the deepfake is being used to steal money, impersonate you, damage your reputation, threaten you or create sexual material, different laws may become relevant. Bangladesh does not need one offence called “deepfake” for the conduct to have legal consequences; the correct legal provision depends on how the fake media is used.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Save the original post URL, account name, date, screenshots and any message that shows why the fake content was made. Re",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "",
+      "steps": [
+        "Copy the exact URL.",
+        "Save screenshots showing the account and date.",
+        "Save the original file if lawfully available, without spreading it.",
+        "Note whether the material is labelled AI-generated.",
+        "Save messages showing threats, payment requests or intent.",
+        "Report the content through the platform.",
+        "Warn people if the content is being used for financial impersonation.",
+        "If sexual, threatening or fraudulent, consider formal reporting.",
+        "Keep the original evidence before requesting removal."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A fake AI voice recording sounds like a business owner asking an employee to transfer money. The employee should verify the instruction through a separate channel. If money was sent, preserve the audio, sender details, transaction record and chat. The incident may raise cyber-fraud and impersonation issues.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Speak to a licensed Advocate if substantial property rights, financial compensation, or criminal allegations are involved.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information. Synthetic-media disputes are fact-specific and may require legal and technical review.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "ff6120a0e4de0cbb"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

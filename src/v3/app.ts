@@ -153,15 +153,49 @@ const icon = (name: string, size = 20): string => {
     external: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
     home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] ?? paths.source}</svg>`;
 };
 
+interface UserProfileData {
+  fullName: string;
+  email: string;
+  chamberName: string;
+  barAssociation: string;
+  practiceAreas: string;
+  role: Role;
+}
+
+const getStoredProfile = (): UserProfileData => {
+  try {
+    const raw = localStorage.getItem('justor_user_profile');
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return {
+    fullName: state.session?.user?.user_metadata?.full_name || 'Advocate Tajuddin Ahamed',
+    email: state.session?.user?.email || 'tajuddinahamed.contact@gmail.com',
+    chamberName: 'Chambers of Justor Legal Intelligence',
+    barAssociation: 'Supreme Court Bar Association (SCBA)',
+    practiceAreas: 'Land/Property, NI Act 138, Writ/Constitutional, Corporate, Criminal',
+    role: state.role || 'professional',
+  };
+};
+
+const saveStoredProfile = (data: Partial<UserProfileData>): void => {
+  const current = getStoredProfile();
+  const updated = { ...current, ...data };
+  localStorage.setItem('justor_user_profile', JSON.stringify(updated));
+};
+
 const brand = (inverse = false): string => `<span class="brand-lockup ${inverse ? 'brand-lockup-inverse' : ''}"><img src="/visuals/justor-mark.png" alt="" width="42" height="22"><span>Justor <strong>AI</strong></span></span>`;
 const route = (path: string, label: string, className = ''): string => `<a href="${localizedPath(path, state.language)}" data-route class="${className}">${label}</a>`;
 
-const header = (): string => `
+const header = (): string => {
+  const profile = getStoredProfile();
+  const firstName = profile.fullName.split(' ')[0] || ui(state.language, 'profile');
+  return `
   <a class="skip-link" href="#page-content">Skip to content</a>
   <header class="site-header" data-header>
     <div class="nav-shell">
@@ -176,6 +210,7 @@ const header = (): string => `
       <div class="nav-actions">
         <button class="button-pilot-badge" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot — ৳200/mo">⚖️ Founding Pilot</button>
         <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
+        ${route('/profile', `<span class="nav-profile-pill">${icon('user', 14)} <span>${escapeHtml(firstName)}</span></span>`, 'nav-profile-link')}
         ${state.session ? `<button class="nav-signin" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` : route('/login', ui(state.language, 'signIn'), 'nav-signin')}
         <button class="menu-button" type="button" data-action="menu" aria-label="${state.menuOpen ? ui(state.language, 'close') : ui(state.language, 'menu')}" aria-expanded="${state.menuOpen}">${icon(state.menuOpen ? 'close' : 'menu')}</button>
       </div>
@@ -198,6 +233,7 @@ const header = (): string => `
         <span class="menu-section-label" style="margin-top: 16px;">${ui(state.language, 'resources')}</span>
         ${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}
         ${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}
+        ${route('/profile', `${icon('user', 16)} ${ui(state.language, 'profile')} & ${ui(state.language, 'accountSettings')}`, 'menu-nav-link menu-nav-profile')}
         ${route('/trust', ui(state.language, 'trust'), 'menu-nav-link')}
         ${route('/about', ui(state.language, 'about'), 'menu-nav-link')}
 
@@ -211,6 +247,7 @@ const header = (): string => `
       </div>
     </nav>
   </header>`;
+};
 
 const footer = (): string => `
   <footer class="site-footer">
@@ -286,10 +323,20 @@ const startPage = (): string => `
 const workspaceNav = (role: Role, items: Array<{ label: string; href: string; icon: string }>, active: string): string => {
   const threads = chatStore.getThreadsByRole(role);
   const activeThreadId = chatStore.getActiveThreadId(role);
+  const profile = getStoredProfile();
+  const initials = profile.fullName
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || 'JA';
 
   return `
   <aside class="workspace-sidebar">
-    <div class="workspace-brand">${route('/', brand(true), 'workspace-brand-link')}<span>Beta</span></div>
+    <div class="workspace-brand">
+      ${route('/', `${brand(true)}<span class="workspace-beta-badge">Beta</span>`, 'workspace-brand-link')}
+    </div>
     <button class="new-research-capsule" type="button" data-action="new-research">
       ${icon('plus', 16)} <span>${role === 'professional' ? 'New Research' : role === 'student' ? 'New Study Chat' : 'New Legal Inquiry'}</span>
     </button>
@@ -321,20 +368,58 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
       </div>
     </div>
 
-    <button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>
+    <!-- ChatGPT-Style Sidebar User Account Card & Footer Actions -->
+    <div class="sidebar-bottom-actions">
+      <button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>
+      
+      <div class="sidebar-user-footer">
+        ${route('/profile', `
+          <div class="sidebar-user-card" title="Open User Profile & Settings">
+            <div class="sidebar-user-avatar">
+              <span>${escapeHtml(initials)}</span>
+              <span class="user-status-dot"></span>
+            </div>
+            <div class="sidebar-user-info">
+              <strong class="sidebar-user-name">${escapeHtml(profile.fullName)}</strong>
+              <span class="sidebar-user-plan">⚖️ Founding Pilot · Settings</span>
+            </div>
+            <span class="sidebar-user-settings-icon">${icon('gear', 16)}</span>
+          </div>
+        `, 'sidebar-user-link')}
+      </div>
+    </div>
   </aside>`;
 };
 
-const workspaceTopbar = (role: Role, title?: string): string => `
+const workspaceTopbar = (role: Role, title?: string): string => {
+  const profile = getStoredProfile();
+  const firstName = profile.fullName.split(' ')[0] || ui(state.language, 'profile');
+  const initials = profile.fullName
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || 'JA';
+
+  return `
   <header class="workspace-topbar">
     <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
     <span>${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
     <div style="display: flex; align-items: center; gap: 8px;">
       <button class="button-pilot-badge" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot — ৳200/mo">⚖️ Founding Pilot</button>
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
+      ${route('/profile', `
+        <span class="topbar-profile-pill" title="User Profile & Settings">
+          <span class="topbar-avatar-circle">${escapeHtml(initials)}</span>
+          <span class="topbar-profile-name">${escapeHtml(firstName)}</span>
+          <span class="topbar-gear">${icon('gear', 14)}</span>
+        </span>
+      `, 'workspace-profile-btn')}
       ${state.session ? `<button type="button" data-action="sign-out" class="text-button">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'button button-small')}
     </div>
   </header>`;
+};
 
 const quotaLine = (role: Role): string => `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${roleQuota[role]}` : `${ui(state.language, 'signInQuotaPrefix')} ${roleQuota[role]} ${ui(state.language, 'answersPerDay')}`}</span>`;
 
@@ -478,6 +563,7 @@ const professionalWorkspace = (): string => {
       { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'source' },
       { label: ui(state.language, 'updates'), href: '/legal-updates', icon: 'clock' },
       { label: ui(state.language, 'amendments'), href: '/legal-library?type=amendment', icon: 'source' },
+      { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
     ], ui(state.language, 'researchHome'))}
     <section class="workspace-main">
       ${workspaceTopbar('professional', thread.title !== 'New Legal Research' ? thread.title : undefined)}
@@ -507,6 +593,7 @@ const studentWorkspace = (): string => {
       { label: ui(state.language, 'cases'), href: '/legal-library?type=case', icon: 'scale' },
       { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'book' },
       { label: ui(state.language, 'concepts'), href: '/legal-library?type=concept', icon: 'source' },
+      { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
     ], ui(state.language, 'studyHome'))}
     <section class="workspace-main">
       ${workspaceTopbar('student', thread.title !== 'New Study Session' ? thread.title : undefined)}
@@ -531,6 +618,7 @@ const citizenWorkspace = (): string => {
       { label: ui(state.language, 'home'), href: '/workspace/citizen', icon: 'home' },
       { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
       { label: ui(state.language, 'askJustor'), href: '/workspace/citizen#ask', icon: 'source' },
+      { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
     ], ui(state.language, 'home'))}
     <section class="workspace-main">
       ${workspaceTopbar('citizen', thread.title !== 'New Legal Inquiry' ? thread.title : undefined)}
@@ -692,6 +780,218 @@ const feedbackPage = (): string => `
     </article>
   </main>`;
 
+const profilePage = (): string => {
+  const profile = getStoredProfile();
+  const initials = profile.fullName
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || 'JA';
+
+  return `
+  <main id="page-content" class="inner-page profile-page">
+    <section class="compact-hero section-shell profile-hero">
+      <div class="profile-hero-header">
+        <div class="profile-avatar-large">
+          <span>${escapeHtml(initials)}</span>
+          <span class="avatar-verified-dot" title="Active Verified Session">✓</span>
+        </div>
+        <div class="profile-hero-info">
+          <div class="profile-hero-title-row">
+            <h1>${escapeHtml(profile.fullName)}</h1>
+            <span class="pilot-active-badge">⚖️ Founding Pilot Member (৳200/mo)</span>
+          </div>
+          <p class="profile-hero-email">${escapeHtml(profile.email)} · ${localizedRoleLabel(profile.role)}</p>
+          <div class="profile-badges-row">
+            <span class="semantic-badge badge-source-checked">● Google Cloud AI Partner</span>
+            <span class="semantic-badge badge-reporter-verified">◐ $2,000 Credits Active</span>
+            <span class="semantic-badge badge-source-checked">✓ 46,000+ Statutes Indexed</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-shell profile-content-layout">
+      <div class="profile-sidebar-nav">
+        <a href="#general" class="profile-nav-item is-active">${icon('user', 16)} <span>${ui(state.language, 'personalDetails')}</span></a>
+        <a href="#cloud" class="profile-nav-item">${icon('source', 16)} <span>${ui(state.language, 'subscriptionCloud')}</span></a>
+        <a href="#preferences" class="profile-nav-item">${icon('scale', 16)} <span>${ui(state.language, 'researchPreferences')}</span></a>
+        <a href="#privacy" class="profile-nav-item">${icon('shield', 16)} <span>${ui(state.language, 'dataPrivacy')}</span></a>
+      </div>
+
+      <div class="profile-main-cards">
+        <!-- Personal & Chamber Form -->
+        <form class="profile-card" data-action="save-profile-form" id="general">
+          <div class="profile-card-header">
+            <div>
+              <h2>${ui(state.language, 'personalDetails')}</h2>
+              <p>Update your advocate profile and chamber credentials.</p>
+            </div>
+            <button class="button button-small" type="submit">${ui(state.language, 'saveSettings')}</button>
+          </div>
+
+          <div class="profile-form-grid">
+            <div class="profile-field">
+              <label for="prof-fullName">${ui(state.language, 'fullName')} *</label>
+              <input type="text" id="prof-fullName" name="fullName" value="${escapeHtml(profile.fullName)}" required />
+            </div>
+
+            <div class="profile-field">
+              <label for="prof-email">${ui(state.language, 'emailAddress')}</label>
+              <input type="email" id="prof-email" name="email" value="${escapeHtml(profile.email)}" readonly />
+            </div>
+
+            <div class="profile-field">
+              <label for="prof-role">Primary Justor Persona</label>
+              <select id="prof-role" name="role">
+                <option value="professional" ${profile.role === 'professional' ? 'selected' : ''}>Legal Professional (Advocate / Judge / Corporate)</option>
+                <option value="student" ${profile.role === 'student' ? 'selected' : ''}>Law Student / Bar Candidate</option>
+                <option value="citizen" ${profile.role === 'citizen' ? 'selected' : ''}>Citizen / Public Guidance</option>
+              </select>
+            </div>
+
+            <div class="profile-field">
+              <label for="prof-barAssociation">${ui(state.language, 'barAssociation')}</label>
+              <select id="prof-barAssociation" name="barAssociation">
+                <option value="Supreme Court Bar Association (SCBA)" ${profile.barAssociation === 'Supreme Court Bar Association (SCBA)' ? 'selected' : ''}>Supreme Court Bar Association (SCBA)</option>
+                <option value="Dhaka Bar Association" ${profile.barAssociation === 'Dhaka Bar Association' ? 'selected' : ''}>Dhaka Bar Association</option>
+                <option value="Chittagong District Bar Association" ${profile.barAssociation === 'Chittagong District Bar Association' ? 'selected' : ''}>Chittagong District Bar Association</option>
+                <option value="Other District Bar" ${profile.barAssociation === 'Other District Bar' ? 'selected' : ''}>Other District Bar</option>
+                <option value="Law Student / Bar Examinee" ${profile.barAssociation === 'Law Student / Bar Examinee' ? 'selected' : ''}>Law Student / Bar Examinee</option>
+                <option value="Citizen Legal Researcher" ${profile.barAssociation === 'Citizen Legal Researcher' ? 'selected' : ''}>Citizen Legal Researcher</option>
+              </select>
+            </div>
+
+            <div class="profile-field full-width">
+              <label for="prof-chamberName">${ui(state.language, 'chamberName')}</label>
+              <input type="text" id="prof-chamberName" name="chamberName" value="${escapeHtml(profile.chamberName)}" placeholder="e.g. Chambers of Advocate..." />
+            </div>
+
+            <div class="profile-field full-width">
+              <label for="prof-practiceAreas">${ui(state.language, 'practiceAreas')}</label>
+              <input type="text" id="prof-practiceAreas" name="practiceAreas" value="${escapeHtml(profile.practiceAreas)}" placeholder="e.g. Land/Property, NI Act 138, Writ/Constitutional, Criminal" />
+            </div>
+          </div>
+        </form>
+
+        <!-- Google Cloud & Infrastructure Tier -->
+        <div class="profile-card" id="cloud">
+          <div class="profile-card-header">
+            <div>
+              <h2>${ui(state.language, 'subscriptionCloud')}</h2>
+              <p>High-performance legal RAG powered by Google Cloud & Vertex AI.</p>
+            </div>
+            <span class="gcp-partner-chip">☁️ Google Cloud Partner</span>
+          </div>
+
+          <div class="cloud-quota-grid">
+            <div class="quota-stat-box">
+              <span class="stat-label">Cloud Credit Tier</span>
+              <strong class="stat-value">$2,000 USD Active</strong>
+              <small class="stat-desc">NSU Startups Next Incubation Grant</small>
+            </div>
+            <div class="quota-stat-box">
+              <span class="stat-label">Legal Database</span>
+              <strong class="stat-value">46,000+ Records</strong>
+              <small class="stat-desc">Statutes, DLR, SCOB, Gazette</small>
+            </div>
+            <div class="quota-stat-box">
+              <span class="stat-label">AI Engine</span>
+              <strong class="stat-value">Evidence Engine V2</strong>
+              <small class="stat-desc">7-Gate Deterministic Verification</small>
+            </div>
+            <div class="quota-stat-box">
+              <span class="stat-label">Membership Tier</span>
+              <strong class="stat-value">Founding Pilot</strong>
+              <small class="stat-desc">৳200/mo Guaranteed Rate</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Research Preferences -->
+        <div class="profile-card" id="preferences">
+          <div class="profile-card-header">
+            <div>
+              <h2>${ui(state.language, 'researchPreferences')}</h2>
+              <p>Customize citation rendering, language, and legal reasoning display.</p>
+            </div>
+          </div>
+
+          <div class="preference-rows">
+            <div class="preference-row">
+              <div>
+                <strong>Default Research Language</strong>
+                <p>Switch primary system language between English and বাংলা.</p>
+              </div>
+              <button class="button button-small button-secondary" type="button" data-action="language">${state.language === 'bn' ? 'বাংলা (Bangla)' : 'English (EN)'}</button>
+            </div>
+
+            <div class="preference-row">
+              <div>
+                <strong>Live Thinking & Step Telemetry</strong>
+                <p>Display live statutory retrieval and 7-gate verification steps.</p>
+              </div>
+              <span class="toggle-pill is-active">Active</span>
+            </div>
+
+            <div class="preference-row">
+              <div>
+                <strong>Strict Citation Grounding</strong>
+                <p>Enforce zero ungrounded propositions and highlight missing authorities.</p>
+              </div>
+              <span class="toggle-pill is-active">Enforced</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Privacy & History Controls (ChatGPT Style) -->
+        <div class="profile-card" id="privacy">
+          <div class="profile-card-header">
+            <div>
+              <h2>${ui(state.language, 'dataPrivacy')}</h2>
+              <p>Control your data, export legal memos, and manage local session storage.</p>
+            </div>
+          </div>
+
+          <div class="privacy-action-rows">
+            <div class="privacy-action-row">
+              <div>
+                <strong>Export Legal Research History</strong>
+                <p>Download a complete JSON digest of all your research queries and citations.</p>
+              </div>
+              <button class="button button-small button-outline" type="button" data-action="export-chat-history">
+                ${icon('external', 14)} ${ui(state.language, 'exportData')}
+              </button>
+            </div>
+
+            <div class="privacy-action-row">
+              <div>
+                <strong>Clear Local Research Threads</strong>
+                <p>Delete all research history stored on this device for your current role.</p>
+              </div>
+              <button class="button button-small button-secondary danger-button" type="button" data-action="clear-threads-profile">
+                ${ui(state.language, 'clearAllHistory')}
+              </button>
+            </div>
+
+            <div class="privacy-action-row">
+              <div>
+                <strong>Sign Out from Session</strong>
+                <p>Safely disconnect your account and clear local authorization keys.</p>
+              </div>
+              <button class="button button-small button-secondary" type="button" data-action="sign-out">
+                ${ui(state.language, 'signOut')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>`;
+};
+
 const pageForPath = (path: string): string => {
   if (path === '/') return homePage();
   if (path === '/start') return startPage();
@@ -708,6 +1008,7 @@ const pageForPath = (path: string): string => {
   if (path === '/about') return aboutPage();
   if (path === '/contact') return contactPage();
   if (path === '/login') return loginPage();
+  if (path === '/profile' || path === '/account' || path === '/settings') return profilePage();
   if (path === '/privacy') return policyPage('privacy');
   if (path === '/terms') return policyPage('terms');
   if (path === '/disclaimer') return policyPage('disclaimer');
@@ -717,12 +1018,12 @@ const pageForPath = (path: string): string => {
   return notFoundPage();
 };
 
-const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/') || path === '/login' || path === '/start';
+const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/') || path === '/login' || path === '/start' || path === '/profile';
 
 const setDocumentMeta = (): void => {
   document.documentElement.lang = state.language === 'bn' ? 'bn' : 'en';
   const titles: Record<string, string> = {
-    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/contact': 'Contact', '/login': 'Sign In', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
+    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
   };
   const dynamic = state.routePath.startsWith('/workspace/') ? `${roleLabels[state.routePath.split('/').pop() as Role]} Workspace` : state.routePath.startsWith('/guides/') || state.routePath.startsWith('/action-guides/') ? 'Citizen Legal Guide' : state.routePath.startsWith('/legal-updates/') ? 'Legal Update' : 'Justor AI';
   document.title = `${titles[state.routePath] ?? dynamic} | Justor AI`;
@@ -1851,6 +2152,22 @@ document.addEventListener('click', (event) => {
       if (result.error) showToast('Sign-in unavailable', result.error, 'warning');
     });
   }
+  if (action === 'export-chat-history') {
+    const threads = chatStore.getThreadsByRole(state.role);
+    const blob = new Blob([JSON.stringify({ exportDate: new Date().toISOString(), role: state.role, profile: getStoredProfile(), threads }, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `justor_legal_research_${state.role}_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(ui(state.language, 'exportData'), 'Research history exported successfully.', 'positive');
+  }
+  if (action === 'clear-threads-profile') {
+    chatStore.clearAllForRole(state.role);
+    showToast(ui(state.language, 'clearAllHistory'), 'All local research threads cleared.', 'positive');
+    render(true);
+  }
   if (action === 'ask-from-guide') {
     const context = { id: actionElement?.dataset.guideId ?? '', title: actionElement?.dataset.guideTitle ?? '', topic: actionElement?.dataset.guideTopic ?? '' };
     sessionStorage.setItem('justor-guide-context', JSON.stringify(context));
@@ -1941,6 +2258,21 @@ document.addEventListener('submit', (event) => {
     state.citizenHasSearched = true;
     document.querySelector<HTMLElement>('[data-citizen-mascot]')?.remove();
     void hydrateCitizen(query);
+  }
+  if (form.matches('[data-action="save-profile-form"]')) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const fullName = String(formData.get('fullName') || '').trim();
+    const chamberName = String(formData.get('chamberName') || '').trim();
+    const barAssociation = String(formData.get('barAssociation') || '').trim();
+    const practiceAreas = String(formData.get('practiceAreas') || '').trim();
+    const role = (formData.get('role') as Role) || state.role;
+
+    saveStoredProfile({ fullName, chamberName, barAssociation, practiceAreas, role });
+    state.role = role;
+    localStorage.setItem('justor-role', role);
+    showToast(ui(state.language, 'saveSettings'), 'Profile and preferences updated successfully.', 'positive');
+    render(true);
   }
   if (form.matches('[data-action="submit-pilot-form"]')) {
     event.preventDefault();

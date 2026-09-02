@@ -1,0 +1,78 @@
+{
+  "id": 4,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "How to Check Whether a Land Deed Is Genuine",
+    "description": "Bangladesh citizen legal guide on How to Check Whether a Land Deed Is Genuine.",
+    "searchIntent": "How to Check Whether a Land Deed Is Genuine"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "How to Check Whether a Land Deed Is Genuine",
+      "directAnswer": "A deed can look real and still be unsafe. Check the registration record, the seller’s identity, the property description, the chain of earlier deeds, current land records, mutation, tax records and any available mortgage information. A genuine document does not always mean the seller has complete legal title.",
+      "atAGlance": {
+        "whoFor": "A buyer wants to reduce the risk of a fake or misleading deed.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A deed can look real and still be unsafe. Check the registration record, the seller’s identity, the property description",
+        "updateStatus": "Re-check any new Registration Directorate digital verification service before publication."
+      },
+      "lawMeaning": "Verification should compare the document with official records, not only the paper shown by the seller.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Read the original document.",
+        "Confirm names and identity.",
+        "Match deed number, date and registration office.",
+        "Compare property description with khatian and map.",
+        "Trace earlier deeds.",
+        "Check mutation and tax records.",
+        "Check available mortgage information.",
+        "Ask why any record does not match."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A seller shows a clean-looking deed, but the plot number in the deed does not match the latest land record. That mismatch should be resolved before purchase.",
+      "commonMistakes": [
+        "Checking only the stamp paper.",
+        "trusting a scanned copy.",
+        "ignoring earlier deeds.",
+        "not checking seller identity.",
+        "assuming registration means no mortgage exists.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Missing title chain; forged or altered documents; disputed inheritance; power of attorney; mortgage; court case; unusual urgent sale.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "190f72b58582323e"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

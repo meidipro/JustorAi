@@ -1,0 +1,75 @@
+{
+  "id": 18,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Child Custody: What Should Parents Know?",
+    "description": "Bangladesh citizen legal guide on Child Custody: What Should Parents Know?.",
+    "searchIntent": "Child Custody: What Should Parents Know?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Child Custody: What Should Parents Know?",
+      "directAnswer": "Child custody is about who cares for a child in daily life. Guardianship concerns legal authority and can involve different questions. A court can consider the child’s welfare and the specific family facts. Do not rely on a simple internet rule that one parent always wins at a certain age.",
+      "atAGlance": {
+        "whoFor": "A parent wants a basic guide to custody and guardianship.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Child custody is about who cares for a child in daily life. Guardianship concerns legal authority and can involve differ",
+        "updateStatus": "High-risk family-law page. Legal reviewer should verify current guardianship law citations before publication."
+      },
+      "lawMeaning": "Custody and guardianship should be explained separately. Existing court orders must be followed until changed by lawful process.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Put the child’s safety first.",
+        "Keep school, medical and care records.",
+        "Record the current living arrangement.",
+        "Do not hide the child or breach a court order.",
+        "Try safe agreement where possible.",
+        "Use the family-court/guardianship process when necessary."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "Two parents separate and both say, “The child belongs to me.” The legal question is not ownership of a child. The court process focuses on lawful custody/guardianship and the child’s welfare.",
+      "commonMistakes": [
+        "Using the child as pressure.",
+        "breaking court orders.",
+        "relying on fixed-age myths.",
+        "taking a child abroad without checking legal restrictions.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Abuse; abduction risk; international travel; existing order; serious health needs; high-conflict dispute.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "dfd198b127dac591"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

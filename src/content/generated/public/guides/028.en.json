@@ -1,0 +1,78 @@
+{
+  "id": 28,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "You Received a Tax Notice: What Should You Do?",
+    "description": "Bangladesh citizen legal guide on You Received a Tax Notice: What Should You Do?.",
+    "searchIntent": "You Received a Tax Notice: What Should You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "You Received a Tax Notice: What Should You Do?",
+      "directAnswer": "Do not ignore a tax notice and do not pay money just because someone tells you to. First verify that the notice is genuine, identify the legal section, note the deadline, collect the return and supporting records, and understand what NBR is asking. Get professional help if the notice involves an assessment, penalty, audit or major mismatch.",
+      "atAGlance": {
+        "whoFor": "A taxpayer received an NBR notice and needs safe first steps.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Do not ignore a tax notice and do not pay money just because someone tells you to. First verify that the notice is genui",
+        "updateStatus": "Deadline-sensitive. Final page should tell users to read the exact section instead of giving one response template."
+      },
+      "lawMeaning": "The legal effect depends on the exact notice section and facts. This guide must not pretend every notice is the same.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Verify the notice source.",
+        "Read the section and deadline.",
+        "Save the envelope/email/portal copy.",
+        "Collect the filed return.",
+        "Collect bank, income, TDS and tax-payment records.",
+        "Identify the mismatch.",
+        "Prepare a truthful response.",
+        "Submit through the correct channel and keep proof."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A taxpayer gets a message asking for payment to a personal mobile number. They should verify through NBR channels before sending any money.",
+      "commonMistakes": [
+        "Ignoring deadline.",
+        "calling an unofficial “fixer”.",
+        "deleting records.",
+        "submitting invented documents.",
+        "paying to a personal account.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Assessment; penalty; search/audit; large mismatch; appeal deadline; suspected fake notice.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "977a14c1e107f595"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "id": 49,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "How to Make a Right to Information Request",
+    "description": "Bangladesh citizen legal guide on How to Make a Right to Information Request.",
+    "searchIntent": "How to Make a Right to Information Request"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "How to Make a Right to Information Request",
+      "directAnswer": "The Right to Information Act, 2009 gives a legal framework for requesting information from covered authorities, subject to exclusions and procedures. In 2026 the law was amended, so Justor must use the current consolidated text, not an old RTI template.",
+      "atAGlance": {
+        "whoFor": "A citizen wants information held by a public authority.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "The Right to Information Act, 2009 gives a legal framework for requesting information from covered authorities, subject ",
+        "updateStatus": "LAW UPDATED: Right to Information (Amendment) Ordinance, 2026 dated 9 February 2026. Verify current consolidated sections and forms before publication."
+      },
+      "lawMeaning": "RTI is for information. It is not the same as a service complaint. GRS itself lists RTI matters outside the normal grievance route.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the authority holding the information.",
+        "Identify the designated information officer.",
+        "Describe the information clearly.",
+        "Use the official form/process.",
+        "Pay lawful fee if required.",
+        "Save proof of submission.",
+        "Track the statutory response period.",
+        "Use the RTI appeal/complaint process when available."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A citizen wants a copy of an official decision. An RTI request should ask for the specific document, date or file rather than demand that the office “explain why the government is bad.”",
+      "commonMistakes": [
+        "Using RTI to demand a personal service.",
+        "vague requests.",
+        "asking for exempt information.",
+        "missing appeal deadline.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Sensitive/exempt information; national-security issue; personal privacy; deadline dispute; repeated refusal.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "bfb6e56d3fa11684"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

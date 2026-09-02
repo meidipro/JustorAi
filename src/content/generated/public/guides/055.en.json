@@ -1,0 +1,76 @@
+{
+  "id": 55,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+    "description": "Bangladesh citizen legal guide on Fake Facebook, Instagram or Social Media Account Pretending to Be You.",
+    "searchIntent": "Fake Facebook, Instagram or Social Media Account Pretending to Be You"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+      "directAnswer": "Take screenshots before the fake account disappears. Save the profile URL, username, photos used, messages sent and any request for money. Report the account through the social platform's official impersonation process. Warn people who may be targeted. If the account is being used for fraud, threats, blackmail or harmful false content, preserve that evidence and consider a formal complaint through the proper legal channel.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Take screenshots before the fake account disappears. Save the profile URL, username, photos used, messages sent and any ",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "Impersonation can involve different legal issues. If a fake digital identity or material is used to deceive people, section 21 on cyber forgery or section 22 on fraud in cyberspace may be relevant. If the fake account publishes defamatory statements, other laws may also require analysis. The legal character depends on what the fake account actually does.\n\nDo not state that using another person's photo is automatically a criminal offence in every situation. The purpose, consent, content and resulting conduct matter.",
+      "steps": [
+        "Screenshot the profile and posts.",
+        "Copy the exact profile URL and username.",
+        "Record the date you found it.",
+        "Save messages sent from the fake account.",
+        "Ask friends who received messages to preserve them.",
+        "Report the profile using the platform's official impersonation tool.",
+        "Warn contacts if money or private information is being requested.",
+        "If fraud, threats or blackmail occur, preserve the separate evidence.",
+        "Do not publicly post sensitive ID documents unless the platform's secure official process specifically requires them."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A fake Facebook profile copies a person's name and profile picture, then messages relatives asking for ৳10,000. The person should save the fake profile URL and messages, report the account as impersonation, warn relatives, and preserve any payment details for a fraud complaint.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Speak to a licensed Advocate if substantial property rights, financial compensation, or criminal allegations are involved.",
+      "faqs": [],
+      "disclaimer": "This page gives general information. Whether impersonation amounts to an offence depends on the facts and use of the account.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "57d7c683152316a7"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

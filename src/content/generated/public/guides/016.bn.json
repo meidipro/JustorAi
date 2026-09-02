@@ -1,0 +1,75 @@
+{
+  "id": 16,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Dower or Mehr: What Are Your Rights?",
+    "description": "Bangladesh citizen legal guide on Dower or Mehr: What Are Your Rights?.",
+    "searchIntent": "Dower or Mehr: What Are Your Rights?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Dower or Mehr: What Are Your Rights?",
+      "directAnswer": "Dower, also called mehr or moharana, is money or property promised to the wife as part of a Muslim marriage. The kabinnama is an important document. Whether an amount is due now, later or after divorce depends on the recorded terms and applicable law.",
+      "atAGlance": {
+        "whoFor": "A spouse wants to understand dower written in a Muslim marriage.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Dower, also called mehr or moharana, is money or property promised to the wife as part of a Muslim marriage. The kabinna",
+        "updateStatus": "Do not state a universal prompt/deferred rule without checking the kabinnama and applicable law."
+      },
+      "lawMeaning": "A divorce or dissolution does not automatically erase a lawful dower claim.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Get the kabinnama.",
+        "Read the exact dower amount and terms.",
+        "Check any amount already paid.",
+        "Keep payment or receipt evidence.",
+        "If unpaid, identify the correct legal claim route.",
+        "Do not sign a waiver you do not understand."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A kabinnama states a dower amount, and the husband says it was paid in cash years ago. Both sides should look for receipts, witnesses and other reliable evidence.",
+      "commonMistakes": [
+        "Assuming dower is symbolic.",
+        "signing away a claim without advice.",
+        "changing kabinnama terms informally.",
+        "confusing maintenance with dower.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Disputed payment; waiver; settlement; death; large amount; foreign marriage documents.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "420c7ecabc424c62"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

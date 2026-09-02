@@ -1,0 +1,77 @@
+{
+  "id": 46,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Government Office Did Not Give You a Service: How to Complain",
+    "description": "Bangladesh citizen legal guide on Government Office Did Not Give You a Service: How to Complain.",
+    "searchIntent": "Government Office Did Not Give You a Service: How to Complain"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Government Office Did Not Give You a Service: How to Complain",
+      "directAnswer": "Start with the responsible office and its service commitment. If the issue is an eligible service grievance, Bangladesh’s Government Grievance Redress System (GRS) lets citizens submit complaints, track them and use an appeal route. GRS does not accept every kind of dispute.",
+      "atAGlance": {
+        "whoFor": "A citizen is unhappy with a government service or delay.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Start with the responsible office and its service commitment. If the issue is an eligible service grievance, Bangladesh’",
+        "updateStatus": "DYNAMIC PROCEDURE: verify GRS timeframes, exclusions and contact details before publication."
+      },
+      "lawMeaning": "GRS says certain matters are outside its scope, including court-pending matters, RTI issues and matters with another statutory review or appeal route.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the correct office.",
+        "Check the promised service and timeline.",
+        "Save application/receipt.",
+        "Contact the responsible officer.",
+        "If unresolved, identify the grievance officer.",
+        "Submit GRS complaint if eligible.",
+        "Save tracking number.",
+        "Appeal through GRS where allowed."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A citizen applied for a certificate and the service time has passed with no explanation. They can first contact the office and then use GRS if the complaint falls within GRS scope.",
+      "commonMistakes": [
+        "Using GRS for a court case.",
+        "filing under the wrong office.",
+        "submitting no application proof.",
+        "abusive language.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Corruption allegation; court case; statutory appeal; urgent rights violation; repeated retaliation.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "c014d4fc7105e0fd"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "id": 59,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+    "description": "Bangladesh citizen legal guide on Facebook Marketplace, Online Seller or Advance-Payment Scam.",
+    "searchIntent": "Facebook Marketplace, Online Seller or Advance-Payment Scam"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+      "directAnswer": "Save the listing, seller profile, messages, payment proof, phone number, delivery promise and transaction ID. First identify what happened: a normal delivery dispute, defective product, misleading sale, or deliberate fraud. If it is a consumer dispute with a business, DNCRP may be relevant. If a person used cyberspace to deceive you for money, section 22 of the Cyber Security Act, 2026 and general cheating law may be relevant depending on the facts. Contact the payment provider quickly if the transfer may be fraudulent.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Save the listing, seller profile, messages, payment proof, phone number, delivery promise and transaction ID. First iden",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "",
+      "steps": [
+        "Review the relevant official documentation.",
+        "Submit the application or complaint to the designated authority.",
+        "Retain all receipts and acknowledgment slips."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A seller advertises a phone on Facebook. A buyer sends a fake MFS payment screenshot and asks the seller to hand the phone to a courier. The seller should verify the actual account balance before release. If the screenshot was falsified to deceive the seller, cyber-forgery and fraud issues may arise.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Speak to a licensed Advocate if substantial property rights, financial compensation, or criminal allegations are involved.",
+      "faqs": [],
+      "disclaimer": "This page provides general information. A failed online sale is not automatically criminal fraud; the facts and evidence must be checked.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "21a135845553d492"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": 19,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+    "description": "Bangladesh citizen legal guide on Muslim Inheritance in Bangladesh: A Beginner’s Guide.",
+    "searchIntent": "Muslim Inheritance in Bangladesh: A Beginner’s Guide"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+      "directAnswer": "Muslim inheritance is not a simple “divide everything equally” system. The estate must first be identified, and lawful debts, valid testamentary issues and the actual heirs must be checked. The share of one heir can change because of the presence of other heirs. Do not use a simple percentage from another family.",
+      "atAGlance": {
+        "whoFor": "A Muslim family wants to understand the order of inheritance questions.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Muslim inheritance is not a simple “divide everything equally” system. The estate must first be identified, and lawful d",
+        "updateStatus": "Do not launch an automated inheritance calculator until two-lawyer validation covers the rules and edge cases."
+      },
+      "lawMeaning": "The page should teach structure, not issue personal share calculations without a validated inheritance engine.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "List the deceased person’s assets.",
+        "Separate jointly owned property from the deceased’s own share.",
+        "Identify debts and relevant estate obligations.",
+        "Check any valid will issue.",
+        "Identify all lawful heirs.",
+        "Calculate shares only after the family tree is complete.",
+        "Record later land mutation or partition correctly."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A man dies leaving a wife, children and a surviving parent. A share copied from a case with only a wife and children may be wrong because the surviving parent changes the calculation.",
+      "commonMistakes": [
+        "Leaving out daughters.",
+        "dividing before checking debts.",
+        "treating all family property as the deceased’s.",
+        "using an online calculator with an incomplete family tree.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Any real share calculation; disputed heirs; will; adopted/step relationships; predeceased descendants; different personal laws.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "9e8332633352a1cb"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

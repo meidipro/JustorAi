@@ -1,0 +1,77 @@
+{
+  "id": 23,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Freelancer and Remote Worker Tax Guide — 2026–27",
+    "description": "Bangladesh citizen legal guide on Freelancer and Remote Worker Tax Guide — 2026–27.",
+    "searchIntent": "Freelancer and Remote Worker Tax Guide — 2026–27"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Freelancer and Remote Worker Tax Guide — 2026–27",
+      "directAnswer": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and source of income, current exemptions or concessions, and the taxpayer’s full facts. Keep bank, remittance, platform and contract records and check the current NBR rules before filing.",
+      "atAGlance": {
+        "whoFor": "A freelancer earning locally or from abroad wants to understand tax duties.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Freelance or remote-work income is not automatically tax-free. The treatment depends on tax residence, the type and sour",
+        "updateStatus": "YEARLY UPDATE. Review any 2026 freelancer/IT service SRO before publication."
+      },
+      "lawMeaning": "Never make a blanket statement that “foreign remittance” or “freelance income” is exempt without identifying the exact current provision.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the service you provide.",
+        "Record where the customer and work relationship are located.",
+        "Keep invoices/contracts.",
+        "Keep bank/remittance records.",
+        "Check tax residence.",
+        "Check any current exemption/SRO.",
+        "Calculate total annual income.",
+        "File the required return."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A designer receives dollars from overseas clients. The bank describes the payment as remittance. That label alone should not be used to conclude the income is tax-free.",
+      "commonMistakes": [
+        "No records.",
+        "mixing business and personal payments.",
+        "relying on Facebook tax advice.",
+        "claiming an exemption without reading the SRO.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "High income; company structure; VAT issues; foreign bank account; disputed exemption; double-tax issue.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "a11d52ec926060af"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

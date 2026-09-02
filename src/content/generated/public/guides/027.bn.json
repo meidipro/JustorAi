@@ -1,0 +1,75 @@
+{
+  "id": 27,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Tax Deducted at Source (TDS) Explained Simply",
+    "description": "Bangladesh citizen legal guide on Tax Deducted at Source (TDS) Explained Simply.",
+    "searchIntent": "Tax Deducted at Source (TDS) Explained Simply"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Tax Deducted at Source (TDS) Explained Simply",
+      "directAnswer": "Tax deducted at source means a payer withholds tax from a payment before giving you the balance. Depending on the current law, that deduction may count toward your final tax or have another treatment. Always keep the certificate or proof because rates and treatment differ by payment type.",
+      "atAGlance": {
+        "whoFor": "A citizen sees tax deducted before receiving money and wants to understand it.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Tax deducted at source means a payer withholds tax from a payment before giving you the balance. Depending on the curren",
+        "updateStatus": "DYNAMIC RATES: link to current Withholding Tax Rules/SROs instead of hard-coding."
+      },
+      "lawMeaning": "Do not publish a universal TDS rate. Salary, professional fees, bank interest, contracts and other payments can have different rules.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify the payment type.",
+        "Check the current withholding rule.",
+        "Confirm the amount deducted.",
+        "Get the certificate/statement.",
+        "Match it to the e-Return record where applicable.",
+        "Claim credit only when legally allowed."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A consultant receives ৳90,000 after tax was deducted from a ৳100,000 invoice. The consultant should keep the withholding proof and report the income and credit under the correct rule.",
+      "commonMistakes": [
+        "Assuming all deductions are final tax.",
+        "losing certificates.",
+        "using an old rate.",
+        "claiming a credit that does not belong to the taxpayer.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large mismatch; refund claim; non-resident payment; business withholding dispute.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "ac0f8173c844cb59"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

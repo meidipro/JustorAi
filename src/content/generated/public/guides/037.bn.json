@@ -1,0 +1,76 @@
+{
+  "id": 37,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Your Employer Has Not Paid Your Salary",
+    "description": "Bangladesh citizen legal guide on Your Employer Has Not Paid Your Salary.",
+    "searchIntent": "Your Employer Has Not Paid Your Salary"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Your Employer Has Not Paid Your Salary",
+      "directAnswer": "Keep proof of employment, attendance, agreed salary and earlier payments. Ask the employer or HR in writing for the unpaid amount and a payment date. If the issue is not resolved, the correct labour authority or court route depends on whether the Labour Act applies to you and the type of claim.",
+      "atAGlance": {
+        "whoFor": "A worker has unpaid wages or salary.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Keep proof of employment, attendance, agreed salary and earlier payments. Ask the employer or HR in writing for the unpa",
+        "updateStatus": "Add the exact forum and limitation only after a labour-law reviewer checks the user category."
+      },
+      "lawMeaning": "Worker classification matters. Do not promise that every salaried office employee has the same Labour Act remedy.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Calculate the unpaid period.",
+        "Save appointment letter.",
+        "Save attendance/work proof.",
+        "Save payslips and bank statements.",
+        "Send a factual written demand.",
+        "Keep HR reply.",
+        "Use the correct statutory claim route if unpaid."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A worker says three months are unpaid. A clean table showing month, agreed salary, paid amount and balance is stronger than a vague complaint.",
+      "commonMistakes": [
+        "Quitting and deleting email immediately.",
+        "threatening the employer.",
+        "guessing the amount.",
+        "using the wrong forum.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large arrears; company closure; retaliation; disputed worker status; foreign employer.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "79dca3470bf512ea"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

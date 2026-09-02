@@ -1,1 +1,842 @@
-[]
+[
+  {
+    "id": 1,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Register Land in Bangladesh",
+    "titleBn": "How to Register Land in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on How to Register Land in Bangladesh.",
+    "searchIntent": "How to Register Land in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 2,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Mutation or Namjari: What Is It and How Do You Apply?",
+    "titleBn": "Mutation or Namjari: What Is It and How Do You Apply?",
+    "metaDescription": "Bangladesh citizen legal guide on Mutation or Namjari: What Is It and How Do You Apply?.",
+    "searchIntent": "Mutation or Namjari: What Is It and How Do You Apply?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 3,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "CS, SA, RS and BS Khatian Explained Simply",
+    "titleBn": "CS, SA, RS and BS Khatian Explained Simply",
+    "metaDescription": "Bangladesh citizen legal guide on CS, SA, RS and BS Khatian Explained Simply.",
+    "searchIntent": "CS, SA, RS and BS Khatian Explained Simply",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 4,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Check Whether a Land Deed Is Genuine",
+    "titleBn": "How to Check Whether a Land Deed Is Genuine",
+    "metaDescription": "Bangladesh citizen legal guide on How to Check Whether a Land Deed Is Genuine.",
+    "searchIntent": "How to Check Whether a Land Deed Is Genuine",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 5,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Gift Deed and Hiba of Property in Bangladesh",
+    "titleBn": "Gift Deed and Hiba of Property in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on Gift Deed and Hiba of Property in Bangladesh.",
+    "searchIntent": "Gift Deed and Hiba of Property in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 6,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Legal Steps for Buying and Selling Land",
+    "titleBn": "Legal Steps for Buying and Selling Land",
+    "metaDescription": "Bangladesh citizen legal guide on Legal Steps for Buying and Selling Land.",
+    "searchIntent": "Legal Steps for Buying and Selling Land",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 7,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Mortgage of Land Explained Simply",
+    "titleBn": "Mortgage of Land Explained Simply",
+    "metaDescription": "Bangladesh citizen legal guide on Mortgage of Land Explained Simply.",
+    "searchIntent": "Mortgage of Land Explained Simply",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 8,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Transfer Inherited Land to the Heirs",
+    "titleBn": "How to Transfer Inherited Land to the Heirs",
+    "metaDescription": "Bangladesh citizen legal guide on How to Transfer Inherited Land to the Heirs.",
+    "searchIntent": "How to Transfer Inherited Land to the Heirs",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 9,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What Is Pre-emption in Bangladesh?",
+    "titleBn": "What Is Pre-emption in Bangladesh?",
+    "metaDescription": "Bangladesh citizen legal guide on What Is Pre-emption in Bangladesh?.",
+    "searchIntent": "What Is Pre-emption in Bangladesh?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 10,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What Should You Do First in a Land Dispute?",
+    "titleBn": "What Should You Do First in a Land Dispute?",
+    "metaDescription": "Bangladesh citizen legal guide on What Should You Do First in a Land Dispute?.",
+    "searchIntent": "What Should You Do First in a Land Dispute?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 11,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Pay Land Development Tax",
+    "titleBn": "How to Pay Land Development Tax",
+    "metaDescription": "Bangladesh citizen legal guide on How to Pay Land Development Tax.",
+    "searchIntent": "How to Pay Land Development Tax",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 12,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Mutation Is Delayed: What Can You Do?",
+    "titleBn": "Mutation Is Delayed: What Can You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on Mutation Is Delayed: What Can You Do?.",
+    "searchIntent": "Mutation Is Delayed: What Can You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 13,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Muslim Marriage Registration in Bangladesh",
+    "titleBn": "Muslim Marriage Registration in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on Muslim Marriage Registration in Bangladesh.",
+    "searchIntent": "Muslim Marriage Registration in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 14,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Talaq Procedure in Bangladesh",
+    "titleBn": "Talaq Procedure in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on Talaq Procedure in Bangladesh.",
+    "searchIntent": "Talaq Procedure in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 15,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How Can a Muslim Woman Seek Divorce?",
+    "titleBn": "How Can a Muslim Woman Seek Divorce?",
+    "metaDescription": "Bangladesh citizen legal guide on How Can a Muslim Woman Seek Divorce?.",
+    "searchIntent": "How Can a Muslim Woman Seek Divorce?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 16,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Dower or Mehr: What Are Your Rights?",
+    "titleBn": "Dower or Mehr: What Are Your Rights?",
+    "metaDescription": "Bangladesh citizen legal guide on Dower or Mehr: What Are Your Rights?.",
+    "searchIntent": "Dower or Mehr: What Are Your Rights?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 17,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Maintenance Rights in Bangladesh",
+    "titleBn": "Maintenance Rights in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on Maintenance Rights in Bangladesh.",
+    "searchIntent": "Maintenance Rights in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 18,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Child Custody: What Should Parents Know?",
+    "titleBn": "Child Custody: What Should Parents Know?",
+    "metaDescription": "Bangladesh citizen legal guide on Child Custody: What Should Parents Know?.",
+    "searchIntent": "Child Custody: What Should Parents Know?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 19,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+    "titleBn": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+    "metaDescription": "Bangladesh citizen legal guide on Muslim Inheritance in Bangladesh: A Beginner’s Guide.",
+    "searchIntent": "Muslim Inheritance in Bangladesh: A Beginner’s Guide",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 20,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Second Marriage and Polygamy: What Does the Law Require?",
+    "titleBn": "Second Marriage and Polygamy: What Does the Law Require?",
+    "metaDescription": "Bangladesh citizen legal guide on Second Marriage and Polygamy: What Does the Law Require?.",
+    "searchIntent": "Second Marriage and Polygamy: What Does the Law Require?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 21,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Income Tax for Salaried People — 2026–27",
+    "titleBn": "Income Tax for Salaried People — 2026–27",
+    "metaDescription": "Bangladesh citizen legal guide on Income Tax for Salaried People — 2026–27.",
+    "searchIntent": "Income Tax for Salaried People — 2026–27",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 22,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+    "titleBn": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+    "metaDescription": "Bangladesh citizen legal guide on Salary Tax Examples: ৳30,000 to ৳300,000 Per Month.",
+    "searchIntent": "Salary Tax Examples: ৳30,000 to ৳300,000 Per Month",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 23,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Freelancer and Remote Worker Tax Guide — 2026–27",
+    "titleBn": "Freelancer and Remote Worker Tax Guide — 2026–27",
+    "metaDescription": "Bangladesh citizen legal guide on Freelancer and Remote Worker Tax Guide — 2026–27.",
+    "searchIntent": "Freelancer and Remote Worker Tax Guide — 2026–27",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 24,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Get a TIN in Bangladesh",
+    "titleBn": "How to Get a TIN in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on How to Get a TIN in Bangladesh.",
+    "searchIntent": "How to Get a TIN in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 25,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to File an e-Return — 2026–27",
+    "titleBn": "How to File an e-Return — 2026–27",
+    "metaDescription": "Bangladesh citizen legal guide on How to File an e-Return — 2026–27.",
+    "searchIntent": "How to File an e-Return — 2026–27",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 26,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Who Needs to File an Income Tax Return?",
+    "titleBn": "Who Needs to File an Income Tax Return?",
+    "metaDescription": "Bangladesh citizen legal guide on Who Needs to File an Income Tax Return?.",
+    "searchIntent": "Who Needs to File an Income Tax Return?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 27,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Tax Deducted at Source (TDS) Explained Simply",
+    "titleBn": "Tax Deducted at Source (TDS) Explained Simply",
+    "metaDescription": "Bangladesh citizen legal guide on Tax Deducted at Source (TDS) Explained Simply.",
+    "searchIntent": "Tax Deducted at Source (TDS) Explained Simply",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 28,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "You Received a Tax Notice: What Should You Do?",
+    "titleBn": "You Received a Tax Notice: What Should You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on You Received a Tax Notice: What Should You Do?.",
+    "searchIntent": "You Received a Tax Notice: What Should You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 29,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What to Do If You Buy a Defective Product",
+    "titleBn": "What to Do If You Buy a Defective Product",
+    "metaDescription": "Bangladesh citizen legal guide on What to Do If You Buy a Defective Product.",
+    "searchIntent": "What to Do If You Buy a Defective Product",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 30,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Facebook or Online Shop Did Not Deliver Your Product",
+    "titleBn": "Facebook or Online Shop Did Not Deliver Your Product",
+    "metaDescription": "Bangladesh citizen legal guide on Facebook or Online Shop Did Not Deliver Your Product.",
+    "searchIntent": "Facebook or Online Shop Did Not Deliver Your Product",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 31,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "You Paid for a Service but Did Not Receive It",
+    "titleBn": "You Paid for a Service but Did Not Receive It",
+    "metaDescription": "Bangladesh citizen legal guide on You Paid for a Service but Did Not Receive It.",
+    "searchIntent": "You Paid for a Service but Did Not Receive It",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 32,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Wrong Price and Misleading Advertising: What Can You Do?",
+    "titleBn": "Wrong Price and Misleading Advertising: What Can You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on Wrong Price and Misleading Advertising: What Can You Do?.",
+    "searchIntent": "Wrong Price and Misleading Advertising: What Can You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 33,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Mobile, Internet or Subscription Billing Dispute",
+    "titleBn": "Mobile, Internet or Subscription Billing Dispute",
+    "metaDescription": "Bangladesh citizen legal guide on Mobile, Internet or Subscription Billing Dispute.",
+    "searchIntent": "Mobile, Internet or Subscription Billing Dispute",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 34,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Ticket, Travel or Transport Service Complaint",
+    "titleBn": "Ticket, Travel or Transport Service Complaint",
+    "metaDescription": "Bangladesh citizen legal guide on Ticket, Travel or Transport Service Complaint.",
+    "searchIntent": "Ticket, Travel or Transport Service Complaint",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 35,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to File a DNCRP Consumer Complaint",
+    "titleBn": "How to File a DNCRP Consumer Complaint",
+    "metaDescription": "Bangladesh citizen legal guide on How to File a DNCRP Consumer Complaint.",
+    "searchIntent": "How to File a DNCRP Consumer Complaint",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 36,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Read an Appointment Letter and Employment Contract",
+    "titleBn": "How to Read an Appointment Letter and Employment Contract",
+    "metaDescription": "Bangladesh citizen legal guide on How to Read an Appointment Letter and Employment Contract.",
+    "searchIntent": "How to Read an Appointment Letter and Employment Contract",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 37,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Your Employer Has Not Paid Your Salary",
+    "titleBn": "Your Employer Has Not Paid Your Salary",
+    "metaDescription": "Bangladesh citizen legal guide on Your Employer Has Not Paid Your Salary.",
+    "searchIntent": "Your Employer Has Not Paid Your Salary",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 38,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Termination and Dismissal Explained Simply",
+    "titleBn": "Termination and Dismissal Explained Simply",
+    "metaDescription": "Bangladesh citizen legal guide on Termination and Dismissal Explained Simply.",
+    "searchIntent": "Termination and Dismissal Explained Simply",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 39,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Workplace Harassment: What Evidence Should You Keep?",
+    "titleBn": "Workplace Harassment: What Evidence Should You Keep?",
+    "metaDescription": "Bangladesh citizen legal guide on Workplace Harassment: What Evidence Should You Keep?.",
+    "searchIntent": "Workplace Harassment: What Evidence Should You Keep?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 40,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Leave, Maternity and Basic Workplace Rights",
+    "titleBn": "Leave, Maternity and Basic Workplace Rights",
+    "metaDescription": "Bangladesh citizen legal guide on Leave, Maternity and Basic Workplace Rights.",
+    "searchIntent": "Leave, Maternity and Basic Workplace Rights",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 41,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "What to Do After an Online Scam",
+    "titleBn": "What to Do After an Online Scam",
+    "metaDescription": "Bangladesh citizen legal guide on What to Do After an Online Scam.",
+    "searchIntent": "What to Do After an Online Scam",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 42,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Someone Is Pretending to Be You Online",
+    "titleBn": "Someone Is Pretending to Be You Online",
+    "metaDescription": "Bangladesh citizen legal guide on Someone Is Pretending to Be You Online.",
+    "searchIntent": "Someone Is Pretending to Be You Online",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 43,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Online Harassment, Threats and Blackmail: What to Do",
+    "titleBn": "Online Harassment, Threats and Blackmail: What to Do",
+    "metaDescription": "Bangladesh citizen legal guide on Online Harassment, Threats and Blackmail: What to Do.",
+    "searchIntent": "Online Harassment, Threats and Blackmail: What to Do",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 44,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Defamation in Bangladesh Explained Simply",
+    "titleBn": "Defamation in Bangladesh Explained Simply",
+    "metaDescription": "Bangladesh citizen legal guide on Defamation in Bangladesh Explained Simply.",
+    "searchIntent": "Defamation in Bangladesh Explained Simply",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 45,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+    "titleBn": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+    "metaDescription": "Bangladesh citizen legal guide on GD, Police Complaint and Criminal Case: What Is the Difference?.",
+    "searchIntent": "GD, Police Complaint and Criminal Case: What Is the Difference?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 46,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Government Office Did Not Give You a Service: How to Complain",
+    "titleBn": "Government Office Did Not Give You a Service: How to Complain",
+    "metaDescription": "Bangladesh citizen legal guide on Government Office Did Not Give You a Service: How to Complain.",
+    "searchIntent": "Government Office Did Not Give You a Service: How to Complain",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 47,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+    "titleBn": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+    "metaDescription": "Bangladesh citizen legal guide on Waste, Drainage or Road-Service Problem: Where Do You Complain?.",
+    "searchIntent": "Waste, Drainage or Road-Service Problem: Where Do You Complain?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 48,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Land Office Is Delaying Your Service",
+    "titleBn": "Land Office Is Delaying Your Service",
+    "metaDescription": "Bangladesh citizen legal guide on Land Office Is Delaying Your Service.",
+    "searchIntent": "Land Office Is Delaying Your Service",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 49,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Make a Right to Information Request",
+    "titleBn": "How to Make a Right to Information Request",
+    "metaDescription": "Bangladesh citizen legal guide on How to Make a Right to Information Request.",
+    "searchIntent": "How to Make a Right to Information Request",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 50,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "How to Get Government Legal Aid in Bangladesh",
+    "titleBn": "How to Get Government Legal Aid in Bangladesh",
+    "metaDescription": "Bangladesh citizen legal guide on How to Get Government Legal Aid in Bangladesh.",
+    "searchIntent": "How to Get Government Legal Aid in Bangladesh",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 51,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Fake Bank, Police or Government Call: What Should You Do?",
+    "titleBn": "Fake Bank, Police or Government Call: What Should You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on Fake Bank, Police or Government Call: What Should You Do?.",
+    "searchIntent": "Fake Bank, Police or Government Call: What Should You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 52,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+    "titleBn": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on OTP, PIN and Mobile Financial Service Scam: What Should You Do?.",
+    "searchIntent": "OTP, PIN and Mobile Financial Service Scam: What Should You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 53,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+    "titleBn": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on Phishing Link, Fake Login Page or Fake Website: What Should You Do?.",
+    "searchIntent": "Phishing Link, Fake Login Page or Fake Website: What Should You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 54,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+    "titleBn": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+    "metaDescription": "Bangladesh citizen legal guide on Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do.",
+    "searchIntent": "Facebook, Instagram, Gmail or Social Media Account Hacked: What to Do",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 55,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+    "titleBn": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+    "metaDescription": "Bangladesh citizen legal guide on Fake Facebook, Instagram or Social Media Account Pretending to Be You.",
+    "searchIntent": "Fake Facebook, Instagram or Social Media Account Pretending to Be You",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 56,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Online Blackmail, Sextortion or Threat to Share Private Images",
+    "titleBn": "Online Blackmail, Sextortion or Threat to Share Private Images",
+    "metaDescription": "Bangladesh citizen legal guide on Online Blackmail, Sextortion or Threat to Share Private Images.",
+    "searchIntent": "Online Blackmail, Sextortion or Threat to Share Private Images",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 57,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+    "titleBn": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+    "metaDescription": "Bangladesh citizen legal guide on Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?.",
+    "searchIntent": "Deepfake, AI Voice Clone or AI-Generated Fake Photo/Video: What Can You Do?",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 58,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
+    "titleBn": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
+    "metaDescription": "Bangladesh citizen legal guide on Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud.",
+    "searchIntent": "Unknown SIM Registered with Your NID or Suspected SIM-Swap Fraud",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 59,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+    "titleBn": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+    "metaDescription": "Bangladesh citizen legal guide on Facebook Marketplace, Online Seller or Advance-Payment Scam.",
+    "searchIntent": "Facebook Marketplace, Online Seller or Advance-Payment Scam",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  },
+  {
+    "id": 60,
+    "cluster": "digital",
+    "route": "",
+    "sourceRoutePrefix": "action-guides",
+    "titleEn": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
+    "titleBn": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
+    "metaDescription": "Bangladesh citizen legal guide on Your NID, Phone Number or Personal Data Was Leaked or Misused.",
+    "searchIntent": "Your NID, Phone Number or Personal Data Was Leaked or Misused",
+    "publishedLocales": [
+      "en",
+      "bn"
+    ]
+  }
+]

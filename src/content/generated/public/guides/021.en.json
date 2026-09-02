@@ -1,0 +1,78 @@
+{
+  "id": 21,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Income Tax for Salaried People — 2026–27",
+    "description": "Bangladesh citizen legal guide on Income Tax for Salaried People — 2026–27.",
+    "searchIntent": "Income Tax for Salaried People — 2026–27"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Income Tax for Salaried People — 2026–27",
+      "directAnswer": "For salaried people, income tax depends on the current tax-year rules, taxable salary components, exemptions, rebates, other income, tax already deducted and filing obligations. Do not use last year’s tax thresholds. This page must be rebuilt each tax year from the Income Tax Act, Finance Act and current NBR notices.",
+      "atAGlance": {
+        "whoFor": "A salaried person wants to know the current tax-year process.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "For salaried people, income tax depends on the current tax-year rules, taxable salary components, exemptions, rebates, o",
+        "updateStatus": "LAW UPDATED YEARLY: Finance Act, 2026 is current for this edition. Numeric fields must be re-verified immediately before publishing."
+      },
+      "lawMeaning": "Every numeric threshold, slab, minimum tax and rebate must have a current NBR citation in the published version.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Add annual salary components.",
+        "Identify exempt or specially treated amounts under current law.",
+        "Add other taxable income.",
+        "Apply the current tax-year rates.",
+        "Apply eligible rebate/credit rules.",
+        "Subtract tax already paid or withheld.",
+        "Check whether a return is required.",
+        "File and save acknowledgement."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A worker earning the same monthly salary as a friend may still have a different final tax because benefits, investments, other income and tax already deducted can differ.",
+      "commonMistakes": [
+        "Using gross monthly salary alone.",
+        "copying last year’s slabs.",
+        "missing other income.",
+        "losing TDS proof.",
+        "assuming no tax means no return.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large income; foreign income; stock/business income; disputed assessment; tax notice.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "7ddff70055bc17b7"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

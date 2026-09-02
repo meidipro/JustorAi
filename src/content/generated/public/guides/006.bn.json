@@ -1,0 +1,81 @@
+{
+  "id": 6,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Legal Steps for Buying and Selling Land",
+    "description": "Bangladesh citizen legal guide on Legal Steps for Buying and Selling Land.",
+    "searchIntent": "Legal Steps for Buying and Selling Land"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Legal Steps for Buying and Selling Land",
+      "directAnswer": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after registration. The largest risk usually comes from paying before ownership and property details are properly checked.",
+      "atAGlance": {
+        "whoFor": "A citizen wants an end-to-end property transaction checklist.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A safe land sale has three parts: checks before payment, a correct deed and registration, and record updates after regis",
+        "updateStatus": "Use the current 2026 Registration Act text for all timing and registration statements."
+      },
+      "lawMeaning": "The transaction should connect the seller, the land description, the title chain and the official records.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Verify seller.",
+        "Verify title chain.",
+        "Check khatian, plot and map.",
+        "Check mutation, tax and mortgage information.",
+        "Agree price and payment method.",
+        "Draft and read the deed.",
+        "Register within the legal time.",
+        "Keep official receipts.",
+        "Take possession lawfully.",
+        "Apply for mutation."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "Nadia pays only a small documented advance after verification begins. The final payment is linked to a verified deed and registration process. This is safer than paying most of the price before checks.",
+      "commonMistakes": [
+        "Cash payment without receipt.",
+        "vague property description.",
+        "ignoring possession.",
+        "skipping mortgage check.",
+        "not reading deed.",
+        "delaying mutation.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Joint title; POA; inheritance; disputed possession; minor owner; litigation; mortgage.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "309ef047068dd60c"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

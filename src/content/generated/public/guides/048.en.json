@@ -1,0 +1,76 @@
+{
+  "id": 48,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Land Office Is Delaying Your Service",
+    "description": "Bangladesh citizen legal guide on Land Office Is Delaying Your Service.",
+    "searchIntent": "Land Office Is Delaying Your Service"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Land Office Is Delaying Your Service",
+      "directAnswer": "First identify the exact land service and check its official status. The Ministry of Land portal provides mutation, land development tax, records/maps and other services. Save application and payment details. If an eligible service delay remains unresolved, use the land authority’s complaint route or GRS where appropriate.",
+      "atAGlance": {
+        "whoFor": "A citizen has a delay in mutation, record, map, tax or another land service.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "First identify the exact land service and check its official status. The Ministry of Land portal provides mutation, land",
+        "updateStatus": "Re-check Ministry land-service hotline and complaint workflow on publication date."
+      },
+      "lawMeaning": "Do not use a general complaint route to replace a statutory review/appeal from an actual legal decision.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Identify service.",
+        "Check online status.",
+        "Read any notice.",
+        "Save application ID and payment.",
+        "Contact responsible office.",
+        "Use the service’s review route if a decision was made.",
+        "Use grievance route for eligible delay/service-quality issues."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A mutation application is rejected for missing evidence. That is different from an unexplained delay. The first step is to understand the rejection and proper review route.",
+      "commonMistakes": [
+        "Calling every rejection “delay”.",
+        "using GRS instead of appeal.",
+        "paying unofficial money.",
+        "losing application number.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Corruption allegation; repeated unexplained delay; adverse title decision; court case.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "d25bb3e2bed50dce"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

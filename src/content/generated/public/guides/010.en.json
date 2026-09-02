@@ -1,0 +1,78 @@
+{
+  "id": 10,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "What Should You Do First in a Land Dispute?",
+    "description": "Bangladesh citizen legal guide on What Should You Do First in a Land Dispute?.",
+    "searchIntent": "What Should You Do First in a Land Dispute?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "What Should You Do First in a Land Dispute?",
+      "directAnswer": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession, boundary, inheritance, fraud, a forged deed, mortgage or a government record. Do not use force. Collect documents, make a timeline and get the correct legal route for the facts.",
+      "atAGlance": {
+        "whoFor": "A citizen has a land conflict and needs safe first steps.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Start by protecting evidence and identifying the real type of dispute. A land problem may involve ownership, possession,",
+        "updateStatus": "Do not publish a one-size-fits-all “file this case” instruction."
+      },
+      "lawMeaning": "The 2023 land-crime law contains offences relating to land fraud. A dispute can still be civil, criminal, administrative or a mix, so do not label every land disagreement as a crime.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Stay safe and avoid confrontation.",
+        "Photograph current possession and boundaries where safe.",
+        "Collect deeds, khatians, maps and mutation papers.",
+        "Save tax receipts and payment records.",
+        "Write a dated timeline.",
+        "Identify witnesses.",
+        "Check whether forged documents or threats are involved.",
+        "Get legal advice before filing the wrong case."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A neighbour moves a boundary marker. Before fighting, the owner saves photos, gets the relevant map and records, and seeks the correct survey/legal remedy.",
+      "commonMistakes": [
+        "Using violence.",
+        "destroying the other side’s property.",
+        "filing a criminal complaint only to pressure a civil opponent.",
+        "losing original documents.",
+        "posting accusations online.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Threats or violence; forged deed; dispossession; injunction needed; court case; large-value property; unclear title.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "d691945a29e0af44"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

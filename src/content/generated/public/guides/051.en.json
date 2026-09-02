@@ -1,0 +1,83 @@
+{
+  "id": 51,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Fake Bank, Police or Government Call: What Should You Do?",
+    "description": "Bangladesh citizen legal guide on Fake Bank, Police or Government Call: What Should You Do?.",
+    "searchIntent": "Fake Bank, Police or Government Call: What Should You Do?"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Fake Bank, Police or Government Call: What Should You Do?",
+      "directAnswer": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says they are from a bank, police, BTRC, court or government office. End the call if you are unsure. Then contact the organisation using a phone number or website that you find independently from its official source. If the caller tried to take money or obtain access to an account, save the evidence and report the incident through the correct channel.",
+      "atAGlance": {
+        "whoFor": "Citizens in Bangladesh",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Do not send money, share an OTP, disclose your PIN, or give sensitive personal information only because a caller says th",
+        "updateStatus": "Current Bangladesh law"
+      },
+      "lawMeaning": "A fake call is not a separate offence simply because it is fake. The legal issue depends on what the caller does. If the caller uses cyberspace to deceive someone for money or another benefit, the **Cyber Security Act, 2026** may be relevant, including section 22 on fraud in cyberspace. If false digital material is created or used, section 21 on cyber forgery may also become relevant. General cheating provisions in the **Penal Code, 1860**, including sections 415 and 420, may apply depending on the facts.\n\nDo not write that every fake call automatically falls under one section. The facts, medium, intention and loss matter.",
+      "steps": [
+        "End the call if the caller pressures or threatens you.",
+        "Do not call back using a number sent by the caller.",
+        "Open the official website or app of the claimed organisation.",
+        "Call the official customer-service or office number.",
+        "Ask whether the request is genuine.",
+        "If banking information was exposed, change credentials and contact the provider immediately.",
+        "Save screenshots of SMS, WhatsApp messages, caller ID and payment instructions.",
+        "If money was taken or a crime is suspected, make the appropriate complaint to police or another competent authority.",
+        "If the issue concerns a bank, finance company or MFS provider and remains unresolved, follow Bangladesh Bank's CIPC complaint process."
+      ],
+      "evidence": [
+        "Caller number.",
+        "Date and time.",
+        "SMS or WhatsApp messages.",
+        "Name and title claimed by the caller.",
+        "Payment account or MFS number.",
+        "Transaction ID.",
+        "Screenshots.",
+        "Email or website links sent by the caller.",
+        "Bank or provider complaint number."
+      ],
+      "simpleExample": "A caller says, “I am from your bank. Your account will be blocked today. Tell me the six-digit OTP.” The safest action is to end the call. Then contact the bank using its official app, website or card number. If you already shared the OTP, immediately tell the bank that the account may be compromised.",
+      "commonMistakes": [
+        "Missing statutory limitation deadlines.",
+        "Failing to retain written acknowledgments."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Get legal help if there is a large financial loss, identity misuse, a threat of arrest based on a real legal notice, repeated harassment, blackmail, or a dispute about liability after a financial provider rejects your complaint.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures and reporting channels can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "59f5296859279617"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

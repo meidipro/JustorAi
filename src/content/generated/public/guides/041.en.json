@@ -1,0 +1,78 @@
+{
+  "id": 41,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "What to Do After an Online Scam",
+    "description": "Bangladesh citizen legal guide on What to Do After an Online Scam.",
+    "searchIntent": "What to Do After an Online Scam"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "What to Do After an Online Scam",
+      "directAnswer": "Act quickly. Stop sending money, contact the bank or mobile financial service, secure your accounts and save the full evidence. Keep transaction IDs, profile links, phone numbers, messages and screenshots. The Cyber Security Act, 2026 is now the current core cyber statute, subject to its July 2026 amendment.",
+      "atAGlance": {
+        "whoFor": "A person sent money or information to an online scammer.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Act quickly. Stop sending money, contact the bank or mobile financial service, secure your accounts and save the full ev",
+        "updateStatus": "LAW UPDATED: use Cyber Security Act, 2026 and Cyber Security (Amendment) Act, 2026. Do not cite the repealed 2025 Ordinance or older cyber statutes as current law."
+      },
+      "lawMeaning": "Do not promise recovery. Fast reporting can still help protect accounts and evidence.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Stop further payment.",
+        "Contact bank/MFS through official channel.",
+        "Change compromised passwords.",
+        "Enable stronger account security.",
+        "Save full chat and URLs.",
+        "Save transaction IDs.",
+        "Report the fake account to the platform.",
+        "Use police/cyber reporting where appropriate."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A scammer says the victim must pay another “verification fee” to recover the first payment. The victim should stop paying and contact the real financial provider.",
+      "commonMistakes": [
+        "Paying more to recover money.",
+        "deleting chat.",
+        "calling a number sent by the scammer.",
+        "sharing OTP.",
+        "editing screenshots.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Large loss; identity theft; threats; intimate-image blackmail; business account compromise.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "1da0818c5b9416c8"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

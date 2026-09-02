@@ -1,0 +1,75 @@
+{
+  "id": 7,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Mortgage of Land Explained Simply",
+    "description": "Bangladesh citizen legal guide on Mortgage of Land Explained Simply.",
+    "searchIntent": "Mortgage of Land Explained Simply"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Mortgage of Land Explained Simply",
+      "directAnswer": "A mortgage uses an interest in specific immovable property as security for a debt or other covered obligation. The exact legal effect depends on the type of mortgage and the documents used. A buyer should check whether land is already mortgaged before purchase.",
+      "atAGlance": {
+        "whoFor": "A borrower or buyer wants to understand a property mortgage.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "A mortgage uses an interest in specific immovable property as security for a debt or other covered obligation. The exact",
+        "updateStatus": "Re-check the Ministry mortgage-search feature and any updated lender/registration process before publication."
+      },
+      "lawMeaning": "Do not say that a lender automatically “owns” mortgaged land. The legal rights depend on the mortgage form and current documents.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Read the mortgage document.",
+        "Identify the debt and property.",
+        "Check registration requirements.",
+        "Understand default and repayment terms.",
+        "Keep repayment proof.",
+        "Obtain release/redemption documents when debt is cleared.",
+        "Buyers should check available mortgage records."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A buyer finds a seller’s property in a mortgage search. The buyer should not assume the debt is cleared because the seller says so. Ask for lender evidence and proper release.",
+      "commonMistakes": [
+        "Buying mortgaged land without lender clearance.",
+        "losing repayment proof.",
+        "assuming title deed possession alone explains the legal position.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Foreclosure/default; disputed loan; missing original deeds; multiple lenders; sale of mortgaged property.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "6bba5d04c96146a6"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "en",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

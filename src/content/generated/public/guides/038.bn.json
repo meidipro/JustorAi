@@ -1,0 +1,76 @@
+{
+  "id": 38,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "Termination and Dismissal Explained Simply",
+    "description": "Bangladesh citizen legal guide on Termination and Dismissal Explained Simply.",
+    "searchIntent": "Termination and Dismissal Explained Simply"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "Termination and Dismissal Explained Simply",
+      "directAnswer": "Termination, dismissal, discharge, retrenchment and resignation are not the same legal event. The correct rights depend on why the job ended, the worker’s legal status, notice, misconduct process, length of service and applicable law. Keep the termination letter and do not sign a settlement you do not understand.",
+      "atAGlance": {
+        "whoFor": "A worker has lost a job and wants to understand the legal terms.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Termination, dismissal, discharge, retrenchment and resignation are not the same legal event. The correct rights depend ",
+        "updateStatus": "Current law changed in 2026. Do not use pre-2026 termination summaries without checking the amended sections."
+      },
+      "lawMeaning": "Use the exact legal category from the employer’s document. Do not call every job loss “dismissal.”\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Get the written decision.",
+        "Identify the stated reason.",
+        "Check notice/pay.",
+        "Check disciplinary process if misconduct is alleged.",
+        "Calculate earned salary and benefits.",
+        "Ask for service documents.",
+        "Check challenge deadline and forum."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "An employer labels a letter “termination” but also accuses the worker of misconduct. The worker should get the legal effect reviewed instead of relying only on the heading.",
+      "commonMistakes": [
+        "Signing “full and final” without reading.",
+        "deleting work records.",
+        "missing appeal/claim deadline.",
+        "making public accusations.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Misconduct; discrimination/retaliation claim; large severance; senior executive status; EPZ.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "33085bdb210fa955"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}

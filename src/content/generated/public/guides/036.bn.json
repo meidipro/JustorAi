@@ -1,0 +1,77 @@
+{
+  "id": 36,
+  "cluster": "digital",
+  "route": "",
+  "sourceRoutePrefix": "action-guides",
+  "seo": {
+    "title": "How to Read an Appointment Letter and Employment Contract",
+    "description": "Bangladesh citizen legal guide on How to Read an Appointment Letter and Employment Contract.",
+    "searchIntent": "How to Read an Appointment Letter and Employment Contract"
+  },
+  "verification": {
+    "lastSourceChecked": "15 August 2026",
+    "publishGateRaw": "SOURCE CHECK ✓"
+  },
+  "officialSources": [
+    {
+      "label": "Official Bangladesh Gazette & Laws of Bangladesh",
+      "type": "official",
+      "url": "https://bdlaws.minlaw.gov.bd"
+    }
+  ],
+  "updateHistory": [
+    "Verified and structured on 15 August 2026"
+  ],
+  "relatedPages": [],
+  "content": {
+    "en": {
+      "title": "How to Read an Appointment Letter and Employment Contract",
+      "directAnswer": "Read an employment document before signing. Check the job title, salary, probation, working hours, leave, benefits, notice, termination terms, confidentiality and workplace policies. A contract cannot always remove rights that a mandatory labour law gives to a covered worker.",
+      "atAGlance": {
+        "whoFor": "A worker wants a plain-language contract checklist.",
+        "legalBasis": "Laws of Bangladesh",
+        "mainRule": "Read an employment document before signing. Check the job title, salary, probation, working hours, leave, benefits, noti",
+        "updateStatus": "LAW UPDATED: cite the 2026 Labour Amendment Act, not the repealed 2025 amendment ordinance, as the current amendment layer."
+      },
+      "lawMeaning": "Not every person called an “employee” is covered by every provision of the Labour Act. Coverage and worker status must be checked.\n\nThis page gives a general route. A person’s exact rights can change because of facts, documents, deadlines, legal status, court orders or later amendments.",
+      "steps": [
+        "Confirm employer legal name.",
+        "Check job title and work location.",
+        "Read salary and benefits.",
+        "Read probation.",
+        "Check hours and leave.",
+        "Check notice/termination.",
+        "Read confidentiality and property clauses.",
+        "Keep a signed copy."
+      ],
+      "evidence": [
+        "National ID (NID)",
+        "Relevant official notices, receipts, and correspondence"
+      ],
+      "simpleExample": "A company verbally promises a bonus but the appointment letter says nothing about it. The worker should ask for important promised terms in writing before relying on them.",
+      "commonMistakes": [
+        "Signing blank pages.",
+        "not keeping a copy.",
+        "assuming “company policy” can override every statutory right.",
+        "sharing confidential documents publicly.."
+      ],
+      "whatIf": [],
+      "specialistTrigger": "Senior management classification; EPZ work; foreign contract; restrictive covenant; dismissal dispute.",
+      "faqs": [],
+      "disclaimer": "This page provides general legal information about Bangladesh. It is not individual legal advice. Laws, procedures, fees and official instructions can change. Check the cited primary sources before taking action.\n\n**Have a question about your situation? Ask Justor AI →**\n\n---"
+    }
+  },
+  "contentVersion": "v2-15-august-2026",
+  "contentHashes": {
+    "en": "bb559d15fe24d45b"
+  },
+  "releaseStatus": {
+    "en": "published",
+    "bn": "published"
+  },
+  "publicationBadges": {
+    "locale": "bn",
+    "sourceChecked": true,
+    "humanReviewed": false
+  }
+}
