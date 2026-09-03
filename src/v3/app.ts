@@ -90,6 +90,7 @@ const state: {
   session: Session | null;
   lastResearch: ResearchResult | null;
   lastResearchRole: Role | null;
+  lastResearchQuery: string;
   selectedSource: number;
   guidePage: number;
   guideQuery: string;
@@ -103,6 +104,7 @@ const state: {
   session: null,
   lastResearch: null,
   lastResearchRole: null,
+  lastResearchQuery: '',
   selectedSource: 0,
   guidePage: 1,
   guideQuery: '',
@@ -1486,11 +1488,221 @@ const hydrateRoute = async (path: string): Promise<void> => {
   }
 };
 
+interface LawyerRecommendation {
+  specialistTitle: string;
+  domainName: string;
+  icon: string;
+  actionReason: string;
+  documentsToBring: string[];
+  helpline: string;
+  helphoneNumber: string;
+}
+
+function getCitizenLawyerRecommendation(query: string, answerText: string, lang: Language): LawyerRecommendation {
+  const combined = `${query} ${answerText}`.toLowerCase();
+  const isBn = lang === 'bn';
+
+  // 1. Property / Land / Mutation / Eviction
+  if (
+    combined.includes('land') || combined.includes('property') || combined.includes('deed') ||
+    combined.includes('mutation') || combined.includes('khatian') || combined.includes('porcha') ||
+    combined.includes('dolil') || combined.includes('registry') || combined.includes('partition') ||
+    combined.includes('eviction') || combined.includes('tenant') || combined.includes('rent') ||
+    combined.includes('জমি') || combined.includes('দলিল') || combined.includes('খতিয়ান') ||
+    combined.includes('পর্চা') || combined.includes('নামজারি') || combined.includes('বেদখল') ||
+    combined.includes('উচ্ছেদ') || combined.includes('বায়নানামা') || combined.includes('মালিকানা')
+  ) {
+    return {
+      specialistTitle: isBn ? 'দেওয়ানি ও জমিজমা সংক্রান্ত আইনজীবী (Civil & Property Advocate)' : 'Deed & Land Litigation Advocate',
+      domainName: isBn ? 'ভূমি ও সম্পত্তি বিরোধ আইন' : 'Land, Property & Real Estate Law',
+      icon: '🏡',
+      actionReason: isBn
+        ? 'জমির মালিকানা বিরোধ, জাল দলিল বা বেদখল রোধে সহকারী জজ আদালতে দ্রুত স্বত্ব ঘোষণা মামলা (Title Suit) বা অস্থায়ী নিষেধাজ্ঞা (Injunction) চেয়ে প্রতিকার নিতে হবে।'
+        : 'Property ownership disputes, deed fraudulent claims, or possession threats require immediate filing of a Title Suit or Injunction in the Civil Court.',
+      documentsToBring: isBn
+        ? ['মূল বা সহি মহরর দলিল (Deed)', 'হালনাগাদ খতিয়ান ও পর্চা (CS/SA/RS/BS)', 'নামজারি খতিয়ান ও ডিসিআর (DCR)', 'হাল ভূমি উন্নয়ন কর রশিদ (দাখিলা)']
+        : ['Original / Certified Deed (মূল দলিল)', 'Updated Khatian / Porcha (খতিয়ান ও পর্চা)', 'Mutation Certificate & DCR', 'Up-to-date Land Development Tax Receipt'],
+      helpline: isBn ? 'সরকারি আইনগত সহায়তা' : 'Govt. Legal Aid Helpline',
+      helphoneNumber: '16430',
+    };
+  }
+
+  // 2. Family / Marriage / Divorce / Dower / Custody
+  if (
+    combined.includes('divorce') || combined.includes('marriage') || combined.includes('dower') ||
+    combined.includes('mohor') || combined.includes('kabin') || combined.includes('maintenance') ||
+    combined.includes('custody') || combined.includes('guardianship') || combined.includes('talaq') ||
+    combined.includes('বিয়ে') || combined.includes('বিবাহ') || combined.includes('তালাক') ||
+    combined.includes('দেনমোহর') || combined.includes('কাবিন') || combined.includes('খোরপোশ') ||
+    combined.includes('অভিভাবকত্ব') || combined.includes('হেফাজত') || combined.includes('পারিবারিক')
+  ) {
+    return {
+      specialistTitle: isBn ? 'পারিবারিক আদালত ও দাম্পত্য আইনজীবী (Family Court Advocate)' : 'Family Court & Matrimonial Advocate',
+      domainName: isBn ? 'পারিবারিক ও দাম্পত্য আইন' : 'Family & Matrimonial Law',
+      icon: '👨‍👩‍👧',
+      actionReason: isBn
+        ? 'দেনমোহর আদায়, স্ত্রী-সন্তানের খোরপোশ, তালাক কার্যকর বা সন্তানের হেফাজত নিশ্চিত করতে পারিবারিক আদালত আইন ২০২৩ অনুযায়ী উপযুক্ত আদালতে মামলা দায়ের করতে হবে।'
+        : 'Dower recovery, child maintenance, divorce execution, and child custody claims are legally enforced through the Family Court under the Family Courts Act 2023.',
+      documentsToBring: isBn
+        ? ['মূল নিকাহনামা / কাবিননামা (Kabinnama)', 'তালাকের নোটিশ ও ডাক রসিদ (যদি থাকে)', 'সন্তানদের জন্মনিবন্ধন সনদ', 'আর্থিক লেনদেন বা উপার্জনের প্রমাণ']
+        : ['Original Nikahnama / Kabinnama', 'Talaq Notice & Postal Registry Receipts (if served)', 'Birth Certificates of children', 'Proof of spouse earnings & transactions'],
+      helpline: isBn ? 'জাতীয় নারী ও শিশু সহায়তা হেল্পলাইন' : 'Women & Child Helpline',
+      helphoneNumber: '109 / 16430',
+    };
+  }
+
+  // 3. Cheque Bounce / NI Act 138 / Loan
+  if (
+    combined.includes('cheque') || combined.includes('check') || combined.includes('dishonour') ||
+    combined.includes('dishonor') || combined.includes('bounce') || combined.includes('138') ||
+    combined.includes('ni act') || combined.includes('loan') || combined.includes('চেক') ||
+    combined.includes('বাউন্স') || combined.includes('ডিজঅনার') || combined.includes('এনআই অ্যাক্ট') ||
+    combined.includes('১৩৮') || combined.includes('পাওনা টাকা')
+  ) {
+    return {
+      specialistTitle: isBn ? 'এনআই অ্যাক্ট ও ব্যাংকিং আইনজীবী (Cheque Dishonour Specialist)' : 'NI Act & Banking Litigation Advocate',
+      domainName: isBn ? 'চেক ডিজঅনার ও আর্থিক লেনদেন আইন' : 'Negotiable Instruments & Debt Recovery',
+      icon: '💳',
+      actionReason: isBn
+        ? 'চেক ডিজঅনারের তারিখ থেকে ৩০ দিনের মধ্যে আইনজীবীর মাধ্যমে লিখিত লিগ্যাল নোটিশ পাঠানো বাধ্যতামূলক। নোটিশ সময়মত না পাঠালে এনআই অ্যাক্ট ১৩৮ ধারায় মামলা করার সুযোগ নষ্ট হবে।'
+        : 'Section 138 of the NI Act mandates serving a formal legal notice within 30 days of cheque dishonour before instituting criminal proceedings in the Magistrate Court.',
+      documentsToBring: isBn
+        ? ['মূল ডিজঅনার্ড চেক ও ব্যাংক মেমো (Return Memo)', 'আইনজীবীর মাধ্যমে পাঠানো লিগ্যাল নোটিশ ও ডাক রসিদ', 'লেনদেন বা পাওনা টাকার চুক্তিপত্র', 'ব্যাংক স্টেটমেন্ট']
+        : ['Original Dishonoured Cheque & Bank Memo', 'Copy of Legal Notice sent via Advocate', 'Postal Registry (A/D) receipt & delivery acknowledgment', 'Underlying agreement / transaction proofs'],
+      helpline: isBn ? 'সরকারি আইনগত সহায়তা' : 'Govt. Legal Aid Helpline',
+      helphoneNumber: '16430',
+    };
+  }
+
+  // 4. Criminal / Police / Bail / Arrest / Remand / Fraud / Extortion
+  if (
+    combined.includes('criminal') || combined.includes('police') || combined.includes('fir') ||
+    combined.includes('gd') || combined.includes('bail') || combined.includes('arrest') ||
+    combined.includes('remand') || combined.includes('thana') || combined.includes('theft') ||
+    combined.includes('assault') || combined.includes('extortion') || combined.includes('fraud') ||
+    combined.includes('পুলিশ') || combined.includes('থানা') || combined.includes('মামলা') ||
+    combined.includes('জিডি') || combined.includes('এফআইআর') || combined.includes('জামিন') ||
+    combined.includes('রিমান্ড') || combined.includes('গ্রেপ্তার') || combined.includes('চাঁদাবাজি')
+  ) {
+    return {
+      specialistTitle: isBn ? 'ফৌজদারি ও জামিন বিশেষজ্ঞ আইনজীবী (Criminal Defense Advocate)' : 'Criminal Defense & Bail Advocate',
+      domainName: isBn ? 'ফৌজদারি কার্যবিধি ও দণ্ডবিধি' : 'Criminal Law & Procedure',
+      icon: '🚓',
+      actionReason: isBn
+        ? 'গ্রেপ্তার, পুলিশি হয়রানি বা মিথ্যা মামলায় সুরক্ষা পেতে চিফ মেট্রোপলিটন/জুডিসিয়াল ম্যাজিস্ট্রেট আদালতে অবিলম্বে জামিন আবেদন (Bail Petition) বা নারাজি দাখিল করতে হবে।'
+        : 'In cases of arrest, police custody, or formal charges, immediate representation is necessary to file a Bail Petition before the Magistrate or Sessions Court.',
+      documentsToBring: isBn
+        ? ['এজাহার (FIR) বা জিডির সার্টিফাইড কপি', 'ফরওয়ার্ডিং বা সিজারলিস্ট (যদি থাকে)', 'জাতীয় পরিচয়পত্র ও স্থানীয় প্রত্যয়নপত্র', 'মেডিকেল সার্টিফিকেট বা ইনজুরি রিপোর্ট (যদি থাকে)']
+        : ['Certified Copy of FIR / GD / Complaint', 'Police forwarding memo or seizure list (if available)', 'National ID (NID) & local address proofs', 'Medical injury certificate (if applicable)'],
+      helpline: isBn ? 'জাতীয় জরুরি সেবা' : 'National Emergency Helpline',
+      helphoneNumber: '999 / 16430',
+    };
+  }
+
+  // 5. Labour / Employment / Worker / Wage / Gratuity
+  if (
+    combined.includes('labour') || combined.includes('labor') || combined.includes('worker') ||
+    combined.includes('employee') || combined.includes('employer') || combined.includes('termination') ||
+    combined.includes('gratuity') || combined.includes('salary') || combined.includes('wage') ||
+    combined.includes('শ্রম') || combined.includes('চাকরি') || combined.includes('বরখাস্ত') ||
+    combined.includes('গ্র্যাচুইটি') || combined.includes('বেতন') || combined.includes('ছাঁটাই')
+  ) {
+    return {
+      specialistTitle: isBn ? 'শ্রম আইন ও কর্মসংস্থান আইনজীবী (Labour Law Advocate)' : 'Labour & Employment Advocate',
+      domainName: isBn ? 'বাংলাদেশ শ্রম আইন' : 'Bangladesh Labour Law',
+      icon: '💼',
+      actionReason: isBn
+        ? 'বেআইনি বরখাস্ত, বকেয়া মজুরি বা সার্ভিস বেনিফিট আদায়ে বাংলাদেশ শ্রম আইনের অধীনে নির্দিষ্ট সময়ের মধ্যে শ্রম আদালতে (Labour Court) অভিযোগ দায়ের করতে হবে।'
+        : 'Unlawful termination, unpaid gratuity, or severance disputes must be formally filed before the Bangladesh Labour Court within the statutory limitation period.',
+      documentsToBring: isBn
+        ? ['নিয়োগপত্র ও পরিচয়পত্র (Appointment Letter & ID)', 'বেতন স্লিপ বা ব্যাংক স্টেটমেন্ট', 'বরখাস্ত বা ছাঁটাইপত্র (যদি থাকে)', 'মালিকের কাছে প্রদত্ত লিখিত অভিযোগের কপি']
+        : ['Appointment Letter & Employee ID', 'Salary slips / Bank statement', 'Termination / Dismissal notice (if provided)', 'Copy of written grievance notice given to employer'],
+      helpline: isBn ? 'কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর' : 'Labour Inspection Helpline',
+      helphoneNumber: '16197 / 16430',
+    };
+  }
+
+  // 6. Cyber / Harassment / Online / Facebook / Digital
+  if (
+    combined.includes('cyber') || combined.includes('facebook') || combined.includes('online') ||
+    combined.includes('harassment') || combined.includes('blackmail') || combined.includes('leak') ||
+    combined.includes('সাইবার') || combined.includes('ফেসবুক') || combined.includes('ব্ল্যাকমেইল') ||
+    combined.includes('অনলাইন হয়রানি') || combined.includes('মানহানি')
+  ) {
+    return {
+      specialistTitle: isBn ? 'সাইবার ট্রাইব্যুনাল ও ডিজিটাল ক্রাইম আইনজীবী (Cyber Law Advocate)' : 'Cyber Law & Digital Crime Advocate',
+      domainName: isBn ? 'সাইবার সুরক্ষা ও ডিজিটাল আইন' : 'Cyber Security & Media Law',
+      icon: '📱',
+      actionReason: isBn
+        ? 'অনলাইন হয়রানি, ছবি বিকৃত বা ব্ল্যাকমেইলের বিরুদ্ধে সাইবার ট্রাইব্যুনাল বা সিআইডি সাইবার পুলিশ সেন্টারে ডিজিটাল প্রমাণাদি সহ অভিযোগ দাখিল করতে হবে।'
+        : 'Digital harassment, unauthorized content dissemination, or blackmail require filing a petition before the Cyber Tribunal or CID Cyber Police with verified electronic evidence.',
+      documentsToBring: isBn
+        ? ['ইউআরএল (URL) ও তারিখ সহ মূল স্ক্রিনশট', 'চ্যাট হিস্ট্রি ও অডিও/ভিডিও record', 'অভিযুক্তের প্রোফাইল লিংক বা ফোন নম্বর', 'স্থানীয় থানায় সাধারণ ডায়েরি (GD) কপি']
+        : ['High-res screenshots with visible URLs & timestamps', 'Exported chat logs & digital media files', 'Profile URL, phone number, or identifier of offender', 'General Diary (GD) copy filed at local police station'],
+      helpline: isBn ? 'পুলিশ সাইবার সাপোর্ট ফর উইমেন / জরুরি সেবা' : 'Police Cyber Support for Women',
+      helphoneNumber: '01320000888 / 999',
+    };
+  }
+
+  // Default: General Civil / Constitutional Advocate
+  return {
+    specialistTitle: isBn ? 'দেওয়ানি ও সাধারণ প্র্যাকটিস আইনজীবী (Civil & General Advocate)' : 'Civil & Statutory Practice Advocate',
+    domainName: isBn ? 'সাধারণ ও দেওয়ানি আইন' : 'Civil & Statutory Law',
+    icon: '⚖️',
+    actionReason: isBn
+      ? 'আপনার অধিকার সুরক্ষা, চুক্তি কার্যকর বা আনুষ্ঠানিক আইনি নোটিশ প্রেরণের জন্য সংশ্লিষ্ট আদালতের একজন উপযুক্ত আইনজীবীর সাথে সরাসরি পরামর্শ করা প্রয়োজন।'
+      : 'Protecting legal rights, serving statutory legal notices, or filing civil suits requires consultation with an advocate practicing in the relevant territorial jurisdiction.',
+    documentsToBring: isBn
+      ? ['সকল প্রাসঙ্গিক চুক্তি, নোটিশ ও চিঠিপত্র', 'অর্থ লেনদেন বা ব্যাংক রশিদ', 'জাতীয় পরিচয়পত্র (NID)', 'ঘটনার ধারাবাহিক সংক্ষিপ্ত বিবরণ']
+      : ['Relevant agreements, notices & communications', 'Financial receipts / transaction records', 'National ID (NID)', 'Written chronological summary of facts'],
+    helpline: isBn ? 'জাতীয় আইনগত সহায়তা সংস্থা' : 'National Legal Aid Services',
+    helphoneNumber: '16430',
+  };
+}
+
+function renderCitizenLawyerSuggestion(query: string, answerText: string, lang: Language): string {
+  const rec = getCitizenLawyerRecommendation(query, answerText, lang);
+  const isBn = lang === 'bn';
+
+  return `
+    <div class="citizen-lawyer-recommendation-card" role="region" aria-label="${isBn ? 'আইনজীবী পরামর্শের দিকনির্দেশনা' : 'Recommended Legal Counsel'}">
+      <div class="lawyer-rec-header">
+        <span class="lawyer-rec-icon" aria-hidden="true">${rec.icon}</span>
+        <div class="lawyer-rec-title-wrap">
+          <span class="lawyer-rec-kicker">${isBn ? 'প্রয়োজনীয় পরবর্তী পদক্ষেপ · আইনি পরামর্শ' : 'Recommended Next Step · Legal Representation'}</span>
+          <h4 class="lawyer-specialist-title">${escapeHtml(rec.specialistTitle)}</h4>
+        </div>
+      </div>
+
+      <div class="lawyer-rec-body">
+        <p class="lawyer-rec-reason">
+          <strong>${isBn ? 'কেন পরামর্শ প্রয়োজন:' : 'Why You Need This Specialist:'}</strong> ${escapeHtml(rec.actionReason)}
+        </p>
+
+        <div class="lawyer-checklist-box">
+          <strong class="checklist-title">📋 ${isBn ? 'পরামর্শের সময় সাথে যা নিয়ে যাবেন (প্রয়োজনীয় কাগজপত্র):' : 'Documents & Evidence to Bring:'}</strong>
+          <ul class="checklist-items">
+            ${rec.documentsToBring.map((doc) => `<li>${escapeHtml(doc)}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="lawyer-hotline-footer">
+          <span class="hotline-badge">
+            ${icon('shield', 14)} 
+            <span>${escapeHtml(rec.helpline)}: <strong>${escapeHtml(rec.helphoneNumber)}</strong> ${isBn ? '(টোল ফ্রি)' : '(Free Helpline)'}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string => {
   if (!text) return '';
   const lines = text.split('\n');
   const htmlParts: string[] = [];
   let currentList: string[] = [];
+  let isSkippingAuthorities = false;
 
   const flushList = () => {
     if (currentList.length) {
@@ -1505,6 +1717,31 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
       flushList();
       continue;
     }
+
+    // For citizen role, strip out any "## Verified Authorities" / "## Sources" section
+    if (role === 'citizen') {
+      const lower = line.toLowerCase();
+      if (
+        lower.startsWith('## verified authorities') ||
+        lower.startsWith('### verified authorities') ||
+        lower.startsWith('# verified authorities') ||
+        lower.startsWith('**verified authorities') ||
+        lower.startsWith('## sources') ||
+        lower.startsWith('### sources')
+      ) {
+        isSkippingAuthorities = true;
+        flushList();
+        continue;
+      }
+      if (isSkippingAuthorities) {
+        if (line.startsWith('#') || (line.startsWith('**') && !line.startsWith('**['))) {
+          isSkippingAuthorities = false;
+        } else {
+          continue;
+        }
+      }
+    }
+
     if (line.startsWith('### ')) {
       flushList();
       htmlParts.push(`<h4>${escapeHtml(line.slice(4))}</h4>`);
@@ -1545,6 +1782,7 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
 
 const renderResearchResult = (result: ResearchResult, role: Role = 'professional'): string => {
   if (role === 'citizen') {
+    const query = state.lastResearchQuery || '';
     return `
       <div class="citizen-result-layout">
         <article class="citizen-analysis">
@@ -1553,6 +1791,10 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
               ${formatAnswerMarkdown(result.shortAnswer || '', 'citizen')}
             </div>
           </div>
+          
+          <!-- Suggested Lawyer Consultation Guidance -->
+          ${renderCitizenLawyerSuggestion(query, result.shortAnswer || '', state.language)}
+
           <div class="citizen-disclaimer-box">
             <p>${ui(state.language, 'citizenDisclaimer')}</p>
           </div>
@@ -2036,6 +2278,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
     clearInterval(timerInterval);
     state.lastResearch = result;
     state.lastResearchRole = role;
+    state.lastResearchQuery = query;
     state.selectedSource = 0;
 
     chatStore.addMessage(activeThread.id, { sender: 'assistant', content: result.shortAnswer, result });
@@ -2045,9 +2288,9 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
       thinkingElement.outerHTML = `
         <div class="chat-message-row assistant-row">
           <div class="chat-assistant-container">
-            <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+            <div class="assistant-avatar-badge">${brandMarkSvg(false)}</div>
             <div class="assistant-content-wrapper">
-              ${renderResearchResult(result)}
+              ${renderResearchResult(result, role)}
             </div>
           </div>
         </div>
