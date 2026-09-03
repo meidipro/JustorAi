@@ -159,6 +159,7 @@ const icon = (name: string, size = 20): string => {
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
     gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
     home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/>',
+    mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] ?? paths.source}</svg>`;
 };
@@ -269,7 +270,7 @@ const footer = (): string => `
       <div>${route('/', brand(true), 'brand-link')}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
       <nav aria-label="Product"><strong>Product</strong>${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}${route('/workspace/citizen', 'Citizen')}${route('/start', 'Start Justor')}</nav>
       <nav aria-label="Resources"><strong>Resources</strong>${route('/legal-library', ui(state.language, 'library'))}${route('/guides', ui(state.language, 'guides'))}${route('/legal-updates', ui(state.language, 'updates'))}${route('/trust', ui(state.language, 'trust'))}</nav>
-      <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
+      <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/careers', 'Careers')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
       <nav aria-label="Legal"><strong>Legal</strong>${route('/privacy', 'Privacy')}${route('/terms', 'Terms')}${route('/disclaimer', 'Disclaimer')}<a href="mailto:tajuddinahamed.contact@gmail.com">Email us</a></nav>
     </div>
     <div class="footer-bottom"><span>© 2026 Justor AI</span><span>General legal information. Not a substitute for individual legal advice.</span><a href="tel:+8801764662967">+880 1764-662967</a></div>
@@ -962,6 +963,293 @@ const policyPage = (kind: 'privacy' | 'terms' | 'disclaimer'): string => {
   </main>`;
 };
 
+interface CareerRole {
+  tag: string;
+  tagClass: string;
+  title: string;
+  body: string;
+  tasks: string[];
+  meta: string;
+}
+
+const careerRoles: CareerRole[] = [
+  {
+    tag: 'Legal',
+    tagClass: 'badge-legal',
+    title: 'Legal Research Intern',
+    body: 'You are the quality gate. Every answer Justor AI gives must be grounded in verified Bangladeshi law. You review, fact-check, and help us close the gap between what the model says and what the law actually says. This is the most important role on the team right now.',
+    tasks: [
+      'Review AI-generated legal answers against primary statute text',
+      'Flag citation errors, outdated provisions, and missing authorities',
+      'Research and summarise key Acts for the knowledge corpus',
+      'Help write and verify the bite-size legal learning card library',
+      'Support Bangla legal terminology accuracy checks',
+    ],
+    meta: 'Law student · Any year · Passion over credentials · 14–25 hrs/week',
+  },
+  {
+    tag: 'Legal',
+    tagClass: 'badge-legal',
+    title: 'Legal Content Writer',
+    body: 'Bangladesh has 170 million people and most of them have never had meaningful access to legal information. You change that. You write plain-language legal explainers, citizen guides, and learning content that makes the law feel like something people can actually use.',
+    tasks: [
+      'Write citizen-facing guides on family law, property, labour rights, and more',
+      'Script the bite-size Contract Act and other learning card series',
+      'Translate complex legal provisions into plain Bangla and English',
+      'Fact-check all citizen-facing content against verified statute text',
+      'Research real case scenarios that citizens actually face',
+    ],
+    meta: 'Law student preferred · Strong Bangla writing essential · 14–25 hrs/week',
+  },
+  {
+    tag: 'Design',
+    tagClass: 'badge-design',
+    title: 'Product Designer',
+    body: 'Justor serves three distinct users — lawyers, law students, and citizens. Each needs a different interface. You think in user journeys, not just screens, and you understand that in legal tech, clarity is a safety feature.',
+    tasks: [
+      'Design and iterate on workspace UX for lawyer and student modes',
+      'Create citizen-facing guide flows and sector card layouts',
+      'Build and maintain a component library in Figma',
+      'Run informal usability tests with real users',
+      'Work directly with CTO on frontend implementation handoff',
+    ],
+    meta: 'Basic Figma knowledge enough · We will teach the rest · 14–25 hrs/week',
+  },
+  {
+    tag: 'Brand',
+    tagClass: 'badge-brand',
+    title: 'Brand Visualiser',
+    body: "Justor AI's visual identity needs to feel like authority — not a startup trying to look authoritative. You create graphics, templates, and visual assets that make people trust us before they read a single word.",
+    tasks: [
+      'Design pitch deck slides, one-pagers, and investor materials',
+      'Create social media templates aligned with brand DNA',
+      'Build visual assets for product launches and announcements',
+      'Develop iconography consistent with the legal corpus UI',
+      'Maintain and evolve Justor AI brand guidelines document',
+    ],
+    meta: 'Canva / Figma / any design tool · Show us anything you have made · 14–25 hrs/week',
+  },
+  {
+    tag: 'Data',
+    tagClass: 'badge-data',
+    title: 'Data & Research Analyst',
+    body: 'We run legal accuracy benchmarks and need someone to make sense of the results. No advanced skills required — just curiosity, attention to detail, and the willingness to learn. AI tools handle the hard parts. You handle the thinking.',
+    tasks: [
+      'Run and record results from the legal accuracy benchmark test suite',
+      'Spot patterns in where the model fails — by topic, language, query type',
+      'Help track citation accuracy and domain classification over time',
+      'Research comparable legal AI products globally',
+      'Prepare readable summaries from raw data for team decisions',
+    ],
+    meta: 'Any background · No coding required · Curiosity is the skill · 14–25 hrs/week',
+  },
+  {
+    tag: 'Content',
+    tagClass: 'badge-content',
+    title: 'Reels & Legal Content Creator',
+    body: 'Two things need to be made: content about Justor AI as a product, and content about Bangladeshi law that makes people stop scrolling. Laws about land disputes, inheritance, worker rights, digital fraud — these stories are everywhere. You find them, script them, and make them impossible to ignore.',
+    tasks: [
+      'Script and produce short Reels explaining real Bangladeshi laws in plain language',
+      'Create Justor AI product reels — demos, features, behind-the-scenes',
+      'Make bilingual (EN/BN) carousel posts on laws citizens need to know',
+      'Research interesting, surprising, or alarming laws for content hooks',
+      'Collaborate with legal intern to verify every legal fact before publishing',
+    ],
+    meta: 'Any video editor · Phone camera is fine · Content ideas matter more · 14–25 hrs/week',
+  },
+  {
+    tag: 'Marketing',
+    tagClass: 'badge-marketing',
+    title: 'Marketing & Comms Intern',
+    body: 'We are incubated, we have bar council relationships, and we are raising a pre-seed round. You help us tell that story — to users, to press, to funders, and to the legal community who needs to know we exist.',
+    tasks: [
+      'Write and distribute press releases and product announcements',
+      'Manage and grow LinkedIn, Facebook, and X presence',
+      'Research and draft applications for grants and accelerator programs',
+      'Build outreach lists for bar councils, universities, and legal aid orgs',
+      'Track weekly reach, engagement, and conversion metrics',
+    ],
+    meta: 'Strong Bangla and English writing · Passion for the mission · 14–25 hrs/week',
+  },
+  {
+    tag: 'R&D',
+    tagClass: 'badge-rd',
+    title: 'Research & Development Intern',
+    body: 'Legal tech in Bangladesh is years behind where it needs to be. You research what is being built globally, what our users actually need locally, and what problems we should be solving in 12 months that we are not solving today. You write memos. We make decisions from them.',
+    tasks: [
+      'Map global legal AI products and identify what they do better or worse',
+      'Conduct user interviews with lawyers, law students, and citizens',
+      'Research Bangladesh legal aid gaps using DBLA, bar council, and court data',
+      'Write short internal research memos that inform product decisions',
+      'Track papers and news on RAG, legal AI accuracy, and LLM reasoning',
+    ],
+    meta: 'Any discipline · Writing clarity is the only hard requirement · 14–25 hrs/week',
+  },
+];
+
+const careersPage = (): string => {
+  const isBn = state.language === 'bn';
+  return `
+  <main id="page-content" class="careers-page">
+    <!-- Hero Section -->
+    <section class="careers-hero">
+      <div class="careers-hero-inner">
+        ${pageBackButton('/', isBn ? 'হোমে ফিরে যান' : 'Back to Home')}
+        <div class="careers-kicker-badge">
+          <span class="careers-kicker-dot"></span>
+          <span>Careers at Justor AI</span>
+        </div>
+        <h1 class="careers-h1">Build the future of Bangladesh law.</h1>
+        <p class="careers-subheading">
+          We are a small team building Bangladesh's authority-first bilingual legal intelligence platform — incubated at NSU Startups Next, part of the IEXF startup ecosystem, and trusted by bar councils. Join us before we scale.
+        </p>
+
+        <!-- Stats Row -->
+        <div class="careers-stats-grid">
+          <div class="career-stat-card">
+            <strong class="stat-value">8+</strong>
+            <span class="stat-label">Open intern roles</span>
+          </div>
+          <div class="career-stat-card">
+            <strong class="stat-value">Remote</strong>
+            <span class="stat-label">Work arrangement</span>
+          </div>
+          <div class="career-stat-card">
+            <strong class="stat-value">Unpaid</strong>
+            <span class="stat-label">With certification</span>
+          </div>
+          <div class="career-stat-card">
+            <strong class="stat-value">Dhaka</strong>
+            <span class="stat-label">51 Madani Avenue</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Perks Strip (Blue bar #1E38C8 full width) -->
+    <section class="careers-perks-strip">
+      <div class="careers-perks-inner">
+        <div class="perks-heading">
+          <span>What interns get <span aria-hidden="true">→</span></span>
+        </div>
+        <div class="perks-list">
+          <div class="perk-item">Founding contributor title</div>
+          <div class="perk-item">Product credit listing</div>
+          <div class="perk-item">Certification letter</div>
+          <div class="perk-item">Reference from founder</div>
+          <div class="perk-item">IEXF startup ecosystem access</div>
+          <div class="perk-item">Real work that ships to real users</div>
+          <div class="perk-item">First consideration for full-time roles</div>
+          <div class="perk-item">Your ideas get evaluated and potentially built</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Roles Section -->
+    <section class="careers-roles-section">
+      <div class="careers-section-container">
+        <div class="careers-roles-header">
+          <div>
+            <span class="section-kicker">Opportunities</span>
+            <h2 class="section-title">Open Intern Roles</h2>
+          </div>
+          <div class="roles-header-meta">
+            <span>8 positions · Remote · Unpaid with certification · 14–25 hrs/week</span>
+          </div>
+        </div>
+
+        <div class="careers-roles-grid">
+          ${careerRoles.map((role) => `
+            <article class="career-role-card">
+              <div class="role-card-top">
+                <span class="role-tag-badge ${role.tagClass}">${escapeHtml(role.tag)}</span>
+                <a href="mailto:contact@justorai.com?subject=${encodeURIComponent(`Internship Application — ${role.title}`)}" class="role-apply-pill">
+                  Apply for Role <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+              <h3 class="role-card-title">${escapeHtml(role.title)}</h3>
+              <p class="role-card-body">${escapeHtml(role.body)}</p>
+              
+              <div class="role-tasks-wrapper">
+                <strong class="role-tasks-heading">Key responsibilities:</strong>
+                <ul class="role-tasks-list">
+                  ${role.tasks.map((task) => `<li><span class="task-arrow">→</span> <span>${escapeHtml(task)}</span></li>`).join('')}
+                </ul>
+              </div>
+
+              <div class="role-card-footer">
+                <span class="role-meta-text">${escapeHtml(role.meta)}</span>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Apply (4 Steps) -->
+    <section class="careers-apply-section">
+      <div class="careers-section-container">
+        <div class="careers-apply-header">
+          <span class="section-kicker">Application Process</span>
+          <h2 class="section-title">How to Apply</h2>
+          <p class="section-subtext">Four straightforward steps from application to shipping real work.</p>
+        </div>
+
+        <div class="careers-steps-grid">
+          <div class="career-step-card">
+            <div class="step-number-badge">01</div>
+            <h3 class="step-title">Send your CV</h3>
+            <p class="step-body">Email your CV and one paragraph on why this role to <strong>contact@justorai.com</strong>. No formal cover letter needed.</p>
+          </div>
+          <div class="career-step-card">
+            <div class="step-number-badge">02</div>
+            <h3 class="step-title">Show us something you have made</h3>
+            <p class="step-body">A design, a video, a piece of writing, a research note — anything. No prior experience required, but show us you can make things.</p>
+          </div>
+          <div class="career-step-card">
+            <div class="step-number-badge">03</div>
+            <h3 class="step-title">Brief call with founder</h3>
+            <p class="step-body">20 minutes with Taj. We talk about the product, your role, and fit.</p>
+          </div>
+          <div class="career-step-card">
+            <div class="step-number-badge">04</div>
+            <h3 class="step-title">Start on a real task</h3>
+            <p class="step-body">No probation. Week one you work on something real. Remote-first. Flexible hours. 14–25 hrs/week commitment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Email CTA Block -->
+    <section class="careers-cta-section">
+      <div class="careers-section-container">
+        <div class="careers-cta-card">
+          <h2 class="cta-heading">Ready to apply?</h2>
+          <p class="cta-subheading">Send your CV and a short paragraph to our founding team.</p>
+          
+          <div class="cta-email-action">
+            <a href="mailto:contact@justorai.com?subject=Internship%20Application" class="cta-email-button">
+              ${icon('mail', 18)} <span>contact@justorai.com</span>
+            </a>
+          </div>
+
+          <div class="cta-meta-bar">
+            <div class="cta-meta-item">
+              <span class="meta-label">Subject Format:</span>
+              <code>Internship Application — [Role Name]</code>
+            </div>
+            <div class="cta-meta-divider"></div>
+            <div class="cta-meta-item">
+              <span class="meta-label">Incubator & Office:</span>
+              <span>Grameen Banglar Akshay Tower, 3rd Floor, G-407 · 51 Madani Avenue, Dhaka · NSU Startups Next Cohort 4 · IEXF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>`;
+};
+
 const notFoundPage = (): string => `<main id="page-content" class="not-found">${citizenWelcomeMascot()}<span>404</span><h1>This legal path was not found.</h1><p>The page may have moved or may not be part of the published beta.</p>${route('/legal-library', `Search Legal Library ${icon('arrow', 16)}`, 'button')}</main>`;
 
 const hydrateHeroVisual = (): void => {
@@ -1189,6 +1477,7 @@ const pageForPath = (path: string): string => {
   if (path === '/workspace/citizen') return citizenWorkspace();
   if (path === '/trust') return trustPage();
   if (path === '/about') return aboutPage();
+  if (path === '/careers') return careersPage();
   if (path === '/contact') return contactPage();
   if (path === '/login') return loginPage();
   if (path === '/profile' || path === '/account' || path === '/settings') return profilePage();
@@ -1206,7 +1495,7 @@ const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/')
 const setDocumentMeta = (): void => {
   document.documentElement.lang = state.language === 'bn' ? 'bn' : 'en';
   const titles: Record<string, string> = {
-    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
+    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
   };
   const dynamic = state.routePath.startsWith('/workspace/') ? `${roleLabels[state.routePath.split('/').pop() as Role]} Workspace` : state.routePath.startsWith('/guides/') || state.routePath.startsWith('/action-guides/') ? 'Citizen Legal Guide' : state.routePath.startsWith('/legal-updates/') ? 'Legal Update' : 'Justor AI';
   document.title = `${titles[state.routePath] ?? dynamic} | Justor AI`;

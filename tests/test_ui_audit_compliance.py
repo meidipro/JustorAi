@@ -208,3 +208,36 @@ def test_citizen_response_lawyer_recommendation(app_ts_content, style_css_conten
     assert "16430" in app_ts_content
     assert ".citizen-lawyer-recommendation-card" in style_css_content
 
+
+# ─── 9. CAREERS PAGE & 8 OPEN INTERN ROLES ──────────────────────────────────────
+
+def test_careers_page_and_eight_roles(app_ts_content, style_css_content):
+    """Careers page must support /careers route, 8 specific intern roles, and email application CTA."""
+    assert "careersPage" in app_ts_content
+    assert "path === '/careers'" in app_ts_content
+    assert "Build the future of Bangladesh law." in app_ts_content
+    assert "contact@justorai.com" in app_ts_content
+
+    roles = [
+        "Legal Research Intern",
+        "Legal Content Writer",
+        "Product Designer",
+        "Brand Visualiser",
+        "Data & Research Analyst",
+        "Reels & Legal Content Creator",
+        "Marketing & Comms Intern",
+        "Research & Development Intern",
+    ]
+    for r in roles:
+        assert r in app_ts_content, f"Role '{r}' missing from careersPage in app.ts"
+
+    # CSS verification
+    assert ".careers-page" in style_css_content
+    assert ".careers-hero" in style_css_content
+    assert ".careers-perks-strip" in style_css_content
+    assert ".careers-roles-grid" in style_css_content
+    assert ".career-role-card" in style_css_content
+    assert ".careers-steps-grid" in style_css_content
+    assert ".careers-cta-card" in style_css_content
+
+
