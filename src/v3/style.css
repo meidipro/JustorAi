@@ -96,14 +96,16 @@ svg { flex: 0 0 auto; }
 
 .site-header { position: sticky; top: 0; z-index: 100; min-height: 64px; background: var(--dark-canvas); border-bottom: 1px solid var(--dark-hairline); transition: background 200ms ease; }
 .site-header.scrolled { background: var(--dark-canvas); backdrop-filter: none; -webkit-backdrop-filter: none; }
-.nav-shell { width: min(1280px, calc(100% - 128px)); min-height: 64px; margin: auto; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; }
-.desktop-nav { display: flex; justify-content: center; align-items: center; gap: 30px; }
-.desktop-nav a, .nav-signin, .text-button { font-size: 14px; font-weight: 500; color: var(--dark-ink-muted); }
-.desktop-nav a { display: inline-flex; min-height: 44px; align-items: center; border-bottom: 2px solid transparent; }
-.desktop-nav a:hover { color: var(--dark-ink); border-bottom-color: transparent; }
-.nav-actions { display: flex; align-items: center; gap: 12px; }
-.language-switch, .menu-button, .nav-signin, .text-button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; }
-.site-header .language-switch { border: 1px solid var(--dark-hairline-strong); color: var(--dark-ink); font-weight: 500; }
+.nav-shell { width: min(1280px, calc(100% - 64px)); min-height: 64px; margin: auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.desktop-nav { display: flex; justify-content: center; align-items: center; gap: 24px; }
+.desktop-nav a, .nav-signin, .text-button { font-size: 14px; font-weight: 500; color: var(--dark-ink-muted); text-decoration: none; }
+.desktop-nav a { display: inline-flex; min-height: 44px; align-items: center; border-bottom: 2px solid transparent; transition: color 120ms ease; }
+.desktop-nav a:hover { color: var(--dark-ink); }
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.language-switch, .menu-button, .nav-signin, .text-button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.site-header .language-switch { min-height: 38px; border: 1px solid var(--dark-hairline-strong); color: var(--dark-ink); font-weight: 500; }
+.site-header .nav-signin { min-height: 38px; padding: 0 14px; border: 1px solid var(--accent); background: var(--accent); color: var(--white); font-weight: 500; transition: background 120ms ease; }
+.site-header .nav-signin:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 .menu-button { display: none; align-items: center; justify-content: center; border: 1px solid var(--dark-hairline-strong); color: var(--dark-ink); }
 .mobile-menu { display: none; }
 

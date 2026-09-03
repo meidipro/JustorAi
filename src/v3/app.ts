@@ -162,9 +162,6 @@ const icon = (name: string, size = 20): string => {
 interface UserProfileData {
   fullName: string;
   email: string;
-  chamberName: string;
-  barAssociation: string;
-  practiceAreas: string;
   role: Role;
 }
 
@@ -174,12 +171,9 @@ const getStoredProfile = (): UserProfileData => {
     if (raw) return JSON.parse(raw);
   } catch {}
   return {
-    fullName: state.session?.user?.user_metadata?.full_name || 'Advocate Tajuddin Ahamed',
-    email: state.session?.user?.email || 'tajuddinahamed.contact@gmail.com',
-    chamberName: 'Chambers of Justor Legal Intelligence',
-    barAssociation: 'Supreme Court Bar Association (SCBA)',
-    practiceAreas: 'Land/Property, NI Act 138, Writ/Constitutional, Corporate, Criminal',
-    role: state.role || 'professional',
+    fullName: state.session?.user?.user_metadata?.full_name || (state.session?.user?.email ? state.session.user.email.split('@')[0] : 'User'),
+    email: state.session?.user?.email || '',
+    role: state.role || 'citizen',
   };
 };
 
@@ -194,9 +188,8 @@ const route = (path: string, label: string, className = ''): string => `<a href=
 
 const header = (): string => {
   const profile = getStoredProfile();
-  const firstName = profile.fullName.split(' ')[0] || ui(state.language, 'profile');
+  const firstName = state.session ? (profile.fullName.split(' ')[0] || ui(state.language, 'profile')) : '';
   return `
-  <a class="skip-link" href="#page-content">Skip to content</a>
   <header class="site-header" data-header>
     <div class="nav-shell">
       ${route('/', brand(true), 'brand-link')}
@@ -208,9 +201,8 @@ const header = (): string => {
         ${route('/workspace/student', ui(state.language, 'lawStudent'))}
       </nav>
       <div class="nav-actions">
-        <button class="button-pilot-badge" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot — ৳200/mo">⚖️ Founding Pilot</button>
         <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
-        ${route('/profile', `<span class="nav-profile-pill">${icon('user', 14)} <span>${escapeHtml(firstName)}</span></span>`, 'nav-profile-link')}
+        ${state.session ? route('/profile', `<span class="nav-profile-pill">${icon('user', 14)} <span>${escapeHtml(firstName)}</span></span>`, 'nav-profile-link') : ''}
         ${state.session ? `<button class="nav-signin" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` : route('/login', ui(state.language, 'signIn'), 'nav-signin')}
         <button class="menu-button" type="button" data-action="menu" aria-label="${state.menuOpen ? ui(state.language, 'close') : ui(state.language, 'menu')}" aria-expanded="${state.menuOpen}">${icon(state.menuOpen ? 'close' : 'menu')}</button>
       </div>
@@ -381,7 +373,7 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
             </div>
             <div class="sidebar-user-info">
               <strong class="sidebar-user-name">${escapeHtml(profile.fullName)}</strong>
-              <span class="sidebar-user-plan">⚖️ Founding Pilot · Settings</span>
+              <span class="sidebar-user-plan">${localizedRoleLabel(profile.role)}</span>
             </div>
             <span class="sidebar-user-settings-icon">${icon('gear', 16)}</span>
           </div>
@@ -407,10 +399,9 @@ const workspaceTopbar = (role: Role, title?: string): string => {
     <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
     <span>${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
     <div style="display: flex; align-items: center; gap: 8px;">
-      <button class="button-pilot-badge" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot — ৳200/mo">⚖️ Founding Pilot</button>
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       ${route('/profile', `
-        <span class="topbar-profile-pill" title="User Profile & Settings">
+        <span class="topbar-profile-pill" title="User Profile">
           <span class="topbar-avatar-circle">${escapeHtml(initials)}</span>
           <span class="topbar-profile-name">${escapeHtml(firstName)}</span>
           <span class="topbar-gear">${icon('gear', 14)}</span>
@@ -2113,15 +2104,12 @@ document.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const fullName = String(formData.get('fullName') || '').trim();
-    const chamberName = String(formData.get('chamberName') || '').trim();
-    const barAssociation = String(formData.get('barAssociation') || '').trim();
-    const practiceAreas = String(formData.get('practiceAreas') || '').trim();
     const role = (formData.get('role') as Role) || state.role;
 
-    saveStoredProfile({ fullName, chamberName, barAssociation, practiceAreas, role });
+    saveStoredProfile({ fullName, role });
     state.role = role;
     localStorage.setItem('justor-role', role);
-    showToast(ui(state.language, 'saveSettings'), 'Profile and preferences updated successfully.', 'positive');
+    showToast(ui(state.language, 'saveSettings'), 'Profile updated successfully.', 'positive');
     render(true);
   }
   if (form.matches('[data-action="submit-pilot-form"]')) {
