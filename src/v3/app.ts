@@ -826,31 +826,116 @@ const contactPage = (): string => `
 
 const loginPage = (): string => {
   const next = new URLSearchParams(window.location.search).get('next') || localizedPath(`/workspace/${state.role}`, state.language);
+  const isBn = state.language === 'bn';
   return `
   <main id="page-content" class="login-page">
-    <section class="login-brand">
-      <a href="${localizedPath('/', state.language)}" data-route>${brand(true)}</a>
-      <div>
-        <span class="section-kicker section-kicker-light">${ui(state.language, 'loginKicker')}</span>
-        <h1>${ui(state.language, 'loginBrandHeading')}</h1>
-        <p>${ui(state.language, 'loginBrandBody')}</p>
+    <!-- Left Hero & Brand Column -->
+    <section class="login-brand-panel">
+      <div class="login-brand-top">
+        <a href="${localizedPath('/', state.language)}" data-route class="login-logo-link">${brand(true)}</a>
+        <div class="login-badge-pill">
+          <span class="badge-dot"></span>
+          <span>${isBn ? 'নিয়ন্ত্রিত বেটা সংস্করণ · বাংলাদেশ আইন' : 'Controlled Beta · Bangladesh Legal Intelligence'}</span>
+        </div>
+      </div>
+      
+      <div class="login-brand-hero">
+        <span class="section-kicker section-kicker-light">${isBn ? 'আইনি বুদ্ধিমত্তা প্ল্যাটফর্ম' : 'Source-Grounded Legal Intelligence'}</span>
+        <h1>${isBn ? 'আইনি গবেষণায় কর্তৃত্বপূর্ণ নির্ভুলতা ও গতি।' : 'Legal Intelligence Grounded on Authority.'}</h1>
+        <p class="login-hero-desc">
+          ${isBn 
+            ? 'আইনজীবী, শিক্ষার্থী এবং সাধারণ নাগরিকদের জন্য সুপ্রিম কোর্টের নজির ও বাংলাদেশ গেজেটের উপর ভিত্তি করে তৈরি ডিজিটাল লিগ্যাল প্ল্যাটফর্ম।' 
+            : 'Access source-linked statutory intelligence, Supreme Court precedents, and citizen guidance tailored for Bangladesh.'}
+        </p>
+        
+        <div class="login-feature-list">
+          <div class="login-feature-card">
+            <span class="login-feature-icon">⚖️</span>
+            <div>
+              <strong>${isBn ? 'উৎস যাচাইকৃত কর্তৃত্ব' : 'Primary Source Grounding'}</strong>
+              <p>${isBn ? 'প্রত্যেকটি বিশ্লেষণ মূল আইন ও গেজেটের সাথে যুক্ত।' : 'Direct citations to controlling Acts, Sections & DLR precedents.'}</p>
+            </div>
+          </div>
+          <div class="login-feature-card">
+            <span class="login-feature-icon">⚡</span>
+            <div>
+              <strong>${isBn ? 'তিনটি নির্দিষ্ট ওয়ার্কস্পেস' : 'Three Dedicated Roles'}</strong>
+              <p>${isBn ? 'আইনজীবী, শিক্ষার্থী ও সাধারণ নাগরিকদের জন্য পৃথক ইন্টারফেস।' : 'Custom workflows for Advocates, Law Students, and Citizens.'}</p>
+            </div>
+          </div>
+          <div class="login-feature-card">
+            <span class="login-feature-icon">🛡️</span>
+            <div>
+              <strong>${isBn ? 'চেম্বার গোপনীয়তা নীতি' : 'Chambers-Grade Privacy'}</strong>
+              <p>${isBn ? 'অনুসন্ধান তথ্য নিরাপদ এবং অনুমতি ছাড়া সংরক্ষিত হয় না।' : 'Zero data retention on search queries for confidential research.'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-brand-footer">
+        <div class="login-incubation-badge">
+          <img src="/visuals/nsu-startups-next.png" alt="NSU Startups Next">
+          <span>Incubated at <strong>NSU Startups Next</strong></span>
+        </div>
       </div>
     </section>
-    <section class="login-panel">
-      <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px;">
-        ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
-        <button class="language-switch login-language" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
+
+    <!-- Right Authentication Box Column -->
+    <section class="login-auth-panel">
+      <div class="login-auth-topbar">
+        ${pageBackButton('/', isBn ? 'হোমে ফিরে যান' : 'Back to Home')}
+        <button class="language-switch login-language-btn" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       </div>
-      <div>
-        <span class="section-kicker">${ui(state.language, 'signIn')}</span>
-        <h2>${ui(state.language, 'loginHeading')}</h2>
-        <p>${ui(state.language, 'loginBody')}</p>
-        <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; margin: 18px 0;">
-          <button class="button google-button" type="button" data-action="google-sign-in" data-next="${escapeHtml(next)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button>
-          <button class="button button-secondary guest-sign-in-btn" type="button" data-action="guest-sign-in" data-next="${escapeHtml(next)}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; min-height: 44px;">${icon('user', 16)} ${state.language === 'bn' ? 'গেস্ট হিসেবে প্রবেশ করুন (লগইন ছাড়া টেস্ট করুন)' : 'Continue as Guest (Test All Features)'}</button>
+
+      <div class="login-card-box">
+        <div class="login-card-header">
+          <span class="section-kicker">${ui(state.language, 'signIn')}</span>
+          <h2>${isBn ? 'জাস্টরে প্রবেশ করুন' : 'Welcome to Justor AI'}</h2>
+          <p>${isBn ? 'গবেষণা ও ওয়ার্কস্পেস শুরু করতে আপনার পছন্দের মাধ্যমে প্রবেশ করুন।' : 'Sign in to access your legal workspaces, research history, and verified statutes.'}</p>
         </div>
-        <small>${ui(state.language, 'publicReading')}</small>
-        ${route('/', ui(state.language, 'returnPublic'), 'text-link')}
+
+        <div class="login-action-group">
+          <!-- Google Sign In Button -->
+          <button class="button google-sign-btn" type="button" data-action="google-sign-in" data-next="${escapeHtml(next)}">
+            <svg class="google-icon" width="20" height="20" viewBox="0 0 18 18" aria-hidden="true">
+              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.616z"/>
+              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+              <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/>
+              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
+            </svg>
+            <span>${ui(state.language, 'continueGoogle')}</span>
+          </button>
+
+          <!-- Divider -->
+          <div class="auth-divider">
+            <span>${isBn ? 'অথবা অ্যাকাউন্ট ছাড়া টেস্ট করুন' : 'or test immediately without account'}</span>
+          </div>
+
+          <!-- Guest Mode Instant Access -->
+          <button class="guest-sign-card" type="button" data-action="guest-sign-in" data-next="${escapeHtml(next)}">
+            <div class="guest-card-left">
+              <span class="guest-icon-badge">${icon('user', 18)}</span>
+              <div>
+                <strong>${isBn ? 'গেস্ট হিসেবে প্রবেশ করুন' : 'Continue as Guest'}</strong>
+                <p>${isBn ? 'লগইন ছাড়াই সকল আইনি গবেষণা ফিচার টেস্ট করুন' : 'Instant access to test all research & learning tools'}</p>
+              </div>
+            </div>
+            <span class="guest-arrow">${icon('arrow', 16)}</span>
+          </button>
+        </div>
+
+        <div class="login-card-footer">
+          <div class="login-privacy-badge">
+            ${icon('shield', 14)}
+            <span>${isBn ? 'পাবলিক গাইড এবং আইনের তালিকা সর্বদা বিনামূল্যে উন্মুক্ত।' : 'Public statutory records and citizen guides are openly accessible.'}</span>
+          </div>
+          <div class="login-policy-links">
+            ${route('/privacy', isBn ? 'গোপনীয়তা' : 'Privacy', 'policy-link')} ·
+            ${route('/terms', isBn ? 'ব্যবহারের শর্তাবলী' : 'Terms', 'policy-link')} ·
+            ${route('/disclaimer', isBn ? 'দাবিত্যাগ' : 'Disclaimer', 'policy-link')}
+          </div>
+        </div>
       </div>
     </section>
   </main>`;
@@ -966,62 +1051,124 @@ const feedbackPage = (): string => `
 
 const profilePage = (): string => {
   const profile = getStoredProfile();
+  const isGuest = localStorage.getItem('justor_guest_mode') === 'true';
+  const isBn = state.language === 'bn';
   const initials = profile.fullName
     .split(' ')
     .filter(Boolean)
     .map((w) => w[0])
     .slice(0, 2)
     .join('')
-    .toUpperCase() || 'JA';
+    .toUpperCase() || (isGuest ? 'G' : 'JA');
+
+  const roleLabelsMap: Record<Role, { title: string; desc: string; icon: string }> = {
+    professional: {
+      title: isBn ? 'আইনজীবী ও আইনি পেশাদার' : 'Legal Professional',
+      desc: isBn ? 'সুপ্রিম কোর্ট ও অধস্তন আদালতের প্র্যাকটিস ও নজির গবেষণা' : 'Advocate, Judicial officer, or Chamber counsel',
+      icon: '⚖️',
+    },
+    student: {
+      title: isBn ? 'আইনের শিক্ষার্থী' : 'Law Student',
+      desc: isBn ? 'এলএলবি ও বার কাউন্সিলের জন্য ধারা ও কেস বিশ্লেষণ' : 'LLB, LLM, or Bar vocational study & quizzes',
+      icon: '🎓',
+    },
+    citizen: {
+      title: isBn ? 'সাধারণ নাগরিক' : 'Citizen',
+      desc: isBn ? 'বাস্তব সমস্যায় আইনি দিকনির্দেশনা ও সরকারি সেবার পথ' : 'Practical guidance, evidence & official routes',
+      icon: '👥',
+    },
+  };
 
   return `
-  <main id="page-content" class="inner-page profile-page">
-    <div style="max-width: 580px; margin: 30px auto; padding: 0 20px;">
-      ${pageBackButton('/workspace/' + state.role, state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
-      <div class="profile-simple-card" style="background: var(--bg-card, #131827); border: 1px solid var(--border-color, #232B3E); border-radius: 16px; padding: 32px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);">
-        
-        <!-- User Avatar & Title -->
-        <div style="display: flex; align-items: center; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--border-color, #232B3E); margin-bottom: 24px;">
-          <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #1E3AC8, #3B82F6); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0; box-shadow: 0 4px 12px rgba(30,56,200,0.3);">
-            <span>${escapeHtml(initials)}</span>
+  <main id="page-content" class="inner-page profile-page-view">
+    <div class="profile-container">
+      ${pageBackButton('/workspace/' + state.role, isBn ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
+
+      <div class="profile-card-modern">
+        <!-- Profile Header / Avatar Block -->
+        <div class="profile-header-block">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar-circle">
+              <span>${escapeHtml(initials)}</span>
+            </div>
+            ${isGuest ? '<span class="avatar-badge guest-badge" title="Guest Mode">⚡</span>' : '<span class="avatar-badge auth-badge" title="Verified Account">✓</span>'}
           </div>
-          <div>
-            <h1 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--text-primary, #F1F5F9);">${escapeHtml(profile.fullName)}</h1>
-            <p style="margin: 4px 0 0 0; color: var(--text-secondary, #94A3B8); font-size: 14px;">${escapeHtml(profile.email)}</p>
+
+          <div class="profile-identity-info">
+            <div class="profile-name-row">
+              <h1 class="profile-user-name">${escapeHtml(profile.fullName)}</h1>
+              <span class="profile-role-pill">${roleLabelsMap[profile.role]?.icon} ${roleLabelsMap[profile.role]?.title}</span>
+            </div>
+            <p class="profile-user-email">
+              ${icon('shield', 14)} <span>${escapeHtml(profile.email || (isGuest ? 'Guest Testing Session' : 'Verified Account'))}</span>
+            </p>
           </div>
         </div>
 
         <!-- User Information Form -->
-        <form data-action="save-profile-form" style="display: flex; flex-direction: column; gap: 20px;">
-          
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label for="prof-fullName" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94A3B8);">${ui(state.language, 'fullName')}</label>
-            <input type="text" id="prof-fullName" name="fullName" value="${escapeHtml(profile.fullName)}" required style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); background: var(--bg-primary, #0D0F14); color: var(--text-primary, #F1F5F9); font-size: 15px;" />
+        <form data-action="save-profile-form" class="profile-form-modern">
+          <div class="profile-form-section">
+            <label for="prof-fullName" class="profile-form-label">
+              <span>${ui(state.language, 'fullName')}</span>
+            </label>
+            <div class="profile-input-wrap">
+              <span class="input-leading-icon">${icon('user', 16)}</span>
+              <input type="text" id="prof-fullName" name="fullName" value="${escapeHtml(profile.fullName)}" required placeholder="Enter full name" class="profile-text-input" />
+            </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label for="prof-email" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94A3B8);">${ui(state.language, 'emailAddress')}</label>
-            <input type="email" id="prof-email" name="email" value="${escapeHtml(profile.email)}" readonly style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); background: rgba(255,255,255,0.03); color: var(--text-muted, #64748B); font-size: 15px; cursor: not-allowed;" />
+          <div class="profile-form-section">
+            <label for="prof-email" class="profile-form-label">
+              <span>${ui(state.language, 'emailAddress')}</span>
+              <small class="label-hint">${isBn ? 'শুধুমাত্র পাঠযোগ্য (গুগল অ্যাকাউন্ট)' : 'Managed via Google Auth'}</small>
+            </label>
+            <div class="profile-input-wrap is-readonly">
+              <span class="input-leading-icon">${icon('shield', 16)}</span>
+              <input type="email" id="prof-email" name="email" value="${escapeHtml(profile.email || (isGuest ? 'guest@justor.ai' : ''))}" readonly class="profile-text-input" />
+            </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label for="prof-role" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94A3B8);">${state.language === 'bn' ? 'ভূমিকা' : 'Role'}</label>
-            <select id="prof-role" name="role" style="width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-color, #232B3E); background: var(--bg-primary, #0D0F14); color: var(--text-primary, #F1F5F9); font-size: 15px;">
-              <option value="professional" ${profile.role === 'professional' ? 'selected' : ''}>Legal Professional</option>
-              <option value="student" ${profile.role === 'student' ? 'selected' : ''}>Law Student</option>
-              <option value="citizen" ${profile.role === 'citizen' ? 'selected' : ''}>Citizen</option>
-            </select>
+          <!-- Role Selector with Visual Cards -->
+          <div class="profile-form-section">
+            <label class="profile-form-label">
+              <span>${isBn ? 'ডিফল্ট ওয়ার্কস্পেস রোল' : 'Default Workspace Role'}</span>
+            </label>
+            <div class="profile-role-cards-grid">
+              ${(['professional', 'student', 'citizen'] as Role[]).map((r) => {
+                const info = roleLabelsMap[r];
+                const isSelected = profile.role === r;
+                return `
+                  <label class="profile-role-option ${isSelected ? 'is-selected' : ''}">
+                    <input type="radio" name="role" value="${r}" ${isSelected ? 'checked' : ''} class="sr-only" />
+                    <span class="role-option-icon">${info.icon}</span>
+                    <div class="role-option-text">
+                      <strong class="role-option-title">${info.title}</strong>
+                      <span class="role-option-desc">${info.desc}</span>
+                    </div>
+                    <span class="role-option-check" aria-hidden="true">${isSelected ? '✓' : ''}</span>
+                  </label>
+                `;
+              }).join('')}
+            </div>
           </div>
 
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 20px; border-top: 1px solid var(--border-color, #232B3E);">
-            <button class="button" type="submit" style="padding: 10px 24px; font-weight: 600; font-size: 14px;">${ui(state.language, 'saveSettings')}</button>
-            <button class="button button-secondary" type="button" data-action="sign-out" style="padding: 10px 18px; font-size: 14px; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">${ui(state.language, 'signOut')}</button>
+          <!-- Action Buttons -->
+          <div class="profile-actions-bar">
+            <button class="button profile-save-btn" type="submit">
+              ${icon('check', 16)} <span>${ui(state.language, 'saveSettings')}</span>
+            </button>
+            <button class="button button-secondary profile-signout-btn" type="button" data-action="sign-out">
+              <span>${ui(state.language, 'signOut')}</span>
+            </button>
           </div>
-
         </form>
 
+        <!-- Privacy & Local Data Note -->
+        <div class="profile-privacy-note">
+          ${icon('shield', 14)}
+          <p>${isBn ? 'আপনার গবেষণার তথ্য ও হিস্ট্রি সম্পূর্ণ ব্যক্তিগত এবং এই ব্রাউজারে সুরক্ষিত থাকে।' : 'Your legal queries and research threads are stored locally on your device for strict confidentiality.'}</p>
+        </div>
       </div>
-
     </div>
   </main>`;
 };
@@ -2102,6 +2249,21 @@ document.addEventListener('click', (event) => {
   if (action === 'clear-threads') {
     chatStore.clearAllForRole(state.role);
     render(true);
+  }
+  const roleOption = target.closest<HTMLElement>('.profile-role-option');
+  if (roleOption) {
+    const radio = roleOption.querySelector<HTMLInputElement>('input[type="radio"]');
+    if (radio) {
+      radio.checked = true;
+      document.querySelectorAll('.profile-role-option').forEach((el) => {
+        el.classList.remove('is-selected');
+        const check = el.querySelector('.role-option-check');
+        if (check) check.textContent = '';
+      });
+      roleOption.classList.add('is-selected');
+      const check = roleOption.querySelector('.role-option-check');
+      if (check) check.textContent = '✓';
+    }
   }
   const suggestedCard = target.closest<HTMLElement>('[data-suggested-query]');
   if (suggestedCard) {
