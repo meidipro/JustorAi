@@ -141,6 +141,8 @@ const safeUrl = (value?: string): string | null => {
 const icon = (name: string, size = 20): string => {
   const paths: Record<string, string> = {
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+    'arrow-left': '<path d="M19 12H5M12 19l-7-7 7-7"/>',
+    back: '<path d="M19 12H5M12 19l-7-7 7-7"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     close: '<path d="m6 6 12 12M18 6 6 18"/>',
@@ -157,6 +159,17 @@ const icon = (name: string, size = 20): string => {
     home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] ?? paths.source}</svg>`;
+};
+
+const pageBackButton = (fallbackHref = '/', label?: string): string => {
+  const text = label || (state.language === 'bn' ? 'ফিরে যান' : 'Back');
+  return `
+    <div class="page-back-row">
+      <button type="button" class="page-back-btn" data-action="go-back" data-fallback="${escapeHtml(fallbackHref)}" aria-label="${escapeHtml(text)}">
+        ${icon('arrow-left', 16)} <span>${escapeHtml(text)}</span>
+      </button>
+    </div>
+  `;
 };
 
 interface UserProfileData {
@@ -183,7 +196,14 @@ const saveStoredProfile = (data: Partial<UserProfileData>): void => {
   localStorage.setItem('justor_user_profile', JSON.stringify(updated));
 };
 
-const brand = (inverse = false): string => `<span class="brand-lockup ${inverse ? 'brand-lockup-inverse' : ''}"><img src="/visuals/justor-mark.png" alt="" width="42" height="22"><span>Justor <strong>AI</strong></span></span>`;
+const brandMarkSvg = (inverse = false): string => {
+  const strokeColor = inverse ? '#3B82F6' : '#1E3AC8';
+  const fillColor = inverse ? 'rgba(59, 130, 246, 0.18)' : 'rgba(30, 58, 200, 0.12)';
+  const jColor = inverse ? '#FFFFFF' : '#1E3AC8';
+  return `<svg class="brand-mark-svg" width="34" height="20" viewBox="0 0 68 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="3" y="4" width="28" height="28" rx="4" stroke="${strokeColor}" stroke-width="4.5" fill="${fillColor}"/><line x1="31" y1="18" x2="41" y2="18" stroke="${strokeColor}" stroke-width="4.5" stroke-linecap="round"/><circle cx="53" cy="18" r="13" stroke="${strokeColor}" stroke-width="4.5" fill="${fillColor}"/><path d="M54.5 11.5V19C54.5 20.6569 53.1569 22 51.5 22H49.5" stroke="${jColor}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+};
+
+const brand = (inverse = false): string => `<span class="brand-lockup ${inverse ? 'brand-lockup-inverse' : ''}">${brandMarkSvg(inverse)}<span class="brand-name">Justor <strong class="brand-ai">AI</strong></span></span>`;
 const route = (path: string, label: string, className = ''): string => `<a href="${localizedPath(path, state.language)}" data-route class="${className}">${label}</a>`;
 
 const header = (): string => {
@@ -384,29 +404,30 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
 };
 
 const workspaceTopbar = (role: Role, title?: string): string => {
+  const isGuest = localStorage.getItem('justor_guest_mode') === 'true';
   const profile = getStoredProfile();
-  const firstName = profile.fullName.split(' ')[0] || ui(state.language, 'profile');
-  const initials = profile.fullName
+  const firstName = state.session ? (profile.fullName.split(' ')[0] || ui(state.language, 'profile')) : (isGuest ? 'Guest' : '');
+  const initials = isGuest ? 'G' : (profile.fullName
     .split(' ')
     .filter(Boolean)
     .map((w) => w[0])
     .slice(0, 2)
     .join('')
-    .toUpperCase() || 'JA';
+    .toUpperCase() || 'U');
 
   return `
   <header class="workspace-topbar">
     <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
-    <span>${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
-    <div style="display: flex; align-items: center; gap: 8px;">
+    <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
+    <div class="workspace-topbar-actions" style="display: flex; align-items: center; gap: 8px;">
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
-      ${route('/profile', `
+      ${state.session ? route('/profile', `
         <span class="topbar-profile-pill" title="User Profile">
           <span class="topbar-avatar-circle">${escapeHtml(initials)}</span>
           <span class="topbar-profile-name">${escapeHtml(firstName)}</span>
           <span class="topbar-gear">${icon('gear', 14)}</span>
         </span>
-      `, 'workspace-profile-btn')}
+      `, 'workspace-profile-btn') : ''}
       ${state.session ? `<button type="button" data-action="sign-out" class="text-button">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'button button-small')}
     </div>
   </header>`;
@@ -429,7 +450,9 @@ const renderEmptyLanding = (role: Role): string => {
     return `
       <div class="chat-empty-landing citizen-landing-sectors">
         <div class="empty-landing-brand">
-          <img src="/visuals/justor-mark.png" alt="Justor AI" width="44" height="44">
+          <div class="landing-logo-badge">
+            ${brandMarkSvg(false)}
+          </div>
         </div>
         <h1 class="empty-landing-title">${state.language === 'bn' ? 'কী ঘটেছে? আপনার পরিস্থিতি বেছে নিন' : 'What happened? Choose your situation'}</h1>
         <p class="empty-landing-subtitle">
@@ -440,11 +463,12 @@ const renderEmptyLanding = (role: Role): string => {
         <div class="citizen-sector-cards" role="region" aria-label="Citizen Legal Sectors">
           ${citizenSectors.map((s) => `
             <button type="button" class="citizen-sector-card" data-suggested-query="${escapeHtml(s.query)}" aria-label="${escapeHtml(ui(state.language, s.titleKey as CopyKey))}">
-              <span class="sector-card-icon" aria-hidden="true">${s.icon}</span>
+              <span class="sector-card-icon-wrap" aria-hidden="true">${s.icon}</span>
               <div class="sector-card-text">
                 <strong class="sector-card-title">${escapeHtml(ui(state.language, s.titleKey as CopyKey))}</strong>
                 <span class="sector-card-desc">${escapeHtml(ui(state.language, s.descKey as CopyKey))}</span>
               </div>
+              <span class="sector-card-arrow" aria-hidden="true">${icon('arrow', 14)}</span>
             </button>
           `).join('')}
         </div>
@@ -459,7 +483,9 @@ const renderEmptyLanding = (role: Role): string => {
   return `
     <div class="chat-empty-landing">
       <div class="empty-landing-brand">
-        <img src="/visuals/justor-mark.png" alt="Justor AI" width="44" height="44">
+        <div class="landing-logo-badge">
+          ${brandMarkSvg(false)}
+        </div>
       </div>
       <h1 class="empty-landing-title">${role === 'professional' ? (state.language === 'bn' ? 'পেশাগত আইনি গবেষণা ও বুদ্ধিমত্তা' : 'Bangladesh Legal Research & Intelligence') : (state.language === 'bn' ? 'উৎস-সংযুক্ত আইনি শিক্ষা' : 'Source-Linked Legal Study')}</h1>
       <p class="empty-landing-subtitle">
@@ -625,12 +651,37 @@ const citizenWorkspace = (): string => {
 };
 
 function mobileBottomNav(role: Role): string {
-  const items = role === 'citizen'
-    ? [[ui(state.language, 'home'), '/workspace/citizen', 'home'], [ui(state.language, 'guides'), '/guides', 'book'], [ui(state.language, 'mobileAsk'), '/workspace/citizen#ask', 'source']]
+  const items: Array<{ label: string; href: string; icon: string; action?: string }> = role === 'citizen'
+    ? [
+        { label: ui(state.language, 'home'), href: '/', icon: 'home' },
+        { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
+        { label: ui(state.language, 'mobileAsk'), href: '#ask', icon: 'source', action: 'focus-composer' },
+        { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
+      ]
     : role === 'student'
-      ? [[ui(state.language, 'mobileStudy'), '/workspace/student', 'home'], [ui(state.language, 'mobileAsk'), '/workspace/student#ask', 'source'], [ui(state.language, 'cases'), '/legal-library?type=case', 'scale'], [ui(state.language, 'library'), '/legal-library', 'book']]
-      : [[ui(state.language, 'mobileResearch'), '/workspace/professional', 'home'], [ui(state.language, 'library'), '/legal-library', 'book'], [ui(state.language, 'updates'), '/legal-updates', 'clock'], [ui(state.language, 'mobileStart'), '/start', 'user']];
-  return `<nav class="mobile-bottom-nav" aria-label="${localizedRoleLabel(role)} mobile navigation">${items.map(([label, href, iconName]) => route(href, `${icon(iconName, 18)}<span>${label}</span>`)).join('')}</nav>`;
+      ? [
+          { label: ui(state.language, 'home'), href: '/', icon: 'home' },
+          { label: ui(state.language, 'library'), href: '/legal-library', icon: 'book' },
+          { label: ui(state.language, 'mobileAsk'), href: '#ask', icon: 'source', action: 'focus-composer' },
+          { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
+        ]
+      : [
+          { label: ui(state.language, 'home'), href: '/', icon: 'home' },
+          { label: ui(state.language, 'library'), href: '/legal-library', icon: 'book' },
+          { label: ui(state.language, 'updates'), href: '/legal-updates', icon: 'clock' },
+          { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
+        ];
+
+  return `
+    <nav class="mobile-bottom-nav" aria-label="${localizedRoleLabel(role)} mobile navigation">
+      ${items.map((item) => {
+        if (item.action === 'focus-composer') {
+          return `<button type="button" class="bottom-nav-item bottom-nav-btn" data-action="focus-composer">${icon(item.icon, 18)}<span>${escapeHtml(item.label)}</span></button>`;
+        }
+        return route(item.href, `${icon(item.icon, 18)}<span>${escapeHtml(item.label)}</span>`, 'bottom-nav-item bottom-nav-link');
+      }).join('')}
+    </nav>
+  `;
 }
 
 const unavailable = (message?: string): string => `<div class="empty-state"><span>${icon('shield', 24)}</span><h3>${ui(state.language, 'unavailableTitle')}</h3><p>${message ?? ui(state.language, 'unavailableBody')}</p></div>`;
@@ -639,38 +690,170 @@ const empty = (): string => `<div class="empty-state"><span>${icon('search', 24)
 const libraryPage = (): string => {
   const query = new URLSearchParams(window.location.search).get('q') ?? '';
   const type = new URLSearchParams(window.location.search).get('type') ?? '';
-  return `<main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">${ui(state.language, 'library')}</span><h1>${ui(state.language, 'libraryPageHeading')}</h1><p>${ui(state.language, 'libraryPageBody')}</p><form class="public-search" data-library-search><label>${icon('search')}<span class="sr-only">${ui(state.language, 'search')}</span><input name="query" value="${escapeHtml(query)}" placeholder="${ui(state.language, 'libraryPlaceholder')}"></label><button class="button" type="submit">${ui(state.language, 'search')}</button></form><div class="filter-row" data-library-filters>${['', 'law', 'section', 'case', 'amendment', 'guide', 'update'].map((value) => `<button type="button" data-library-type="${value}" class="${value === type ? 'active' : ''}">${value ? `${value[0]?.toUpperCase()}${value.slice(1)}s` : 'All'}</button>`).join('')}</div></section><section class="section-shell results-section"><div class="result-summary"><strong data-library-count>—</strong><span>${ui(state.language, 'publishedRecords')}</span></div><div data-library-results class="record-grid"><div class="data-loading">Checking canonical records…</div></div></section></main>`;
+  return `<main id="page-content" class="inner-page"><section class="compact-hero section-shell">${pageBackButton('/workspace/' + state.role, state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}<span class="section-kicker">${ui(state.language, 'library')}</span><h1>${ui(state.language, 'libraryPageHeading')}</h1><p>${ui(state.language, 'libraryPageBody')}</p><form class="public-search" data-library-search><label>${icon('search')}<span class="sr-only">${ui(state.language, 'search')}</span><input name="query" value="${escapeHtml(query)}" placeholder="${ui(state.language, 'libraryPlaceholder')}"></label><button class="button" type="submit">${ui(state.language, 'search')}</button></form><div class="filter-row" data-library-filters>${['', 'law', 'section', 'case', 'amendment', 'guide', 'update'].map((value) => `<button type="button" data-library-type="${value}" class="${value === type ? 'active' : ''}">${value ? `${value[0]?.toUpperCase()}${value.slice(1)}s` : 'All'}</button>`).join('')}</div></section><section class="section-shell results-section"><div class="result-summary"><strong data-library-count>—</strong><span>${ui(state.language, 'publishedRecords')}</span></div><div data-library-results class="record-grid"><div class="data-loading">Checking canonical records…</div></div></section></main>`;
 };
 
 const guidesPage = (): string => `
-  <main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">${ui(state.language, 'citizenGuides')}</span><h1>${ui(state.language, 'guidePageHeading')}</h1><p>${ui(state.language, 'guidePageBody')}</p><form class="public-search" data-guide-directory-search><label>${icon('search')}<span class="sr-only">${ui(state.language, 'search')}</span><input name="query" placeholder="${ui(state.language, 'guidePlaceholder')}"></label><button class="button" type="submit">${ui(state.language, 'search')}</button></form></section>
-  <section class="section-shell guide-directory"><div class="directory-topics"><h2>${ui(state.language, 'topics')}</h2>${guideTopics.map((topic) => `<button type="button" data-guide-cluster="${topic.value}">${topic.label}<span>${icon('arrow', 15)}</span></button>`).join('')}</div><div class="directory-results"><div class="section-heading section-heading-row"><div><span class="section-kicker">${ui(state.language, 'publishedLibrary')}</span><h2>${ui(state.language, 'browseGuides')}</h2></div><span data-guide-count>—</span></div><div data-guide-results class="guide-list"><div class="data-loading">Loading published citizen guides…</div></div><button class="button button-secondary load-more" type="button" data-guide-more hidden>${ui(state.language, 'loadMore')}</button></div></section></main>`;
-
-const guideDetailShell = (slug: string): string => `<main id="page-content" class="inner-page"><section class="section-shell detail-loading" data-guide-detail data-slug="${escapeHtml(slug)}"><div class="data-loading">Checking the published guide and its source status…</div></section></main>`;
-
-const updatesPage = (): string => `<main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">${ui(state.language, 'updates')}</span><h1>${ui(state.language, 'updatesHeading')}</h1><p>${ui(state.language, 'updatesBody')}</p></section><section class="section-shell results-section"><div data-update-results class="update-list"><div class="data-loading">Checking current update records…</div></div></section></main>`;
-const updateDetailShell = (id: string): string => `<main id="page-content" class="inner-page"><section class="section-shell detail-loading" data-update-detail data-id="${escapeHtml(id)}"><div class="data-loading">Checking the current update record…</div></section></main>`;
-
-const trustPage = (): string => `<main id="page-content" class="inner-page trust-page"><section class="compact-hero trust-hero section-shell"><span class="section-kicker">Trust Method</span><h1>How Justor handles legal information.</h1><p>Verification language is precise because a source, a checked relationship and human review are different claims.</p></section><section class="section-shell trust-content"><div class="trust-definitions"><div class="trust-row"><span class="trust-term">Primary Source</span><p class="trust-def">The law, judgment, gazette or official authority itself.</p></div><div class="trust-row"><span class="trust-term">Source Checked</span><p class="trust-def">The relationship between a proposition and its cited source was checked.</p></div><div class="trust-row"><span class="trust-term">Human Legal Reviewed</span><p class="trust-def">That specific content version received human legal review.</p></div></div><article><span>Evidence insufficient</span><h2>Uncertainty stays visible</h2><p>If a reliable source or current status is unavailable, Justor should say so rather than infer a badge.</p></article><section><h2>Legal update process</h2><p>Current-law checks depend on versioned legal records, amendment history and official publication data. The frontend displays only the status returned by that system.</p></section><section><h2>Coverage limitations</h2><p>Coverage varies by topic and source availability. Justor does not promise completeness, absolute accuracy or zero hallucination.</p></section><section><h2>Corrections</h2><p>Report an unsupported citation, outdated provision, translation problem or missing authority directly to the team.</p><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Justor%20correction">Report a correction ${icon('arrow', 15)}</a></section><section><h2>Privacy and limits</h2><p>Do not submit unnecessary sensitive information. Justor provides legal information and research support, not individual legal representation.</p>${route('/privacy', 'Privacy overview', 'text-link')} ${route('/disclaimer', 'Read disclaimer', 'text-link')}</section></section></main>`;
-
-const aboutPage = (): string => `<main id="page-content" class="inner-page about-page"><nav class="about-anchor-nav" aria-label="About page sections"><a href="#about">About</a><a href="#team">Team</a><a href="#stage">Stage</a><a href="#incubation">Incubation</a><a href="#collaborate">Collaborate</a><a href="#investors">Investors</a><a href="#contact">Contact</a></nav>
-  <section id="about" class="compact-hero section-shell"><span class="section-kicker">About Justor</span><h1>Building a better interface to Bangladesh law.</h1><p>Justor AI is a Bangladesh-focused legal intelligence startup building structured, source-linked tools for understanding, learning and researching law.</p><div class="mission-vision"><div><strong>Mission</strong><p>Make Bangladesh law easier to access, understand, research and verify.</p></div><div><strong>Vision</strong><p>Build digital legal intelligence infrastructure for Bangladesh that improves access to legal information, legal learning and professional research.</p></div></div></section>
-  <section class="section-shell about-block"><span class="section-kicker">What we are building</span><div class="plain-columns"><article><h2>Citizen Guidance</h2><p>Practical routes and public legal information.</p></article><article><h2>Legal Learning</h2><p>Source-linked assistance for cases, statutes and concepts.</p></article><article><h2>Professional Intelligence</h2><p>Research that keeps authority beside the analysis.</p></article><article><h2>Shared Legal Knowledge</h2><p>A structured layer across role-specific experiences.</p></article></div></section>
-  <section class="about-narrative"><div class="section-shell"><span class="section-kicker section-kicker-light">Why Justor exists</span><h2>Legal information is difficult to navigate.</h2><p>Finding the legal rule that applies to a problem can require navigating dense statutes, scattered government websites and unfamiliar terminology.</p><p>Citizens often do not know where to start. Students need to connect concepts to authority. Professionals need faster ways to locate and verify relevant law.</p><p>Justor is building a more structured interface to that information.</p></div></section>
-  <section class="section-shell principle-quote"><span class="section-kicker">Our product principle</span><blockquote>“Don't ask users to trust the AI. Make important legal propositions easy to verify.”</blockquote>${route('/trust', `Read our Trust Method ${icon('arrow', 16)}`, 'text-link')}</section>
-  <section id="stage" class="section-shell stage-block"><div><span class="section-kicker">Where we are today</span><h2>Controlled beta</h2><p>Current work includes source-grounded AI, Citizen Authority Guides, Legal Library, professional research, student learning, Legal Updates, and Bangla + English.</p></div><div id="incubation" class="nsusn-block"><img src="/visuals/nsu-startups-next.png" alt="NSU Startups Next"><strong>Incubation</strong><h3>Justor AI is incubated at NSU Startups Next.</h3><p>Part of the NSU Startups Next incubation program, supporting the team's product development, validation and startup growth.</p></div></section>
-  <section id="team" class="section-shell team-block"><span class="section-kicker">Team</span><div class="team-list"><article><div>TA</div><span>Founder & CEO</span><h2>Tajuddin Ahamed</h2><p>Leads Justor AI's product vision, company strategy and overall execution. Works across product architecture, UX design, business development, market validation and legal-tech strategy. Also contributes directly to engineering decisions alongside the CTO, translating product requirements into the platform.</p></article><article><div>MH</div><span>Co-founder & CTO</span><h2>Mehedi Hasan</h2><p>Leads Justor AI's engineering and technical development, including backend infrastructure, legal retrieval systems, AI and RAG architecture, database design and production engineering.</p></article><article><div>AS</div><span>Legal Q&A</span><h2>Anisur Rahman Sanjib</h2><p>Contributes to Justor's legal Q&A process, helping ensure legal information used in the platform's workflows is appropriately structured and checked.</p></article></div></section>
-  <section class="section-shell upcoming-block"><span class="section-kicker">Upcoming</span><h2>What's coming next</h2><div class="upcoming-rows"><article><strong>For Law Students</strong><p>Exam Mode · Moot Practice · Notes · Concept Maps<br>Compare Laws · Case Navigator</p></article><article><strong>For Legal Professionals</strong><p>Document Analysis · Compare Authorities · Saved Authorities<br>Research History · Matter Workspace · Citation Workspace · Drafting Tools</p></article><article><strong>For Citizens</strong><p>Document Explanation · OCR · Complaint Tracking<br>Official Authority Routing</p></article></div><p class="roadmap-note">Roadmap features are under development and may change during beta.</p></section>
-  <section id="collaborate" class="work-with"><div class="section-shell"><span class="section-kicker section-kicker-light">Work with Justor</span><h2>Build Bangladesh legal intelligence with us.</h2><div class="collaboration-tracks"><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Academic%20collaboration">Universities & Academic Institutions</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20professional%20collaboration">Law Firms & Legal Professionals</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20collaboration">Media & Publishers</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Technology%20collaboration">Technology & Ecosystem</a></div></div></section>
-  <section id="investors" class="section-shell investor-block"><span class="section-kicker">For Investors & Strategic Partners</span><h2>Legal intelligence infrastructure focused on Bangladesh.</h2><p>We welcome conversations with investors and strategic partners interested in LegalTech, AI infrastructure, emerging markets and access to legal information.</p><dl class="investor-grid"><div><dt>Product</dt><dd>Role-specific legal intelligence</dd></div><div><dt>Market</dt><dd>Bangladesh legal-information, learning and professional workflows</dd></div><div><dt>Infrastructure</dt><dd>Structured legal knowledge + AI</dd></div><div><dt>Stage</dt><dd>Controlled Beta</dd></div></dl><div class="button-row"><a class="button" href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor Inquiry</a><a class="button button-secondary" href="mailto:tajuddinahamed.contact@gmail.com?subject=Contact%20founder">Contact Founder</a></div><a href="tel:+8801764662967">+880 1764-662967</a></section>
-  <section id="contact" class="section-shell direct-contact"><span class="section-kicker">Contact</span><h2>Start the right conversation.</h2><a href="mailto:tajuddinahamed.contact@gmail.com">tajuddinahamed.contact@gmail.com</a><a href="tel:+8801764662967">+880 1764-662967</a></section>
+  <main id="page-content" class="inner-page">
+    <section class="compact-hero section-shell">
+      ${pageBackButton('/workspace/citizen', state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
+      <span class="section-kicker">${ui(state.language, 'citizenGuides')}</span>
+      <h1>${ui(state.language, 'guidePageHeading')}</h1>
+      <p>${ui(state.language, 'guidePageBody')}</p>
+      <form class="public-search" data-guide-directory-search>
+        <label>${icon('search')}<span class="sr-only">${ui(state.language, 'search')}</span><input name="query" placeholder="${ui(state.language, 'guidePlaceholder')}"></label>
+        <button class="button" type="submit">${ui(state.language, 'search')}</button>
+      </form>
+    </section>
+    <section class="section-shell guide-directory">
+      <div class="directory-topics">
+        <h2>${ui(state.language, 'topics')}</h2>
+        ${guideTopics.map((topic) => `<button type="button" data-guide-cluster="${topic.value}">${topic.label}<span>${icon('arrow', 15)}</span></button>`).join('')}
+      </div>
+      <div class="directory-results">
+        <div class="section-heading section-heading-row">
+          <div>
+            <span class="section-kicker">${ui(state.language, 'publishedLibrary')}</span>
+            <h2>${ui(state.language, 'browseGuides')}</h2>
+          </div>
+          <span data-guide-count>—</span>
+        </div>
+        <div data-guide-results class="guide-list">
+          <div class="data-loading">Loading published citizen guides…</div>
+        </div>
+        <button class="button button-secondary load-more" type="button" data-guide-more hidden>${ui(state.language, 'loadMore')}</button>
+      </div>
+    </section>
   </main>`;
 
-const contactPage = (): string => `<main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">Contact Justor</span><h1>Start the right conversation.</h1><p>Choose a direct route to the team. No submission is silently stored by this page.</p></section><section class="section-shell contact-options"><a href="mailto:tajuddinahamed.contact@gmail.com"><span>Email</span><strong>tajuddinahamed.contact@gmail.com</strong>${icon('arrow', 16)}</a><a href="tel:+8801764662967"><span>Phone</span><strong>+880 1764-662967</strong>${icon('arrow', 16)}</a><a href="https://wa.me/8801764662967" target="_blank" rel="noopener"><span>WhatsApp</span><strong>Open a conversation</strong>${icon('external', 16)}</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener"><span>User Survey</span><strong>Share your product feedback</strong>${icon('external', 16)}</a></section><section class="section-shell inquiry-links"><h2>Inquiry type</h2><div><a href="mailto:tajuddinahamed.contact@gmail.com?subject=University%20partnership">University partnership</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20collaboration">Legal collaboration</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20inquiry">Media & press</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor / strategic partnership</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener">Product Feedback Survey ↗</a></div></section></main>`;
+const guideDetailShell = (slug: string): string => `
+  <main id="page-content" class="inner-page">
+    <section class="section-shell detail-loading" data-guide-detail data-slug="${escapeHtml(slug)}">
+      ${pageBackButton('/guides', state.language === 'bn' ? 'সকল গাইডে ফিরে যান' : 'Back to Legal Guides')}
+      <div class="data-loading">Checking the published guide and its source status…</div>
+    </section>
+  </main>`;
+
+const updatesPage = (): string => `
+  <main id="page-content" class="inner-page">
+    <section class="compact-hero section-shell">
+      ${pageBackButton('/workspace/' + state.role, state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
+      <span class="section-kicker">${ui(state.language, 'updates')}</span>
+      <h1>${ui(state.language, 'updatesHeading')}</h1>
+      <p>${ui(state.language, 'updatesBody')}</p>
+    </section>
+    <section class="section-shell results-section">
+      <div data-update-results class="update-list"><div class="data-loading">Checking current update records…</div></div>
+    </section>
+  </main>`;
+
+const updateDetailShell = (id: string): string => `
+  <main id="page-content" class="inner-page">
+    <section class="section-shell detail-loading" data-update-detail data-id="${escapeHtml(id)}">
+      ${pageBackButton('/legal-updates', state.language === 'bn' ? 'সকল আপডেটে ফিরে যান' : 'Back to Updates')}
+      <div class="data-loading">Checking the current update record…</div>
+    </section>
+  </main>`;
+
+const trustPage = (): string => `
+  <main id="page-content" class="inner-page trust-page">
+    <section class="compact-hero trust-hero section-shell">
+      ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
+      <span class="section-kicker">Trust Method</span>
+      <h1>How Justor handles legal information.</h1>
+      <p>Verification language is precise because a source, a checked relationship and human review are different claims.</p>
+    </section>
+    <section class="section-shell trust-content">
+      <div class="trust-definitions">
+        <div class="trust-row"><span class="trust-term">Primary Source</span><p class="trust-def">The law, judgment, gazette or official authority itself.</p></div>
+        <div class="trust-row"><span class="trust-term">Source Checked</span><p class="trust-def">The relationship between a proposition and its cited source was checked.</p></div>
+        <div class="trust-row"><span class="trust-term">Human Legal Reviewed</span><p class="trust-def">That specific content version received human legal review.</p></div>
+      </div>
+      <article><span>Evidence insufficient</span><h2>Uncertainty stays visible</h2><p>If a reliable source or current status is unavailable, Justor should say so rather than infer a badge.</p></article>
+      <section><h2>Legal update process</h2><p>Current-law checks depend on versioned legal records, amendment history and official publication data. The frontend displays only the status returned by that system.</p></section>
+      <section><h2>Coverage limitations</h2><p>Coverage varies by topic and source availability. Justor does not promise completeness, absolute accuracy or zero hallucination.</p></section>
+      <section><h2>Corrections</h2><p>Report an unsupported citation, outdated provision, translation problem or missing authority directly to the team.</p><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Justor%20correction">Report a correction ${icon('arrow', 15)}</a></section>
+      <section><h2>Privacy and limits</h2><p>Do not submit unnecessary sensitive information. Justor provides legal information and research support, not individual legal representation.</p>${route('/privacy', 'Privacy overview', 'text-link')} ${route('/disclaimer', 'Read disclaimer', 'text-link')}</section>
+    </section>
+  </main>`;
+
+const aboutPage = (): string => `
+  <main id="page-content" class="inner-page about-page">
+    <section class="compact-hero section-shell">
+      ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
+      <span class="section-kicker">About Justor</span>
+      <h1>Building a better interface to Bangladesh law.</h1>
+      <p>Justor AI is a Bangladesh-focused legal intelligence startup building structured, source-linked tools for understanding, learning and researching law.</p>
+      <div class="mission-vision"><div><strong>Mission</strong><p>Make Bangladesh law easier to access, understand, research and verify.</p></div><div><strong>Vision</strong><p>Build digital legal intelligence infrastructure for Bangladesh that improves access to legal information, legal learning and professional research.</p></div></div>
+    </section>
+    <nav class="about-anchor-nav" aria-label="About page sections"><a href="#about">About</a><a href="#team">Team</a><a href="#stage">Stage</a><a href="#incubation">Incubation</a><a href="#collaborate">Collaborate</a><a href="#investors">Investors</a><a href="#contact">Contact</a></nav>
+    <section class="section-shell about-block"><span class="section-kicker">What we are building</span><div class="plain-columns"><article><h2>Citizen Guidance</h2><p>Practical routes and public legal information.</p></article><article><h2>Legal Learning</h2><p>Source-linked assistance for cases, statutes and concepts.</p></article><article><h2>Professional Intelligence</h2><p>Research that keeps authority beside the analysis.</p></article><article><h2>Shared Legal Knowledge</h2><p>A structured layer across role-specific experiences.</p></article></div></section>
+    <section class="about-narrative"><div class="section-shell"><span class="section-kicker section-kicker-light">Why Justor exists</span><h2>Legal information is difficult to navigate.</h2><p>Finding the legal rule that applies to a problem can require navigating dense statutes, scattered government websites and unfamiliar terminology.</p><p>Citizens often do not know where to start. Students need to connect concepts to authority. Professionals need faster ways to locate and verify relevant law.</p><p>Justor is building a more structured interface to that information.</p></div></section>
+    <section class="section-shell principle-quote"><span class="section-kicker">Our product principle</span><blockquote>“Don't ask users to trust the AI. Make important legal propositions easy to verify.”</blockquote>${route('/trust', `Read our Trust Method ${icon('arrow', 16)}`, 'text-link')}</section>
+    <section id="stage" class="section-shell stage-block"><div><span class="section-kicker">Where we are today</span><h2>Controlled beta</h2><p>Current work includes source-grounded AI, Citizen Authority Guides, Legal Library, professional research, student learning, Legal Updates, and Bangla + English.</p></div><div id="incubation" class="nsusn-block"><img src="/visuals/nsu-startups-next.png" alt="NSU Startups Next"><strong>Incubation</strong><h3>Justor AI is incubated at NSU Startups Next.</h3><p>Part of the NSU Startups Next incubation program, supporting the team's product development, validation and startup growth.</p></div></section>
+    <section id="team" class="section-shell team-block"><span class="section-kicker">Team</span><div class="team-list"><article><div>TA</div><span>Founder & CEO</span><h2>Tajuddin Ahamed</h2><p>Leads Justor AI's product vision, company strategy and overall execution. Works across product architecture, UX design, business development, market validation and legal-tech strategy. Also contributes directly to engineering decisions alongside the CTO, translating product requirements into the platform.</p></article><article><div>MH</div><span>Co-founder & CTO</span><h2>Mehedi Hasan</h2><p>Leads Justor AI's engineering and technical development, including backend infrastructure, legal retrieval systems, AI and RAG architecture, database design and production engineering.</p></article><article><div>AS</div><span>Legal Q&A</span><h2>Anisur Rahman Sanjib</h2><p>Contributes to Justor's legal Q&A process, helping ensure legal information used in the platform's workflows is appropriately structured and checked.</p></article></div></section>
+    <section class="section-shell upcoming-block"><span class="section-kicker">Upcoming</span><h2>What's coming next</h2><div class="upcoming-rows"><article><strong>For Law Students</strong><p>Exam Mode · Moot Practice · Notes · Concept Maps<br>Compare Laws · Case Navigator</p></article><article><strong>For Legal Professionals</strong><p>Document Analysis · Compare Authorities · Saved Authorities<br>Research History · Matter Workspace · Citation Workspace · Drafting Tools</p></article><article><strong>For Citizens</strong><p>Document Explanation · OCR · Complaint Tracking<br>Official Authority Routing</p></article></div><p class="roadmap-note">Roadmap features are under development and may change during beta.</p></section>
+    <section id="collaborate" class="work-with"><div class="section-shell"><span class="section-kicker section-kicker-light">Work with Justor</span><h2>Build Bangladesh legal intelligence with us.</h2><div class="collaboration-tracks"><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Academic%20collaboration">Universities & Academic Institutions</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20professional%20collaboration">Law Firms & Legal Professionals</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20collaboration">Media & Publishers</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Technology%20collaboration">Technology & Ecosystem</a></div></div></section>
+    <section id="investors" class="section-shell investor-block"><span class="section-kicker">For Investors & Strategic Partners</span><h2>Legal intelligence infrastructure focused on Bangladesh.</h2><p>We welcome conversations with investors and strategic partners interested in LegalTech, AI infrastructure, emerging markets and access to legal information.</p><dl class="investor-grid"><div><dt>Product</dt><dd>Role-specific legal intelligence</dd></div><div><dt>Market</dt><dd>Bangladesh legal-information, learning and professional workflows</dd></div><div><dt>Infrastructure</dt><dd>Structured legal knowledge + AI</dd></div><div><dt>Stage</dt><dd>Controlled Beta</dd></div></dl><div class="button-row"><a class="button" href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor Inquiry</a><a class="button button-secondary" href="mailto:tajuddinahamed.contact@gmail.com?subject=Contact%20founder">Contact Founder</a></div><a href="tel:+8801764662967">+880 1764-662967</a></section>
+    <section id="contact" class="section-shell direct-contact"><span class="section-kicker">Contact</span><h2>Start the right conversation.</h2><a href="mailto:tajuddinahamed.contact@gmail.com">tajuddinahamed.contact@gmail.com</a><a href="tel:+8801764662967">+880 1764-662967</a></section>
+  </main>`;
+
+const contactPage = (): string => `
+  <main id="page-content" class="inner-page">
+    <section class="compact-hero section-shell">
+      ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
+      <span class="section-kicker">Contact Justor</span>
+      <h1>Start the right conversation.</h1>
+      <p>Choose a direct route to the team. No submission is silently stored by this page.</p>
+    </section>
+    <section class="section-shell contact-options">
+      <a href="mailto:tajuddinahamed.contact@gmail.com"><span>Email</span><strong>tajuddinahamed.contact@gmail.com</strong>${icon('arrow', 16)}</a>
+      <a href="tel:+8801764662967"><span>Phone</span><strong>+880 1764-662967</strong>${icon('arrow', 16)}</a>
+      <a href="https://wa.me/8801764662967" target="_blank" rel="noopener"><span>WhatsApp</span><strong>Open a conversation</strong>${icon('external', 16)}</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener"><span>User Survey</span><strong>Share your product feedback</strong>${icon('external', 16)}</a>
+    </section>
+    <section class="section-shell inquiry-links">
+      <h2>Inquiry type</h2>
+      <div>
+        <a href="mailto:tajuddinahamed.contact@gmail.com?subject=University%20partnership">University partnership</a>
+        <a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20collaboration">Legal collaboration</a>
+        <a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20inquiry">Media & press</a>
+        <a href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor / strategic partnership</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener">Product Feedback Survey ↗</a>
+      </div>
+    </section>
+  </main>`;
 
 const loginPage = (): string => {
   const next = new URLSearchParams(window.location.search).get('next') || localizedPath(`/workspace/${state.role}`, state.language);
-  return `<main id="page-content" class="login-page"><section class="login-brand"><a href="${localizedPath('/', state.language)}" data-route>${brand(true)}</a><div><span class="section-kicker section-kicker-light">${ui(state.language, 'loginKicker')}</span><h1>${ui(state.language, 'loginBrandHeading')}</h1><p>${ui(state.language, 'loginBrandBody')}</p></div></section><section class="login-panel"><button class="language-switch login-language" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button><div><span class="section-kicker">${ui(state.language, 'signIn')}</span><h2>${ui(state.language, 'loginHeading')}</h2><p>${ui(state.language, 'loginBody')}</p><button class="button google-button" type="button" data-action="google-sign-in" data-next="${escapeHtml(next)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><small>${ui(state.language, 'publicReading')}</small>${route('/', ui(state.language, 'returnPublic'), 'text-link')}</div></section></main>`;
+  return `
+  <main id="page-content" class="login-page">
+    <section class="login-brand">
+      <a href="${localizedPath('/', state.language)}" data-route>${brand(true)}</a>
+      <div>
+        <span class="section-kicker section-kicker-light">${ui(state.language, 'loginKicker')}</span>
+        <h1>${ui(state.language, 'loginBrandHeading')}</h1>
+        <p>${ui(state.language, 'loginBrandBody')}</p>
+      </div>
+    </section>
+    <section class="login-panel">
+      <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px;">
+        ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
+        <button class="language-switch login-language" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
+      </div>
+      <div>
+        <span class="section-kicker">${ui(state.language, 'signIn')}</span>
+        <h2>${ui(state.language, 'loginHeading')}</h2>
+        <p>${ui(state.language, 'loginBody')}</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; margin: 18px 0;">
+          <button class="button google-button" type="button" data-action="google-sign-in" data-next="${escapeHtml(next)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button>
+          <button class="button button-secondary guest-sign-in-btn" type="button" data-action="guest-sign-in" data-next="${escapeHtml(next)}" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; min-height: 44px;">${icon('user', 16)} ${state.language === 'bn' ? 'গেস্ট হিসেবে প্রবেশ করুন (লগইন ছাড়া টেস্ট করুন)' : 'Continue as Guest (Test All Features)'}</button>
+        </div>
+        <small>${ui(state.language, 'publicReading')}</small>
+        ${route('/', ui(state.language, 'returnPublic'), 'text-link')}
+      </div>
+    </section>
+  </main>`;
 };
 
 const policyPage = (kind: 'privacy' | 'terms' | 'disclaimer'): string => {
@@ -680,7 +863,16 @@ const policyPage = (kind: 'privacy' | 'terms' | 'disclaimer'): string => {
     disclaimer: ['Legal information disclaimer', 'Justor provides legal information and research support, not individual legal representation.', [['Not legal advice', 'Using Justor does not create a lawyer-client relationship or replace advice about your facts.'], ['Verify before acting', 'Open the cited authority and obtain professional help when rights, deadlines, money, liberty or safety are at risk.'], ['Urgent matters', 'Do not rely on an AI interface for an emergency, arrest, imminent deadline or immediate threat.']]],
   } as const;
   const [title, intro, sections] = pages[kind];
-  return `<main id="page-content" class="inner-page"><section class="compact-hero section-shell"><span class="section-kicker">Legal & product notice</span><h1>${title}</h1><p>${intro}</p></section><article class="section-shell policy-content">${sections.map(([heading, body]) => `<section><h2>${heading}</h2><p>${body}</p></section>`).join('')}<p>Questions: <a href="mailto:tajuddinahamed.contact@gmail.com">tajuddinahamed.contact@gmail.com</a></p></article></main>`;
+  return `
+  <main id="page-content" class="inner-page">
+    <section class="compact-hero section-shell">
+      ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
+      <span class="section-kicker">Legal & product notice</span>
+      <h1>${title}</h1>
+      <p>${intro}</p>
+    </section>
+    <article class="section-shell policy-content">${sections.map(([heading, body]) => `<section><h2>${heading}</h2><p>${body}</p></section>`).join('')}<p>Questions: <a href="mailto:tajuddinahamed.contact@gmail.com">tajuddinahamed.contact@gmail.com</a></p></article>
+  </main>`;
 };
 
 const notFoundPage = (): string => `<main id="page-content" class="not-found">${citizenWelcomeMascot()}<span>404</span><h1>This legal path was not found.</h1><p>The page may have moved or may not be part of the published beta.</p>${route('/legal-library', `Search Legal Library ${icon('arrow', 16)}`, 'button')}</main>`;
@@ -711,6 +903,7 @@ const hydrateHeroVisual = (): void => {
 const feedbackPage = (): string => `
   <main id="page-content" class="inner-page feedback-page">
     <section class="compact-hero section-shell">
+      ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
       <span class="section-kicker">${state.language === 'bn' ? 'ব্যবহারকারী প্রতিক্রিয়া ও সমীক্ষা' : 'User Feedback & Evaluation'}</span>
       <h1>${state.language === 'bn' ? 'জাস্টর এআই ব্যবহারকারী মতামত সমীক্ষা' : 'Justor AI User Experience Survey'}</h1>
       <p>${state.language === 'bn' ? 'আপনার মূল্যবান মতামত আমাদের এআই ও আইনি গবেষণা প্ল্যাটফর্মকে আরও উন্নত করতে সাহায্য করে।' : 'Your feedback helps us refine our legal AI intelligence, statutory verification, and user experience for lawyers, students, and citizens.'}</p>
@@ -783,8 +976,8 @@ const profilePage = (): string => {
 
   return `
   <main id="page-content" class="inner-page profile-page">
-    <div style="max-width: 580px; margin: 40px auto; padding: 0 20px;">
-      
+    <div style="max-width: 580px; margin: 30px auto; padding: 0 20px;">
+      ${pageBackButton('/workspace/' + state.role, state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
       <div class="profile-simple-card" style="background: var(--bg-card, #131827); border: 1px solid var(--border-color, #232B3E); border-radius: 16px; padding: 32px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);">
         
         <!-- User Avatar & Title -->
@@ -1054,7 +1247,29 @@ const hydrateGuideDetail = async (slug: string): Promise<void> => {
   const translationFallback = state.language === 'bn' && renderLocale === 'en';
   const badges = `<span class="semantic-badge">Primary sources linked</span>${guide.publicationBadges?.sourceChecked ? '<span class="semantic-badge badge-checked">SOURCE CHECKED ✓</span>' : ''}${guide.publicationBadges?.humanReviewed ? '<span class="semantic-badge badge-reviewed">HUMAN LEGAL REVIEWED ✓</span>' : ''}`;
   mount.className = 'guide-detail';
-  mount.innerHTML = `<div class="guide-breadcrumbs">${route('/guides', 'Citizen Legal Guides')}<span>/</span><span>${escapeHtml(clusterLabel(guide.cluster))}</span></div><header><div class="guide-meta"><span class="section-kicker">${escapeHtml(clusterLabel(guide.cluster))}</span><time>${escapeHtml(guide.verification.lastSourceChecked)}</time></div><h1>${escapeHtml(content.title)}</h1><div class="source-badges">${badges}</div></header>${translationFallback ? '<div class="translation-notice" lang="bn"><strong>অনুবাদ প্রস্তুত হচ্ছে</strong><p>এই প্রকাশিত গাইডটি এখন ইংরেজিতে দেখানো হচ্ছে।</p></div>' : ''}${renderGuideBody(guide, renderLocale)}<section class="guide-ask"><div><span class="section-kicker">Ask Justor</span><h2>Ask Justor about your situation.</h2><p>The published guide stays attached as context when you continue.</p></div><button class="button" type="button" data-action="ask-from-guide" data-guide-id="${escapeHtml(guide.id)}" data-guide-title="${escapeHtml(content.title)}" data-guide-topic="${escapeHtml(guide.cluster)}">Ask Justor ${icon('arrow', 16)}</button></section>`;
+  mount.innerHTML = `
+    <div class="guide-nav-top" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+      ${pageBackButton('/guides', state.language === 'bn' ? 'সকল গাইডে ফিরে যান' : 'Back to Legal Guides')}
+      <div class="guide-breadcrumbs">${route('/guides', 'Citizen Legal Guides')}<span>/</span><span>${escapeHtml(clusterLabel(guide.cluster))}</span></div>
+    </div>
+    <header>
+      <div class="guide-meta"><span class="section-kicker">${escapeHtml(clusterLabel(guide.cluster))}</span><time>${escapeHtml(guide.verification.lastSourceChecked)}</time></div>
+      <h1>${escapeHtml(content.title)}</h1>
+      <div class="source-badges">${badges}</div>
+    </header>
+    ${translationFallback ? '<div class="translation-notice" lang="bn"><strong>অনুবাদ প্রস্তুত হচ্ছে</strong><p>এই প্রকাশিত গাইডটি এখন ইংরেজিতে দেখানো হচ্ছে।</p></div>' : ''}
+    ${renderGuideBody(guide, renderLocale)}
+    <section class="guide-ask">
+      <div>
+        <span class="section-kicker">Ask Justor</span>
+        <h2>Ask Justor about your situation.</h2>
+        <p>The published guide stays attached as context when you continue.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+        <button class="button" type="button" data-action="ask-from-guide" data-guide-id="${escapeHtml(guide.id)}" data-guide-title="${escapeHtml(content.title)}" data-guide-topic="${escapeHtml(guide.cluster)}">Ask Justor ${icon('arrow', 16)}</button>
+        <button class="button button-secondary" type="button" data-action="go-back" data-fallback="/guides">${icon('arrow-left', 16)} ${state.language === 'bn' ? 'সকল গাইডে ফিরে যান' : 'Back to Legal Guides'}</button>
+      </div>
+    </section>`;
 };
 
 const renderGuideBody = (guide: GuideDetailRecord, locale: 'en' | 'bn'): string => {
@@ -1090,7 +1305,12 @@ const hydrateUpdateDetail = async (id: string): Promise<void> => {
   if (resource.status === 'empty' || !resource.data) { mount.innerHTML = empty(); return; }
   const update = resource.data;
   mount.className = 'update-detail';
-  mount.innerHTML = `<div class="guide-breadcrumbs">${route('/legal-updates', 'Legal Updates')}<span>/</span><span>${escapeHtml(update.topic ?? 'Update')}</span></div><header><span class="section-kicker">${escapeHtml(update.topic ?? 'Legal update')}</span><h1>${escapeHtml(update.title)}</h1>${update.date ? `<time>${escapeHtml(update.date)}</time>` : ''}</header>${update.summary ? `<section><h2>Summary</h2><p>${escapeHtml(update.summary)}</p></section>` : ''}${update.effect ? `<section><h2>What to recheck</h2><p>${escapeHtml(update.effect)}</p></section>` : ''}${update.source ? `<section><h2>Source record</h2>${sourcePanel(update.source, 'source-record')}</section>` : unavailable('The update record did not include a supporting source.')}`;
+  mount.innerHTML = `
+    <div class="update-nav-top" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+      ${pageBackButton('/legal-updates', state.language === 'bn' ? 'সকল আপডেটে ফিরে যান' : 'Back to Legal Updates')}
+      <div class="guide-breadcrumbs">${route('/legal-updates', 'Legal Updates')}<span>/</span><span>${escapeHtml(update.topic ?? 'Update')}</span></div>
+    </div>
+    <header><span class="section-kicker">${escapeHtml(update.topic ?? 'Legal update')}</span><h1>${escapeHtml(update.title)}</h1>${update.date ? `<time>${escapeHtml(update.date)}</time>` : ''}</header>${update.summary ? `<section><h2>Summary</h2><p>${escapeHtml(update.summary)}</p></section>` : ''}${update.effect ? `<section><h2>What to recheck</h2><p>${escapeHtml(update.effect)}</p></section>` : ''}${update.source ? `<section><h2>Source record</h2>${sourcePanel(update.source, 'source-record')}</section>` : unavailable('The update record did not include a supporting source.')}`;
 };
 
 const hydrateRoute = async (path: string): Promise<void> => {
@@ -1561,20 +1781,8 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   const context = form.dataset.contextId ? { id: form.dataset.contextId, title: form.dataset.contextTitle ?? '', topic: form.dataset.contextTopic ?? '' } : undefined;
   
   if (!state.session) {
-    if (role === 'student') {
-      sessionStorage.setItem('justor-pending-research', JSON.stringify({ query, role, context }));
-      navigate(`${localizedPath('/login', state.language)}?next=${encodeURIComponent(localizedPath('/workspace/student', state.language))}`);
-      return;
-    }
-    if (role === 'citizen') {
-      const count = parseInt(sessionStorage.getItem('justor_citizen_query_count') || '0', 10);
-      if (count >= 1) {
-        sessionStorage.setItem('justor-pending-research', JSON.stringify({ query, role, context }));
-        navigate(`${localizedPath('/login', state.language)}?next=${encodeURIComponent(`${localizedPath('/workspace/citizen', state.language)}#ask`)}`);
-        return;
-      }
-      sessionStorage.setItem('justor_citizen_query_count', String(count + 1));
-    }
+    sessionStorage.setItem('justor_citizen_query_count', String(parseInt(sessionStorage.getItem('justor_citizen_query_count') || '0', 10) + 1));
+    state.session = authService.signInAsGuest();
   }
 
   const activeThread = chatStore.getOrCreateActiveThread(role);
@@ -1834,6 +2042,8 @@ document.addEventListener('click', (event) => {
     event.preventDefault();
     if (state.menuOpen) {
       state.menuOpen = false;
+      document.querySelector('.mobile-drawer')?.classList.remove('is-open');
+      document.querySelector('.mobile-drawer-overlay')?.classList.remove('is-open');
     }
     const role = link.dataset.role as Role | undefined;
     if (role) { state.role = role; localStorage.setItem('justor-role', role); }
@@ -1844,9 +2054,21 @@ document.addEventListener('click', (event) => {
   const action = actionElement?.dataset.action;
   if (action === 'menu') {
     state.menuOpen = !state.menuOpen;
-    document.querySelector('.mobile-menu')?.classList.toggle('is-open', state.menuOpen);
-    document.querySelector('.mobile-menu')?.setAttribute('aria-hidden', String(!state.menuOpen));
-    actionElement?.setAttribute('aria-expanded', String(state.menuOpen));
+    const drawer = document.querySelector('.mobile-drawer');
+    const overlay = document.querySelector('.mobile-drawer-overlay');
+    const btn = document.querySelector('.menu-button');
+    if (drawer && overlay) {
+      drawer.classList.toggle('is-open', state.menuOpen);
+      drawer.setAttribute('aria-hidden', String(!state.menuOpen));
+      overlay.classList.toggle('is-open', state.menuOpen);
+      overlay.setAttribute('aria-hidden', String(!state.menuOpen));
+      if (btn) {
+        btn.setAttribute('aria-expanded', String(state.menuOpen));
+        btn.innerHTML = icon(state.menuOpen ? 'close' : 'menu');
+      }
+    } else {
+      render(true);
+    }
   }
   if (action === 'language') {
     const preservedQuery = document.querySelector<HTMLInputElement | HTMLTextAreaElement>('[name="query"]')?.value ?? '';
@@ -1922,7 +2144,21 @@ document.addEventListener('click', (event) => {
   }
   if (action === 'close-menu') {
     state.menuOpen = false;
-    render(true);
+    const drawer = document.querySelector('.mobile-drawer');
+    const overlay = document.querySelector('.mobile-drawer-overlay');
+    const btn = document.querySelector('.menu-button');
+    if (drawer && overlay) {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = icon('menu');
+      }
+    } else {
+      render(true);
+    }
   }
   if (action === 'click-citation-index') {
     const idx = Number(actionElement?.dataset.citationIndex ?? 0);
@@ -1986,12 +2222,26 @@ document.addEventListener('click', (event) => {
     const drawer = document.querySelector<HTMLElement>('[data-feedback-drawer]');
     if (drawer) drawer.hidden = true;
   }
+  if (action === 'go-back') {
+    if (window.history.length > 1 && document.referrer && document.referrer.includes(window.location.host)) {
+      window.history.back();
+    } else {
+      const fallback = actionElement?.dataset.fallback || '/';
+      navigate(localizedPath(fallback, state.language));
+    }
+  }
   if (action === 'sign-out') void authService.signOut().then(() => { state.session = null; render(); });
   if (action === 'google-sign-in') {
     const next = actionElement?.dataset.next ?? localizedPath(`/workspace/${state.role}`, state.language);
     void authService.signInWithGoogle(next).then((result) => {
       if (result.error) showToast('Sign-in unavailable', result.error, 'warning');
     });
+  }
+  if (action === 'guest-sign-in') {
+    const next = actionElement?.dataset.next ?? localizedPath(`/workspace/${state.role}`, state.language);
+    state.session = authService.signInAsGuest();
+    showToast('Guest Mode Activated', 'Full access to test all research features.', 'positive');
+    navigate(next);
   }
   if (action === 'export-chat-history') {
     const threads = chatStore.getThreadsByRole(state.role);

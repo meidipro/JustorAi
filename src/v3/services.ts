@@ -96,11 +96,48 @@ const supabase: SupabaseClient | null = supabaseUrl && supabaseAnonKey
   : null;
 
 export const authService = {
-  available: Boolean(supabase),
+  available: true,
   async session(): Promise<Session | null> {
+    if (localStorage.getItem('justor_guest_mode') === 'true') {
+      return {
+        access_token: 'guest_token',
+        token_type: 'bearer',
+        expires_in: 3600 * 24 * 30,
+        refresh_token: 'guest_refresh',
+        user: {
+          id: 'guest_user',
+          aud: 'authenticated',
+          role: 'authenticated',
+          email: 'guest@justor.ai',
+          app_metadata: { provider: 'guest' },
+          user_metadata: { full_name: 'Guest User' },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as any,
+      };
+    }
     if (!supabase) return null;
     const { data } = await supabase.auth.getSession();
     return data.session;
+  },
+  signInAsGuest(): Session {
+    localStorage.setItem('justor_guest_mode', 'true');
+    return {
+      access_token: 'guest_token',
+      token_type: 'bearer',
+      expires_in: 3600 * 24 * 30,
+      refresh_token: 'guest_refresh',
+      user: {
+        id: 'guest_user',
+        aud: 'authenticated',
+        role: 'authenticated',
+        email: 'guest@justor.ai',
+        app_metadata: { provider: 'guest' },
+        user_metadata: { full_name: 'Guest User' },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      } as any,
+    };
   },
   async signInWithGoogle(nextPath: string): Promise<{ error?: string }> {
     if (!supabase) return { error: 'Sign-in is temporarily unavailable.' };
@@ -112,6 +149,7 @@ export const authService = {
     return error ? { error: error.message } : {};
   },
   async signOut(): Promise<void> {
+    localStorage.removeItem('justor_guest_mode');
     try {
       Object.keys(localStorage)
         .filter(k => k.startsWith('justor_') || k.startsWith('justor-') || k.startsWith('sb-'))
