@@ -193,3 +193,18 @@ def test_feedback_page_has_7_qa_categories(app_ts_content):
     ]
     for cat in categories:
         assert cat in app_ts_content, f"Feedback category '{cat}' missing from QA form"
+
+
+# ─── 8. CITIZEN LAWYER CONSULTATION RECOMMENDATIONS (C-04) ──────────────────────
+
+def test_citizen_response_lawyer_recommendation(app_ts_content, style_css_content):
+    """Citizen responses must include domain-tailored lawyer recommendations and document checklists."""
+    assert "getCitizenLawyerRecommendation" in app_ts_content
+    assert "renderCitizenLawyerSuggestion" in app_ts_content
+    assert "Deed & Land Litigation Advocate" in app_ts_content
+    assert "Family Court & Matrimonial Advocate" in app_ts_content
+    assert "NI Act & Banking Litigation Advocate" in app_ts_content
+    assert "Criminal Defense & Bail Advocate" in app_ts_content
+    assert "16430" in app_ts_content
+    assert ".citizen-lawyer-recommendation-card" in style_css_content
+
