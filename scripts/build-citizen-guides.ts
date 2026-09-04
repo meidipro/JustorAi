@@ -550,7 +550,7 @@ const publicGuideForLocale = (
 
 const runPublicationBoundarySelfTest = (guide: CitizenGuide): void => {
   const synthetic = structuredClone(guide);
-  synthetic.releaseStatus = { en: 'pending', bn: 'pending' };
+  synthetic.releaseStatus = { en: 'review', bn: 'review' };
   synthetic.verification.publishGateRaw = 'SOURCE CHECK';
   delete synthetic.verification.freshnessRequirementRaw;
   synthetic.content.bn = structuredClone(synthetic.content.en);
