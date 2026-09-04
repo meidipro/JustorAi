@@ -5,14 +5,17 @@ import asyncio
 import json
 import uuid
 import time
-from datetime import datetime, date
+import io
 import urllib.request
+import urllib.error
+from datetime import datetime, date
 from typing import List, Optional, Dict, Any, cast
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks, Request, Depends, Header, Query
+import httpx
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks, Request, Depends, Query
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from dotenv import load_dotenv
 
 from supabase import create_client, Client
@@ -41,41 +44,43 @@ app = FastAPI(
     version="4.0.0",
 )
 
-# Configurable CORS for environment security
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+from backend.security_controls import (
+    admin_secret,
+    claim_pilot_email,
+    consume_chat_quota,
+    enforce_ip_rate_limit,
+    job_row,
+    parse_allowed_origins,
+    require_admin_secret,
+    resolve_guest_id,
+    valid_email,
 )
 
-@app.middleware("http")
-async def add_cors_headers(request: Request, call_next):
-    if request.method == "OPTIONS":
-        response = JSONResponse(content={"status": "ok"})
-    else:
-        try:
-            response = await call_next(request)
-        except Exception as exc:
-            logger.error(f"Unhandled exception in {request.url.path}: {exc}")
-            response = JSONResponse(
-                status_code=500,
-                content={"detail": "Internal server error occurred.", "error": str(exc)}
-            )
-    
-    origin = request.headers.get("origin") or "*"
-    response.headers["Access-Control-Allow-Origin"] = origin if origin != "*" else "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
-    response.headers["Access-Control-Allow-Headers"] = "*"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response
+ALLOWED_ORIGINS = parse_allowed_origins()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "X-Guest-Id"],
+)
 
-@app.options("/{full_path:path}")
-async def options_handler(full_path: str):
-    """Handle CORS preflight across all paths."""
-    return JSONResponse(content={"status": "ok"})
+if not admin_secret():
+    logger.warning("JUSTOR_ADMIN_SECRET is not set; /api/qa/* will return 503 until configured.")
+
+
+@app.middleware("http")
+async def catch_unhandled_errors(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("Unhandled exception in %s: %s", request.url.path, exc)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error occurred."},
+        )
 
 # ─── Health / Keep-Alive ──────────────────────────────────────────────────────
 @app.get("/ping")
@@ -134,20 +139,30 @@ if OpenAI and OPENROUTER_API_KEY:
         openrouter_client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=OPENROUTER_API_KEY,
+            timeout=90.0,
         )
         logger.info("OpenRouter client initialized.")
     except Exception as e:
         logger.warning(f"OpenRouter init failed: {e}")
 
 dashscope_client = None
-if OpenAI and DASHSCOPE_API_KEY:
+if OpenAI and DASHSCOPE_API_KEY and not DASHSCOPE_API_KEY.startswith("your_"):
     try:
         dashscope_client = OpenAI(
             base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
             api_key=DASHSCOPE_API_KEY,
+            timeout=90.0,
         )
+        logger.info("Alibaba DashScope client initialized.")
     except Exception:
         pass
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
+gemini_ready: bool = bool(GEMINI_API_KEY)
+if gemini_ready:
+    logger.info("Gemini API Key detected.")
+else:
+    logger.warning("GEMINI_API_KEY missing.")
 
 # ─── Legal Evidence Engine V2 & Unified Search Aggregator ────────────────────
 legal_repository_v2 = None
@@ -450,13 +465,29 @@ class FeedbackRequest(BaseModel):
 
 
 class PilotApplicationRequest(BaseModel):
-    advocate_name: str
-    chamber_name: Optional[str] = None
-    bar_association: Optional[str] = None
-    phone: str
-    email: Optional[str] = None
+    advocate_name: str = Field(..., min_length=2, max_length=120)
+    chamber_name: Optional[str] = Field(None, max_length=200)
+    bar_association: Optional[str] = Field(None, max_length=200)
+    phone: str = Field(..., min_length=6, max_length=30)
+    email: str = Field(..., min_length=5, max_length=200)
     practice_areas: Optional[List[str]] = None
-    custom_needs: Optional[str] = None
+    custom_needs: Optional[str] = Field(None, max_length=2000)
+
+    @field_validator("email")
+    @classmethod
+    def _email(cls, value: str) -> str:
+        cleaned = value.strip().lower()
+        if not valid_email(cleaned):
+            raise ValueError("A valid email address is required.")
+        return cleaned
+
+    @field_validator("advocate_name", "phone")
+    @classmethod
+    def _strip_required(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("This field is required.")
+        return cleaned
 
 
 def resolve_provision_text(act_name: str, section_ref: str, as_of_date: Optional[str] = None) -> Optional[dict]:
@@ -742,6 +773,8 @@ def get_current_user(request: Request) -> Optional[dict]:
     token = auth_header.split(" ", 1)[1].strip()
     if not token or not supabase:
         return None
+    if token == "guest_token" or token.startswith("guest_"):
+        return None
     try:
         res = supabase.auth.get_user(token)
         if res and res.user:
@@ -780,46 +813,6 @@ async def get_user_role(user_id: Optional[str]) -> str:
         logger.warning(f"Role lookup warning for user {user_id}: {e}")
     return "General Public"
 
-# ─── Groq LLM ────────────────────────────────────────────────────────────────
-GROQ_API_KEY = (os.environ.get("GROQ_API_KEY") or os.environ.get("VITE_GROQ_API_KEY") or "").strip()
-groq_client: Optional[Groq] = None
-if GROQ_API_KEY:
-    groq_client = Groq(api_key=GROQ_API_KEY, max_retries=0)
-    logger.info("Groq client initialized securely (backend secret).")
-else:
-    logger.warning("GROQ_API_KEY missing.")
-
-# ─── Gemini (For Embeddings) ────────────────────────────────────────────────
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
-gemini_ready: bool = False
-if GEMINI_API_KEY:
-    gemini_ready = True
-    logger.info("Gemini API Key detected for embeddings.")
-else:
-    logger.warning("GEMINI_API_KEY missing.")
-
-# ─── OpenRouter ─────────────────────────────────────────────────────────────
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
-openrouter_client = None
-if OPENROUTER_API_KEY and OpenAI:
-    openrouter_client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY, timeout=90.0)
-    logger.info("OpenRouter client initialized.")
-else:
-    logger.warning("OPENROUTER_API_KEY missing or 'openai' package not installed.")
-
-# ─── Alibaba DashScope ──────────────────────────────────────────────────────
-DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "").strip()
-dashscope_client = None
-if DASHSCOPE_API_KEY and not DASHSCOPE_API_KEY.startswith("your_") and OpenAI:
-    dashscope_client = OpenAI(
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
-        api_key=DASHSCOPE_API_KEY,
-        timeout=90.0
-    )
-    logger.info("Alibaba DashScope client initialized.")
-else:
-    logger.warning("DASHSCOPE_API_KEY missing, is placeholder, or 'openai' package not installed.")
-
 try:
     import evidence
 except ImportError:
@@ -832,10 +825,6 @@ def _embed(text: str) -> List[float]:
     """Generate a 1024-dim embedding via OpenRouter Native API.
     Used for query embedding before RAG search.
     """
-    import time, urllib.error
-    import json
-    import urllib.request
-    
     url = "https://openrouter.ai/api/v1/embeddings"
     
     payload = json.dumps({
@@ -874,47 +863,7 @@ def _embed(text: str) -> List[float]:
 
 
 async def _embed_async(text: str) -> List[float]:
-    import asyncio
     return await asyncio.to_thread(_embed, text)
-
-
-def _call_gemini_native(messages, temperature=0.1) -> str:
-    """Helper to query Gemini 1.5 Flash directly via native Google REST API."""
-    if not GEMINI_API_KEY:
-        raise ValueError("GEMINI_API_KEY missing.")
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
-    
-    contents = []
-    system_instruction = None
-    for msg in messages:
-        if msg["role"] == "system":
-            system_instruction = {"parts": [{"text": msg["content"]}]}
-        else:
-            role = "user" if msg["role"] == "user" else "model"
-            contents.append({
-                "role": role,
-                "parts": [{"text": msg["content"]}]
-            })
-            
-    payload = {
-        "contents": contents,
-        "generationConfig": {
-            "temperature": temperature,
-            "maxOutputTokens": 4000
-        }
-    }
-    if system_instruction:
-        payload["systemInstruction"] = system_instruction
-
-    req = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        method="POST",
-        headers={"Content-Type": "application/json"}
-    )
-    with urllib.request.urlopen(req) as response:
-        resp_data = json.loads(response.read().decode("utf-8"))
-        return resp_data["candidates"][0]["content"]["parts"][0]["text"]
 
 
 def prompt_general_public(context: str) -> str:
@@ -1339,8 +1288,6 @@ ACT_NAME_MAP = {
     r'suits valuation act': 'The Suits Valuation Act, 1887',
 }
 
-import json
-
 async def classify_query(query: str) -> dict:
     from backend.legal_normalize import normalize_bengali_text
     norm_query = normalize_bengali_text(query)
@@ -1596,7 +1543,6 @@ def _filter_blocked_acts(acts: list, target_act: Optional[str], intent: dict) ->
 
 async def retrieve_context(query_vec: list, intent: dict):
     db = cast(Client, supabase)
-    import asyncio
     detected = intent.get("detected_act")
     primary_sec = intent.get("primary_section")
     is_repealed_req = intent.get("is_repealed_request", False)
@@ -1980,7 +1926,6 @@ async def _call_gemini_native(messages: list, temperature: float = 0.1, model_na
     if system_instruction:
         body["systemInstruction"] = system_instruction
     
-    import httpx
     async with httpx.AsyncClient(timeout=25.0) as client:
         resp = await client.post(url, json=body)
         if resp.status_code == 200:
@@ -2031,8 +1976,6 @@ MODEL_CHAINS = {
 
 async def call_llm_with_fallbacks(models: list, messages) -> tuple:
     """Returns (text, 'provider/model'). Fast zero-wait fallback across models with strict per-provider timeout."""
-    import asyncio
-    
     for provider, model in models:
         try:
             payload = messages
@@ -2118,10 +2061,35 @@ def chunk_text(text: str, chunk_size: int = 800, overlap: int = 150) -> List[str
 
     return chunks
 
-# Job status store (in-memory — resets on server restart)
+# Job status: memory cache plus Supabase upload_jobs when the table exists.
 _jobs: Dict[str, Dict[str, Any]] = {}
 
-import uuid
+
+def _persist_job(job_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+    merged = {**_jobs.get(job_id, {}), **payload}
+    _jobs[job_id] = merged
+    if supabase:
+        try:
+            supabase.table("upload_jobs").upsert(job_row(job_id, merged)).execute()
+        except Exception as exc:
+            logger.warning("upload_jobs persist skipped: %s", exc)
+    return merged
+
+
+def _get_job(job_id: str) -> Optional[Dict[str, Any]]:
+    cached = _jobs.get(job_id)
+    if cached:
+        return cached
+    if not supabase:
+        return None
+    try:
+        resp = supabase.table("upload_jobs").select("*").eq("id", job_id).limit(1).execute()
+        if resp.data:
+            _jobs[job_id] = resp.data[0]
+            return resp.data[0]
+    except Exception as exc:
+        logger.warning("upload_jobs lookup skipped: %s", exc)
+    return None
 
 
 # ─── Endpoints ────────────────────────────────────────────────────────────────
@@ -2143,8 +2111,7 @@ async def health():
 
 def _process_pdf_background(job_id: str, title: str, filename: str, raw_bytes: bytes):
     """Run in background thread — embed all chunks and store in Supabase."""
-    import io
-    _jobs[job_id] = {"status": "processing", "title": title, "chunks_done": 0, "total_chunks": 0}
+    _persist_job(job_id, {"status": "processing", "title": title, "chunks_done": 0, "total_chunks": 0})
 
     try:
         db = cast(Client, supabase)
@@ -2152,7 +2119,7 @@ def _process_pdf_background(job_id: str, title: str, filename: str, raw_bytes: b
         # Extract text from bytes
         raw_text = extract_pdf_text(io.BytesIO(raw_bytes))
         if not raw_text.strip():
-            _jobs[job_id] = {"status": "error", "error": "No text extracted from PDF"}
+            _persist_job(job_id, {"status": "error", "error": "No text extracted from PDF"})
             return
 
         # Insert document metadata
@@ -2166,7 +2133,7 @@ def _process_pdf_background(job_id: str, title: str, filename: str, raw_bytes: b
 
         # Chunk
         chunks = chunk_text(raw_text, chunk_size=800, overlap=150)
-        _jobs[job_id]["total_chunks"] = len(chunks)
+        _persist_job(job_id, {"total_chunks": len(chunks)})
         logger.info(f"[job {job_id}] '{title}' -> {len(chunks)} chunks, embedding...")
 
         # Embed + batch insert
@@ -2180,7 +2147,7 @@ def _process_pdf_background(job_id: str, title: str, filename: str, raw_bytes: b
                 "chunk_index": i,
                 "metadata": {"source": filename, "chunk": i},
             })
-            _jobs[job_id]["chunks_done"] = i + 1
+            _persist_job(job_id, {"chunks_done": i + 1})
             if len(records) >= 50:
                 db.table("document_chunks").insert(records).execute()
                 records = []
@@ -2188,17 +2155,17 @@ def _process_pdf_background(job_id: str, title: str, filename: str, raw_bytes: b
         if records:
             db.table("document_chunks").insert(records).execute()
 
-        _jobs[job_id] = {
+        _persist_job(job_id, {
             "status": "done",
             "title": title,
             "document_id": document_id,
             "total_chunks": len(chunks),
-        }
+        })
         logger.info(f"[job {job_id}] Done — {len(chunks)} chunks stored.")
 
     except Exception as e:
         logger.error(f"[job {job_id}] Error: {e}")
-        _jobs[job_id] = {"status": "error", "error": str(e)}
+        _persist_job(job_id, {"status": "error", "error": "Upload processing failed."})
 
 
 @app.post("/upload", tags=["Knowledge Base"])
@@ -2224,7 +2191,7 @@ async def upload_document(
         raise HTTPException(422, "Empty file uploaded.")
 
     job_id = str(uuid.uuid4())
-    _jobs[job_id] = {"status": "queued", "title": title, "user_id": current_user["id"]}
+    _persist_job(job_id, {"status": "queued", "title": title, "user_id": current_user["id"]})
 
     background_tasks.add_task(
         _process_pdf_background, job_id, title, file.filename, raw_bytes
@@ -2240,9 +2207,9 @@ async def upload_document(
 @app.get("/upload/status/{job_id}", tags=["Knowledge Base"])
 async def upload_status(job_id: str):
     """Poll the status of a background PDF upload job."""
-    job = _jobs.get(job_id)
+    job = _get_job(job_id)
     if job is None:
-        raise HTTPException(404, f"Job {job_id} not found.")
+        raise HTTPException(404, "Job not found.")
     return job
 
 
@@ -2252,8 +2219,6 @@ async def verify_citations(answer: str, sources: list) -> str:
     Verifies that cited sources and section numbers exist in DB context.
     Strips unverified citation tags.
     """
-    import re
-    from supabase import Client
     db = cast(Client, supabase)
     
     if not sources:
@@ -2325,17 +2290,23 @@ async def chat(request: ChatRequest, req: Request):
         raise HTTPException(503, "Supabase database client is not ready.")
 
     query_run_id = str(uuid.uuid4())
-
-    # Determine authenticated user or guest client IP
-    authenticated_user = get_current_user(req)
-    user_id = authenticated_user["id"] if authenticated_user else (request.user_id or f"guest-{req.client.host if req.client else 'anon'}")
-
-    # Derive user_role server-side from JWT profile if logged in
-    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
     query_str = resolve_request_query(request)
-
     if not query_str:
         raise HTTPException(400, "Query/message cannot be empty.")
+
+    authenticated_user = get_current_user(req)
+    if authenticated_user:
+        user_id = authenticated_user["id"]
+    else:
+        user_id = resolve_guest_id(req, request.user_id)
+
+    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
+
+    if not getattr(req.state, "chat_limits_applied", False):
+        enforce_ip_rate_limit(req, "chat-burst", 20, 60)
+        if not authenticated_user:
+            enforce_ip_rate_limit(req, "chat-guest-hour", 10, 3600)
+        req.state.chat_limits_applied = True
 
     # Fast Smalltalk / Greeting Handler
     if is_smalltalk(query_str):
@@ -2356,6 +2327,11 @@ async def chat(request: ChatRequest, req: Request):
             "model_used": "direct-assistant",
             "metadata": {"detected_act": None, "sections_found": [], "is_greeting": True}
         })
+
+    quota_state = getattr(req.state, "quota_state", None)
+    if quota_state is None:
+        quota_state = consume_chat_quota(user_id, user_role)
+        req.state.quota_state = quota_state
 
     try:
         # ── Primary Path: Legal Evidence Engine V2 ───────────────────────────
@@ -2390,6 +2366,7 @@ async def chat(request: ChatRequest, req: Request):
                         "reasoning_steps": v2_result.get("reasoning_steps", []),
                         "retrieval_status": status,
                         "model_used": "legal-engine-v2",
+                        "quota": quota_state,
                         "metadata": {
                             "engine_version": "v2",
                             "persona": user_role,
@@ -2415,9 +2392,9 @@ async def chat(request: ChatRequest, req: Request):
                 logger.warning(f"Legal Engine V2 runtime fallback: {engine_err}")
 
         # ── Secondary Path: Fallback RAG Pipeline ─────────────────────────────
-        intent = await classify_query(request.message)
+        intent = await classify_query(query_str)
         intent["role"] = user_role
-        query_vec = await _embed_async(request.message)
+        query_vec = await _embed_async(query_str)
         acts, dlrs = await retrieve_context(query_vec, intent)
         ok, status = validate_retrieval(intent, acts, dlrs)
 
@@ -2438,7 +2415,7 @@ async def chat(request: ChatRequest, req: Request):
                                              "Please consult bdlaws.minlaw.gov.bd or a licensed lawyer.")
             }
             msg = msg_map.get(status, "This question cannot be answered from our verified database.")
-            log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=request.message,
+            log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=query_str,
                       act_detected=intent.get("detected_act"),
                       section_detected=intent.get("primary_section"),
                       sources_found=0, retrieval_status=status,
@@ -2446,6 +2423,7 @@ async def chat(request: ChatRequest, req: Request):
             response_content = {
                 "query_run_id": query_run_id,
                 "response": msg, "sources_used": 0, "sources": [], "retrieval_status": status,
+                "quota": quota_state,
                 "metadata": {"detected_act": intent.get("detected_act"),
                              "sections_found": intent["sections"]}
             }
@@ -2456,7 +2434,7 @@ async def chat(request: ChatRequest, req: Request):
         context, sources = format_retrieved_context(acts, dlrs)
         messages = [{"role": "system", "content": get_system_prompt(user_role, context)}]
         messages += [{"role": m.role, "content": m.content} for m in (request.history or [])[-6:]]
-        messages.append({"role": "user", "content": request.message})
+        messages.append({"role": "user", "content": query_str})
 
         models = MODEL_CHAINS.get(user_role, MODEL_CHAINS["General Public"])
         answer, model_used = await call_llm_with_fallbacks(models, messages)
@@ -2468,7 +2446,7 @@ async def chat(request: ChatRequest, req: Request):
         
         final = answer if user_role == "Legal Professional" else build_citation_footer(answer, sources)
 
-        log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=request.message,
+        log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=query_str,
                   act_detected=intent.get("detected_act"),
                   section_detected=intent.get("primary_section"),
                   sources_found=len(acts) + len(dlrs), retrieval_status=status,
@@ -2478,6 +2456,7 @@ async def chat(request: ChatRequest, req: Request):
             "query_run_id": query_run_id,
             "response": final, "sources_used": len(acts) + len(dlrs), "sources": sources,
             "retrieval_status": status, "model_used": model_used,
+            "quota": quota_state,
             "metadata": {"detected_act": intent.get("detected_act"),
                          "sections_found": intent["sections"],
                          "section_detected": intent.get("primary_section"),
@@ -2522,13 +2501,26 @@ async def chat_stream(request: ChatRequest, req: Request):
         raise HTTPException(503, "Supabase database client is not ready.")
 
     query_run_id = str(uuid.uuid4())
-    authenticated_user = get_current_user(req)
-    user_id = authenticated_user["id"] if authenticated_user else (request.user_id or f"guest-{req.client.host if req.client else 'anon'}")
-    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
     query_str = resolve_request_query(request)
-
     if not query_str:
         raise HTTPException(400, "Query/message cannot be empty.")
+
+    authenticated_user = get_current_user(req)
+    if authenticated_user:
+        user_id = authenticated_user["id"]
+    else:
+        user_id = resolve_guest_id(req, request.user_id)
+    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
+
+    enforce_ip_rate_limit(req, "chat-burst", 20, 60)
+    if not authenticated_user:
+        enforce_ip_rate_limit(req, "chat-guest-hour", 10, 3600)
+
+    quota_state = None
+    if not is_smalltalk(query_str):
+        quota_state = consume_chat_quota(user_id, user_role)
+        req.state.quota_state = quota_state
+    req.state.chat_limits_applied = True
 
     async def event_generator():
         if is_smalltalk(query_str):
@@ -2573,6 +2565,7 @@ async def chat_stream(request: ChatRequest, req: Request):
                             "reasoning_steps": cdata.get("reasoning_steps", []),
                             "retrieval_status": "verified_engine_v2" if cdata.get("status") == "ok" else "abstain_verified",
                             "model_used": "legal-engine-v2",
+                            "quota": quota_state,
                             "metadata": {
                                 "engine_version": "v2",
                                 "persona": user_role,
@@ -2643,11 +2636,14 @@ async def submit_feedback(fb: FeedbackRequest):
 
 
 @app.post("/api/pilot-application", tags=["Founding Pilot"])
-async def apply_founding_pilot(app_data: PilotApplicationRequest):
+async def apply_founding_pilot(app_data: PilotApplicationRequest, req: Request):
     """
     Captures founding advocate pilot registrations for chambers onboarding.
     Persists to Supabase and local JSON ledger.
     """
+    enforce_ip_rate_limit(req, "pilot-hour", 5, 3600)
+    claim_pilot_email(app_data.email)
+
     timestamp = datetime.utcnow().isoformat()
     record = {
         "advocate_name": app_data.advocate_name,
@@ -2802,19 +2798,8 @@ async def validate_citation_endpoint(citation: str = Query(..., description="Rep
 
 
 @app.get("/api/qa/queue", tags=["Legal QA"])
-async def get_qa_queue(limit: int = 50, authorization: Optional[str] = Header(None)):
-    """
-    Retrieves flagged feedback and pilot queries awaiting legal evaluation.
-    Role-gated or secret token protected for pilot administrators.
-    """
-    # Admin security check
-    admin_token = os.getenv("JUSTOR_ADMIN_SECRET", "justor-pilot-admin-2026")
-    if authorization and (authorization == f"Bearer {admin_token}" or authorization == admin_token):
-        pass  # Authorized
-    else:
-        # Fallback to Supabase JWT verification if user is logged in
-        pass
-
+async def get_qa_queue(limit: int = 50, _: str = Depends(require_admin_secret)):
+    """Pilot QA queue. Requires JUSTOR_ADMIN_SECRET Bearer token."""
     items = []
     if supabase:
         try:
@@ -2866,7 +2851,7 @@ async def get_qa_queue(limit: int = 50, authorization: Optional[str] = Header(No
 
 
 @app.post("/api/qa/review", tags=["Legal QA"])
-async def submit_qa_review(review: QAReviewRequest, authorization: Optional[str] = Header(None)):
+async def submit_qa_review(review: QAReviewRequest, _: str = Depends(require_admin_secret)):
     """
     Records a human QA verdict (Correct / Partial / Incorrect), severity (Minor / Material / Dangerous),
     and corrected authority into the evaluation dataset.

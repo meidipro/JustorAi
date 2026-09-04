@@ -18,7 +18,7 @@ export async function renderQaAdminPage(container: HTMLElement) {
           </p>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <input id="qa-admin-token" type="password" placeholder="Admin Secret Token..." value="justor-pilot-admin-2026" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #CBD5E1; font-size: 13px;">
+          <input id="qa-admin-token" type="password" placeholder="Admin secret (JUSTOR_ADMIN_SECRET)" value="" autocomplete="off" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #CBD5E1; font-size: 13px;">
           <button id="qa-refresh-btn" class="button button-small" type="button">Refresh Queue</button>
         </div>
       </header>
@@ -45,17 +45,24 @@ export async function renderQaAdminPage(container: HTMLElement) {
     </main>
   `;
 
+  const storedToken = sessionStorage.getItem('justor-qa-admin-token');
+  if (storedToken) {
+    const tokenInput = document.getElementById('qa-admin-token') as HTMLInputElement | null;
+    if (tokenInput) tokenInput.value = storedToken;
+  }
+
   let queueItems: any[] = [];
   let selectedIndex = -1;
 
   const loadQueue = async () => {
     try {
       const token = (document.getElementById('qa-admin-token') as HTMLInputElement)?.value || '';
+      if (token) sessionStorage.setItem('justor-qa-admin-token', token);
       const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
       const res = await fetch(`${backendUrl}/api/qa/queue`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (!res.ok) throw new Error('failed-to-load');
+      if (!res.ok) throw new Error(res.status === 403 ? 'forbidden' : 'failed-to-load');
       const data = await res.json();
       queueItems = data.queue || [];
       const countEl = document.getElementById('qa-queue-count');
@@ -99,7 +106,7 @@ export async function renderQaAdminPage(container: HTMLElement) {
       });
     } catch (e) {
       const listEl = document.getElementById('qa-queue-list');
-      if (listEl) listEl.innerHTML = `<p style="color: #B42318; text-align: center; padding: 24px;">Error connecting to QA Queue endpoint.</p>`;
+      if (listEl) listEl.innerHTML = `<p style="color: #B42318; text-align: center; padding: 24px;">Could not load the QA queue. Check the admin secret and try again.</p>`;
     }
   };
 

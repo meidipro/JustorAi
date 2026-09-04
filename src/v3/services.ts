@@ -91,6 +91,28 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
 
+const isRealSession = (session: Session | null): boolean =>
+  Boolean(session?.access_token && session.access_token !== 'guest_token' && session.user?.id !== 'guest_user');
+
+const ensureGuestId = (): string => {
+  let guestId = localStorage.getItem('justor-guest-id');
+  if (!guestId) {
+    guestId = `guest_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    localStorage.setItem('justor-guest-id', guestId);
+  }
+  return guestId;
+};
+
+const researchHeaders = (session: Session | null, extra: Record<string, string> = {}): Record<string, string> => {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json', ...extra };
+  if (isRealSession(session) && session?.access_token) {
+    headers.Authorization = `Bearer ${session.access_token}`;
+  } else {
+    headers['X-Guest-Id'] = ensureGuestId();
+  }
+  return headers;
+};
+
 const supabase: SupabaseClient | null = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
@@ -303,18 +325,8 @@ export async function runResearch(
 ): Promise<ResearchResult> {
   if (!backendUrl) throw new Error('service-unavailable');
   const session = await authService.session();
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  if (session?.access_token) {
-    headers['Authorization'] = `Bearer ${session.access_token}`;
-  }
-
-  let guestId = localStorage.getItem('justor-guest-id');
-  if (!guestId) {
-    guestId = `guest_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    localStorage.setItem('justor-guest-id', guestId);
-  }
+  const headers = researchHeaders(session);
+  const guestId = ensureGuestId();
 
   const response = await fetch(`${backendUrl}/chat`, {
     method: 'POST',
@@ -324,11 +336,12 @@ export async function runResearch(
       user_role: role,
       language,
       chat_history: [],
-      user_id: session?.user?.id || guestId,
+      user_id: isRealSession(session) ? session?.user.id : guestId,
       context,
     }),
   });
   if (response.status === 401) throw new Error('authentication-required');
+  if (response.status === 429) throw new Error('quota-exceeded');
   if (!response.ok) throw new Error('service-unavailable');
   const payload = await response.json() as Record<string, unknown>;
   const result = normalizeResearch(payload);
@@ -346,19 +359,8 @@ export async function streamResearch(
 ): Promise<ResearchResult> {
   if (!backendUrl) return runResearch(query, role, language, context);
   const session = await authService.session();
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    Accept: 'text/event-stream, application/json',
-  };
-  if (session?.access_token) {
-    headers['Authorization'] = `Bearer ${session.access_token}`;
-  }
-
-  let guestId = localStorage.getItem('justor-guest-id');
-  if (!guestId) {
-    guestId = `guest_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    localStorage.setItem('justor-guest-id', guestId);
-  }
+  const headers = researchHeaders(session, { Accept: 'text/event-stream, application/json' });
+  const guestId = ensureGuestId();
 
   try {
     const response = await fetch(`${backendUrl}/chat/stream`, {
@@ -369,12 +371,13 @@ export async function streamResearch(
         user_role: role,
         language,
         chat_history: [],
-        user_id: session?.user?.id || guestId,
+        user_id: isRealSession(session) ? session?.user.id : guestId,
         context,
       }),
     });
 
     if (response.status === 401) throw new Error('authentication-required');
+    if (response.status === 429) throw new Error('quota-exceeded');
     if (!response.ok || !response.body) {
       return runResearch(query, role, language, context);
     }
