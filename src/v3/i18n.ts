@@ -30,6 +30,10 @@ export const copy = {
     continue: 'Continue',
     search: 'Search',
     cancel: 'Cancel',
+    foundingPilot: 'Founding Pilot',
+    foundingPilotCohort: 'Founding Pilot Cohort',
+    foundingPilotCardDesc: 'First 20 Advocates get unlimited statutory research, 1-click court memos & chambers onboarding.',
+    foundingPilotApply: 'Apply for Pilot Access',
 
     // Homepage
     controlledBeta: 'Controlled Beta',
@@ -269,6 +273,10 @@ export const copy = {
     continue: 'এগিয়ে যান',
     search: 'খুঁজুন',
     cancel: 'বাতিল',
+    foundingPilot: 'ফাউন্ডিং পাইলট',
+    foundingPilotCohort: 'ফাউন্ডিং পাইলট কোহর্ট',
+    foundingPilotCardDesc: 'প্রথম ২০ জন অ্যাডভোকেট পাবেন আনলিমিটেড আইনি গবেষণা ও ১-ক্লিক কোর্ট মেমো।',
+    foundingPilotApply: 'পাইলট অ্যাক্সেসের জন্য আবেদন',
 
     // Homepage
     controlledBeta: 'নিয়ন্ত্রিত বেটা',

@@ -224,6 +224,11 @@ const header = (): string => {
         ${route('/workspace/student', ui(state.language, 'lawStudent'))}
       </nav>
       <div class="nav-actions">
+        <button class="nav-founding-pilot" type="button" data-action="open-pilot-modal" aria-label="${ui(state.language, 'foundingPilot')}">
+          <span class="pilot-pulse-dot" aria-hidden="true"></span>
+          <span class="pilot-nav-label">${ui(state.language, 'foundingPilot')}</span>
+          <span class="pilot-nav-badge">৳200</span>
+        </button>
         <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
         ${state.session ? route('/profile', `<span class="nav-profile-pill">${icon('user', 14)} <span>${escapeHtml(firstName)}</span></span>`, 'nav-profile-link') : ''}
         ${state.session ? `<button class="nav-signin" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` : route('/login', ui(state.language, 'signIn'), 'nav-signin')}
@@ -239,15 +244,42 @@ const header = (): string => {
         <button class="mobile-drawer-close" type="button" data-action="close-menu" aria-label="${ui(state.language, 'close')}">✕</button>
       </div>
       <div class="mobile-drawer-content">
+        <!-- Founding Pilot Featured Card in Mobile Sidebar Drawer -->
+        <div class="drawer-pilot-card" data-action="open-pilot-modal" role="button" tabindex="0" aria-label="${ui(state.language, 'foundingPilotCohort')}">
+          <div class="drawer-pilot-card-top">
+            <span class="drawer-pilot-kicker">
+              <span class="pilot-pulse-dot" aria-hidden="true"></span>
+              ${ui(state.language, 'foundingPilotCohort')}
+            </span>
+            <span class="drawer-pilot-price-tag">৳200/mo</span>
+          </div>
+          <div class="drawer-pilot-card-body">
+            <strong class="drawer-pilot-title">${state.language === 'bn' ? 'ফাউন্ডিং চেম্বার্সে যুক্ত হোন ⚖️' : 'Join Founding Chambers ⚖️'}</strong>
+            <p class="drawer-pilot-desc">${ui(state.language, 'foundingPilotCardDesc')}</p>
+          </div>
+          <div class="drawer-pilot-card-footer">
+            <span class="drawer-pilot-action-text">${ui(state.language, 'foundingPilotApply')}</span>
+            <span class="drawer-pilot-arrow" aria-hidden="true">→</span>
+          </div>
+        </div>
+
         <span class="menu-section-label">${ui(state.language, 'product')}</span>
         ${route('/workspace/citizen', ui(state.language, 'citizen'), 'menu-nav-link')}
         ${route('/legal-library', ui(state.language, 'library'), 'menu-nav-link')}
         ${route('/guides', ui(state.language, 'guides'), 'menu-nav-link')}
         ${route('/legal-updates', ui(state.language, 'updates'), 'menu-nav-link')}
+        <button class="menu-nav-link menu-nav-pilot-link" type="button" data-action="open-pilot-modal">
+          <span class="menu-nav-pilot-left">
+            <span class="pilot-pulse-dot" aria-hidden="true"></span>
+            <span>${ui(state.language, 'foundingPilot')}</span>
+          </span>
+          <span class="menu-nav-pilot-badge">৳200</span>
+        </button>
         
         <span class="menu-section-label" style="margin-top: 16px;">${ui(state.language, 'resources')}</span>
         ${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}
         ${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}
+        ${route('/careers', 'Careers', 'menu-nav-link')}
         ${route('/profile', `${icon('user', 16)} ${ui(state.language, 'profile')} & ${ui(state.language, 'accountSettings')}`, 'menu-nav-link menu-nav-profile')}
         ${route('/trust', ui(state.language, 'trust'), 'menu-nav-link')}
         ${route('/about', ui(state.language, 'about'), 'menu-nav-link')}
@@ -385,6 +417,11 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
 
     <!-- ChatGPT-Style Sidebar User Account Card & Footer Actions -->
     <div class="sidebar-bottom-actions">
+      <button class="sidebar-pilot-pill" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot (৳200/mo)">
+        <span class="pilot-pulse-dot" aria-hidden="true"></span>
+        <span class="sidebar-pilot-text">${ui(state.language, 'foundingPilot')}</span>
+        <span class="sidebar-pilot-badge">৳200</span>
+      </button>
       <button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>
       
       <div class="sidebar-user-footer">
@@ -423,6 +460,11 @@ const workspaceTopbar = (role: Role, title?: string): string => {
     <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
     <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
     <div class="workspace-topbar-actions" style="display: flex; align-items: center; gap: 8px;">
+      <button class="workspace-topbar-pilot-btn" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot (৳200/mo)">
+        <span class="pilot-pulse-dot" aria-hidden="true"></span>
+        <span class="workspace-topbar-pilot-label">${ui(state.language, 'foundingPilot')}</span>
+        <span class="pilot-nav-badge">৳200</span>
+      </button>
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       ${state.session ? route('/profile', `
         <span class="topbar-profile-pill" title="User Profile">
@@ -2900,6 +2942,11 @@ document.addEventListener('click', (event) => {
     });
   }
   if (action === 'open-pilot-modal') {
+    if (state.menuOpen) {
+      state.menuOpen = false;
+      document.querySelector('.mobile-drawer')?.classList.remove('is-open');
+      document.querySelector('.mobile-drawer-overlay')?.classList.remove('is-open');
+    }
     const existing = document.querySelector('[data-pilot-modal-overlay]');
     if (!existing) {
       document.body.insertAdjacentHTML('beforeend', renderPilotModal());

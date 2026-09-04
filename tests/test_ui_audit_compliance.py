@@ -241,3 +241,28 @@ def test_careers_page_and_eight_roles(app_ts_content, style_css_content):
     assert ".careers-cta-card" in style_css_content
 
 
+# ─── 10. FOUNDING PILOT IN NAVBAR & MOBILE DRAWER ──────────────────────────────
+
+def test_founding_pilot_in_navbar_and_mobile_drawer(app_ts_content, style_css_content, i18n_ts_content):
+    """Founding pilot badge/modal must exist in navbar and mobile drawer with sleek pulse animations."""
+    # i18n keys
+    assert "foundingPilot" in i18n_ts_content
+    assert "foundingPilotCohort" in i18n_ts_content
+    assert "ফাউন্ডিং পাইলট" in i18n_ts_content
+
+    # app.ts markup
+    assert "nav-founding-pilot" in app_ts_content
+    assert "drawer-pilot-card" in app_ts_content
+    assert "menu-nav-pilot-link" in app_ts_content
+    assert "data-action=\"open-pilot-modal\"" in app_ts_content
+    assert "pilot-pulse-dot" in app_ts_content
+
+    # CSS styles
+    assert ".nav-founding-pilot" in style_css_content
+    assert ".drawer-pilot-card" in style_css_content
+    assert ".pilot-pulse-dot" in style_css_content
+    assert ".pilot-nav-badge" in style_css_content
+    assert "pilotPulseAnimation" in style_css_content
+
+
+
