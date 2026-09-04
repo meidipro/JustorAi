@@ -4885,6 +4885,215 @@ svg { flex: 0 0 auto; }
   }
 }
 
+/* Mobile chrome: navbar, workspace sidebar, role lock, login */
+.nav-shell {
+  box-sizing: border-box;
+  min-width: 0;
+}
+.workspace-menu-button {
+  display: none;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+}
+.workspace-topbar-start {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.workspace-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.workspace-sidebar-overlay {
+  display: none;
+}
+.login-google-hint {
+  margin: 8px 0 0;
+  color: var(--slate);
+  font-size: 12px;
+  text-align: center;
+}
+.choose-role-page {
+  min-height: 100dvh;
+  background: var(--surface);
+  padding: 20px 16px 40px;
+  box-sizing: border-box;
+}
+.choose-role-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+.choose-role-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.choose-role-card h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(22px, 5vw, 32px);
+}
+.choose-role-grid {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 16px;
+}
+.choose-role-option {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.choose-role-option:hover,
+.choose-role-option:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+.profile-role-locked {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+@media (max-width: 820px) {
+  .site-header {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  .nav-shell {
+    width: 100% !important;
+    max-width: none;
+    margin: 0;
+    padding: 8px max(12px, env(safe-area-inset-right)) 8px max(12px, env(safe-area-inset-left));
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-shell .brand-link {
+    min-width: 0;
+    flex: 1;
+  }
+  .nav-actions {
+    flex-shrink: 0;
+    gap: 6px;
+  }
+  .nav-profile-link,
+  .desktop-only-auth,
+  .nav-founding-pilot {
+    display: none !important;
+  }
+  .menu-button {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    margin: 0;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+  .site-header .language-switch {
+    min-width: 44px;
+    min-height: 40px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+  .workspace {
+    display: flex;
+    flex-direction: column;
+  }
+  .workspace-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: rgba(6, 8, 14, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+  .workspace-sidebar-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .workspace-sidebar {
+    display: flex !important;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 200;
+    width: min(300px, 86vw);
+    height: 100dvh;
+    transform: translateX(-100%);
+    transition: transform 220ms ease;
+  }
+  .workspace-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .workspace-menu-button {
+    display: inline-flex;
+  }
+  .workspace-topbar {
+    padding: 0 max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
+    gap: 8px;
+  }
+  .workspace-mobile-brand {
+    display: inline-flex;
+  }
+  .workspace-topbar-role {
+    display: none;
+  }
+  .topbar-profile-name {
+    display: none;
+  }
+  body.sidebar-open {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 560px) {
+  .login-brand-panel {
+    display: none;
+  }
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+  .login-auth-panel {
+    padding: 16px 14px 32px;
+  }
+  .login-card-box {
+    padding: 18px 14px;
+  }
+}
+
 
 
 

@@ -87,6 +87,7 @@ const state: {
   routePath: string;
   role: Role;
   menuOpen: boolean;
+  sidebarOpen: boolean;
   session: Session | null;
   lastResearch: ResearchResult | null;
   lastResearchRole: Role | null;
@@ -101,6 +102,7 @@ const state: {
   ...parseLocalizedPath(window.location.pathname),
   role: (localStorage.getItem('justor-role') as Role | null) ?? 'citizen',
   menuOpen: false,
+  sidebarOpen: false,
   session: null,
   lastResearch: null,
   lastResearchRole: null,
@@ -199,6 +201,19 @@ const saveStoredProfile = (data: Partial<UserProfileData>): void => {
   localStorage.setItem('justor_user_profile', JSON.stringify(updated));
 };
 
+const VALID_ROLES: Role[] = ['citizen', 'student', 'professional'];
+const ROLE_LOCK_KEY = 'justor-role-locked';
+const isValidRole = (value: unknown): value is Role => VALID_ROLES.includes(value as Role);
+const isRoleLocked = (): boolean => localStorage.getItem(ROLE_LOCK_KEY) === 'true' && isValidRole(localStorage.getItem('justor-role'));
+const lockedRole = (): Role | null => (isRoleLocked() ? (localStorage.getItem('justor-role') as Role) : null);
+const lockUserRole = (role: Role): void => {
+  localStorage.setItem('justor-role', role);
+  localStorage.setItem(ROLE_LOCK_KEY, 'true');
+  state.role = role;
+  saveStoredProfile({ role });
+};
+const workspacePathForRole = (role: Role): string => localizedPath(`/workspace/${role}`, state.language);
+
 const brandMarkSvg = (inverse = false): string => {
   const strokeColor = inverse ? '#3B82F6' : '#1E3AC8';
   const fillColor = inverse ? 'rgba(59, 130, 246, 0.18)' : 'rgba(30, 58, 200, 0.12)';
@@ -212,26 +227,25 @@ const route = (path: string, label: string, className = ''): string => `<a href=
 const header = (): string => {
   const profile = getStoredProfile();
   const firstName = state.session ? (profile.fullName.split(' ')[0] || ui(state.language, 'profile')) : '';
+  const locked = lockedRole();
+  const workspaceNavLinks = locked
+    ? route(`/workspace/${locked}`, localizedRoleLabel(locked))
+    : `${route('/workspace/citizen', ui(state.language, 'citizen'))}
+        ${route('/workspace/professional', ui(state.language, 'legalProfessional'))}
+        ${route('/workspace/student', ui(state.language, 'lawStudent'))}`;
   return `
   <header class="site-header" data-header>
     <div class="nav-shell">
       ${route('/', brand(true), 'brand-link')}
       <nav class="desktop-nav" aria-label="Primary navigation">
-        ${route('/workspace/citizen', ui(state.language, 'citizen'))}
+        ${workspaceNavLinks}
         ${route('/legal-library', ui(state.language, 'library'))}
         ${route('/guides', ui(state.language, 'guides'))}
-        ${route('/workspace/professional', ui(state.language, 'legalProfessional'))}
-        ${route('/workspace/student', ui(state.language, 'lawStudent'))}
       </nav>
       <div class="nav-actions">
-        <button class="nav-founding-pilot" type="button" data-action="open-pilot-modal" aria-label="${ui(state.language, 'foundingPilot')}">
-          <span class="pilot-pulse-dot" aria-hidden="true"></span>
-          <span class="pilot-nav-label">${ui(state.language, 'foundingPilot')}</span>
-          <span class="pilot-nav-badge">৳200</span>
-        </button>
         <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
         ${state.session ? route('/profile', `<span class="nav-profile-pill">${icon('user', 14)} <span>${escapeHtml(firstName)}</span></span>`, 'nav-profile-link') : ''}
-        ${state.session ? `<button class="nav-signin" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` : route('/login', ui(state.language, 'signIn'), 'nav-signin')}
+        ${state.session ? `<button class="nav-signin desktop-only-auth" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` : route('/login', ui(state.language, 'signInOrSignUp'), 'nav-signin')}
         <button class="menu-button" type="button" data-action="menu" aria-label="${state.menuOpen ? ui(state.language, 'close') : ui(state.language, 'menu')}" aria-expanded="${state.menuOpen}">${icon(state.menuOpen ? 'close' : 'menu')}</button>
       </div>
     </div>
@@ -264,7 +278,9 @@ const header = (): string => {
         </div>
 
         <span class="menu-section-label">${ui(state.language, 'product')}</span>
-        ${route('/workspace/citizen', ui(state.language, 'citizen'), 'menu-nav-link')}
+        ${locked
+          ? route(`/workspace/${locked}`, localizedRoleLabel(locked), 'menu-nav-link')
+          : `${route('/workspace/citizen', ui(state.language, 'citizen'), 'menu-nav-link')}`}
         ${route('/legal-library', ui(state.language, 'library'), 'menu-nav-link')}
         ${route('/guides', ui(state.language, 'guides'), 'menu-nav-link')}
         ${route('/legal-updates', ui(state.language, 'updates'), 'menu-nav-link')}
@@ -277,8 +293,7 @@ const header = (): string => {
         </button>
         
         <span class="menu-section-label" style="margin-top: 16px;">${ui(state.language, 'resources')}</span>
-        ${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}
-        ${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}
+        ${!locked ? `${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}` : ''}
         ${route('/careers', 'Careers', 'menu-nav-link')}
         ${route('/profile', `${icon('user', 16)} ${ui(state.language, 'profile')} & ${ui(state.language, 'accountSettings')}`, 'menu-nav-link menu-nav-profile')}
         ${route('/trust', ui(state.language, 'trust'), 'menu-nav-link')}
@@ -288,7 +303,7 @@ const header = (): string => {
           <button class="button button-secondary language-drawer-btn" type="button" data-action="language">${ui(state.language, 'language')}</button>
           ${state.session 
             ? `<button class="button button-outline signout-drawer-btn" type="button" data-action="sign-out">${ui(state.language, 'signOut')}</button>` 
-            : route('/login', ui(state.language, 'signIn'), 'button signin-drawer-btn')
+            : route('/login', ui(state.language, 'signInOrSignUp'), 'button signin-drawer-btn')
           }
         </div>
       </div>
@@ -300,7 +315,7 @@ const footer = (): string => `
   <footer class="site-footer">
     <div class="footer-grid">
       <div>${route('/', brand(true), 'brand-link')}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
-      <nav aria-label="Product"><strong>Product</strong>${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}${route('/workspace/citizen', 'Citizen')}${route('/start', 'Start Justor')}</nav>
+      <nav aria-label="Product"><strong>Product</strong>${lockedRole() ? route(`/workspace/${lockedRole()}`, localizedRoleLabel(lockedRole() as Role)) : `${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}${route('/workspace/citizen', 'Citizen')}`}${route('/start', 'Start Justor')}</nav>
       <nav aria-label="Resources"><strong>Resources</strong>${route('/legal-library', ui(state.language, 'library'))}${route('/guides', ui(state.language, 'guides'))}${route('/legal-updates', ui(state.language, 'updates'))}${route('/trust', ui(state.language, 'trust'))}</nav>
       <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/careers', 'Careers')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
       <nav aria-label="Legal"><strong>Legal</strong>${route('/privacy', 'Privacy')}${route('/terms', 'Terms')}${route('/disclaimer', 'Disclaimer')}<a href="mailto:tajuddinahamed.contact@gmail.com">Email us</a></nav>
@@ -308,10 +323,14 @@ const footer = (): string => `
     <div class="footer-bottom"><span>© 2026 Justor AI</span><span>General legal information. Not a substitute for individual legal advice.</span><a href="tel:+8801764662967">+880 1764-662967</a></div>
   </footer>`;
 
-const roleRows = (surface: 'hero' | 'start' = 'hero'): string => `
+const roleRows = (surface: 'hero' | 'start' = 'hero'): string => {
+  const locked = lockedRole();
+  const roles = locked ? [locked] : roleOrder;
+  return `
   <nav class="${surface === 'hero' ? 'role-selectors' : 'start-roles'}" aria-label="Choose your Justor experience">
-    ${roleOrder.map((role) => `<a href="${localizedPath(`/workspace/${role}`, state.language)}" data-route data-role="${role}" class="role-row ${surface === 'start' ? 'start-role-row' : ''}"><span class="role-row-body"><span class="role-label">${localizedRoleLabel(role)}</span><strong class="role-heading">${rolePromise(role)}</strong><span class="role-desc role-desc-desktop">${roleBody(role)}</span><span class="role-desc role-desc-mobile">${mobileRoleBody(role)}</span></span><span class="role-arrow" aria-hidden="true">→</span><span class="sr-only">${roleContinue(role)}</span></a>`).join('')}
+    ${roles.map((role) => `<a href="${workspacePathForRole(role)}" data-route data-role="${role}" class="role-row ${surface === 'start' ? 'start-role-row' : ''}"><span class="role-row-body"><span class="role-label">${localizedRoleLabel(role)}</span><strong class="role-heading">${rolePromise(role)}</strong><span class="role-desc role-desc-desktop">${roleBody(role)}</span><span class="role-desc role-desc-mobile">${mobileRoleBody(role)}</span></span><span class="role-arrow" aria-hidden="true">→</span><span class="sr-only">${roleContinue(role)}</span></a>`).join('')}
   </nav>`;
+};
 
 const libraryPreviewFallback = (): string => `
   <section class="library-band light-section">
@@ -380,7 +399,8 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
     .toUpperCase() || 'JA';
 
   return `
-  <aside class="workspace-sidebar">
+  <div class="workspace-sidebar-overlay ${state.sidebarOpen ? 'is-open' : ''}" data-action="close-sidebar" aria-hidden="${!state.sidebarOpen}"></div>
+  <aside class="workspace-sidebar ${state.sidebarOpen ? 'is-open' : ''}" aria-label="${localizedRoleLabel(role)} sidebar">
     <div class="workspace-brand">
       ${route('/', `${brand(true)}<span class="workspace-beta-badge">Beta</span>`, 'workspace-brand-link')}
     </div>
@@ -422,7 +442,7 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
         <span class="sidebar-pilot-text">${ui(state.language, 'foundingPilot')}</span>
         <span class="sidebar-pilot-badge">৳200</span>
       </button>
-      <button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>
+      ${isRoleLocked() ? '' : `<button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>`}
       
       <div class="sidebar-user-footer">
         ${route('/profile', `
@@ -457,23 +477,19 @@ const workspaceTopbar = (role: Role, title?: string): string => {
 
   return `
   <header class="workspace-topbar">
-    <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
+    <div class="workspace-topbar-start">
+      <button class="workspace-menu-button" type="button" data-action="toggle-sidebar" aria-label="${state.sidebarOpen ? ui(state.language, 'close') : ui(state.language, 'menu')}" aria-expanded="${state.sidebarOpen}">${icon(state.sidebarOpen ? 'close' : 'menu')}</button>
+      <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
+    </div>
     <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
-    <div class="workspace-topbar-actions" style="display: flex; align-items: center; gap: 8px;">
-      <button class="workspace-topbar-pilot-btn" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot (৳200/mo)">
-        <span class="pilot-pulse-dot" aria-hidden="true"></span>
-        <span class="workspace-topbar-pilot-label">${ui(state.language, 'foundingPilot')}</span>
-        <span class="pilot-nav-badge">৳200</span>
-      </button>
+    <div class="workspace-topbar-actions">
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       ${state.session ? route('/profile', `
         <span class="topbar-profile-pill" title="User Profile">
           <span class="topbar-avatar-circle">${escapeHtml(initials)}</span>
           <span class="topbar-profile-name">${escapeHtml(firstName)}</span>
-          <span class="topbar-gear">${icon('gear', 14)}</span>
         </span>
-      `, 'workspace-profile-btn') : ''}
-      ${state.session ? `<button type="button" data-action="sign-out" class="text-button">Sign Out</button>` : route('/login', ui(state.language, 'signIn'), 'button button-small')}
+      `, 'workspace-profile-btn') : route('/login', ui(state.language, 'signInOrSignUp'), 'button button-small')}
     </div>
   </header>`;
 };
@@ -641,7 +657,7 @@ const professionalWorkspace = (): string => {
 };
 
 const studentPreAuth = (): string => `
-  <main id="page-content" class="preauth-page"><header>${route('/', brand(), 'brand-link')}<div><button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>${route('/start', ui(state.language, 'switchExperience'), 'text-link')}</div></header><section><span class="section-kicker">${ui(state.language, 'studentKicker')}</span><h1>${ui(state.language, 'studentHeading')}</h1><p>${ui(state.language, 'studentAllowance')}</p><button class="button google-button" type="button" data-action="google-sign-in" data-next="${localizedPath('/workspace/student', state.language)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><small>${ui(state.language, 'publicReading')}</small></section></main>`;
+  <main id="page-content" class="preauth-page"><header>${route('/', brand(), 'brand-link')}<div><button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>${route('/login', ui(state.language, 'signInOrSignUp'), 'text-link')}</div></header><section><span class="section-kicker">${ui(state.language, 'studentKicker')}</span><h1>${ui(state.language, 'studentHeading')}</h1><p>${ui(state.language, 'studentAllowance')}</p><button class="button google-button" type="button" data-action="google-sign-in" data-next="${localizedPath('/choose-role', state.language)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><small>${ui(state.language, 'publicReading')}</small></section></main>`;
 
 const studentWorkspace = (): string => {
   if (!state.session) return studentPreAuth();
@@ -870,7 +886,7 @@ const contactPage = (): string => `
   </main>`;
 
 const loginPage = (): string => {
-  const next = new URLSearchParams(window.location.search).get('next') || localizedPath(`/workspace/${state.role}`, state.language);
+  const next = new URLSearchParams(window.location.search).get('next') || localizedPath('/choose-role', state.language);
   const isBn = state.language === 'bn';
   return `
   <main id="page-content" class="login-page">
@@ -904,8 +920,8 @@ const loginPage = (): string => {
           <div class="login-feature-card">
             <span class="login-feature-icon">⚡</span>
             <div>
-              <strong>${isBn ? 'তিনটি নির্দিষ্ট ওয়ার্কস্পেস' : 'Three Dedicated Roles'}</strong>
-              <p>${isBn ? 'আইনজীবী, শিক্ষার্থী ও সাধারণ নাগরিকদের জন্য পৃথক ইন্টারফেস।' : 'Custom workflows for Advocates, Law Students, and Citizens.'}</p>
+              <strong>${isBn ? 'তিনটি নির্দিষ্ট ওয়ার্কস্পেস' : 'One locked workspace'}</strong>
+              <p>${isBn ? 'সাইন আপের পর আপনার রোল বেছে নিন — পরে পরিবর্তন করা যাবে না।' : 'After sign-up you choose Citizen, Student, or Professional. That role stays locked.'}</p>
             </div>
           </div>
           <div class="login-feature-card">
@@ -935,13 +951,12 @@ const loginPage = (): string => {
 
       <div class="login-card-box">
         <div class="login-card-header">
-          <span class="section-kicker">${ui(state.language, 'signIn')}</span>
+          <span class="section-kicker">${ui(state.language, 'signInOrSignUp')}</span>
           <h2>${isBn ? 'জাস্টরে প্রবেশ করুন' : 'Welcome to Justor AI'}</h2>
-          <p>${isBn ? 'গবেষণা ও ওয়ার্কস্পেস শুরু করতে আপনার পছন্দের মাধ্যমে প্রবেশ করুন।' : 'Sign in to access your legal workspaces, research history, and verified statutes.'}</p>
+          <p>${isBn ? 'গুগল দিয়ে সাইন ইন বা সাইন আপ করুন। এরপর আপনার রোল বেছে নিলে চ্যাটে যেতে পারবেন।' : 'Sign in or create an account with Google. Next you will choose a role, then enter your chat workspace.'}</p>
         </div>
 
         <div class="login-action-group">
-          <!-- Google Sign In Button -->
           <button class="button google-sign-btn" type="button" data-action="google-sign-in" data-next="${escapeHtml(next)}">
             <svg class="google-icon" width="20" height="20" viewBox="0 0 18 18" aria-hidden="true">
               <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.616z"/>
@@ -951,19 +966,18 @@ const loginPage = (): string => {
             </svg>
             <span>${ui(state.language, 'continueGoogle')}</span>
           </button>
+          <p class="login-google-hint">${isBn ? 'নতুন অ্যাকাউন্টও একই বাটনে তৈরি হয়।' : 'New accounts are created with the same Google button.'}</p>
 
-          <!-- Divider -->
           <div class="auth-divider">
             <span>${isBn ? 'অথবা অ্যাকাউন্ট ছাড়া টেস্ট করুন' : 'or test immediately without account'}</span>
           </div>
 
-          <!-- Guest Mode Instant Access -->
           <button class="guest-sign-card" type="button" data-action="guest-sign-in" data-next="${escapeHtml(next)}">
             <div class="guest-card-left">
               <span class="guest-icon-badge">${icon('user', 18)}</span>
               <div>
                 <strong>${isBn ? 'গেস্ট হিসেবে প্রবেশ করুন' : 'Continue as Guest'}</strong>
-                <p>${isBn ? 'লগইন ছাড়াই সকল আইনি গবেষণা ফিচার টেস্ট করুন' : 'Instant access to test all research & learning tools'}</p>
+                <p>${isBn ? 'রোল বেছে নিয়ে চ্যাট টেস্ট করুন' : 'Choose a role, then try the chat workspace'}</p>
               </div>
             </div>
             <span class="guest-arrow">${icon('arrow', 16)}</span>
@@ -982,6 +996,38 @@ const loginPage = (): string => {
           </div>
         </div>
       </div>
+    </section>
+  </main>`;
+};
+
+const chooseRolePage = (): string => {
+  if (!state.session) {
+    return loginPage();
+  }
+  if (isRoleLocked()) {
+    return `<main id="page-content" class="choose-role-page"><p class="choose-role-redirect">Opening your workspace…</p></main>`;
+  }
+  const isBn = state.language === 'bn';
+  return `
+  <main id="page-content" class="choose-role-page">
+    <header class="choose-role-header">
+      ${route('/', brand(), 'brand-link')}
+      <button class="language-switch" type="button" data-action="language">${ui(state.language, 'language')}</button>
+    </header>
+    <section class="choose-role-card">
+      <span class="section-kicker">${ui(state.language, 'signUp')}</span>
+      <h1>${ui(state.language, 'chooseRoleHeading')}</h1>
+      <p>${ui(state.language, 'chooseRoleBody')}</p>
+      <div class="choose-role-grid">
+        ${roleOrder.map((role) => `
+          <button type="button" class="choose-role-option" data-action="lock-role" data-role="${role}">
+            <span class="role-label">${localizedRoleLabel(role)}</span>
+            <strong>${rolePromise(role)}</strong>
+            <span>${roleBody(role)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <small>${isBn ? 'নাগরিক শুধু নাগরিক ওয়ার্কস্পেস ব্যবহার করতে পারবেন।' : 'A citizen account can only use the citizen workspace.'}</small>
     </section>
   </main>`;
 };
@@ -1460,28 +1506,20 @@ const profilePage = (): string => {
             </div>
           </div>
 
-          <!-- Role Selector with Visual Cards -->
+          <!-- Locked role -->
           <div class="profile-form-section">
             <label class="profile-form-label">
-              <span>${isBn ? 'ডিফল্ট ওয়ার্কস্পেস রোল' : 'Default Workspace Role'}</span>
+              <span>${isBn ? 'ওয়ার্কস্পেস রোল' : 'Workspace role'}</span>
+              <small class="label-hint">${ui(state.language, 'chooseRoleLocked')}</small>
             </label>
-            <div class="profile-role-cards-grid">
-              ${(['professional', 'student', 'citizen'] as Role[]).map((r) => {
-                const info = roleLabelsMap[r];
-                const isSelected = profile.role === r;
-                return `
-                  <label class="profile-role-option ${isSelected ? 'is-selected' : ''}">
-                    <input type="radio" name="role" value="${r}" ${isSelected ? 'checked' : ''} class="sr-only" />
-                    <span class="role-option-icon">${info.icon}</span>
-                    <div class="role-option-text">
-                      <strong class="role-option-title">${info.title}</strong>
-                      <span class="role-option-desc">${info.desc}</span>
-                    </div>
-                    <span class="role-option-check" aria-hidden="true">${isSelected ? '✓' : ''}</span>
-                  </label>
-                `;
-              }).join('')}
+            <div class="profile-role-locked">
+              <span class="role-option-icon">${roleLabelsMap[profile.role]?.icon}</span>
+              <div class="role-option-text">
+                <strong class="role-option-title">${roleLabelsMap[profile.role]?.title}</strong>
+                <span class="role-option-desc">${isBn ? 'রোল লক করা আছে এবং পরিবর্তন করা যাবে না।' : 'This role is locked and cannot be changed.'}</span>
+              </div>
             </div>
+            <input type="hidden" name="role" value="${profile.role}" />
           </div>
 
           <!-- Action Buttons -->
@@ -1522,6 +1560,7 @@ const pageForPath = (path: string): string => {
   if (path === '/careers') return careersPage();
   if (path === '/contact') return contactPage();
   if (path === '/login') return loginPage();
+  if (path === '/choose-role') return chooseRolePage();
   if (path === '/profile' || path === '/account' || path === '/settings') return profilePage();
   if (path === '/privacy') return policyPage('privacy');
   if (path === '/terms') return policyPage('terms');
@@ -1532,12 +1571,12 @@ const pageForPath = (path: string): string => {
   return notFoundPage();
 };
 
-const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/') || path === '/login' || path === '/start' || path === '/profile';
+const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/') || path === '/login' || path === '/start' || path === '/profile' || path === '/choose-role';
 
 const setDocumentMeta = (): void => {
   document.documentElement.lang = state.language === 'bn' ? 'bn' : 'en';
   const titles: Record<string, string> = {
-    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
+    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/choose-role': 'Choose workspace', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
   };
   const dynamic = state.routePath.startsWith('/workspace/') ? `${roleLabels[state.routePath.split('/').pop() as Role]} Workspace` : state.routePath.startsWith('/guides/') || state.routePath.startsWith('/action-guides/') ? 'Citizen Legal Guide' : state.routePath.startsWith('/legal-updates/') ? 'Legal Update' : 'Justor AI';
   document.title = `${titles[state.routePath] ?? dynamic} | Justor AI`;
@@ -1546,8 +1585,26 @@ const setDocumentMeta = (): void => {
 const render = (preserveScroll = false, preservedQuery = ''): void => {
   const parsed = parseLocalizedPath(window.location.pathname);
   state.language = parsed.language;
-  state.routePath = parsed.routePath;
+  let routePath = parsed.routePath;
   state.menuOpen = false;
+  state.sidebarOpen = false;
+
+  const locked = lockedRole();
+  if (locked) state.role = locked;
+
+  const openAuthRoutes = new Set(['/login', '/choose-role']);
+  if (state.session && !locked && !openAuthRoutes.has(routePath)) {
+    routePath = '/choose-role';
+    history.replaceState({}, '', `${localizedPath('/choose-role', state.language)}${window.location.search}${window.location.hash}`);
+  } else if (locked && routePath === '/choose-role') {
+    routePath = `/workspace/${locked}`;
+    history.replaceState({}, '', workspacePathForRole(locked));
+  } else if (locked && routePath.startsWith('/workspace/') && routePath !== `/workspace/${locked}`) {
+    routePath = `/workspace/${locked}`;
+    history.replaceState({}, '', `${workspacePathForRole(locked)}${window.location.hash}`);
+  }
+
+  state.routePath = routePath;
   const focused = isFocusedRoute(state.routePath);
   appRoot.innerHTML = `${focused ? '' : header()}${pageForPath(state.routePath)}${focused ? '' : footer()}<div class="toast-region" aria-live="polite" aria-atomic="true"></div>`;
   hydrateHeroVisual();
@@ -2503,6 +2560,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   if (!state.session) {
     sessionStorage.setItem('justor_citizen_query_count', String(parseInt(sessionStorage.getItem('justor_citizen_query_count') || '0', 10) + 1));
     state.session = authService.signInAsGuest();
+    if (!isRoleLocked() && isValidRole(role)) lockUserRole(role);
   }
 
   const activeThread = chatStore.getOrCreateActiveThread(role);
@@ -2661,9 +2719,12 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
     scrollArea?.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
   } catch (error) {
     clearInterval(timerInterval);
-    const message = error instanceof Error && error.message === 'authentication-required'
+    const err = error instanceof Error ? error.message : '';
+    const message = err === 'authentication-required'
       ? 'Your session has ended. Sign in again to continue.'
-      : 'The legal research service is unavailable. No answer was generated.';
+      : err === 'quota-exceeded'
+        ? 'Daily research quota reached. Try again tomorrow or sign in with a higher-allowance role.'
+        : 'The legal research service is unavailable. No answer was generated.';
     const thinkingElement = document.getElementById(thinkingId);
     if (thinkingElement) {
       thinkingElement.outerHTML = `
@@ -2766,8 +2827,22 @@ document.addEventListener('click', (event) => {
       document.querySelector('.mobile-drawer')?.classList.remove('is-open');
       document.querySelector('.mobile-drawer-overlay')?.classList.remove('is-open');
     }
+    if (state.sidebarOpen) {
+      state.sidebarOpen = false;
+      document.body.classList.remove('sidebar-open');
+    }
     const role = link.dataset.role as Role | undefined;
-    if (role) { state.role = role; localStorage.setItem('justor-role', role); }
+    const locked = lockedRole();
+    if (role && locked && role !== locked) {
+      showToast(ui(state.language, 'chooseRoleLocked'), ui(state.language, 'roleLockedToast'), 'warning');
+      return;
+    }
+    if (role && !locked) { state.role = role; localStorage.setItem('justor-role', role); }
+    const destPath = parseLocalizedPath(new URL(link.href, window.location.origin).pathname).routePath;
+    if (locked && destPath.startsWith('/workspace/') && destPath !== `/workspace/${locked}`) {
+      showToast(ui(state.language, 'chooseRoleLocked'), ui(state.language, 'roleLockedToast'), 'warning');
+      return;
+    }
     navigate(link.href);
     return;
   }
@@ -2798,7 +2873,42 @@ document.addEventListener('click', (event) => {
     next.pathname = localizedPath(state.routePath, nextLanguage);
     navigate(`${next.pathname}${next.search}${next.hash}`, true, preservedQuery);
   }
-  if (action === 'switch-experience') navigate(localizedPath('/start', state.language));
+  if (action === 'switch-experience') {
+    if (isRoleLocked()) {
+      showToast(ui(state.language, 'chooseRoleLocked'), ui(state.language, 'roleLockedToast'), 'warning');
+      return;
+    }
+    navigate(localizedPath('/start', state.language));
+  }
+  if (action === 'toggle-sidebar') {
+    state.sidebarOpen = !state.sidebarOpen;
+    document.querySelector('.workspace-sidebar')?.classList.toggle('is-open', state.sidebarOpen);
+    document.querySelector('.workspace-sidebar-overlay')?.classList.toggle('is-open', state.sidebarOpen);
+    const btn = document.querySelector('.workspace-menu-button');
+    if (btn) {
+      btn.setAttribute('aria-expanded', String(state.sidebarOpen));
+      btn.innerHTML = icon(state.sidebarOpen ? 'close' : 'menu');
+    }
+    document.body.classList.toggle('sidebar-open', state.sidebarOpen);
+  }
+  if (action === 'close-sidebar') {
+    state.sidebarOpen = false;
+    document.querySelector('.workspace-sidebar')?.classList.remove('is-open');
+    document.querySelector('.workspace-sidebar-overlay')?.classList.remove('is-open');
+    const btn = document.querySelector('.workspace-menu-button');
+    if (btn) {
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML = icon('menu');
+    }
+    document.body.classList.remove('sidebar-open');
+  }
+  if (action === 'lock-role') {
+    const role = actionElement?.dataset.role as Role | undefined;
+    if (!role || !isValidRole(role) || !state.session) return;
+    lockUserRole(role);
+    navigate(workspacePathForRole(role));
+    return;
+  }
   if (action === 'new-research') {
     state.lastResearch = null;
     state.lastResearchRole = null;
@@ -2973,15 +3083,15 @@ document.addEventListener('click', (event) => {
   }
   if (action === 'sign-out') void authService.signOut().then(() => { state.session = null; render(); });
   if (action === 'google-sign-in') {
-    const next = actionElement?.dataset.next ?? localizedPath(`/workspace/${state.role}`, state.language);
+    const next = actionElement?.dataset.next ?? localizedPath('/choose-role', state.language);
     void authService.signInWithGoogle(next).then((result) => {
       if (result.error) showToast('Sign-in unavailable', result.error, 'warning');
     });
   }
   if (action === 'guest-sign-in') {
-    const next = actionElement?.dataset.next ?? localizedPath(`/workspace/${state.role}`, state.language);
+    const next = actionElement?.dataset.next ?? localizedPath('/choose-role', state.language);
     state.session = authService.signInAsGuest();
-    showToast('Guest Mode Activated', 'Full access to test all research features.', 'positive');
+    showToast('Guest Mode Activated', 'Choose your workspace role to continue.', 'positive');
     navigate(next);
   }
   if (action === 'export-chat-history') {
@@ -3095,11 +3205,10 @@ document.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     const fullName = String(formData.get('fullName') || '').trim();
-    const role = (formData.get('role') as Role) || state.role;
+    const role = lockedRole() || (formData.get('role') as Role) || state.role;
 
     saveStoredProfile({ fullName, role });
     state.role = role;
-    localStorage.setItem('justor-role', role);
     showToast(ui(state.language, 'saveSettings'), 'Profile updated successfully.', 'positive');
     render(true);
   }
