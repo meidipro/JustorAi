@@ -44,6 +44,7 @@ app = FastAPI(
     version="4.0.0",
 )
 
+from backend.learning import router as learning_router
 from backend.security_controls import (
     admin_secret,
     claim_pilot_email,
@@ -64,6 +65,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["Authorization", "Content-Type", "Accept", "X-Guest-Id"],
 )
+
+app.include_router(learning_router)
 
 if not admin_secret():
     logger.warning("JUSTOR_ADMIN_SECRET is not set; /api/qa/* will return 503 until configured.")

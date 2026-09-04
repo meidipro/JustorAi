@@ -17,7 +17,7 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         # Comma-separated list of allowed frontend origins
-        # e.g. "https://justor.ai,https://www.justor.ai,https://justorai.vercel.app,http://localhost:5173"
+        # e.g. "https://justorai.com,https://www.justorai.com,https://justorai.vercel.app"
         sync: false
       - key: JUSTOR_ADMIN_SECRET
         sync: false

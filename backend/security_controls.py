@@ -15,6 +15,8 @@ from fastapi import Header, HTTPException, Request
 logger = logging.getLogger(__name__)
 
 DEFAULT_ORIGINS = [
+    "https://justorai.com",
+    "https://www.justorai.com",
     "https://justor.ai",
     "https://www.justor.ai",
     "https://justorai.vercel.app",

@@ -16,6 +16,8 @@ import {
 } from './services';
 import { computeStatusBanner, localizedPath, parseLocalizedPath, ui, type CopyKey } from './i18n';
 import { chatStore, type ChatThread } from './chatStore';
+import { learningCatalog, getSection } from './learning/catalog';
+import { bindLearningSession, buildGoDeeperQuery, renderLearningHome } from './learning/ui';
 
 const appRoot = document.getElementById('app');
 if (!appRoot) throw new Error('App root was not found.');
@@ -161,6 +163,7 @@ const icon = (name: string, size = 20): string => {
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
     gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
     home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/>',
+    cards: '<rect x="4" y="6" width="12" height="16" rx="2"/><path d="M10 4h8a2 2 0 0 1 2 2v14"/>',
     mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] ?? paths.source}</svg>`;
@@ -659,20 +662,22 @@ const professionalWorkspace = (): string => {
 const studentPreAuth = (): string => `
   <main id="page-content" class="preauth-page"><header>${route('/', brand(), 'brand-link')}<div><button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>${route('/login', ui(state.language, 'signInOrSignUp'), 'text-link')}</div></header><section><span class="section-kicker">${ui(state.language, 'studentKicker')}</span><h1>${ui(state.language, 'studentHeading')}</h1><p>${ui(state.language, 'studentAllowance')}</p><button class="button google-button" type="button" data-action="google-sign-in" data-next="${localizedPath('/choose-role', state.language)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><small>${ui(state.language, 'publicReading')}</small></section></main>`;
 
+const studentNavItems = (): Array<{ label: string; href: string; icon: string }> => [
+  { label: ui(state.language, 'studyHome'), href: '/workspace/student', icon: 'home' },
+  { label: ui(state.language, 'biteSize'), href: '/workspace/student/learn', icon: 'cards' },
+  { label: ui(state.language, 'askJustor'), href: '/workspace/student#ask', icon: 'source' },
+  { label: ui(state.language, 'cases'), href: '/legal-library?type=case', icon: 'scale' },
+  { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'book' },
+  { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
+];
+
 const studentWorkspace = (): string => {
   if (!state.session) return studentPreAuth();
   const thread = chatStore.getOrCreateActiveThread('student');
   return `
   <main id="page-content" class="workspace workspace-student">
     <h1 class="sr-only">${state.language === 'bn' ? 'আইন শিক্ষা — শিক্ষার্থী ওয়ার্কস্পেস' : 'Legal Study — Student Workspace'}</h1>
-    ${workspaceNav('student', [
-      { label: ui(state.language, 'studyHome'), href: '/workspace/student', icon: 'home' },
-      { label: ui(state.language, 'askJustor'), href: '/workspace/student#ask', icon: 'source' },
-      { label: ui(state.language, 'cases'), href: '/legal-library?type=case', icon: 'scale' },
-      { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'book' },
-      { label: ui(state.language, 'concepts'), href: '/legal-library?type=concept', icon: 'source' },
-      { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
-    ], ui(state.language, 'studyHome'))}
+    ${workspaceNav('student', studentNavItems(), ui(state.language, 'studyHome'))}
     <section class="workspace-main">
       ${workspaceTopbar('student', thread.title !== 'New Study Session' ? thread.title : undefined)}
       <div class="workspace-chat-container">
@@ -683,6 +688,26 @@ const studentWorkspace = (): string => {
       </div>
     </section>
     ${mobileBottomNav('student')}
+  </main>`;
+};
+
+const studentLearnWorkspace = (): string => {
+  if (!state.session) return studentPreAuth();
+  const sectionSlug = state.routePath.split('/')[4] || '';
+  const nav = workspaceNav('student', studentNavItems(), ui(state.language, 'biteSize'));
+  const topbar = workspaceTopbar('student', ui(state.language, 'biteSize'));
+  const bottom = mobileBottomNav('student');
+  if (!sectionSlug) {
+    return renderLearningHome(learningCatalog, state.language, route, nav, topbar, bottom);
+  }
+  return `
+  <main id="page-content" class="workspace workspace-student workspace-learn workspace-learn-session">
+    ${nav}
+    <section class="workspace-main">
+      ${topbar}
+      <div class="learn-session-mount" data-learn-mount data-section="${escapeHtml(sectionSlug)}"></div>
+    </section>
+    ${bottom}
   </main>`;
 };
 
@@ -721,9 +746,9 @@ function mobileBottomNav(role: Role): string {
       ]
     : role === 'student'
       ? [
-          { label: ui(state.language, 'home'), href: '/', icon: 'home' },
-          { label: ui(state.language, 'library'), href: '/legal-library', icon: 'book' },
-          { label: ui(state.language, 'mobileAsk'), href: '#ask', icon: 'source', action: 'focus-composer' },
+          { label: ui(state.language, 'home'), href: '/workspace/student', icon: 'home' },
+          { label: ui(state.language, 'biteSize'), href: '/workspace/student/learn', icon: 'cards' },
+          { label: ui(state.language, 'mobileAsk'), href: '/workspace/student#ask', icon: 'source' },
           { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
         ]
       : [
@@ -1553,6 +1578,7 @@ const pageForPath = (path: string): string => {
   if (path === '/legal-updates') return updatesPage();
   if (path.startsWith('/legal-updates/')) return updateDetailShell(decodeURIComponent(path.slice('/legal-updates/'.length)));
   if (path === '/workspace/professional') return professionalWorkspace();
+  if (path === '/workspace/student/learn' || path.startsWith('/workspace/student/learn/')) return studentLearnWorkspace();
   if (path === '/workspace/student') return studentWorkspace();
   if (path === '/workspace/citizen') return citizenWorkspace();
   if (path === '/trust') return trustPage();
@@ -1599,7 +1625,7 @@ const render = (preserveScroll = false, preservedQuery = ''): void => {
   } else if (locked && routePath === '/choose-role') {
     routePath = `/workspace/${locked}`;
     history.replaceState({}, '', workspacePathForRole(locked));
-  } else if (locked && routePath.startsWith('/workspace/') && routePath !== `/workspace/${locked}`) {
+  } else if (locked && routePath.startsWith('/workspace/') && !routePath.startsWith(`/workspace/${locked}`)) {
     routePath = `/workspace/${locked}`;
     history.replaceState({}, '', `${workspacePathForRole(locked)}${window.location.hash}`);
   }
@@ -1620,6 +1646,7 @@ const render = (preserveScroll = false, preservedQuery = ''): void => {
   }
   if (!preserveScroll) window.scrollTo({ top: 0, behavior: 'instant' });
   void hydrateRoute(state.routePath);
+  requestAnimationFrame(() => restorePendingResearch());
 };
 
 const navigate = (href: string, preserveScroll = false, preservedQuery = ''): void => {
@@ -1859,6 +1886,7 @@ const hydrateRoute = async (path: string): Promise<void> => {
   if (path === '/legal-updates') await hydrateUpdates();
   if (path.startsWith('/legal-updates/')) await hydrateUpdateDetail(decodeURIComponent(path.slice('/legal-updates/'.length)));
   if (path === '/workspace/professional') await hydrateUpdates('[data-professional-updates]');
+  hydrateLearningPath(path);
   if (path === '/workspace/citizen') await hydrateCitizen();
   if (path === '/amendment-admin') {
     const mount = document.getElementById('amendment-admin-mount');
@@ -2556,6 +2584,8 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   if (!query) return;
   const role = (form.dataset.role as Role) || state.role || 'professional';
   const context = form.dataset.contextId ? { id: form.dataset.contextId, title: form.dataset.contextTitle ?? '', topic: form.dataset.contextTopic ?? '' } : undefined;
+  const displayQuery = sessionStorage.getItem('justor-chat-display-query') || query;
+  sessionStorage.removeItem('justor-chat-display-query');
   
   if (!state.session) {
     sessionStorage.setItem('justor_citizen_query_count', String(parseInt(sessionStorage.getItem('justor_citizen_query_count') || '0', 10) + 1));
@@ -2564,7 +2594,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   }
 
   const activeThread = chatStore.getOrCreateActiveThread(role);
-  chatStore.addMessage(activeThread.id, { sender: 'user', content: query });
+  chatStore.addMessage(activeThread.id, { sender: 'user', content: displayQuery });
 
   const scrollArea = document.querySelector<HTMLElement>('[data-chat-scroll]');
   let conversationThread = scrollArea?.querySelector<HTMLElement>('.chat-conversation-thread');
@@ -2584,7 +2614,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
     const userRowHtml = `
       <div class="chat-message-row user-row">
         <div class="chat-user-bubble">
-          <p class="user-query-text">${escapeHtml(query)}</p>
+          <p class="user-query-text">${escapeHtml(displayQuery)}</p>
           <span class="user-bubble-time">Just now</span>
         </div>
       </div>
@@ -2839,7 +2869,7 @@ document.addEventListener('click', (event) => {
     }
     if (role && !locked) { state.role = role; localStorage.setItem('justor-role', role); }
     const destPath = parseLocalizedPath(new URL(link.href, window.location.origin).pathname).routePath;
-    if (locked && destPath.startsWith('/workspace/') && destPath !== `/workspace/${locked}`) {
+    if (locked && destPath.startsWith('/workspace/') && !destPath.startsWith(`/workspace/${locked}`)) {
       showToast(ui(state.language, 'chooseRoleLocked'), ui(state.language, 'roleLockedToast'), 'warning');
       return;
     }
@@ -3284,23 +3314,50 @@ const restorePendingContext = (): void => {
   } catch { sessionStorage.removeItem('justor-guide-context'); }
 };
 
-const restorePendingResearch = (): void => {
+function restorePendingResearch(): void {
   if (!state.session) return;
   const raw = sessionStorage.getItem('justor-pending-research');
   if (!raw) return;
   try {
-    const pending = JSON.parse(raw) as { query?: string; role?: Role };
+    const pending = JSON.parse(raw) as { query?: string; displayQuery?: string; role?: Role };
     if (!pending.query || !pending.role || state.routePath !== `/workspace/${pending.role}`) return;
     const form = document.querySelector<HTMLFormElement>('[data-research-form]');
     const textarea = form?.querySelector<HTMLTextAreaElement>('textarea[name="query"]');
     if (!form || !textarea) return;
     textarea.value = pending.query;
+    if (pending.displayQuery) sessionStorage.setItem('justor-chat-display-query', pending.displayQuery);
     sessionStorage.removeItem('justor-pending-research');
     void submitResearch(form);
   } catch {
     sessionStorage.removeItem('justor-pending-research');
   }
-};
+}
+
+function hydrateLearningPath(path: string): void {
+  if (!path.startsWith('/workspace/student/learn')) return;
+  const slug = path.split('/')[4];
+  if (!slug) return;
+  const section = getSection(slug);
+  const mount = document.querySelector<HTMLElement>('[data-learn-mount]');
+  if (!section || !mount) return;
+  const reviewOnly = new URLSearchParams(window.location.search).get('review') === '1';
+  bindLearningSession(mount, section, state.language, {
+    reviewOnly,
+    onExit: () => navigate(localizedPath('/workspace/student/learn', state.language)),
+    onComplete: () => navigate(`${localizedPath(`/workspace/student/learn/${slug}`, state.language)}?review=1`),
+    onGoDeeper: (handoff) => {
+      const { query, displayQuery } = buildGoDeeperQuery(section, handoff);
+      sessionStorage.setItem('justor-pending-research', JSON.stringify({
+        query,
+        displayQuery,
+        role: 'student',
+      }));
+      navigate(`${localizedPath('/workspace/student', state.language)}#ask`);
+    },
+    onViewProvision: (act, sectionLabel) => { void openProvisionModal(act, sectionLabel); },
+    localizedPath: (p) => localizedPath(p, state.language),
+  });
+}
 
 export function mountApp(): void {
   render();
