@@ -5308,16 +5308,31 @@ svg { flex: 0 0 auto; }
 }
 
 
+
 .learn-session-mount {
+  position: relative;
   flex: 1;
   min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(90% 55% at 50% -10%, rgba(30, 56, 200, 0.07), transparent 62%),
+    radial-gradient(90% 55% at 50% -10%, rgba(30, 56, 200, 0.08), transparent 62%),
     linear-gradient(180deg, #F5F7FB 0%, #EEF2F8 100%);
 }
+.learn-session-mount::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.32;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(30, 56, 200, 0.12) 0 1.1px, transparent 1.5px),
+    radial-gradient(circle at 72% 38%, rgba(59, 91, 219, 0.1) 0 1px, transparent 1.4px);
+  background-size: 36px 36px, 48px 48px;
+}
+.learn-session-mount > * { position: relative; z-index: 1; }
 .learn-session {
   flex: 1;
   min-height: 0;
@@ -5382,6 +5397,11 @@ svg { flex: 0 0 auto; }
   width: 100%;
   height: min(520px, 100%);
   max-height: 100%;
+  animation: learn-stack-float 6s ease-in-out infinite;
+}
+@keyframes learn-stack-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 .learn-ghost {
   position: absolute;
@@ -5392,7 +5412,10 @@ svg { flex: 0 0 auto; }
   pointer-events: none;
 }
 .learn-ghost.g1 { transform: scale(0.97) translateY(12px); }
-.learn-ghost.g2 { transform: scale(0.94) translateY(24px); background: rgba(226, 232, 240, 0.7); }
+.learn-ghost.g2 {
+  transform: scale(0.94) translateY(24px);
+  background: rgba(226, 232, 240, 0.7);
+}
 
 .learn-card {
   position: relative;
@@ -5405,13 +5428,28 @@ svg { flex: 0 0 auto; }
   overflow: hidden;
   cursor: pointer;
   outline: none;
+  opacity: 1;
+  transform: none;
   transform-style: preserve-3d;
-  transition: transform 180ms ease, box-shadow 180ms ease;
-  animation: learn-card-in 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease, opacity 180ms ease;
 }
-@keyframes learn-card-in {
-  from { opacity: 0; transform: translateY(18px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+.learn-card.is-enter {
+  transform: translateY(12px) scale(0.985);
+}
+.learn-card.is-live {
+  transform: none;
+}
+.learn-card.is-exit-right,
+.learn-card.is-exit-left {
+  pointer-events: none;
+}
+.learn-card.is-exit-right {
+  transform: translateX(110%) rotate(6deg) scale(0.96);
+  opacity: 0;
+}
+.learn-card.is-exit-left {
+  transform: translateX(-110%) rotate(-6deg) scale(0.96);
+  opacity: 0;
 }
 .learn-card.is-front {
   color: #F8FAFC;
@@ -5423,27 +5461,38 @@ svg { flex: 0 0 auto; }
   box-shadow:
     0 28px 56px rgba(11, 18, 32, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: learn-shadow-breathe 6s ease-in-out infinite;
+}
+@keyframes learn-shadow-breathe {
+  0%, 100% {
+    box-shadow:
+      0 24px 48px rgba(11, 18, 32, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 32px 60px rgba(11, 18, 32, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
 }
 .learn-card.is-front:hover {
   box-shadow:
-    0 32px 64px rgba(11, 18, 32, 0.38),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 34px 64px rgba(11, 18, 32, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 .learn-card.is-revealed {
   cursor: default;
   color: #101828;
+  opacity: 1;
   background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%);
   border: 1px solid #E4E7EC;
   box-shadow: 0 20px 44px rgba(16, 24, 40, 0.1);
-  animation: learn-reveal 320ms ease;
-}
-@keyframes learn-reveal {
-  from { opacity: 0.4; transform: rotateY(-8deg) scale(0.98); }
-  to { opacity: 1; transform: none; }
+  animation: none;
 }
 .learn-card:focus-visible {
   box-shadow: 0 0 0 3px rgba(30, 56, 200, 0.3), 0 28px 56px rgba(11, 18, 32, 0.28);
 }
+.learn-session.is-revealed .learn-stack { animation-play-state: paused; }
 .learn-card-face {
   flex: 1;
   display: flex;
@@ -5452,6 +5501,17 @@ svg { flex: 0 0 auto; }
   min-height: 0;
   overflow-y: auto;
   box-sizing: border-box;
+  opacity: 1;
+}
+.learn-flow-item {
+  opacity: 1;
+  transform: translateY(10px);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i, 0) * 55ms);
+  will-change: transform;
+}
+.learn-card-face.is-flowing .learn-flow-item {
+  transform: translateY(0);
 }
 .learn-card-top {
   display: flex;
@@ -5490,17 +5550,97 @@ svg { flex: 0 0 auto; }
 }
 
 .learn-asset {
-  height: 148px;
+  height: 168px;
   display: grid;
   place-items: center;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   flex-shrink: 0;
 }
-.learn-asset.has-image {
-  height: 168px;
+.learn-asset.has-image { height: 178px; }
+.learn-visual-stage {
+  position: relative;
+  width: min(220px, 78%);
+  height: 154px;
+  display: grid;
+  place-items: center;
+}
+.learn-visual-core {
+  position: relative;
+  z-index: 2;
+}
+.learn-orbit,
+.learn-node,
+.learn-flow-beam,
+.learn-scan,
+.learn-pulse-ring {
+  position: absolute;
+  pointer-events: none;
+}
+.learn-orbit {
+  border-radius: 999px;
+  border: 1px solid rgba(147, 197, 253, 0.35);
+  inset: 18px;
+  animation: learn-orbit-spin 10s linear infinite;
+}
+.learn-orbit.o2 {
+  inset: 6px;
+  border-style: dashed;
+  border-color: rgba(96, 165, 250, 0.28);
+  animation-duration: 14s;
+  animation-direction: reverse;
+}
+.learn-node {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #93C5FD;
+  box-shadow: 0 0 12px rgba(59, 91, 219, 0.65);
+  animation: learn-node-pulse 2.4s ease-in-out infinite;
+}
+.learn-node.n1 { top: 18%; left: 14%; }
+.learn-node.n2 { bottom: 20%; right: 16%; animation-delay: 0.5s; background: #60A5FA; }
+.learn-flow-beam {
+  left: 18%;
+  right: 18%;
+  top: 50%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(147, 197, 253, 0.75), transparent);
+  transform: translateY(-50%);
+  animation: learn-beam 2.8s ease-in-out infinite;
+}
+.learn-scan {
+  left: 12%;
+  right: 12%;
+  height: 26%;
+  top: 12%;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(147, 197, 253, 0.18), transparent);
+  animation: learn-scan-move 3.2s ease-in-out infinite;
+  opacity: 0;
+}
+.learn-pulse-ring {
+  inset: 28px;
+  border-radius: 999px;
+  border: 2px solid rgba(96, 165, 250, 0.35);
+  animation: learn-pulse-ring 2.6s ease-out infinite;
+}
+.learn-asset.type-rule_visualizer .learn-scan { opacity: 1; }
+.learn-asset.type-rule_visualizer .learn-flow-beam { opacity: 0.35; }
+.learn-asset.type-counterintuitive .learn-orbit.o1 { animation-duration: 7s; }
+.learn-asset.type-myth_buster .learn-pulse-ring {
+  border-color: rgba(134, 239, 172, 0.45);
+}
+.learn-asset.type-edge_case .learn-node {
+  background: #FDBA74;
+  box-shadow: 0 0 12px rgba(251, 146, 60, 0.55);
+}
+.learn-asset.type-scenario .learn-flow-beam {
+  animation-duration: 2.1s;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.9), transparent);
 }
 .learn-asset-img {
-  width: min(168px, 58%);
+  width: min(148px, 70%);
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
@@ -5510,6 +5650,7 @@ svg { flex: 0 0 auto; }
     0 14px 28px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
+  animation: learn-art-float 5.2s ease-in-out infinite;
 }
 .learn-asset-plate {
   position: relative;
@@ -5523,6 +5664,31 @@ svg { flex: 0 0 auto; }
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 12px 28px rgba(0, 0, 0, 0.18);
+  animation: learn-art-float 5.2s ease-in-out infinite;
+}
+@keyframes learn-art-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes learn-orbit-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes learn-node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  50% { transform: scale(1.35); opacity: 1; }
+}
+@keyframes learn-beam {
+  0%, 100% { opacity: 0.25; transform: translateY(-50%) scaleX(0.72); }
+  50% { opacity: 1; transform: translateY(-50%) scaleX(1); }
+}
+@keyframes learn-scan-move {
+  0% { transform: translateY(0); opacity: 0.15; }
+  40% { opacity: 0.55; }
+  100% { transform: translateY(140%); opacity: 0.1; }
+}
+@keyframes learn-pulse-ring {
+  0% { transform: scale(0.82); opacity: 0.7; }
+  100% { transform: scale(1.28); opacity: 0; }
 }
 .learn-asset.tone-spline .learn-asset-plate {
   background: linear-gradient(145deg, rgba(59, 91, 219, 0.4), rgba(14, 165, 233, 0.08));
@@ -5549,9 +5715,28 @@ svg { flex: 0 0 auto; }
   50% { transform: scale(1.05); opacity: 0.5; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .learn-stack,
+  .learn-card.is-front,
+  .learn-asset-img,
+  .learn-asset-plate,
   .learn-asset-ring,
-  .learn-card,
-  .learn-card.is-reduced { animation: none; }
+  .learn-orbit,
+  .learn-node,
+  .learn-flow-beam,
+  .learn-scan,
+  .learn-pulse-ring {
+    animation: none !important;
+  }
+  .learn-card.is-enter,
+  .learn-flow-item {
+    transform: none !important;
+    transition: none !important;
+  }
+  .learn-card.is-exit-right,
+  .learn-card.is-exit-left {
+    transition: none;
+    opacity: 0;
+  }
 }
 
 .learn-hook,
@@ -5691,6 +5876,12 @@ svg { flex: 0 0 auto; }
 .learn-controls.is-locked .learn-ctrl.review {
   opacity: 0.72;
   filter: saturate(0.85);
+}
+.learn-card.is-tilting {
+  transition: none;
+}
+.learn-session.is-revealed .learn-stack {
+  animation-play-state: paused;
 }
 .learn-controls.is-active .learn-ctrl.gotit {
   box-shadow: 0 10px 22px rgba(30, 56, 200, 0.28);
@@ -5843,9 +6034,10 @@ svg { flex: 0 0 auto; }
   .learn-topic-row { grid-template-columns: 42px minmax(0, 1fr); }
   .learn-topic-go { display: none; }
   .learn-ctrl span:not(.learn-ctrl-ico) { font-size: 12.5px; }
-  .learn-asset { height: 92px; }
-  .learn-asset.has-image { height: 132px; }
-  .learn-asset-img { width: min(132px, 52%); border-radius: 18px; }
+  .learn-asset { height: 132px; }
+  .learn-asset.has-image { height: 140px; }
+  .learn-visual-stage { height: 120px; width: min(190px, 82%); }
+  .learn-asset-img { width: min(112px, 58%); border-radius: 18px; }
   .learn-asset-plate { width: 76px; height: 76px; border-radius: 22px; }
   .learn-glyph { width: 42px; height: 42px; }
   .learn-reveal-btn { min-height: 44px; }

@@ -26,20 +26,27 @@ const conceptGlyph = (card: LearningCard): string => {
   return `<svg class="learn-glyph" viewBox="0 0 80 80" aria-hidden="true"><circle cx="28" cy="36" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="52" cy="36" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M38 36h4M24 52c4 6 12 8 16 8s12-2 16-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
 };
 
+const visualFx = (card: LearningCard): string => `
+  <span class="learn-orbit o1"></span>
+  <span class="learn-orbit o2"></span>
+  <span class="learn-node n1"></span>
+  <span class="learn-node n2"></span>
+  <span class="learn-flow-beam"></span>
+  <span class="learn-scan"></span>
+  <span class="learn-pulse-ring" data-type="${esc(card.card_type)}"></span>`;
+
 const assetMarkup = (card: LearningCard): string => {
   const kind = card.asset_type;
   const tone = kind === 'spline' ? 'tone-spline' : kind === 'lottie' ? 'tone-lottie' : 'tone-image';
-  if (card.asset_url) {
-    return `
-    <div class="learn-asset ${tone} has-image" aria-hidden="true">
-      <img class="learn-asset-img" src="${esc(card.asset_url)}" alt="" width="160" height="160" loading="lazy" decoding="async" />
-    </div>`;
-  }
+  const typeClass = `type-${esc(card.card_type || 'concept')}`;
+  const core = card.asset_url
+    ? `<img class="learn-asset-img" src="${esc(card.asset_url)}" alt="" width="160" height="160" loading="lazy" decoding="async" />`
+    : `<div class="learn-asset-plate">${conceptGlyph(card)}<span class="learn-asset-ring"></span></div>`;
   return `
-    <div class="learn-asset ${tone}" aria-hidden="true">
-      <div class="learn-asset-plate">
-        ${conceptGlyph(card)}
-        <span class="learn-asset-ring"></span>
+    <div class="learn-asset ${tone} ${typeClass} ${card.asset_url ? 'has-image' : ''}" aria-hidden="true">
+      <div class="learn-visual-stage">
+        ${visualFx(card)}
+        <div class="learn-visual-core">${core}</div>
       </div>
     </div>`;
 };
@@ -169,13 +176,15 @@ export const bindLearningSession = (
       : (lang === 'bn' ? 'উৎস যাচাইকৃত' : 'Source checked');
     const face = revealed ? `
       <div class="learn-card-face learn-card-back" aria-live="polite">
-        <div class="learn-card-top">
-          <span class="learn-chip answer">${lang === 'bn' ? 'উত্তর' : 'Answer'}</span>
-          <span class="learn-chip type">${esc(typeLabel(card, lang))}</span>
+        <div class="learn-flow-item" style="--i:0">
+          <div class="learn-card-top">
+            <span class="learn-chip answer">${lang === 'bn' ? 'উত্তর' : 'Answer'}</span>
+            <span class="learn-chip type">${esc(typeLabel(card, lang))}</span>
+          </div>
         </div>
-        <h2 class="learn-answer">${esc(txt(card, lang, 'answer'))}</h2>
-        <p class="learn-explain">${esc(txt(card, lang, 'explanation'))}</p>
-        <div class="learn-source">
+        <h2 class="learn-answer learn-flow-item" style="--i:1">${esc(txt(card, lang, 'answer'))}</h2>
+        <p class="learn-explain learn-flow-item" style="--i:2">${esc(txt(card, lang, 'explanation'))}</p>
+        <div class="learn-source learn-flow-item" style="--i:3">
           <div class="learn-source-head">
             <span class="learn-source-badge">${esc(badge)}</span>
             <button type="button" class="learn-source-link" data-learn="provision">${lang === 'bn' ? 'ধারা দেখুন' : 'View provision'}</button>
@@ -183,21 +192,21 @@ export const bindLearningSession = (
           <strong>${esc(card.act_name)}</strong>
           <span class="learn-source-ref">${esc(card.section_label)}</span>
         </div>
-        <blockquote class="learn-bn-key" lang="bn">
+        <blockquote class="learn-bn-key learn-flow-item" style="--i:4" lang="bn">
           <span class="learn-bn-label">বাংলা মূলনীতি</span>
           ${esc(card.key_principle_bn)}
         </blockquote>
-        ${card.authority_note ? `<p class="learn-doctrine-note">${esc(card.authority_note)}</p>` : ''}
+        ${card.authority_note ? `<p class="learn-doctrine-note learn-flow-item" style="--i:5">${esc(card.authority_note)}</p>` : ''}
       </div>` : `
       <div class="learn-card-face learn-card-front">
-        ${assetMarkup(card)}
-        <div class="learn-card-top">
+        <div class="learn-flow-item" style="--i:0">${assetMarkup(card)}</div>
+        <div class="learn-card-top learn-flow-item" style="--i:1">
           <span class="learn-chip micro">${esc(card.label)}</span>
           <span class="learn-chip type">${esc(typeLabel(card, lang))}</span>
         </div>
-        <h2 class="learn-hook">${esc(txt(card, lang, 'hook'))}</h2>
-        <p class="learn-question">${esc(txt(card, lang, 'question'))}</p>
-        <button type="button" class="learn-reveal-btn" data-learn="reveal">
+        <h2 class="learn-hook learn-flow-item" style="--i:2">${esc(txt(card, lang, 'hook'))}</h2>
+        <p class="learn-question learn-flow-item" style="--i:3">${esc(txt(card, lang, 'question'))}</p>
+        <button type="button" class="learn-reveal-btn learn-flow-item" style="--i:4" data-learn="reveal">
           <span>${lang === 'bn' ? 'উত্তর দেখুন' : 'Reveal answer'}</span>
           <span class="learn-reveal-arrow" aria-hidden="true">→</span>
         </button>
@@ -224,7 +233,7 @@ export const bindLearningSession = (
           <div class="learn-stack">
             <div class="learn-ghost g2" aria-hidden="true"></div>
             <div class="learn-ghost g1" aria-hidden="true"></div>
-            <article class="learn-card ${revealed ? 'is-revealed' : 'is-front'} ${reduced ? 'is-reduced' : ''}" data-learn-card tabindex="0">
+            <article class="learn-card ${revealed ? 'is-revealed' : 'is-front'} ${reduced ? 'is-reduced' : 'is-enter'}" data-learn-card tabindex="0">
               ${face}
             </article>
           </div>
@@ -249,36 +258,79 @@ export const bindLearningSession = (
           <button type="button" class="button-secondary learn-report-cancel" data-learn="close-report">${lang === 'bn' ? 'বাতিল' : 'Cancel'}</button>
         </div>
       </div>`;
+    bindCardFlow();
     bindCardMotion();
+  };
+
+  const bindCardFlow = (): void => {
+    const cardEl = mount.querySelector<HTMLElement>('[data-learn-card]');
+    const face = mount.querySelector<HTMLElement>('.learn-card-face');
+    if (!cardEl || !face) return;
+    face.classList.add('is-flow-ready');
+    const activate = (): void => {
+      cardEl.classList.remove('is-enter');
+      cardEl.classList.add('is-live');
+      face.classList.add('is-flowing');
+    };
+    if (reduced) {
+      activate();
+      return;
+    }
+    requestAnimationFrame(() => requestAnimationFrame(activate));
+    window.setTimeout(activate, 40);
   };
 
   const bindCardMotion = (): void => {
     const cardEl = mount.querySelector<HTMLElement>('[data-learn-card]');
     if (!cardEl || reduced) return;
-    const reset = () => { cardEl.style.transform = ''; };
+    let frame = 0;
+    const reset = () => {
+      if (frame) cancelAnimationFrame(frame);
+      cardEl.style.transform = '';
+      cardEl.classList.remove('is-tilting');
+    };
     cardEl.onpointermove = (event) => {
-      if (revealed) return;
+      if (revealed || cardEl.classList.contains('is-exit-right') || cardEl.classList.contains('is-exit-left')) return;
       const rect = cardEl.getBoundingClientRect();
       const px = (event.clientX - rect.left) / rect.width - 0.5;
       const py = (event.clientY - rect.top) / rect.height - 0.5;
-      cardEl.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 6}deg) translateY(-2px)`;
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        cardEl.classList.add('is-tilting');
+        cardEl.style.transform = `perspective(900px) rotateY(${px * 8}deg) rotateX(${-py * 6}deg) translateY(-2px)`;
+      });
     };
     cardEl.onpointerleave = reset;
     cardEl.onpointerup = reset;
   };
 
+  let advancing = false;
   const advance = (state: 'got_it' | 'review_again'): void => {
     const card = deck[index];
-    if (!card || !revealed) return;
+    if (!card || !revealed || advancing) return;
+    advancing = true;
     setCardProgress(card.id, state, true);
     void fetch('/api/learning/cards/' + encodeURIComponent(card.id) + '/progress', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Guest-Id': localStorage.getItem('justor-guest-id') || 'guest_local' },
       body: JSON.stringify({ state, revealed: true }),
     }).catch(() => undefined);
-    revealed = false;
-    index += 1;
-    paint();
+
+    const finish = (): void => {
+      revealed = false;
+      index += 1;
+      advancing = false;
+      paint();
+    };
+
+    const cardEl = mount.querySelector<HTMLElement>('[data-learn-card]');
+    if (!cardEl || reduced) {
+      finish();
+      return;
+    }
+    cardEl.style.transform = '';
+    cardEl.classList.add(state === 'got_it' ? 'is-exit-right' : 'is-exit-left');
+    window.setTimeout(finish, 220);
   };
 
   mount.onclick = (event) => {
