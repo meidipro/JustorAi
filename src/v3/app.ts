@@ -24,7 +24,8 @@ if (!appRoot) throw new Error('App root was not found.');
 
 const roleQuota: Record<Role, number> = { citizen: 3, student: 30, professional: 50 };
 const roleLabels: Record<Role, string> = { citizen: 'Citizen', student: 'Law Student', professional: 'Legal Professional' };
-const roleOrder: Role[] = ['professional', 'student', 'citizen'];
+/** Roles shown on public landing & start pages — citizen is hidden (guides-only via sign-in). */
+const publicRoleOrder: Role[] = ['professional', 'student'];
 const guideTopics = [
   { label: 'Property & Land', value: 'property' },
   { label: 'Family', value: 'family' },
@@ -117,18 +118,6 @@ const state: {
   productProof: null,
 };
 
-const storedGuideContext = (): { id: string; title: string; topic: string } | undefined => {
-  const raw = sessionStorage.getItem('justor-guide-context');
-  if (!raw) return undefined;
-  try {
-    const context = JSON.parse(raw) as Partial<{ id: string; title: string; topic: string }>;
-    if (!context.id || !context.title) return undefined;
-    return { id: context.id, title: context.title, topic: context.topic ?? '' };
-  } catch {
-    sessionStorage.removeItem('justor-guide-context');
-    return undefined;
-  }
-};
 
 const escapeHtml = (value: unknown): string => String(value ?? '').replace(/[&<>'"]/g, (character) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;',
@@ -232,10 +221,9 @@ const header = (): string => {
   const profile = getStoredProfile();
   const firstName = state.session ? (profile.fullName.split(' ')[0] || ui(state.language, 'profile')) : '';
   const locked = lockedRole();
-  const workspaceNavLinks = locked
+  const workspaceNavLinks = locked && locked !== 'citizen'
     ? route(`/workspace/${locked}`, localizedRoleLabel(locked))
-    : `${route('/workspace/citizen', ui(state.language, 'citizen'))}
-        ${route('/workspace/professional', ui(state.language, 'legalProfessional'))}
+    : `${route('/workspace/professional', ui(state.language, 'legalProfessional'))}
         ${route('/workspace/student', ui(state.language, 'lawStudent'))}`;
   return `
   <header class="site-header" data-header>
@@ -282,9 +270,9 @@ const header = (): string => {
         </div>
 
         <span class="menu-section-label">${ui(state.language, 'product')}</span>
-        ${locked
+        ${locked && locked !== 'citizen'
           ? route(`/workspace/${locked}`, localizedRoleLabel(locked), 'menu-nav-link')
-          : `${route('/workspace/citizen', ui(state.language, 'citizen'), 'menu-nav-link')}`}
+          : `${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}`}
         ${route('/legal-library', ui(state.language, 'library'), 'menu-nav-link')}
         ${route('/guides', ui(state.language, 'guides'), 'menu-nav-link')}
         ${route('/legal-updates', ui(state.language, 'updates'), 'menu-nav-link')}
@@ -297,7 +285,6 @@ const header = (): string => {
         </button>
         
         <span class="menu-section-label" style="margin-top: 16px;">${ui(state.language, 'resources')}</span>
-        ${!locked ? `${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}` : ''}
         ${route('/careers', 'Careers', 'menu-nav-link')}
         ${route('/profile', `${icon('user', 16)} ${ui(state.language, 'profile')} & ${ui(state.language, 'accountSettings')}`, 'menu-nav-link menu-nav-profile')}
         ${route('/trust', ui(state.language, 'trust'), 'menu-nav-link')}
@@ -319,7 +306,7 @@ const footer = (): string => `
   <footer class="site-footer">
     <div class="footer-grid">
       <div>${route('/', brand(true), 'brand-link')}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
-      <nav aria-label="Product"><strong>Product</strong>${lockedRole() ? route(`/workspace/${lockedRole()}`, localizedRoleLabel(lockedRole() as Role)) : `${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}${route('/workspace/citizen', 'Citizen')}`}${route('/start', 'Start Justor')}</nav>
+      <nav aria-label="Product"><strong>Product</strong>${lockedRole() && lockedRole() !== 'citizen' ? route(`/workspace/${lockedRole()}`, localizedRoleLabel(lockedRole() as Role)) : `${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}`}${route('/guides', 'Legal Guides')}${route('/start', 'Start Justor')}</nav>
       <nav aria-label="Resources"><strong>Resources</strong>${route('/legal-library', ui(state.language, 'library'))}${route('/guides', ui(state.language, 'guides'))}${route('/legal-updates', ui(state.language, 'updates'))}${route('/trust', ui(state.language, 'trust'))}</nav>
       <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/careers', 'Careers')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
       <nav aria-label="Legal"><strong>Legal</strong>${route('/privacy', 'Privacy')}${route('/terms', 'Terms')}${route('/disclaimer', 'Disclaimer')}<a href="mailto:tajuddinahamed.contact@gmail.com">Email us</a></nav>
@@ -329,7 +316,8 @@ const footer = (): string => `
 
 const roleRows = (surface: 'hero' | 'start' = 'hero'): string => {
   const locked = lockedRole();
-  const roles = locked ? [locked] : roleOrder;
+  // Citizens are guides-only — never shown on public landing/start pages
+  const roles = locked ? [locked === 'citizen' ? 'professional' : locked] as Role[] : publicRoleOrder;
   return `
   <nav class="${surface === 'hero' ? 'role-selectors' : 'start-roles'}" aria-label="Choose your Justor experience">
     ${roles.map((role) => `<a href="${workspacePathForRole(role)}" data-route data-role="${role}" class="role-row ${surface === 'start' ? 'start-role-row' : ''}"><span class="role-row-body"><span class="role-label">${localizedRoleLabel(role)}</span><strong class="role-heading">${rolePromise(role)}</strong><span class="role-desc role-desc-desktop">${roleBody(role)}</span><span class="role-desc role-desc-mobile">${mobileRoleBody(role)}</span></span><span class="role-arrow" aria-hidden="true">→</span><span class="sr-only">${roleContinue(role)}</span></a>`).join('')}
@@ -363,6 +351,7 @@ const homePage = (): string => `
         <h1 class="hero-h1">${ui(state.language, 'heroHeadline')}</h1>
         <p class="hero-subtitle">${ui(state.language, 'heroBody')}</p>
         ${roleRows()}
+        <p class="hero-guide-note">${state.language === 'bn' ? 'নাগরিক গাইড পড়তে <a href="/guides" data-route>আইনি গাইড</a> দেখুন।' : 'Looking for citizen guides? <a href="/guides" data-route>Browse Legal Guides →</a>'}</p>
       </div>
       <div class="hero-visual hero-3d-canvas" role="presentation" aria-hidden="true">
         <img src="/visuals/hero-legal-environment-v2.webp" alt="" width="1" height="1" loading="lazy" decoding="async" fetchpriority="low" class="hero-3d-fallback" hidden data-hero-source>
@@ -713,27 +702,25 @@ const studentLearnWorkspace = (): string => {
 };
 
 const citizenWorkspace = (): string => {
-  const guideContext = storedGuideContext();
-  const thread = chatStore.getOrCreateActiveThread('citizen');
+  // Citizen AI chat is disabled — this role is now guides-only.
+  // Redirect citizen accounts to the legal guides directory.
+  const isBn = state.language === 'bn';
   return `
-  <main id="page-content" class="workspace workspace-citizen">
-    <h1 class="sr-only">${state.language === 'bn' ? 'নাগরিক আইনি নির্দেশনা — ওয়ার্কস্পেস' : 'Citizen Legal Guidance — Workspace'}</h1>
-    ${workspaceNav('citizen', [
-      { label: ui(state.language, 'home'), href: '/workspace/citizen', icon: 'home' },
-      { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
-      { label: ui(state.language, 'askJustor'), href: '/workspace/citizen#ask', icon: 'source' },
-      { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
-    ], ui(state.language, 'home'))}
-    <section class="workspace-main">
-      ${workspaceTopbar('citizen', thread.title !== 'New Legal Inquiry' ? thread.title : undefined)}
-      <div class="workspace-chat-container">
-        <div class="chat-scroll-area" data-chat-scroll>
-          ${renderChatStream(thread, 'citizen')}
-        </div>
-        ${renderBottomChatBar('citizen', 'Describe your specific situation...', ['Explain my next step', 'What evidence should I keep?'], guideContext)}
+  <main id="page-content" class="inner-page citizen-guides-redirect">
+    <section class="compact-hero section-shell">
+      ${pageBackButton('/', isBn ? 'হোমে ফিরে যান' : 'Back to Home')}
+      <span class="section-kicker">${isBn ? 'আইনি গাইড' : 'Legal Guides'}</span>
+      <h1>${isBn ? 'বাস্তব আইনি পরিস্থিতির জন্য গাইড' : 'Practical Legal Guides'}</h1>
+      <p>${isBn ? 'সম্পত্তি, পরিবার, ফৌজদারি, কর্মসংস্থান ও ভোক্তা আইন বিষয়ে বাস্তব নির্দেশনা।' : 'Step-by-step guidance on property, family, criminal, employment and consumer law situations in Bangladesh.'}</p>
+      ${route('/guides', `${icon('book', 16)} ${isBn ? 'সব গাইড দেখুন' : 'Browse All Guides'} →`, 'button')}
+    </section>
+    <section class="section-shell" style="padding: 40px 0;">
+      <div class="citizen-guides-notice">
+        ${icon('shield', 18)}
+        <p>${isBn ? 'এই অ্যাকাউন্টটি গাইড পড়ার জন্য সক্ষম। আইনজীবী বা আইনের শিক্ষার্থী হলে নতুন অ্যাকাউন্ট তৈরি করুন।' : 'This account has access to legal guides. For AI-powered legal research, create a new account as a Legal Professional or Law Student.'}</p>
+        ${route('/login', isBn ? 'নতুন অ্যাকাউন্ট তৈরি করুন →' : 'Create a Professional Account →', 'link-arrow')}
       </div>
     </section>
-    ${mobileBottomNav('citizen')}
   </main>`;
 };
 
@@ -1043,9 +1030,9 @@ const chooseRolePage = (): string => {
     <section class="choose-role-card">
       <span class="section-kicker">${ui(state.language, 'signUp')}</span>
       <h1>${ui(state.language, 'chooseRoleHeading')}</h1>
-      <p>${ui(state.language, 'chooseRoleBody')}</p>
+      <p>${isBn ? 'আপনার পেশা অনুযায়ী রোল বেছে নিন। এই রোল আপনার অ্যাকাউন্টে লক হয়ে যাবে।' : 'Pick your role. This is locked to your account and cannot be changed later.'}</p>
       <div class="choose-role-grid">
-        ${roleOrder.map((role) => `
+        ${publicRoleOrder.map((role) => `
           <button type="button" class="choose-role-option" data-action="lock-role" data-role="${role}">
             <span class="role-label">${localizedRoleLabel(role)}</span>
             <strong>${rolePromise(role)}</strong>
@@ -1053,7 +1040,10 @@ const chooseRolePage = (): string => {
           </button>
         `).join('')}
       </div>
-      <small>${isBn ? 'নাগরিক শুধু নাগরিক ওয়ার্কস্পেস ব্যবহার করতে পারবেন।' : 'A citizen account can only use the citizen workspace.'}</small>
+      <div class="choose-role-guide-note">
+        <span>${isBn ? '📋 নাগরিক হিসেবে শুধু আইনি গাইড পড়তে চাইলে —' : '📋 Just want to read citizen legal guides?'}</span>
+        ${route('/guides', isBn ? 'আইনি গাইড ব্রাউজ করুন →' : 'Browse Legal Guides →', 'link-arrow')}
+      </div>
     </section>
   </main>`;
 };

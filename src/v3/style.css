@@ -3173,6 +3173,55 @@ svg { flex: 0 0 auto; }
   box-sizing: border-box;
 }
 
+/* Hero guide note — small pointer to guides page for non-lawyer visitors */
+.hero-guide-note {
+  font-size: 13px;
+  color: var(--text-secondary, #94A3B8);
+  margin-top: 12px;
+}
+.hero-guide-note a {
+  color: var(--accent, #1E38C8);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Citizen guides redirect page */
+.citizen-guides-redirect .compact-hero {
+  padding-top: 48px;
+}
+.citizen-guides-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F0F4FF;
+  border: 1px solid #C7D2FE;
+  border-left: 4px solid var(--accent, #1E38C8);
+  border-radius: 10px;
+  padding: 18px 20px;
+  max-width: 640px;
+}
+.citizen-guides-notice svg { flex-shrink: 0; color: var(--accent, #1E38C8); margin-top: 2px; }
+.citizen-guides-notice p { margin: 0 0 10px; font-size: 14px; line-height: 1.6; color: #1E293B; }
+.citizen-guides-notice .link-arrow { font-size: 14px; font-weight: 600; color: var(--accent, #1E38C8); }
+
+/* Choose role guide note — below the two role cards */
+.choose-role-guide-note {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #64748B;
+  flex-wrap: wrap;
+}
+.choose-role-guide-note .link-arrow {
+  color: var(--accent, #1E38C8);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+
 /* Section C: View Full Provision Tooltip & Actions */
 .open-prov-btn.is-disabled {
   opacity: 0.6;

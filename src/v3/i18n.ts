@@ -45,8 +45,8 @@ export const copy = {
     // Homepage
     controlledBeta: 'Controlled Beta',
     heroKicker: 'Bangladesh Legal Intelligence',
-    heroHeadline: 'Choose how you use Justor.',
-    heroBody: 'Research, learn, or find practical legal guidance.',
+    heroHeadline: 'Bangladesh Legal Intelligence.',
+    heroBody: 'Source-grounded research for legal professionals. Case briefs and statute study for law students.',
     professionalPromise: 'Research with authority.',
     studentPromise: 'Learn from the law itself.',
     citizenPromise: 'Know what to do next.',
@@ -294,8 +294,8 @@ export const copy = {
     // Homepage
     controlledBeta: 'নিয়ন্ত্রিত বেটা',
     heroKicker: 'বাংলাদেশের আইনি বুদ্ধিমত্তা',
-    heroHeadline: 'কীভাবে জাস্টর ব্যবহার করবেন তা বেছে নিন।',
-    heroBody: 'গবেষণা করুন, শিখুন, অথবা ব্যবহারিক আইনি নির্দেশনা খুঁজুন।',
+    heroHeadline: 'বাংলাদেশ লিগ্যাল ইন্টেলিজেন্স।',
+    heroBody: 'আইনজীবীদের জন্য উৎস-ভিত্তিক গবেষণা। আইনের শিক্ষার্থীদের জন্য কেস ব্রিফ ও আইন অধ্যয়ন।',
     professionalPromise: 'কর্তৃত্বের সাথে গবেষণা করুন।',
     studentPromise: 'আইন থেকে সরাসরি শিখুন।',
     citizenPromise: 'পরবর্তী পদক্ষেপ জানুন।',
