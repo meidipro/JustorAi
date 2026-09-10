@@ -368,6 +368,34 @@ const homePage = (): string => `
 
     <section class="section-shell incubation-signal"><img src="/visuals/nsu-startups-next.png" alt="NSU Startups Next" loading="lazy"><div><span class="section-kicker">${ui(state.language, 'incubation')}</span><h2>${ui(state.language, 'incubationStatement')}</h2><p>${ui(state.language, 'incubationSupport')}</p></div></section>
 
+    <!-- Official Partners & Collaborations -->
+    <section class="section-shell partners-band">
+      <span class="section-kicker section-kicker-light">${state.language === 'bn' ? 'অফিসিয়াল পার্টনার ও সহযোগিতা' : 'Official Partners & Collaborations'}</span>
+      <h2>${state.language === 'bn' ? 'আমাদের সাথে কারা আছেন' : 'Trusted by leading legal institutions'}</h2>
+      <div class="partners-grid">
+        <a class="partner-card" href="https://habiganjbar.com.bd" target="_blank" rel="noopener" aria-label="Habiganj Bar Council — Official Legal Partner">
+          <div class="partner-logo-wrap">
+            <img src="/visuals/habiganj-bar-council.jpg" alt="Habiganj Bar Council" class="partner-logo">
+          </div>
+          <div class="partner-info">
+            <span class="partner-type">${state.language === 'bn' ? 'অফিসিয়াল লিগ্যাল পার্টনার' : 'Official Legal Partner'}</span>
+            <strong class="partner-name">${state.language === 'bn' ? 'হবিগঞ্জ জেলা বার কাউন্সিল' : 'Habiganj Bar Council'}</strong>
+            <span class="partner-link">habiganjbar.com.bd ${icon('external', 12)}</span>
+          </div>
+        </a>
+        <a class="partner-card" href="https://iexf.org" target="_blank" rel="noopener" aria-label="IEXF — Official Community & Ecosystem Partner">
+          <div class="partner-logo-wrap partner-logo-wrap-light">
+            <img src="/visuals/iexf-logo.jpg" alt="IEXF" class="partner-logo partner-logo-iexf">
+          </div>
+          <div class="partner-info">
+            <span class="partner-type">${state.language === 'bn' ? 'অফিসিয়াল কমিউনিটি ও ইকোসিস্টেম পার্টনার' : 'Official Community & Ecosystem Partner'}</span>
+            <strong class="partner-name">IEXF</strong>
+            <span class="partner-link">iexf.org ${icon('external', 12)}</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <section class="early-access section-shell"><div><span class="section-kicker">${ui(state.language, 'controlledBeta')}</span><h2>${ui(state.language, 'earlyHeading')}</h2><p>${ui(state.language, 'earlyBody')}</p></div><a class="button" href="mailto:tajuddinahamed.contact@gmail.com?subject=Justor%20AI%20early%20access">${ui(state.language, 'earlyCta')} ${icon('arrow', 16)}</a></section>
   </main>`;
 
@@ -860,14 +888,43 @@ const aboutPage = (): string => `
       <p>Justor AI is a Bangladesh-focused legal intelligence startup building structured, source-linked tools for understanding, learning and researching law.</p>
       <div class="mission-vision"><div><strong>Mission</strong><p>Make Bangladesh law easier to access, understand, research and verify.</p></div><div><strong>Vision</strong><p>Build digital legal intelligence infrastructure for Bangladesh that improves access to legal information, legal learning and professional research.</p></div></div>
     </section>
-    <nav class="about-anchor-nav" aria-label="About page sections"><a href="#about">About</a><a href="#team">Team</a><a href="#stage">Stage</a><a href="#incubation">Incubation</a><a href="#collaborate">Collaborate</a><a href="#investors">Investors</a><a href="#contact">Contact</a></nav>
+    <nav class="about-anchor-nav" aria-label="About page sections"><a href="#about">About</a><a href="#team">Team</a><a href="#stage">Stage</a><a href="#incubation">Incubation</a><a href="#partners">Partners</a><a href="#collaborate">Collaborate</a><a href="#investors">Investors</a><a href="#contact">Contact</a></nav>
     <section class="section-shell about-block"><span class="section-kicker">What we are building</span><div class="plain-columns"><article><h2>Citizen Guidance</h2><p>Practical routes and public legal information.</p></article><article><h2>Legal Learning</h2><p>Source-linked assistance for cases, statutes and concepts.</p></article><article><h2>Professional Intelligence</h2><p>Research that keeps authority beside the analysis.</p></article><article><h2>Shared Legal Knowledge</h2><p>A structured layer across role-specific experiences.</p></article></div></section>
     <section class="about-narrative"><div class="section-shell"><span class="section-kicker section-kicker-light">Why Justor exists</span><h2>Legal information is difficult to navigate.</h2><p>Finding the legal rule that applies to a problem can require navigating dense statutes, scattered government websites and unfamiliar terminology.</p><p>Citizens often do not know where to start. Students need to connect concepts to authority. Professionals need faster ways to locate and verify relevant law.</p><p>Justor is building a more structured interface to that information.</p></div></section>
     <section class="section-shell principle-quote"><span class="section-kicker">Our product principle</span><blockquote>“Don't ask users to trust the AI. Make important legal propositions easy to verify.”</blockquote>${route('/trust', `Read our Trust Method ${icon('arrow', 16)}`, 'text-link')}</section>
     <section id="stage" class="section-shell stage-block"><div><span class="section-kicker">Where we are today</span><h2>Controlled beta</h2><p>Current work includes source-grounded AI, Citizen Authority Guides, Legal Library, professional research, student learning, Legal Updates, and Bangla + English.</p></div><div id="incubation" class="nsusn-block"><img src="/visuals/nsu-startups-next.png" alt="NSU Startups Next"><strong>Incubation</strong><h3>Justor AI is incubated at NSU Startups Next.</h3><p>Part of the NSU Startups Next incubation program, supporting the team's product development, validation and startup growth.</p></div></section>
     <section id="team" class="section-shell team-block"><span class="section-kicker">Team</span><div class="team-list"><article><div>TA</div><span>Founder & CEO</span><h2>Tajuddin Ahamed</h2><p>Leads Justor AI's product vision, company strategy and overall execution. Works across product architecture, UX design, business development, market validation and legal-tech strategy. Also contributes directly to engineering decisions alongside the CTO, translating product requirements into the platform.</p></article><article><div>MH</div><span>Co-founder & CTO</span><h2>Mehedi Hasan</h2><p>Leads Justor AI's engineering and technical development, including backend infrastructure, legal retrieval systems, AI and RAG architecture, database design and production engineering.</p></article><article><div>AS</div><span>Legal Q&A</span><h2>Anisur Rahman Sanjib</h2><p>Contributes to Justor's legal Q&A process, helping ensure legal information used in the platform's workflows is appropriately structured and checked.</p></article></div></section>
     <section class="section-shell upcoming-block"><span class="section-kicker">Upcoming</span><h2>What's coming next</h2><div class="upcoming-rows"><article><strong>For Law Students</strong><p>Exam Mode · Moot Practice · Notes · Concept Maps<br>Compare Laws · Case Navigator</p></article><article><strong>For Legal Professionals</strong><p>Document Analysis · Compare Authorities · Saved Authorities<br>Research History · Matter Workspace · Citation Workspace · Drafting Tools</p></article><article><strong>For Citizens</strong><p>Document Explanation · OCR · Complaint Tracking<br>Official Authority Routing</p></article></div><p class="roadmap-note">Roadmap features are under development and may change during beta.</p></section>
-    <section id="collaborate" class="work-with"><div class="section-shell"><span class="section-kicker section-kicker-light">Work with Justor</span><h2>Build Bangladesh legal intelligence with us.</h2><div class="collaboration-tracks"><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Academic%20collaboration">Universities & Academic Institutions</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20professional%20collaboration">Law Firms & Legal Professionals</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20collaboration">Media & Publishers</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Technology%20collaboration">Technology & Ecosystem</a></div></div></section>
+    <section id="collaborate" class="work-with"><div class="section-shell"><span class="section-kicker section-kicker-light">Work with Justor</span><h2>Build Bangladesh legal intelligence with us.</h2><div class="collaboration-tracks"><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Academic%20collaboration">Universities &amp; Academic Institutions</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Legal%20professional%20collaboration">Law Firms &amp; Legal Professionals</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Media%20collaboration">Media &amp; Publishers</a><a href="mailto:tajuddinahamed.contact@gmail.com?subject=Technology%20collaboration">Technology &amp; Ecosystem</a></div></div></section>
+    <section id="partners" class="section-shell about-partners-block">
+      <span class="section-kicker">Official Partners &amp; Collaborations</span>
+      <h2>Institutions we work with</h2>
+      <p>Justor AI is proud to collaborate with established legal and ecosystem partners shaping Bangladesh's legal intelligence future.</p>
+      <div class="about-partners-grid">
+        <a class="about-partner-card" href="https://habiganjbar.com.bd" target="_blank" rel="noopener">
+          <div class="about-partner-logo-wrap">
+            <img src="/visuals/habiganj-bar-council.jpg" alt="Habiganj Bar Council" class="about-partner-logo">
+          </div>
+          <div class="about-partner-body">
+            <span class="about-partner-type">Official Legal Partner</span>
+            <h3>Habiganj Bar Council</h3>
+            <p>Habiganj Jela Advocates Association — collaborating with JustorAI to build tailored legal research tools for practicing advocates in Bangladesh.</p>
+            <span class="about-partner-url">habiganjbar.com.bd ${icon('external', 13)}</span>
+          </div>
+        </a>
+        <a class="about-partner-card" href="https://iexf.org" target="_blank" rel="noopener">
+          <div class="about-partner-logo-wrap about-partner-logo-wrap-light">
+            <img src="/visuals/iexf-logo.jpg" alt="IEXF" class="about-partner-logo about-partner-logo-iexf">
+          </div>
+          <div class="about-partner-body">
+            <span class="about-partner-type">Official Community &amp; Ecosystem Partner</span>
+            <h3>IEXF</h3>
+            <p>IEXF is an official community and ecosystem partner of Justor AI — connecting, collaborating and growing the legal tech ecosystem together.</p>
+            <span class="about-partner-url">iexf.org ${icon('external', 13)}</span>
+          </div>
+        </a>
+      </div>
+    </section>
     <section id="investors" class="section-shell investor-block"><span class="section-kicker">For Investors & Strategic Partners</span><h2>Legal intelligence infrastructure focused on Bangladesh.</h2><p>We welcome conversations with investors and strategic partners interested in LegalTech, AI infrastructure, emerging markets and access to legal information.</p><dl class="investor-grid"><div><dt>Product</dt><dd>Role-specific legal intelligence</dd></div><div><dt>Market</dt><dd>Bangladesh legal-information, learning and professional workflows</dd></div><div><dt>Infrastructure</dt><dd>Structured legal knowledge + AI</dd></div><div><dt>Stage</dt><dd>Controlled Beta</dd></div></dl><div class="button-row"><a class="button" href="mailto:tajuddinahamed.contact@gmail.com?subject=Investor%20inquiry">Investor Inquiry</a><a class="button button-secondary" href="mailto:tajuddinahamed.contact@gmail.com?subject=Contact%20founder">Contact Founder</a></div><a href="tel:+8801764662967">+880 1764-662967</a></section>
     <section id="contact" class="section-shell direct-contact"><span class="section-kicker">Contact</span><h2>Start the right conversation.</h2><a href="mailto:tajuddinahamed.contact@gmail.com">tajuddinahamed.contact@gmail.com</a><a href="tel:+8801764662967">+880 1764-662967</a></section>
   </main>`;
