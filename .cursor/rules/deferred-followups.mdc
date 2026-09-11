@@ -1,0 +1,10 @@
+---
+description: Deferred follow-ups the user asked to remember for a later reminder
+alwaysApply: true
+---
+
+# Deferred work
+
+The user asked to remember this and will remind later. Do not start until they ask:
+
+- Remaining production ops from the September 2026 security audit: set `JUSTOR_ADMIN_SECRET` on Render, apply `backend/migrations/20260904_upload_jobs.sql`, and rotate API/service-role keys if they ever leaked.

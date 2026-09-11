@@ -8,6 +8,7 @@ from .legal_relevance import PreGenerationRelevanceGate
 
 
 from .hierarchical_retriever import HierarchicalRetriever, REPEAL_REPLACEMENT_GRAPH
+from .reranker import legal_reranker
 
 
 class EvidenceBuilder:
@@ -160,13 +161,23 @@ class EvidenceBuilder:
                 limit=2,
             )
 
+        # ── 7. Cross-Encoder Fine-Grained Reranking ──
+        if len(found) > 1:
+            found = legal_reranker.rerank_evidence(query=query, items=found, top_k=6)
+
         rank = {
             "CONTROLLING": 0,
             "SUPPORTING": 1,
             "GENERAL": 2,
             "BACKGROUND": 3,
         }
-        found.sort(key=lambda x: rank.get(x.role, 4))
+        # Sort so CONTROLLING is preserved first, then highest rerank score
+        found.sort(
+            key=lambda x: (
+                rank.get(x.role, 4),
+                -(x.rerank_score if x.rerank_score is not None else 0.0)
+            )
+        )
 
         # Assign unique evidence tags: [ACT-1], [ACT-2], [DLR-1]
         all_items: list[EvidenceItem] = []

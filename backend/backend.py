@@ -45,6 +45,8 @@ app = FastAPI(
 )
 
 from backend.learning import router as learning_router
+from backend.ocr_service import legal_ocr_service
+from backend.search_grounding import legal_search_grounding
 from backend.security_controls import (
     admin_secret,
     claim_pilot_email,
@@ -2226,6 +2228,69 @@ async def upload_status(job_id: str):
     if job is None:
         raise HTTPException(404, "Job not found.")
     return job
+
+
+class SearchGroundingRequest(BaseModel):
+    query: str
+    language: Optional[str] = "en"
+    user_role: Optional[str] = "professional"
+
+
+@app.post("/api/document/ocr-analyze", tags=["Document Analysis"])
+async def analyze_document_ocr(
+    file: UploadFile = File(...),
+    req: Request = None,
+):
+    """
+    Multimodal Vision OCR endpoint for Bangladeshi legal documents:
+    Deeds (দলিল/বায়নাপত্র), Khatians (ই-নামজারি/খতিয়ান), FIRs (এজাহার), and Court Orders.
+    Powered by Google Cloud Vertex AI (Gemini 2.5 Flash).
+    """
+    if not file.filename:
+        raise HTTPException(400, "No file uploaded.")
+
+    allowed_exts = {".pdf", ".jpg", ".jpeg", ".png", ".webp"}
+    ext = os.path.splitext(file.filename.lower())[1]
+    if ext not in allowed_exts:
+        raise HTTPException(400, f"Unsupported file format. Supported: {', '.join(allowed_exts)}")
+
+    raw_bytes = await file.read()
+    if not raw_bytes:
+        raise HTTPException(422, "Empty file uploaded.")
+
+    result = await legal_ocr_service.analyze_legal_document(
+        file_bytes=raw_bytes,
+        filename=file.filename,
+        mime_type=file.content_type,
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Document OCR analysis failed."))
+
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/search/live-grounding", tags=["Live Legal Search"])
+async def live_search_grounding(
+    request: SearchGroundingRequest,
+    req: Request = None,
+):
+    """
+    Live web search grounding via Google Cloud Vertex AI (Perplexity-grade).
+    Queries official Bangladeshi government portals and gazettes with verifiable sources.
+    """
+    if not request.query or not request.query.strip():
+        raise HTTPException(400, "Query cannot be empty.")
+
+    result = await legal_search_grounding.query_live_legal_web(
+        query=request.query,
+        language=request.language or "en",
+        user_role=request.user_role or "professional",
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Live legal search grounding failed."))
+
+    return JSONResponse(status_code=200, content=result)
+
 
 
 async def verify_citations(answer: str, sources: list) -> str:

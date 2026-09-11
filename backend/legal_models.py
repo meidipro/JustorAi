@@ -96,6 +96,7 @@ class EvidenceItem(BaseModel):
     ratio_decidendi: str | None = None
     trust_tier: TrustTier = "UNVERIFIED"
     trust_badge: str | None = None
+    rerank_score: float | None = None
 
     def get_badge(self) -> str:
         if self.trust_badge:

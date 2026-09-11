@@ -33,3 +33,7 @@ websockets>=13.0
 # Date & Type Utilities
 python-dateutil>=2.8.2
 eval_type_backport>=0.2.0
+
+# Reranker & Image Processing for OCR
+flashrank>=0.2.10
+pillow>=10.0.0

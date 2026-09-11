@@ -14,10 +14,13 @@ import {
   type ResourceState,
   type Role,
 } from './services';
-import { computeStatusBanner, localizedPath, parseLocalizedPath, ui, type CopyKey } from './i18n';
+import { localizedPath, parseLocalizedPath, ui, type CopyKey } from './i18n';
 import { chatStore, type ChatThread } from './chatStore';
 import { learningCatalog, getSection } from './learning/catalog';
 import { bindLearningSession, buildGoDeeperQuery, renderLearningHome } from './learning/ui';
+import { openDocumentOcrModal } from './document-ocr';
+import { initVoiceInput } from './voice-input';
+import { analytics } from './analytics';
 
 const appRoot = document.getElementById('app');
 if (!appRoot) throw new Error('App root was not found.');
@@ -102,6 +105,7 @@ const state: {
   guideCluster: string;
   citizenHasSearched: boolean;
   productProof: ProductProofRecord | null;
+  liveSearchEnabled: boolean;
 } = {
   ...parseLocalizedPath(window.location.pathname),
   role: (localStorage.getItem('justor-role') as Role | null) ?? 'citizen',
@@ -117,6 +121,7 @@ const state: {
   guideCluster: '',
   citizenHasSearched: false,
   productProof: null,
+  liveSearchEnabled: false,
 };
 
 
@@ -156,6 +161,9 @@ const icon = (name: string, size = 20): string => {
     cards: '<rect x="4" y="6" width="12" height="16" rx="2"/><path d="M10 4h8a2 2 0 0 1 2 2v14"/>',
     mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
     message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] ?? paths.source}</svg>`;
 };
@@ -276,6 +284,7 @@ const header = (): string => {
           ? route(`/workspace/${locked}`, localizedRoleLabel(locked), 'menu-nav-link')
           : `${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}`}
         ${route('/legal-library', ui(state.language, 'library'), 'menu-nav-link')}
+        ${route('/workspace/student/learn', ui(state.language, 'biteSize'), 'menu-nav-link')}
         ${route('/guides', ui(state.language, 'guides'), 'menu-nav-link')}
         ${route('/legal-updates', ui(state.language, 'updates'), 'menu-nav-link')}
         <button class="menu-nav-link menu-nav-pilot-link" type="button" data-action="open-pilot-modal">
@@ -426,6 +435,7 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
   <aside class="workspace-sidebar ${state.sidebarOpen ? 'is-open' : ''}" aria-label="${localizedRoleLabel(role)} sidebar">
     <div class="workspace-brand">
       ${route('/', `${brand(true)}<span class="workspace-beta-badge">Beta</span>`, 'workspace-brand-link')}
+      <button class="sidebar-close-btn mobile-only-close" type="button" data-action="close-sidebar" aria-label="${ui(state.language, 'close')}">✕</button>
     </div>
     <button class="new-research-capsule" type="button" data-action="new-research">
       ${icon('plus', 16)} <span>${role === 'professional' ? 'New Research' : role === 'student' ? 'New Study Chat' : 'New Legal Inquiry'}</span>
@@ -616,6 +626,18 @@ const renderEmptyLanding = (role: Role): string => {
   `;
 };
 
+const aiAuthorHeader = (): string => `
+  <div class="ai-response-author">
+    <div class="ai-author-badge">
+      <img src="/visuals/justor-mark.png" alt="Justor AI" width="17" height="17">
+    </div>
+    <div class="ai-author-text">
+      <strong class="ai-author-name">Justor <span class="ai-highlight">AI</span></strong>
+      <span class="ai-author-pill">${state.language === 'bn' ? 'আইনি এআই সহকারী' : 'Legal Intelligence'}</span>
+    </div>
+  </div>
+`;
+
 const renderChatStream = (thread: ChatThread, role: Role): string => {
   if (thread.messages.length === 0) {
     return renderEmptyLanding(role);
@@ -636,7 +658,7 @@ const renderChatStream = (thread: ChatThread, role: Role): string => {
           return `
             <div class="chat-message-row assistant-row" id="${msg.id}">
               <div class="chat-assistant-container">
-                <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+                ${aiAuthorHeader()}
                 <div class="assistant-content-wrapper">
                   ${msg.result ? renderResearchResult(msg.result, role) : `<div class="research-formatted-markdown">${formatAnswerMarkdown(msg.content, role)}</div>`}
                 </div>
@@ -649,18 +671,31 @@ const renderChatStream = (thread: ChatThread, role: Role): string => {
   `;
 };
 
-const renderBottomChatBar = (role: Role, placeholder: string, quickActions: string[], context?: { id: string; title: string; topic: string }): string => `
+const renderBottomChatBar = (role: Role, placeholder: string, _quickActions?: string[], context?: { id: string; title: string; topic: string }): string => `
   <div class="chat-sticky-bottom-bar">
     <div class="chat-bottom-inner">
-      <div class="chat-quick-actions-bar">
-        ${quickActions.map((action) => `<button type="button" class="quick-chip-btn" data-prompt="${escapeHtml(action)}">${action}</button>`).join('')}
-      </div>
       <form class="chat-floating-composer" data-research-form data-role="${role}" ${context ? `data-context-id="${escapeHtml(context.id)}" data-context-title="${escapeHtml(context.title)}" data-context-topic="${escapeHtml(context.topic)}"` : ''}>
         <div class="composer-input-box">
-          <textarea name="query" rows="1" required placeholder="${placeholder}" data-auto-resize aria-label="${placeholder}"></textarea>
-          <button type="submit" class="composer-send-btn" aria-label="Submit query" title="Send (Enter)">
-            ${icon('arrow', 18)}
-          </button>
+          <div class="composer-left-tools">
+            <button type="button" class="composer-tool-btn composer-attach-btn" data-action="open-ocr-modal" aria-label="Upload document for OCR" title="${state.language === 'bn' ? 'দলিল বা রায় আপলোড করুন (Google Vision OCR)' : 'Upload Deed / FIR / Order (Vision OCR)'}">
+              ${icon('upload', 17)}
+            </button>
+            <button type="button" class="composer-tool-btn composer-search-toggle ${state.liveSearchEnabled ? 'is-active' : ''}" data-action="toggle-live-search" aria-pressed="${state.liveSearchEnabled}" title="${state.language === 'bn' ? 'গুগল লাইভ ওয়েব সার্চ অন/অফ' : 'Toggle Live Google Web Search'}">
+              ${icon('globe', 14)}
+              <span class="search-toggle-label">${state.language === 'bn' ? 'লাইভ সার্চ' : 'Search'}</span>
+            </button>
+          </div>
+          <div class="composer-textarea-wrapper">
+            <textarea name="query" rows="1" required placeholder="${placeholder}" data-auto-resize aria-label="${placeholder}"></textarea>
+          </div>
+          <div class="composer-right-tools">
+            <button type="button" class="composer-tool-btn composer-voice-btn" data-action="toggle-voice-input" aria-label="Voice input" title="${state.language === 'bn' ? 'ভয়েস টাইপিং (বাংলা / ইংরেজি)' : 'Voice Input (Bengali / English)'}">
+              ${icon('mic', 17)}
+            </button>
+            <button type="submit" class="composer-send-btn" aria-label="Submit query" title="Send (Enter)">
+              ${icon('arrow', 16)}
+            </button>
+          </div>
         </div>
         <div class="composer-subline">
           <span class="composer-privacy-hint">${ui(state.language, 'composerPrivacyHint')}</span>
@@ -683,12 +718,13 @@ const professionalWorkspace = (): string => {
   <main id="page-content" class="workspace workspace-professional">
     <h1 class="sr-only">${state.language === 'bn' ? 'আইনি গবেষণা — পেশাদার ওয়ার্কস্পেস' : 'Legal Research — Professional Workspace'}</h1>
     ${workspaceNav('professional', [
-      { label: ui(state.language, 'researchHome'), href: '/workspace/professional', icon: 'home' },
+      { label: state.language === 'bn' ? 'হোম' : 'Home', href: '/', icon: 'home' },
+      { label: ui(state.language, 'researchHome'), href: '/workspace/professional', icon: 'source' },
       { label: ui(state.language, 'legalLibrary'), href: '/legal-library', icon: 'book' },
+      { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
       { label: ui(state.language, 'cases'), href: '/legal-library?type=case', icon: 'scale' },
       { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'source' },
       { label: ui(state.language, 'updates'), href: '/legal-updates', icon: 'clock' },
-      { label: ui(state.language, 'amendments'), href: '/legal-library?type=amendment', icon: 'source' },
       { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
     ], ui(state.language, 'researchHome'))}
     <section class="workspace-main">
@@ -697,10 +733,9 @@ const professionalWorkspace = (): string => {
         <div class="chat-scroll-area" data-chat-scroll>
           ${renderChatStream(thread, 'professional')}
         </div>
-        ${renderBottomChatBar('professional', ui(state.language, 'professionalPlaceholder'), [ui(state.language, 'researchIssue'), ui(state.language, 'findPrecedent'), ui(state.language, 'findStatute'), ui(state.language, 'checkAmendment')])}
+        ${renderBottomChatBar('professional', ui(state.language, 'professionalPlaceholder'))}
       </div>
     </section>
-    ${mobileBottomNav('professional')}
   </main>`;
 };
 
@@ -708,9 +743,12 @@ const studentPreAuth = (): string => `
   <main id="page-content" class="preauth-page"><header>${route('/', brand(), 'brand-link')}<div><button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>${route('/login', ui(state.language, 'signInOrSignUp'), 'text-link')}</div></header><section><span class="section-kicker">${ui(state.language, 'studentKicker')}</span><h1>${ui(state.language, 'studentHeading')}</h1><p>${ui(state.language, 'studentAllowance')}</p><button class="button google-button" type="button" data-action="google-sign-in" data-next="${localizedPath('/choose-role', state.language)}"><span>G</span> ${ui(state.language, 'continueGoogle')}</button><small>${ui(state.language, 'publicReading')}</small></section></main>`;
 
 const studentNavItems = (): Array<{ label: string; href: string; icon: string }> => [
+  { label: state.language === 'bn' ? 'হোম' : 'Home', href: '/', icon: 'home' },
   { label: ui(state.language, 'studyHome'), href: '/workspace/student', icon: 'home' },
   { label: ui(state.language, 'biteSize'), href: '/workspace/student/learn', icon: 'cards' },
   { label: ui(state.language, 'askJustor'), href: '/workspace/student#ask', icon: 'source' },
+  { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
+  { label: ui(state.language, 'legalLibrary'), href: '/legal-library', icon: 'book' },
   { label: ui(state.language, 'cases'), href: '/legal-library?type=case', icon: 'scale' },
   { label: ui(state.language, 'statutes'), href: '/legal-library?type=law', icon: 'book' },
   { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
@@ -729,10 +767,9 @@ const studentWorkspace = (): string => {
         <div class="chat-scroll-area" data-chat-scroll>
           ${renderChatStream(thread, 'student')}
         </div>
-        ${renderBottomChatBar('student', 'Ask about a case, statute, legal concept or principle...', ['Explain a Statute', 'Brief a Case', 'Explain a Concept', 'Compare Cases', 'Quiz Me', 'Practice a Problem'])}
+        ${renderBottomChatBar('student', state.language === 'bn' ? 'আইন, ধারা বা মামলার নীতি সম্পর্কে জিজ্ঞাসা করুন...' : 'Ask about a case, statute, legal concept or principle...')}
       </div>
     </section>
-    ${mobileBottomNav('student')}
   </main>`;
 };
 
@@ -741,9 +778,8 @@ const studentLearnWorkspace = (): string => {
   const sectionSlug = state.routePath.replace('/workspace/student/learn', '').replace(/^\//, '').split('/')[0] || '';
   const nav = workspaceNav('student', studentNavItems(), ui(state.language, 'biteSize'));
   const topbar = workspaceTopbar('student', ui(state.language, 'biteSize'));
-  const bottom = mobileBottomNav('student');
   if (!sectionSlug) {
-    return renderLearningHome(learningCatalog, state.language, route, nav, topbar, bottom);
+    return renderLearningHome(learningCatalog, state.language, route, nav, topbar, '');
   }
   return `
   <main id="page-content" class="workspace workspace-student workspace-learn workspace-learn-session">
@@ -752,7 +788,6 @@ const studentLearnWorkspace = (): string => {
       ${topbar}
       <div class="learn-session-mount" data-learn-mount data-section="${escapeHtml(sectionSlug)}"></div>
     </section>
-    ${bottom}
   </main>`;
 };
 
@@ -779,39 +814,7 @@ const citizenWorkspace = (): string => {
   </main>`;
 };
 
-function mobileBottomNav(role: Role): string {
-  const items: Array<{ label: string; href: string; icon: string; action?: string }> = role === 'citizen'
-    ? [
-        { label: ui(state.language, 'home'), href: '/', icon: 'home' },
-        { label: ui(state.language, 'guides'), href: '/guides', icon: 'book' },
-        { label: ui(state.language, 'mobileAsk'), href: '#ask', icon: 'source', action: 'focus-composer' },
-        { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
-      ]
-    : role === 'student'
-      ? [
-          { label: ui(state.language, 'home'), href: '/workspace/student', icon: 'home' },
-          { label: ui(state.language, 'biteSize'), href: '/workspace/student/learn', icon: 'cards' },
-          { label: ui(state.language, 'mobileAsk'), href: '/workspace/student#ask', icon: 'source' },
-          { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
-        ]
-      : [
-          { label: ui(state.language, 'home'), href: '/', icon: 'home' },
-          { label: ui(state.language, 'library'), href: '/legal-library', icon: 'book' },
-          { label: ui(state.language, 'updates'), href: '/legal-updates', icon: 'clock' },
-          { label: ui(state.language, 'profile'), href: '/profile', icon: 'user' },
-        ];
 
-  return `
-    <nav class="mobile-bottom-nav" aria-label="${localizedRoleLabel(role)} mobile navigation">
-      ${items.map((item) => {
-        if (item.action === 'focus-composer') {
-          return `<button type="button" class="bottom-nav-item bottom-nav-btn" data-action="focus-composer">${icon(item.icon, 18)}<span>${escapeHtml(item.label)}</span></button>`;
-        }
-        return route(item.href, `${icon(item.icon, 18)}<span>${escapeHtml(item.label)}</span>`, 'bottom-nav-item bottom-nav-link');
-      }).join('')}
-    </nav>
-  `;
-}
 
 const unavailable = (message?: string): string => `<div class="empty-state"><span>${icon('shield', 24)}</span><h3>${ui(state.language, 'unavailableTitle')}</h3><p>${message ?? ui(state.language, 'unavailableBody')}</p></div>`;
 const empty = (): string => `<div class="empty-state"><span>${icon('search', 24)}</span><h3>${ui(state.language, 'noResults')}</h3><p>${ui(state.language, 'noResultsBody')}</p></div>`;
@@ -1733,6 +1736,7 @@ const render = (preserveScroll = false, preservedQuery = ''): void => {
   appRoot.innerHTML = `${focused ? '' : header()}${pageForPath(state.routePath)}${focused ? '' : footer()}<div class="toast-region" aria-live="polite" aria-atomic="true"></div>`;
   hydrateHeroVisual();
   setDocumentMeta();
+  analytics.pageView(state.routePath);
   const queryField = document.querySelector<HTMLInputElement | HTMLTextAreaElement>('[name="query"]');
   if (preservedQuery && queryField) queryField.value = preservedQuery;
   if (state.lastResearch && state.lastResearchRole && state.routePath === `/workspace/${state.lastResearchRole}`) {
@@ -1744,7 +1748,14 @@ const render = (preserveScroll = false, preservedQuery = ''): void => {
   }
   if (!preserveScroll) window.scrollTo({ top: 0, behavior: 'instant' });
   void hydrateRoute(state.routePath);
-  requestAnimationFrame(() => restorePendingResearch());
+  requestAnimationFrame(() => {
+    restorePendingResearch();
+    const voiceBtn = document.querySelector<HTMLButtonElement>('[data-action="toggle-voice-input"]');
+    const composerTextarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea[name="query"]');
+    if (voiceBtn && composerTextarea) {
+      initVoiceInput(voiceBtn, composerTextarea, state.language);
+    }
+  });
 };
 
 const navigate = (href: string, preserveScroll = false, preservedQuery = ''): void => {
@@ -1754,10 +1765,40 @@ const navigate = (href: string, preserveScroll = false, preservedQuery = ''): vo
   if (url.hash) window.setTimeout(() => document.querySelector(url.hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30);
 };
 
-const showToast = (title: string, message: string, tone: 'neutral' | 'warning' | 'positive' = 'neutral'): void => {
+let activeToastTimer: number | undefined;
+
+const showToast = (title: string, message: string, tone: 'neutral' | 'warning' | 'positive' = 'neutral', autoDismissMs = 2600): void => {
   const region = document.querySelector<HTMLElement>('.toast-region');
   if (!region) return;
-  region.innerHTML = `<div class="toast ${tone === 'warning' ? 'toast-warning' : tone === 'positive' ? 'toast-positive' : ''}"><span>${icon(tone === 'warning' ? 'shield' : 'check', 18)}</span><div><strong>${escapeHtml(title)}</strong><p>${escapeHtml(message)}</p></div><button type="button" data-action="close-toast" aria-label="Close">${icon('close', 16)}</button></div>`;
+  if (activeToastTimer) {
+    window.clearTimeout(activeToastTimer);
+    activeToastTimer = undefined;
+  }
+  region.innerHTML = `
+    <div class="toast ${tone === 'warning' ? 'toast-warning' : tone === 'positive' ? 'toast-positive' : ''}">
+      <span>${icon(tone === 'warning' ? 'shield' : 'check', 18)}</span>
+      <div>
+        <strong>${escapeHtml(title)}</strong>
+        <p>${escapeHtml(message)}</p>
+      </div>
+      <button type="button" data-action="close-toast" aria-label="Close">${icon('close', 16)}</button>
+    </div>
+  `;
+
+  if (autoDismissMs > 0) {
+    activeToastTimer = window.setTimeout(() => {
+      const toast = region.querySelector<HTMLElement>('.toast');
+      if (toast) {
+        toast.classList.add('is-dismissing');
+        window.setTimeout(() => {
+          region.innerHTML = '';
+        }, 240);
+      } else {
+        region.innerHTML = '';
+      }
+      activeToastTimer = undefined;
+    }, autoDismissMs);
+  }
 };
 
 const verificationBadge = (status?: string): string => {
@@ -2211,16 +2252,39 @@ function renderCitizenLawyerSuggestion(query: string, answerText: string, lang: 
   `;
 }
 
+const formatInlineMarkdown = (text: string, role: Role): string => {
+  let formatted = escapeHtml(text);
+  formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  formatted = formatted.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+  formatted = formatted.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  formatted = formatted.replace(/_([^_]+)_/g, '<em>$1</em>');
+  formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  if (role !== 'citizen') {
+    formatted = formatted
+      .replace(/\[(\d+)\]/g, (_match, p1) => {
+        const idx = parseInt(p1, 10) - 1;
+        return `<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation-index" data-citation-index="${idx}" aria-label="Inspect authority [${p1}]">[${p1}]</button>`;
+      })
+      .replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation" data-citation="$1">[$1]</button>');
+  } else {
+    formatted = formatted.replace(/\[\d+\]/g, '').replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '');
+  }
+  return formatted;
+};
+
 const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string => {
   if (!text) return '';
   const lines = text.split('\n');
   const htmlParts: string[] = [];
   let currentList: string[] = [];
+  let currentListType: 'ul' | 'ol' = 'ul';
   let isSkippingAuthorities = false;
 
   const flushList = () => {
     if (currentList.length) {
-      htmlParts.push(`<ul>${currentList.map((li) => `<li>${li}</li>`).join('')}</ul>`);
+      const tag = currentListType;
+      htmlParts.push(`<${tag} class="answer-list">${currentList.map((li) => `<li>${li}</li>`).join('')}</${tag}>`);
       currentList = [];
     }
   };
@@ -2232,7 +2296,6 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
       continue;
     }
 
-    // For citizen role, strip out any "## Verified Authorities" / "## Sources" section
     if (role === 'citizen') {
       const lower = line.toLowerCase();
       if (
@@ -2256,56 +2319,120 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
       }
     }
 
-    if (line.startsWith('### ')) {
+    if (line.startsWith('#### ')) {
       flushList();
-      htmlParts.push(`<h4>${escapeHtml(line.slice(4))}</h4>`);
+      htmlParts.push(`<h5 class="answer-h5">${formatInlineMarkdown(line.slice(5), role)}</h5>`);
+    } else if (line.startsWith('### ')) {
+      flushList();
+      htmlParts.push(`<h4 class="answer-h4">${formatInlineMarkdown(line.slice(4), role)}</h4>`);
     } else if (line.startsWith('## ')) {
       flushList();
-      htmlParts.push(`<h3>${escapeHtml(line.slice(3))}</h3>`);
+      htmlParts.push(`<h3 class="answer-h3">${formatInlineMarkdown(line.slice(3), role)}</h3>`);
     } else if (line.startsWith('# ')) {
       flushList();
-      htmlParts.push(`<h2>${escapeHtml(line.slice(2))}</h2>`);
-    } else if (line.startsWith('- ') || line.startsWith('* ')) {
-      currentList.push(escapeHtml(line.slice(2)));
-    } else if (/^\d+\.\s/.test(line)) {
-      currentList.push(escapeHtml(line.replace(/^\d+\.\s/, '')));
+      htmlParts.push(`<h2 class="answer-h2">${formatInlineMarkdown(line.slice(2), role)}</h2>`);
+    } else if (line.startsWith('- ') || line.startsWith('* ') || line.startsWith('• ') || line.startsWith('+ ')) {
+      if (currentListType !== 'ul') flushList();
+      currentListType = 'ul';
+      const cleanContent = line.replace(/^[-*•+]\s+/, '');
+      currentList.push(formatInlineMarkdown(cleanContent, role));
+    } else if (/^\d+[\.\)]\s+/.test(line)) {
+      if (currentListType !== 'ol') flushList();
+      currentListType = 'ol';
+      const cleanContent = line.replace(/^\d+[\.\)]\s+/, '');
+      currentList.push(formatInlineMarkdown(cleanContent, role));
     } else if (line.startsWith('> ')) {
       flushList();
-      htmlParts.push(`<blockquote>${escapeHtml(line.slice(2))}</blockquote>`);
+      htmlParts.push(`<blockquote class="answer-quote">${formatInlineMarkdown(line.slice(2), role)}</blockquote>`);
     } else {
       flushList();
-      let formatted = escapeHtml(line).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      if (role !== 'citizen') {
-        // Single unified numbering [1], [2], [3] (Section C)
-        formatted = formatted
-          .replace(/\[(\d+)\]/g, (_match, p1) => {
-            const idx = parseInt(p1, 10) - 1;
-            return `<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation-index" data-citation-index="${idx}" aria-label="Inspect authority [${p1}]">[${p1}]</button>`;
-          })
-          .replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation" data-citation="$1">[$1]</button>');
-      } else {
-        // Strip citation chips for citizen answers (Section G)
-        formatted = formatted.replace(/\[\d+\]/g, '').replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '');
-      }
-      htmlParts.push(`<p>${formatted}</p>`);
+      htmlParts.push(`<p class="answer-p">${formatInlineMarkdown(line, role)}</p>`);
     }
   }
   flushList();
   return htmlParts.join('');
 };
 
-const renderResearchResult = (result: ResearchResult, role: Role = 'professional'): string => {
+const renderResearchResult = (result: ResearchResult, role: Role = 'professional', isStreaming: boolean = false): string => {
+  const liveGrounding = (result as any).liveWebGrounding as {
+    answer?: string;
+    search_queries?: string[];
+    sources?: Array<{ id?: number; title: string; domain?: string; url: string; trust_tier: string }>;
+    related_questions?: string[];
+  } | undefined;
+
+  const sourcesCarouselHtml = liveGrounding && liveGrounding.sources?.length ? `
+    <details class="perplexity-sources-collapsible" style="margin: 12px 0 16px;">
+      <summary class="sources-carousel-summary" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; transition: background 0.15s ease;">
+        <div class="sources-carousel-title" style="display: inline-flex; align-items: center; gap: 8px; color: #1D4ED8; font-weight: 600; font-size: 13.5px;">
+          ${icon('globe', 15)}
+          <span>${state.language === 'bn' ? `ওয়েব ও গেজেট তথ্যসূত্র (${liveGrounding.sources.length})` : `Web & Gazette Sources (${liveGrounding.sources.length})`}</span>
+          <span class="sources-grounding-tag" style="background: #DBEAFE; color: #1E40AF; padding: 2px 7px; border-radius: 10px; font-size: 10.5px; font-weight: 600;">Google Live 🌐</span>
+        </div>
+        <span class="sources-toggle-hint" style="font-size: 12px; font-weight: 500; color: #2563EB;">
+          <span class="hint-show">${state.language === 'bn' ? 'তথ্যসূত্র দেখতে ক্লিক করুন ▼' : 'Click to show sources ▼'}</span>
+          <span class="hint-hide">${state.language === 'bn' ? 'তথ্যসূত্র লুকাতে ক্লিক করুন ▲' : 'Click to hide sources ▲'}</span>
+        </span>
+      </summary>
+      <div class="sources-carousel-track" style="margin-top: 10px;">
+        ${liveGrounding.sources.map((src, idx) => {
+          let domain = src.domain || '';
+          if (!domain || domain.toLowerCase().includes('vertexaisearch')) {
+            try {
+              const u = new URL(src.url);
+              domain = u.hostname.replace(/^www\./, '');
+              if (domain.toLowerCase().includes('vertexaisearch')) domain = 'gov.bd';
+            } catch { domain = 'gov.bd'; }
+          }
+          let title = src.title || domain;
+          if (title.toLowerCase().includes('vertexaisearch') || title.startsWith('http://') || title.startsWith('https://')) {
+            title = domain;
+          }
+          const faviconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=32`;
+          return `
+            <a href="${escapeHtml(src.url)}" target="_blank" rel="noopener noreferrer" class="perplexity-source-card" title="${escapeHtml(title)}">
+              <div class="source-card-top">
+                <img src="${faviconUrl}" alt="" class="source-card-favicon" onerror="this.style.display='none'" />
+                <span class="source-card-domain">${escapeHtml(domain)}</span>
+                <span class="source-card-idx">${idx + 1}</span>
+              </div>
+              <div class="source-card-title">${escapeHtml(title)}</div>
+            </a>
+          `;
+        }).join('')}
+      </div>
+    </details>
+  ` : '';
+
+  const relatedQuestionsHtml = liveGrounding && liveGrounding.related_questions?.length ? `
+    <div class="perplexity-related-section">
+      <div class="related-header">
+        ${icon('arrow', 14)}
+        <span>${state.language === 'bn' ? 'সম্পর্কিত অনুসন্ধান ও পরবর্তী পদক্ষেপ' : 'Related Questions & Next Steps'}</span>
+      </div>
+      <div class="related-questions-list">
+        ${liveGrounding.related_questions.map((q) => `
+          <button type="button" class="related-question-btn" data-action="ask-related-question" data-question="${escapeHtml(q)}">
+            <span>${escapeHtml(q)}</span>
+            <span class="related-question-arrow">→</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+
   if (role === 'citizen') {
     const query = state.lastResearchQuery || '';
     return `
       <div class="citizen-result-layout">
         <article class="citizen-analysis">
+          ${sourcesCarouselHtml}
           <div class="citizen-steps-container">
             <div class="research-formatted-markdown">
               ${formatAnswerMarkdown(result.shortAnswer || '', 'citizen')}
             </div>
           </div>
-          
+          ${relatedQuestionsHtml}
           <!-- Suggested Lawyer Consultation Guidance -->
           ${renderCitizenLawyerSuggestion(query, result.shortAnswer || '', state.language)}
 
@@ -2323,16 +2450,52 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
   }
 
   const sources = result.authorities ?? [];
-  const statusBannerText = computeStatusBanner(sources, state.language);
+  const hasLiveSearch = Boolean(liveGrounding && ((liveGrounding.sources && liveGrounding.sources.length > 0) || (liveGrounding.search_queries && liveGrounding.search_queries.length > 0)));
+  const liveQueries: string[] = liveGrounding?.search_queries || [];
+  const liveSources = liveGrounding?.sources || [];
+  const liveDomains = Array.from(new Set(liveSources.map((s) => s.domain).filter(Boolean)));
 
-  const statusBannerHtml = `
-    <div class="status-banner" data-status-banner>
-      <span class="status-indicator-dot"></span>
-      <span class="status-banner-text">${escapeHtml(statusBannerText)}</span>
+  const researchCardHeader = `
+    <div class="research-card-header">
+      <div class="research-header-badges">
+        <span class="exec-badge exec-badge-verified">
+          <span class="badge-dot"></span>
+          <span>${state.language === 'bn' ? 'বাংলাদেশ আইন ভেরিফাইড' : 'Bangladesh Law Verified'}</span>
+        </span>
+        ${hasLiveSearch ? `
+          <button class="exec-badge exec-badge-google" type="button" data-action="toggle-google-sources" title="${state.language === 'bn' ? 'লাইভ তথ্যসূত্র দেখতে ক্লিক করুন' : 'Click to show Live Web Sources'}">
+            <span>🌐</span>
+            <span>${state.language === 'bn' ? 'গুগল লাইভ গেজেট' : 'Google Live Grounded'}</span>
+            <span class="badge-arrow">▾</span>
+          </button>
+        ` : ''}
+        ${sources.length > 0 ? `
+          <button class="exec-badge exec-badge-authorities" type="button" data-action="toggle-authorities-sources" title="${state.language === 'bn' ? 'আইনি রেফারেন্স দেখতে ক্লিক করুন' : 'Click to show Cited Authorities'}">
+            <span>📚</span>
+            <span>${sources.length} ${state.language === 'bn' ? 'আইনি রেফারেন্স' : 'Authorities Cited'}</span>
+            <span class="badge-arrow">▾</span>
+          </button>
+        ` : ''}
+      </div>
+      <div class="research-header-actions">
+        <button class="exec-action-btn copy-answer-btn" type="button" data-action="copy-research-answer" title="${state.language === 'bn' ? 'উত্তর কপি করুন' : 'Copy Analysis'}">
+          ${icon('copy', 13) || icon('arrow', 13)} <span>${ui(state.language, 'copyAnswer')}</span>
+        </button>
+        <button class="exec-action-btn memo-print-btn" type="button" data-action="print-legal-memo" title="${state.language === 'bn' ? 'লিগ্যাল মেমো প্রিন্ট / পিডিএফ' : 'Export Legal Memo (PDF / Print)'}">
+          ${icon('source', 13)} <span>${state.language === 'bn' ? 'লিগ্যাল মেমো (PDF)' : 'Legal Memo (PDF)'}</span>
+        </button>
+      </div>
     </div>
   `;
 
-  const directAnswerHtml = `
+  const directAnswerHtml = isStreaming ? `
+    <section class="direct-answer-section">
+      <h3 class="sr-only">${ui(state.language, 'directAnswer')}</h3>
+      <div class="direct-answer-content research-formatted-markdown" data-streaming-target>
+        <span class="streaming-pulse-cursor" aria-hidden="true"></span>
+      </div>
+    </section>
+  ` : `
     <section class="direct-answer-section">
       <h3 class="sr-only">${ui(state.language, 'directAnswer')}</h3>
       <div class="direct-answer-content research-formatted-markdown">
@@ -2352,11 +2515,18 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
   ` : '';
 
   const sourcesListHtml = sources.length ? `
-    <details class="sources-collapsible" open style="margin: 18px 0;">
-      <summary class="sources-summary" style="cursor: pointer; font-weight: 600; font-size: 14px; color: #1E38C8; margin-bottom: 8px;">
-        <span>${icon('book', 15)} ${ui(state.language, 'sources')} (${sources.length})</span>
+    <details class="sources-collapsible" style="margin: 18px 0;">
+      <summary class="sources-summary" style="cursor: pointer; font-weight: 600; font-size: 13.5px; color: #1E38C8; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; transition: background 0.15s ease;">
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+          ${icon('book', 15)}
+          <span>${ui(state.language, 'sources')} (${sources.length})</span>
+        </span>
+        <span class="sources-expand-hint" style="font-size: 12px; font-weight: 500; color: #64748B;">
+          <span class="hint-show">${state.language === 'bn' ? 'তথ্যসূত্র দেখতে ক্লিক করুন ▼' : 'Click to show sources ▼'}</span>
+          <span class="hint-hide">${state.language === 'bn' ? 'তথ্যসূত্র লুকাতে ক্লিক করুন ▲' : 'Click to hide sources ▲'}</span>
+        </span>
       </summary>
-      <div class="citation-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+      <div class="citation-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding: 12px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px;">
         ${sources.map((source, index) => `
           <button type="button" data-result-source="${index}" class="citation-chip ${index === 0 ? 'active' : ''}" aria-label="Inspect authority [${index + 1}]: ${escapeHtml(source.authority || source.title)}">
             <span>[${index + 1}]</span>
@@ -2374,35 +2544,61 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
       <summary class="reasoning-summary" style="cursor: pointer; font-weight: 500; font-size: 13.5px; color: #64748B;">
         <span class="reasoning-icon">⚖️</span>
         <span class="reasoning-heading">${ui(state.language, 'howAnswerProduced')}</span>
+        ${hasLiveSearch ? `<span class="reasoning-badge-google">🌐 ${state.language === 'bn' ? 'গুগল লাইভ সার্চ যুক্ত' : 'Google Search Grounded'}</span>` : ''}
         <span class="reasoning-chevron">▼</span>
       </summary>
       <div class="reasoning-steps-list">
         <div class="reasoning-step-item">
           <div class="step-num">1</div>
           <div class="step-content">
-            <strong>Legal Issue & Jurisdiction Identified</strong>
-            <p>Analyzed legal domains (CPC / CrPC / NI Act / SRA / MFLO) and mapped specific controlling provisions.</p>
+            <strong>${state.language === 'bn' ? 'আইনি বিষয় ও এখতিয়ার সনাক্তকরণ' : 'Legal Issue & Jurisdiction Identified'}</strong>
+            <p>${state.language === 'bn' ? 'সংশ্লিষ্ট আইনি ক্ষেত্র (দেওয়ানি / ফৌজদারি / এনআই অ্যাক্ট / সুনির্দিষ্ট প্রতিকার) বিশ্লেষণ ও প্রযোজ্য ধারা নির্ধারণ।' : 'Analyzed legal domains (CPC / CrPC / NI Act / SRA / MFLO) and mapped specific controlling provisions.'}</p>
+          </div>
+        </div>
+        ${hasLiveSearch ? `
+          <div class="reasoning-step-item is-google-step">
+            <div class="step-num">🌐</div>
+            <div class="step-content">
+              <strong>${state.language === 'bn' ? 'গুগল লাইভ সার্চ ও সরকারি গেজেট অনুসন্ধান' : 'Google Live Web Search & Gazette Grounding'}</strong>
+              <p>${state.language === 'bn'
+                ? `বাস্তব সময়ে গুগল সার্চ গ্রাউন্ডিংয়ের মাধ্যমে সর্বশেষ সরকারি প্রজ্ঞাপন, গেজেট ও সার্কুলার যাচাই (${liveSources.length}টি লাইভ ওয়েব সোর্স অন্তর্ভুক্ত)।`
+                : `Queried real-time Google Search grounding to verify recent Bangladesh government notifications, official gazettes, and ministry circulars (${liveSources.length} live web source${liveSources.length === 1 ? '' : 's'} verified).`}</p>
+              ${liveQueries.length > 0 ? `
+                <div class="grounding-search-queries">
+                  <span class="query-tag-label">${state.language === 'bn' ? 'অনুসন্ধান কুয়েরি:' : 'Search Queries:'}</span>
+                  ${liveQueries.map(q => `<code class="grounding-query-pill">${escapeHtml(q)}</code>`).join(' ')}
+                </div>
+              ` : ''}
+              ${liveDomains.length > 0 ? `
+                <div class="grounding-domains-verified">
+                  <span class="query-tag-label">${state.language === 'bn' ? 'যাচাইকৃত পোর্টাল:' : 'Verified Portals:'}</span>
+                  ${liveDomains.map(d => `<span class="grounding-domain-tag">🏛️ ${escapeHtml(d)}</span>`).join(' ')}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        ` : ''}
+        <div class="reasoning-step-item">
+          <div class="step-num">${hasLiveSearch ? '3' : '2'}</div>
+          <div class="step-content">
+            <strong>${state.language === 'bn' ? 'আইনি বিধান ও নজির সংগ্রহ' : 'Primary Authorities Retrieved'}</strong>
+            <p>${state.language === 'bn' ? `ক্যানোনিকাল আইন ভাণ্ডার থেকে ${sources.length}টি প্রাথমিক বিধান ও সুপ্রিম কোর্টের নজির পর্যালোচনা।` : `Retrieved ${sources.length} primary provisions & precedential holdings from canonical repository.`}</p>
           </div>
         </div>
         <div class="reasoning-step-item">
-          <div class="step-num">2</div>
+          <div class="step-num">${hasLiveSearch ? '4' : '3'}</div>
           <div class="step-content">
-            <strong>Primary Authorities Retrieved</strong>
-            <p>Retrieved ${sources.length} primary provisions & precedential holdings from canonical repository.</p>
+            <strong>${state.language === 'bn' ? 'আইন ও সংশোধনী অবস্থা যাচাই' : 'Statutory & Amendment State Verification'}</strong>
+            <p>${state.language === 'bn' ? '২০২৬ সালের সংশোধনী, গেজেট কার্যকারিতা এবং বিধিবদ্ধ ধারার হুবহু নির্ভরযোগ্যতা ক্রস-ভেরিফিকেশন।' : 'Cross-referenced temporal validity (2026 amendments), gazette status, and statutory text accuracy.'}</p>
           </div>
         </div>
         <div class="reasoning-step-item">
-          <div class="step-num">3</div>
+          <div class="step-num">${hasLiveSearch ? '5' : '4'}</div>
           <div class="step-content">
-            <strong>Statutory & Amendment State Verification</strong>
-            <p>Cross-referenced temporal validity (2026 amendments), gazette status, and statutory text accuracy.</p>
-          </div>
-        </div>
-        <div class="reasoning-step-item">
-          <div class="step-num">4</div>
-          <div class="step-content">
-            <strong>Grounded Synthesis Generated</strong>
-            <p>Synthesized structured legal guidance strictly constrained to the cited authorities.</p>
+            <strong>${state.language === 'bn' ? 'নির্ভরযোগ্য সমন্বিত আইনি বিশ্লেষণ' : 'Grounded Legal Synthesis Generated'}</strong>
+            <p>${hasLiveSearch
+              ? (state.language === 'bn' ? 'আইনি ভিত্তি ও গুগল লাইভ সার্চ তথ্যের সুনির্দিষ্ট সংযোগে তৈরি চূড়ান্ত বিশ্লেষণ।' : 'Synthesized structured legal guidance harmonizing statutory law with live verified web intelligence.')
+              : (state.language === 'bn' ? 'উদ্ধৃত কর্তৃপক্ষের কঠোর কাঠামোর মধ্যে প্রস্তুতকৃত আইনি দিকনির্দেশনা।' : 'Synthesized structured legal guidance strictly constrained to the cited authorities.')}</p>
           </div>
         </div>
       </div>
@@ -2467,32 +2663,106 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
       </div>
     </div>`;
 
-  const actionToolbar = `
-    <div class="research-action-toolbar">
-      <button class="button-outline memo-print-btn" type="button" data-action="print-legal-memo" title="Generate printable Chambers Legal Memo with official citations">
-        ${icon('source', 14)} ${state.language === 'bn' ? 'লিগ্যাল মেমো এক্সপোর্ট (PDF / প্রিন্ট)' : 'Export Legal Memo (PDF / Print)'}
-      </button>
-      <button class="button-outline copy-answer-btn" type="button" data-action="copy-research-answer" title="Copy full legal analysis to clipboard">
-        ${icon('arrow', 14)} ${ui(state.language, 'copyAnswer')}
-      </button>
-    </div>
-  `;
-
   return `
-    <div class="research-result-layout">
+    <div class="research-result-layout research-result-modern">
       <article class="research-analysis">
-        ${statusBannerHtml}
-        ${actionToolbar}
+        ${researchCardHeader}
+        ${sourcesCarouselHtml}
         ${directAnswerHtml}
-        ${keyLegalBasisHtml}
-        ${sourcesListHtml}
-        ${researchProcessAccordion}
-        ${fullAnalysisHtml}
-        ${counselNotice}
-        ${feedbackWidget}
+        <div class="post-streaming-metadata" ${isStreaming ? 'style="display: none;"' : ''}>
+          ${keyLegalBasisHtml}
+          ${sourcesListHtml}
+          ${relatedQuestionsHtml}
+          ${researchProcessAccordion}
+          ${fullAnalysisHtml}
+          ${counselNotice}
+          ${feedbackWidget}
+        </div>
       </article>
-      ${sourcePanel(sources[0])}
     </div>`;
+};
+
+let activeStreamingCancel: (() => void) | null = null;
+
+const streamTextToElement = async (
+  targetEl: HTMLElement,
+  fullText: string,
+  role: Role,
+  metadataEl: HTMLElement | null,
+  scrollContainer: HTMLElement | null
+): Promise<void> => {
+  if (activeStreamingCancel) {
+    activeStreamingCancel();
+    activeStreamingCancel = null;
+  }
+
+  return new Promise<void>((resolve) => {
+    if (!fullText || fullText.trim().length === 0) {
+      if (metadataEl) {
+        metadataEl.style.display = 'block';
+        metadataEl.classList.add('fade-in');
+      }
+      resolve();
+      return;
+    }
+
+    const tokens = fullText.match(/\S+|\s+/g) || [fullText];
+    let currentIndex = 0;
+    let accumulatedText = '';
+    let isCancelled = false;
+
+    activeStreamingCancel = () => {
+      isCancelled = true;
+      targetEl.innerHTML = formatAnswerMarkdown(fullText, role);
+      if (metadataEl) {
+        metadataEl.style.display = 'block';
+        metadataEl.classList.add('fade-in');
+      }
+      resolve();
+    };
+
+    // Smooth typing speed: 2 tokens per tick every 20ms (~60 words per second)
+    const stepInterval = 20;
+    const tokensPerStep = 2;
+
+    const intervalId = setInterval(() => {
+      if (isCancelled) {
+        clearInterval(intervalId);
+        return;
+      }
+
+      if (currentIndex >= tokens.length) {
+        clearInterval(intervalId);
+        activeStreamingCancel = null;
+        targetEl.innerHTML = formatAnswerMarkdown(fullText, role);
+        if (metadataEl) {
+          metadataEl.style.display = 'block';
+          metadataEl.classList.add('fade-in');
+        }
+        if (scrollContainer) {
+          const isNearBottom = scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight < 250;
+          if (isNearBottom) {
+            scrollContainer.scrollTo({ top: scrollContainer.scrollHeight, behavior: 'smooth' });
+          }
+        }
+        resolve();
+        return;
+      }
+
+      const nextChunk = tokens.slice(currentIndex, currentIndex + tokensPerStep).join('');
+      accumulatedText += nextChunk;
+      currentIndex += tokensPerStep;
+
+      targetEl.innerHTML = formatAnswerMarkdown(accumulatedText, role) + '<span class="streaming-pulse-cursor" aria-hidden="true"></span>';
+
+      if (scrollContainer) {
+        const isNearBottom = scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight < 250;
+        if (isNearBottom) {
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+      }
+    }, stepInterval);
+  });
 };
 
 const printChambersLegalMemo = (result: ResearchResult, role: Role, language: Language): void => {
@@ -2635,25 +2905,42 @@ const renderPilotModal = (): string => `
   </div>
 `;
 
-const liveThinkingSteps = [
-  { title: 'Legal Intent & Statutory Routing', desc: 'Targeting controlling Bangladesh Acts and legal domain...' },
-  { title: 'Primary Authority Retrieval', desc: 'Searching 46,000+ provisions & Supreme Court precedent database...' },
-  { title: '7-Gate Deterministic Verification', desc: 'Validating exact statutory quotes & 2026 amendment deadlines...' },
-  { title: 'Grounded Legal Synthesis', desc: 'Synthesizing structured legal analysis strictly from verified sources...' },
-];
+const getLiveThinkingSteps = (isLiveSearch: boolean) => {
+  if (isLiveSearch) {
+    return [
+      { title: state.language === 'bn' ? 'আইনি উদ্দেশ্য ও ধারা ম্যাপিং' : 'Legal Intent & Statutory Routing', desc: state.language === 'bn' ? 'বাংলাদেশের আইন ও আদালতের এখতিয়ার নির্ধারণ...' : 'Targeting controlling Bangladesh Acts and legal domain...' },
+      { title: state.language === 'bn' ? 'গুগল লাইভ সার্চ ও গেজেট অনুসন্ধান' : 'Google Live Web Search & Gazette Grounding', desc: state.language === 'bn' ? 'লাইভ সরকারি গেজেট, প্রজ্ঞাপন ও সার্কুলার অনুসন্ধান...' : 'Querying live Google Search for official BD gazettes, circulars & portals...' },
+      { title: state.language === 'bn' ? 'আইন ও নজির সংগ্রহ' : 'Primary Authority Retrieval', desc: state.language === 'bn' ? '৪৬,০০০+ বিধান ও সুপ্রিম কোর্টের নজির পর্যালোচনা...' : 'Searching 46,000+ provisions & Supreme Court precedent database...' },
+      { title: state.language === 'bn' ? '৭-স্তরের তথ্য যাচাইকরণ' : '7-Gate Deterministic Verification', desc: state.language === 'bn' ? 'উদ্ধৃতি ও ২০২৬ সালের সংশোধনী নির্ভুলতা যাচাই...' : 'Validating exact statutory quotes & 2026 amendment deadlines...' },
+      { title: state.language === 'bn' ? 'সমন্বিত আইনি বিশ্লেষণ প্রণয়ন' : 'Grounded Legal Synthesis', desc: state.language === 'bn' ? 'আইন ও লাইভ ওয়েব তথ্যের সুনির্দিষ্ট সংযোগে প্রতিবেদন...' : 'Synthesizing comprehensive analysis with real-time web citations...' },
+    ];
+  }
+  return [
+    { title: state.language === 'bn' ? 'আইনি উদ্দেশ্য ও ধারা ম্যাপিং' : 'Legal Intent & Statutory Routing', desc: state.language === 'bn' ? 'বাংলাদেশের আইন ও আদালতের এখতিয়ার নির্ধারণ...' : 'Targeting controlling Bangladesh Acts and legal domain...' },
+    { title: state.language === 'bn' ? 'আইন ও নজির সংগ্রহ' : 'Primary Authority Retrieval', desc: state.language === 'bn' ? '৪৬,০০০+ বিধান ও সুপ্রিম কোর্টের নজির পর্যালোচনা...' : 'Searching 46,000+ provisions & Supreme Court precedent database...' },
+    { title: state.language === 'bn' ? '৭-স্তরের তথ্য যাচাইকরণ' : '7-Gate Deterministic Verification', desc: state.language === 'bn' ? 'উদ্ধৃতি ও ২০২৬ সালের সংশোধনী নির্ভুলতা যাচাই...' : 'Validating exact statutory quotes & 2026 amendment deadlines...' },
+    { title: state.language === 'bn' ? 'সমন্বিত আইনি বিশ্লেষণ প্রণয়ন' : 'Grounded Legal Synthesis', desc: state.language === 'bn' ? 'শুধুমাত্র যাচাইকৃত উৎসের ভিত্তিতে প্রতিবেদন প্রস্তুত...' : 'Synthesizing structured legal analysis strictly from verified sources...' },
+  ];
+};
 
-const renderLiveThinking = (seconds: number, activeStepIndex: number): string => `
+const renderLiveThinking = (seconds: number, activeStepIndex: number, isLiveSearch = state.liveSearchEnabled): string => {
+  const steps = getLiveThinkingSteps(isLiveSearch);
+  return `
   <div class="live-thinking-card">
     <div class="live-thinking-header">
       <div class="live-thinking-title">
         <span class="thinking-sparkle">✨</span>
-        <strong>${state.language === 'bn' ? 'বাংলাদেশের আইন খোঁজা হচ্ছে...' : 'Researching Bangladesh law...'}</strong>
+        <strong>${isLiveSearch
+          ? (state.language === 'bn' ? 'গুগল লাইভ সার্চ ও আইন অনুসন্ধান...' : 'Google Search & BD Law Grounding...')
+          : (state.language === 'bn' ? 'বাংলাদেশের আইন খোঁজা হচ্ছে...' : 'Researching Bangladesh law...')}</strong>
         <span class="thinking-timer">(${seconds.toFixed(1)}s)</span>
       </div>
-      <span class="thinking-badge">AI Brain Active</span>
+      <span class="thinking-badge ${isLiveSearch ? 'is-google' : ''}" style="${isLiveSearch ? 'background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE;' : ''}">
+        ${isLiveSearch ? '🌐 Google Live Search Active' : 'AI Brain Active'}
+      </span>
     </div>
     <div class="live-thinking-steps">
-      ${liveThinkingSteps.map((step, idx) => {
+      ${steps.map((step, idx) => {
         const isDone = idx < activeStepIndex;
         const isActive = idx === activeStepIndex;
         return `
@@ -2676,6 +2963,7 @@ const renderLiveThinking = (seconds: number, activeStepIndex: number): string =>
     </div>
   </div>
 `;
+};
 
 const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   const query = String(new FormData(form).get('query') ?? '').trim();
@@ -2721,13 +3009,14 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   }
 
   const thinkingId = `thinking_${Date.now()}`;
+  const isLiveSearch = state.liveSearchEnabled;
   if (conversationThread) {
     const thinkingRowHtml = `
       <div class="chat-message-row assistant-row" id="${thinkingId}">
         <div class="chat-assistant-container">
-          <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
+          ${aiAuthorHeader()}
           <div class="assistant-content-wrapper" data-thinking-wrapper>
-            ${renderLiveThinking(0, 0)}
+            ${renderLiveThinking(0, 0, isLiveSearch)}
           </div>
         </div>
       </div>
@@ -2740,9 +3029,16 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   let activeStep = 0;
   const timerInterval = setInterval(() => {
     elapsed += 0.2;
-    if (elapsed > 0.8 && activeStep === 0) activeStep = 1;
-    if (elapsed > 2.0 && activeStep === 1) activeStep = 2;
-    if (elapsed > 3.4 && activeStep === 2) activeStep = 3;
+    if (isLiveSearch) {
+      if (elapsed > 0.6 && activeStep === 0) activeStep = 1;
+      if (elapsed > 1.6 && activeStep === 1) activeStep = 2;
+      if (elapsed > 2.6 && activeStep === 2) activeStep = 3;
+      if (elapsed > 3.8 && activeStep === 3) activeStep = 4;
+    } else {
+      if (elapsed > 0.8 && activeStep === 0) activeStep = 1;
+      if (elapsed > 2.0 && activeStep === 1) activeStep = 2;
+      if (elapsed > 3.4 && activeStep === 2) activeStep = 3;
+    }
     
     const thinkingElement = document.getElementById(thinkingId);
     if (!thinkingElement) return;
@@ -2767,52 +3063,102 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   }, 200);
 
   try {
-    const result = await streamResearch(
-      query,
-      role,
-      state.language,
-      (stepEvent) => {
-        const thinkingElement = document.getElementById(thinkingId);
-        if (!thinkingElement) return;
-        const stepRows = thinkingElement.querySelectorAll<HTMLElement>('.live-step-row');
-        const sIndex = Math.min(stepEvent.step - 1, stepRows.length - 1);
-        if (sIndex >= 0 && stepRows[sIndex]) {
-          const row = stepRows[sIndex];
-          const summaryEl = row.querySelector('.live-step-summary');
-          if (summaryEl && stepEvent.summary) {
-            summaryEl.textContent = stepEvent.summary;
+    const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
+    const liveSearchPromise = state.liveSearchEnabled
+      ? fetch(`${backendUrl}/api/search/live-grounding`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, language: state.language, user_role: role }),
+        })
+          .then((r) => (r.ok ? r.json() : null))
+          .catch((err) => {
+            console.warn('Live search grounding request failed:', err);
+            return null;
+          })
+      : Promise.resolve(null);
+
+    const [liveWebGroundingData, result] = await Promise.all([
+      liveSearchPromise,
+      streamResearch(
+        query,
+        role,
+        state.language,
+        (stepEvent) => {
+          const thinkingElement = document.getElementById(thinkingId);
+          if (!thinkingElement) return;
+          const stepRows = thinkingElement.querySelectorAll<HTMLElement>('.live-step-row');
+          const sIndex = Math.min(stepEvent.step - 1, stepRows.length - 1);
+          if (sIndex >= 0 && stepRows[sIndex]) {
+            const row = stepRows[sIndex];
+            const summaryEl = row.querySelector('.live-step-summary');
+            if (summaryEl && stepEvent.summary) {
+              summaryEl.textContent = stepEvent.summary;
+            }
+            if (stepEvent.status === 'completed' || stepEvent.status === 'passed') {
+              row.className = 'live-step-row is-done';
+              const ind = row.querySelector('.live-step-indicator');
+              if (ind) ind.innerHTML = '✓';
+            }
           }
-          if (stepEvent.status === 'completed' || stepEvent.status === 'passed') {
-            row.className = 'live-step-row is-done';
-            const ind = row.querySelector('.live-step-indicator');
-            if (ind) ind.innerHTML = '✓';
-          }
-        }
-      },
-      undefined,
-      context
-    );
+        },
+        undefined,
+        context
+      ),
+    ]);
     clearInterval(timerInterval);
+
+    if (liveWebGroundingData && liveWebGroundingData.status === 'ok') {
+      (result as any).liveWebGrounding = liveWebGroundingData;
+      const webAnswer = (liveWebGroundingData.answer || '').trim();
+      if (webAnswer.length > 30) {
+        const ragAnswer = (result.shortAnswer || '').trim();
+        if (ragAnswer && ragAnswer.length > 40) {
+          const sectionTitle = state.language === 'bn'
+            ? '🌐 বাস্তব-সময়ের সরকারি গেজেট ও সাম্প্রতিক আপডেট (Google Live Search)'
+            : '🌐 Real-Time Gazette & Web Intelligence (Google Live Search)';
+          result.shortAnswer = `${ragAnswer}\n\n### ${sectionTitle}\n\n${webAnswer}`;
+        } else {
+          result.shortAnswer = webAnswer;
+        }
+      }
+    }
+
     state.lastResearch = result;
     state.lastResearchRole = role;
     state.lastResearchQuery = query;
     state.selectedSource = 0;
 
-    chatStore.addMessage(activeThread.id, { sender: 'assistant', content: result.shortAnswer, result });
-
+    const assistantRowId = `assistant_msg_${Date.now()}`;
     const thinkingElement = document.getElementById(thinkingId);
     if (thinkingElement) {
       thinkingElement.outerHTML = `
-        <div class="chat-message-row assistant-row">
+        <div class="chat-message-row assistant-row" id="${assistantRowId}">
           <div class="chat-assistant-container">
-            <div class="assistant-avatar-badge">${brandMarkSvg(false)}</div>
+            ${aiAuthorHeader()}
             <div class="assistant-content-wrapper">
-              ${renderResearchResult(result, role)}
+              ${renderResearchResult(result, role, true)}
             </div>
           </div>
         </div>
       `;
     }
+
+    const rowEl = document.getElementById(assistantRowId);
+    const streamingTarget = rowEl?.querySelector<HTMLElement>('[data-streaming-target]');
+    const metadataEl = rowEl?.querySelector<HTMLElement>('.post-streaming-metadata');
+    const scrollContainer = document.querySelector<HTMLElement>('[data-chat-scroll]');
+
+    try {
+      if (streamingTarget) {
+        await streamTextToElement(streamingTarget, result.shortAnswer, role, metadataEl ?? null, scrollContainer);
+      }
+    } catch (streamErr) {
+      console.warn('Streaming error, displaying full result immediately:', streamErr);
+      if (streamingTarget) streamingTarget.innerHTML = formatAnswerMarkdown(result.shortAnswer, role);
+      if (metadataEl) metadataEl.style.display = 'block';
+    }
+
+    chatStore.addMessage(activeThread.id, { sender: 'assistant', content: result.shortAnswer, result });
 
     const sidebarHistory = document.querySelector('.sidebar-history-section');
     if (sidebarHistory) {
@@ -2991,6 +3337,13 @@ document.addEventListener('click', (event) => {
     }
     if (state.sidebarOpen) {
       state.sidebarOpen = false;
+      document.querySelector('.workspace-sidebar')?.classList.remove('is-open');
+      document.querySelector('.workspace-sidebar-overlay')?.classList.remove('is-open');
+      const btn = document.querySelector('.workspace-menu-button');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = icon('menu');
+      }
       document.body.classList.remove('sidebar-open');
     }
     const role = link.dataset.role as Role | undefined;
@@ -3010,6 +3363,79 @@ document.addEventListener('click', (event) => {
   }
   const actionElement = target.closest<HTMLElement>('[data-action]');
   const action = actionElement?.dataset.action;
+
+  if (action === 'open-ocr-modal') {
+    event.preventDefault();
+    openDocumentOcrModal(state.language, (summaryPrompt) => {
+      const textarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea[name="query"]');
+      if (textarea) {
+        textarea.value = summaryPrompt;
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+        const form = textarea.closest<HTMLFormElement>('form');
+        if (form) void submitResearch(form);
+      }
+    });
+    return;
+  }
+
+  if (action === 'toggle-live-search') {
+    event.preventDefault();
+    state.liveSearchEnabled = !state.liveSearchEnabled;
+    document.querySelectorAll<HTMLElement>('.composer-search-toggle, .live-search-chip-btn').forEach((btn) => {
+      btn.classList.toggle('is-active', state.liveSearchEnabled);
+      btn.setAttribute('aria-pressed', String(state.liveSearchEnabled));
+      const span = btn.querySelector('.search-toggle-label, span');
+      if (span) {
+        if (btn.classList.contains('composer-search-toggle')) {
+          span.textContent = state.language === 'bn' ? 'লাইভ সার্চ' : 'Search';
+        } else {
+          span.textContent = `${state.language === 'bn' ? 'গুগল লাইভ সার্চ' : 'Google Live Search'}${state.liveSearchEnabled ? ' (ON)' : ''}`;
+        }
+      }
+    });
+    if (state.liveSearchEnabled) {
+      showToast(
+        state.language === 'bn' ? 'গুগল লাইভ সার্চ সক্রিয় 🌐' : 'Google Live Search Enabled 🌐',
+        state.language === 'bn' 
+          ? 'বাংলাদেশ সরকারি গেজেট ও পোর্টালের তথ্যে লাইভ যাচাই সক্রিয় করা হয়েছে।' 
+          : 'Queries will be verified against live Bangladesh government gazettes and court portals via Google Search.',
+        'positive'
+      );
+    } else {
+      showToast(
+        state.language === 'bn' ? 'গুগল লাইভ সার্চ নিষ্ক্রিয়' : 'Google Live Search Disabled',
+        state.language === 'bn' 
+          ? 'শুধুমাত্র অভ্যন্তরীণ অনুমোদিত বিধিবদ্ধ আইন ও রেফারেন্স ব্যবহৃত হবে।' 
+          : 'Restricted to canonical statutory provisions and case precedents.',
+        'neutral'
+      );
+    }
+    return;
+  }
+
+  if (action === 'ask-related-question') {
+    event.preventDefault();
+    const question = actionElement?.dataset.question;
+    if (!question) return;
+    const textarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea[name="query"]');
+    if (textarea) {
+      textarea.value = question;
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      state.liveSearchEnabled = true;
+      document.querySelectorAll<HTMLElement>('.composer-search-toggle, .live-search-chip-btn').forEach((btn) => {
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-pressed', 'true');
+        const span = btn.querySelector('.search-toggle-label, span');
+        if (span && !btn.classList.contains('composer-search-toggle')) {
+          span.textContent = `${state.language === 'bn' ? 'গুগল লাইভ সার্চ' : 'Google Live Search'} (ON)`;
+        }
+      });
+      const form = textarea.closest<HTMLFormElement>('form');
+      if (form) void submitResearch(form);
+    }
+    return;
+  }
+
   if (action === 'menu') {
     state.menuOpen = !state.menuOpen;
     const drawer = document.querySelector('.mobile-drawer');
@@ -3174,8 +3600,8 @@ document.addEventListener('click', (event) => {
     if (idx >= 0 && idx < sources.length) {
       state.selectedSource = idx;
       document.querySelectorAll('[data-result-source]').forEach((button, i) => button.classList.toggle('active', i === idx));
-      const panel = document.querySelector<HTMLElement>('[data-source-panel]');
-      if (panel) panel.outerHTML = sourcePanel(sources[idx]);
+      const s = sources[idx];
+      if (s) void openProvisionModal(s.authority || s.title, s.provision || s.citation || '');
     }
   }
   if (action === 'focus-composer') {
@@ -3194,6 +3620,30 @@ document.addEventListener('click', (event) => {
   if (action === 'print-legal-memo') {
     if (state.lastResearch) {
       printChambersLegalMemo(state.lastResearch, state.role, state.language);
+    }
+  }
+  if (action === 'toggle-authorities-sources') {
+    const card = actionElement?.closest('.research-analysis');
+    const postMeta = card?.querySelector<HTMLElement>('.post-streaming-metadata');
+    if (postMeta && postMeta.style.display === 'none') {
+      postMeta.style.display = 'block';
+    }
+    const details = card?.querySelector<HTMLDetailsElement>('.sources-collapsible');
+    if (details) {
+      details.open = !details.open;
+      if (details.open) {
+        details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
+  if (action === 'toggle-google-sources') {
+    const card = actionElement?.closest('.research-analysis');
+    const details = card?.querySelector<HTMLDetailsElement>('.perplexity-sources-collapsible');
+    if (details) {
+      details.open = !details.open;
+      if (details.open) {
+        details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
   }
   if (action === 'feedback-positive') {
@@ -3322,8 +3772,8 @@ document.addEventListener('click', (event) => {
     const index = Number(resultSource.dataset.resultSource ?? 0);
     state.selectedSource = index;
     document.querySelectorAll('[data-result-source]').forEach((button) => button.classList.toggle('active', button === resultSource));
-    const panel = document.querySelector<HTMLElement>('[data-source-panel]');
-    if (panel) panel.outerHTML = sourcePanel(state.lastResearch.authorities?.[index]);
+    const s = state.lastResearch.authorities?.[index];
+    if (s) void openProvisionModal(s.authority || s.title, s.provision || s.citation || '');
   }
   const proofSource = target.closest<HTMLButtonElement>('[data-proof-source]');
   if (proofSource) {
