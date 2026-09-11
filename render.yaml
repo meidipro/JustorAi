@@ -23,6 +23,12 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
+      - key: GOOGLE_CLOUD_API_KEY
+        sync: false
+      - key: GCP_PROJECT_ID
+        value: "justorai-508321"
+      - key: VERTEX_LOCATION
+        value: "us-central1"
       - key: OPENROUTER_API_KEY
         sync: false
       - key: DASHSCOPE_API_KEY
