@@ -24,10 +24,16 @@ DEFAULT_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
-ROLE_DAILY_QUOTA = {
+# Quota for verified partner organisation members (checked before role quota)
+PARTNER_ORG_QUOTA: dict[str, int] = {
+    "habiganj-bar-council": 100,  # Habiganj Jela Bar Council official collaboration
+}
+
+# Default role-based daily quota for users NOT in a partner organisation
+ROLE_DAILY_QUOTA: dict[str, int] = {
+    "Legal Professional": 10,
+    "Law Student": 10,
     "General Public": 3,
-    "Law Student": 30,
-    "Legal Professional": 50,
 }
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -121,14 +127,40 @@ def enforce_ip_rate_limit(request: Request, bucket: str, limit: int, window_sec:
         raise HTTPException(status_code=429, detail="Too many requests. Please wait and try again.")
 
 
-def quota_for_role(user_role: str) -> int:
+def quota_for_user(user_role: str, partner_org: str | None = None) -> int:
+    """Return daily quota for a user. Partner org members get elevated limits."""
+    if partner_org and partner_org.strip().lower() in PARTNER_ORG_QUOTA:
+        return PARTNER_ORG_QUOTA[partner_org.strip().lower()]
     return ROLE_DAILY_QUOTA.get(user_role, ROLE_DAILY_QUOTA["General Public"])
 
 
-def consume_chat_quota(user_id: str, user_role: str) -> dict[str, int]:
-    limit = quota_for_role(user_role)
-    remaining, limit = quota_store.consume(f"{user_id}:{date.today().isoformat()}", limit)
-    return {"remaining": remaining, "limit": limit}
+# Keep backward-compat alias used by older code paths
+def quota_for_role(user_role: str) -> int:
+    return quota_for_user(user_role, None)
+
+
+def consume_chat_quota(
+    user_id: str,
+    user_role: str,
+    partner_org: str | None = None,
+) -> dict[str, int]:
+    """Consume one credit and return {remaining, limit, partner_org}.
+    Raises HTTP 429 if the daily limit is exhausted.
+    """
+    limit = quota_for_user(user_role, partner_org)
+    today = date.today().isoformat()
+    try:
+        remaining, limit = quota_store.consume(f"{user_id}:{today}", limit)
+    except HTTPException:
+        raise HTTPException(
+            status_code=429,
+            detail=(
+                f"Daily research credits used up ({limit} today). "
+                "Credits reset at midnight Bangladesh time. "
+                "Join the Founding Pilot for unlimited access."
+            ),
+        )
+    return {"remaining": remaining, "limit": limit, "partner_org": partner_org or ""}
 
 
 def admin_secret() -> str:

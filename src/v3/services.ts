@@ -189,6 +189,11 @@ export const authService = {
     const { data } = supabase.auth.onAuthStateChange((_event: any, session: Session | null) => callback(session));
     return () => data.subscription.unsubscribe();
   },
+  async updateProfile(userId: string, fields: Record<string, unknown>): Promise<void> {
+    if (!supabase || !userId) return;
+    const { error } = await supabase.from('profiles').upsert({ id: userId, ...fields }, { onConflict: 'id' });
+    if (error) console.warn('[authService.updateProfile]', error.message);
+  },
 };
 
 const safeArray = <T>(value: unknown): T[] => Array.isArray(value) ? value as T[] : [];

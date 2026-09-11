@@ -22,7 +22,8 @@ import { bindLearningSession, buildGoDeeperQuery, renderLearningHome } from './l
 const appRoot = document.getElementById('app');
 if (!appRoot) throw new Error('App root was not found.');
 
-const roleQuota: Record<Role, number> = { citizen: 3, student: 30, professional: 50 };
+// roleQuota is superseded by PARTNER_ORG_DAILY_LIMIT / UNAFFILIATED_DAILY_LIMIT — kept for reference only
+// const roleQuota: Record<Role, number> = { citizen: 3, student: 30, professional: 50 };
 const roleLabels: Record<Role, string> = { citizen: 'Citizen', student: 'Law Student', professional: 'Legal Professional' };
 /** Roles shown on public landing & start pages — citizen is hidden (guides-only via sign-in). */
 const publicRoleOrder: Role[] = ['professional', 'student'];
@@ -174,6 +175,7 @@ interface UserProfileData {
   fullName: string;
   email: string;
   role: Role;
+  partnerOrg?: string; // e.g. 'habiganj-bar-council' | '' (empty = unaffiliated)
 }
 
 const getStoredProfile = (): UserProfileData => {
@@ -467,7 +469,7 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
       
       <div class="sidebar-user-footer">
         ${route('/profile', `
-          <div class="sidebar-user-card" title="Open User Profile & Settings">
+          <div class="sidebar-user-card" title="Open User Profile &amp; Settings">
             <div class="sidebar-user-avatar">
               <span>${escapeHtml(initials)}</span>
               <span class="user-status-dot"></span>
@@ -484,6 +486,20 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
   </aside>`;
 };
 
+const PARTNER_ORG_LABEL: Record<string, string> = {
+  'habiganj-bar-council': 'Habiganj Bar Council',
+};
+const PARTNER_ORG_DAILY_LIMIT: Record<string, number> = {
+  'habiganj-bar-council': 100,
+};
+const UNAFFILIATED_DAILY_LIMIT = 10;
+
+const getDailyLimit = (): number => {
+  const profile = getStoredProfile();
+  const org = (profile.partnerOrg || '').toLowerCase();
+  return PARTNER_ORG_DAILY_LIMIT[org] ?? UNAFFILIATED_DAILY_LIMIT;
+};
+
 const workspaceTopbar = (role: Role, title?: string): string => {
   const isGuest = localStorage.getItem('justor_guest_mode') === 'true';
   const profile = getStoredProfile();
@@ -496,14 +512,22 @@ const workspaceTopbar = (role: Role, title?: string): string => {
     .join('')
     .toUpperCase() || 'U');
 
+  const dailyLimit = getDailyLimit();
+  const partnerOrg = (profile.partnerOrg || '').toLowerCase();
+  const orgLabel = PARTNER_ORG_LABEL[partnerOrg] || null;
+
   return `
   <header class="workspace-topbar">
     <div class="workspace-topbar-start">
       <button class="workspace-menu-button" type="button" data-action="toggle-sidebar" aria-label="${state.sidebarOpen ? ui(state.language, 'close') : ui(state.language, 'menu')}" aria-expanded="${state.sidebarOpen}">${icon(state.sidebarOpen ? 'close' : 'menu')}</button>
       <a href="${localizedPath('/', state.language)}" data-route class="workspace-mobile-brand">${brand()}</a>
     </div>
-    <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">· ${escapeHtml(title)}</span>` : ''}</span>
+    <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">&middot; ${escapeHtml(title)}</span>` : ''}</span>
     <div class="workspace-topbar-actions">
+      <span class="credit-counter-pill" data-credit-pill title="${state.language === 'bn' ? 'দৈনিক ক্রেডিট' : 'Daily credits'}">
+        ⬡ <span data-credit-remaining>${dailyLimit}</span>/<span data-credit-limit>${dailyLimit}</span>
+        ${orgLabel ? `<span class="credit-partner-tag">${orgLabel}</span>` : ''}
+      </span>
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       ${state.session ? route('/profile', `
         <span class="topbar-profile-pill" title="User Profile">
@@ -515,7 +539,10 @@ const workspaceTopbar = (role: Role, title?: string): string => {
   </header>`;
 };
 
-const quotaLine = (role: Role): string => `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${roleQuota[role]}` : `${ui(state.language, 'signInQuotaPrefix')} ${roleQuota[role]} ${ui(state.language, 'answersPerDay')}`}</span>`;
+const quotaLine = (_role: Role): string => {
+  const limit = getDailyLimit();
+  return `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${limit}` : `${ui(state.language, 'signInQuotaPrefix')} ${limit} ${ui(state.language, 'answersPerDay')}`}</span>`;
+};
 
 const citizenSectors = [
   { icon: '🏠', titleKey: 'sectorProperty', descKey: 'sectorPropertyDesc', cluster: 'property-land', query: 'My landlord won\'t return my advance deposit or rent dispute' },
@@ -1577,6 +1604,29 @@ const profilePage = (): string => {
               <span class="input-leading-icon">${icon('shield', 16)}</span>
               <input type="email" id="prof-email" name="email" value="${escapeHtml(profile.email || (isGuest ? 'guest@justor.ai' : ''))}" readonly class="profile-text-input" />
             </div>
+          </div>
+
+          <!-- Organization / Partner Affiliation -->
+          <div class="profile-form-section">
+            <label for="prof-partnerOrg" class="profile-form-label">
+              <span>${isBn ? 'সংগঠন / বার কাউন্সিল' : 'Organization / Bar Council'}</span>
+              <small class="label-hint">${isBn ? 'আপনার প্রতিদিনের ক্রেডিট নির্ধারণ করে' : 'Determines your daily research credits'}</small>
+            </label>
+            <div class="profile-input-wrap">
+              <span class="input-leading-icon">⚖️</span>
+              <select id="prof-partnerOrg" name="partnerOrg" class="profile-select-input">
+                <option value="" ${!profile.partnerOrg ? 'selected' : ''}>${isBn ? 'স্বাধীন / কোনো অ্যাফিলিয়েশন নেই' : 'Independent — No affiliation'} (${UNAFFILIATED_DAILY_LIMIT} ${isBn ? 'ক্রেডিট/দিন' : 'credits/day'})</option>
+                <option value="habiganj-bar-council" ${profile.partnerOrg === 'habiganj-bar-council' ? 'selected' : ''}>⚖️ Habiganj Bar Council (100 ${isBn ? 'ক্রেডিট/দিন' : 'credits/day'})</option>
+              </select>
+            </div>
+            ${profile.partnerOrg === 'habiganj-bar-council' ? `
+              <div class="partner-tier-badge">
+                <img src="/visuals/habiganj-bar-council.jpg" alt="Habiganj Bar Council" class="partner-badge-logo">
+                <div>
+                  <strong>⚖️ Habiganj Bar Council Member</strong>
+                  <span>${isBn ? '১০০ ক্রেডিট/দিন — অফিসিয়াল পার্টনার সুবিধা' : '100 credits/day — Official partner benefit'}</span>
+                </div>
+              </div>` : ''}
           </div>
 
           <!-- Locked role -->
@@ -2791,17 +2841,51 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
       topbarTitle.textContent = `· ${activeThread.title}`;
     }
 
-    const quota = result.quota;
-    if (quota) document.querySelectorAll<HTMLElement>('[data-quota]').forEach((element) => { element.textContent = `${quota.remaining} of ${quota.limit} AI answers remaining today`; });
+    const quota = result.quota as { remaining: number; limit: number; partner_org?: string } | undefined;
+    if (quota) {
+      const remaining = quota.remaining;
+      const limit = quota.limit;
+      // Update credit counter pill in topbar
+      document.querySelectorAll<HTMLElement>('[data-credit-remaining]').forEach((el) => { el.textContent = String(remaining); });
+      document.querySelectorAll<HTMLElement>('[data-credit-limit]').forEach((el) => { el.textContent = String(limit); });
+      // Color-code the pill
+      document.querySelectorAll<HTMLElement>('[data-credit-pill]').forEach((pill) => {
+        const pct = limit > 0 ? remaining / limit : 0;
+        pill.classList.toggle('credit-pill-amber', pct < 0.3 && pct >= 0.1);
+        pill.classList.toggle('credit-pill-red', pct < 0.1);
+      });
+      // Update legacy quota line in composer
+      document.querySelectorAll<HTMLElement>('[data-quota]').forEach((el) => { el.textContent = `${remaining} of ${limit} credits remaining today`; });
+    }
     
     scrollArea?.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
   } catch (error) {
     clearInterval(timerInterval);
     const err = error instanceof Error ? error.message : '';
-    const message = err === 'authentication-required'
-      ? 'Your session has ended. Sign in again to continue.'
-      : err === 'quota-exceeded'
-        ? 'Daily research quota reached. Try again tomorrow or sign in with a higher-allowance role.'
+    const isQuotaExhausted = err === 'quota-exceeded' || err.includes('quota') || err.includes('429');
+    const isBn = state.language === 'bn';
+    let paywallHtml = '';
+    if (isQuotaExhausted) {
+      const limit = getDailyLimit();
+      paywallHtml = `
+        <div class="quota-paywall-card">
+          <div class="paywall-icon" aria-hidden="true">🔒</div>
+          <div class="paywall-body">
+            <strong class="paywall-title">${isBn ? 'দৈনিক ক্রেডিট শেষ হয়েছে' : 'Daily credits used up'}</strong>
+            <p class="paywall-desc">${isBn ? `আজকের ${limit}টি ক্রেডিট ব্যবহার হয়ে গেছে।` : `You've used all ${limit} research credits for today.`}</p>
+            <p class="paywall-reset">${isBn ? 'মধ্যরাতে (বাংলাদেশ সময়) রিসেট হবে।' : 'Credits reset at midnight (Bangladesh time).'}</p>
+          </div>
+          <div class="paywall-actions">
+            <button class="button paywall-upgrade-btn" type="button" data-action="open-pilot-modal">
+              ${isBn ? 'ফাউন্ডিং পাইলট — ৳২০০/মাস' : 'Join Founding Pilot — ৳200/mo'}
+            </button>
+            <p class="paywall-pilot-desc">${isBn ? 'আইনজীবীদের জন্য আনলিমিটেড রিসার্চ অ্যাক্সেস।' : 'Unlimited research access for advocates.'}</p>
+          </div>
+        </div>`;
+    }
+    const message = isQuotaExhausted ? '' :
+      err === 'authentication-required'
+        ? 'Your session has ended. Sign in again to continue.'
         : 'The legal research service is unavailable. No answer was generated.';
     const thinkingElement = document.getElementById(thinkingId);
     if (thinkingElement) {
@@ -2810,7 +2894,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
           <div class="chat-assistant-container">
             <div class="assistant-avatar-badge"><img src="/visuals/justor-mark.png" alt="Justor AI"></div>
             <div class="assistant-content-wrapper">
-              ${unavailable(message)}
+              ${paywallHtml || unavailable(message)}
             </div>
           </div>
         </div>
@@ -3284,9 +3368,16 @@ document.addEventListener('submit', (event) => {
     const formData = new FormData(form);
     const fullName = String(formData.get('fullName') || '').trim();
     const role = lockedRole() || (formData.get('role') as Role) || state.role;
+    const partnerOrg = String(formData.get('partnerOrg') || '').trim();
 
-    saveStoredProfile({ fullName, role });
+    saveStoredProfile({ fullName, role, partnerOrg });
     state.role = role;
+
+    // Sync partnerOrg to Supabase profiles table so backend quota can read it
+    if (state.session?.user?.id) {
+      void authService.updateProfile(state.session.user.id, { partner_org: partnerOrg || null });
+    }
+
     showToast(ui(state.language, 'saveSettings'), 'Profile updated successfully.', 'positive');
     render(true);
   }

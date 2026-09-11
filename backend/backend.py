@@ -798,23 +798,35 @@ def require_auth(request: Request) -> dict:
     return user
 
 
-async def get_user_role(user_id: Optional[str]) -> str:
-    """Derive user role server-side from Supabase profiles table, never trusting client payloads alone."""
+async def get_user_profile_data(user_id: Optional[str]) -> dict:
+    """Derive user role AND partner_org server-side from Supabase profiles table.
+    Never trusts client payloads alone. Returns {role, partner_org}.
+    """
     if not user_id or not supabase or user_id.startswith("guest-"):
-        return "General Public"
+        return {"role": "General Public", "partner_org": None}
     try:
         def fetch_profile():
-            return supabase.table("profiles").select("role").eq("id", user_id).limit(1).execute()
+            return supabase.table("profiles").select("role, partner_org").eq("id", user_id).limit(1).execute()
         res = await asyncio.to_thread(fetch_profile)
-        if res.data and res.data[0].get("role"):
-            role = res.data[0]["role"]
-            if role in {"Legal Professional", "lawyer", "Lawyer"}:
-                return "Legal Professional"
-            elif role in {"Law Student", "student", "Student"}:
-                return "Law Student"
+        if res.data:
+            row = res.data[0]
+            raw_role = row.get("role", "")
+            partner_org = row.get("partner_org") or None
+            if raw_role in {"Legal Professional", "lawyer", "Lawyer"}:
+                role = "Legal Professional"
+            elif raw_role in {"Law Student", "student", "Student"}:
+                role = "Law Student"
+            else:
+                role = "General Public"
+            return {"role": role, "partner_org": partner_org}
     except Exception as e:
-        logger.warning(f"Role lookup warning for user {user_id}: {e}")
-    return "General Public"
+        logger.warning(f"Profile lookup warning for user {user_id}: {e}")
+    return {"role": "General Public", "partner_org": None}
+
+
+# Backward-compat shim — used by any code still calling get_user_role()
+async def get_user_role(user_id: Optional[str]) -> str:
+    return (await get_user_profile_data(user_id))["role"]
 
 try:
     import evidence
@@ -2303,7 +2315,9 @@ async def chat(request: ChatRequest, req: Request):
     else:
         user_id = resolve_guest_id(req, request.user_id)
 
-    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
+    profile_data = await get_user_profile_data(authenticated_user["id"]) if authenticated_user else {"role": resolve_request_role(request), "partner_org": None}
+    user_role = profile_data["role"]
+    partner_org = profile_data["partner_org"]
 
     if not getattr(req.state, "chat_limits_applied", False):
         enforce_ip_rate_limit(req, "chat-burst", 20, 60)
@@ -2333,7 +2347,7 @@ async def chat(request: ChatRequest, req: Request):
 
     quota_state = getattr(req.state, "quota_state", None)
     if quota_state is None:
-        quota_state = consume_chat_quota(user_id, user_role)
+        quota_state = consume_chat_quota(user_id, user_role, partner_org)
         req.state.quota_state = quota_state
 
     try:
@@ -2513,7 +2527,9 @@ async def chat_stream(request: ChatRequest, req: Request):
         user_id = authenticated_user["id"]
     else:
         user_id = resolve_guest_id(req, request.user_id)
-    user_role = await get_user_role(authenticated_user["id"]) if authenticated_user else resolve_request_role(request)
+    profile_data = await get_user_profile_data(authenticated_user["id"]) if authenticated_user else {"role": resolve_request_role(request), "partner_org": None}
+    user_role = profile_data["role"]
+    partner_org = profile_data["partner_org"]
 
     enforce_ip_rate_limit(req, "chat-burst", 20, 60)
     if not authenticated_user:
@@ -2521,7 +2537,7 @@ async def chat_stream(request: ChatRequest, req: Request):
 
     quota_state = None
     if not is_smalltalk(query_str):
-        quota_state = consume_chat_quota(user_id, user_role)
+        quota_state = consume_chat_quota(user_id, user_role, partner_org)
         req.state.quota_state = quota_state
     req.state.chat_limits_applied = True
 
