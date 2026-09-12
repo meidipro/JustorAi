@@ -5,6 +5,21 @@
  */
 
 import { analytics } from './analytics';
+import { authService } from './services';
+
+const UNLIMITED_EMAILS: Set<string> = new Set([
+  'shakhawatofficial00@gmail.com',
+]);
+
+const checkIsUnlimited = (): boolean => {
+  try {
+    const raw = localStorage.getItem('justor_user_profile');
+    const email = (raw ? JSON.parse(raw).email : '') || '';
+    return UNLIMITED_EMAILS.has(email.trim().toLowerCase());
+  } catch {
+    return false;
+  }
+};
 
 export function openDocumentOcrModal(
   language: 'en' | 'bn' = 'en',
@@ -15,13 +30,16 @@ export function openDocumentOcrModal(
   if (existing) existing.remove();
 
   const isBn = language === 'bn';
+  const isVip = checkIsUnlimited();
   const backdrop = document.createElement('div');
   backdrop.className = 'ocr-modal-backdrop';
   backdrop.innerHTML = `
     <div class="ocr-modal-drawer" role="dialog" aria-modal="true" aria-labelledby="ocr-modal-title">
       <div class="ocr-modal-header">
         <div>
-          <span class="ocr-badge-kicker">Google Cloud Vision OCR · Vertex AI</span>
+          <span class="ocr-badge-kicker" style="${isVip ? 'background: linear-gradient(135deg, #1E38C8, #7C3AED); color: #fff;' : ''}">
+            ${isVip ? '⭐ VIP Unlimited OCR Active · Google Cloud Vertex AI' : 'Google Cloud Vision OCR · Vertex AI'}
+          </span>
           <h2 id="ocr-modal-title">${isBn ? 'আইনি দলিল ও নথিপত্র বিশ্লেষণ' : 'Legal Document & Deed Analyzer'}</h2>
         </div>
         <button class="modal-close-btn" type="button" data-action="close-ocr-modal" aria-label="Close modal">✕</button>
@@ -136,8 +154,22 @@ export function openDocumentOcrModal(
       const formData = new FormData();
       formData.append('file', selectedFile);
 
+      const session = await authService.session();
+      const headers: Record<string, string> = {};
+      const storedEmail = (() => {
+        try { return JSON.parse(localStorage.getItem('justor_user_profile') || '{}').email; } catch { return ''; }
+      })();
+      const email = session?.user?.email || storedEmail;
+      if (email) {
+        headers['X-User-Email'] = email;
+      }
+      if (session?.access_token && session.access_token !== 'guest_token') {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const resp = await fetch(`${backendUrl}/api/document/ocr-analyze`, {
         method: 'POST',
+        headers,
         body: formData,
       });
 

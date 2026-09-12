@@ -103,8 +103,20 @@ const ensureGuestId = (): string => {
   return guestId;
 };
 
+const getStoredUserEmail = (): string => {
+  try {
+    const raw = localStorage.getItem('justor_user_profile');
+    if (raw) return JSON.parse(raw).email || '';
+  } catch {}
+  return '';
+};
+
 const researchHeaders = (session: Session | null, extra: Record<string, string> = {}): Record<string, string> => {
   const headers: Record<string, string> = { 'Content-Type': 'application/json', ...extra };
+  const email = session?.user?.email || getStoredUserEmail();
+  if (email) {
+    headers['X-User-Email'] = email;
+  }
   if (isRealSession(session) && session?.access_token) {
     headers.Authorization = `Bearer ${session.access_token}`;
   } else {
@@ -333,6 +345,8 @@ export async function runResearch(
   const headers = researchHeaders(session);
   const guestId = ensureGuestId();
 
+  const email = session?.user?.email || getStoredUserEmail();
+
   const response = await fetch(`${backendUrl}/chat`, {
     method: 'POST',
     headers,
@@ -342,6 +356,7 @@ export async function runResearch(
       language,
       chat_history: [],
       user_id: isRealSession(session) ? session?.user.id : guestId,
+      email: email || undefined,
       context,
     }),
   });
@@ -366,6 +381,7 @@ export async function streamResearch(
   const session = await authService.session();
   const headers = researchHeaders(session, { Accept: 'text/event-stream, application/json' });
   const guestId = ensureGuestId();
+  const email = session?.user?.email || getStoredUserEmail();
 
   try {
     const response = await fetch(`${backendUrl}/chat/stream`, {
@@ -377,6 +393,7 @@ export async function streamResearch(
         language,
         chat_history: [],
         user_id: isRealSession(session) ? session?.user.id : guestId,
+        email: email || undefined,
         context,
       }),
     });

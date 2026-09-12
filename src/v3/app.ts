@@ -496,16 +496,31 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
   </aside>`;
 };
 
+export const UNLIMITED_EMAILS: Set<string> = new Set([
+  'shakhawatofficial00@gmail.com',
+]);
+
+export const isUnlimitedUser = (email?: string | null): boolean => {
+  if (!email) return false;
+  return UNLIMITED_EMAILS.has(email.trim().toLowerCase());
+};
+
 const PARTNER_ORG_LABEL: Record<string, string> = {
   'habiganj-bar-council': 'Habiganj Bar Council',
+  'unlimited-vip': 'VIP Unlimited ★',
 };
 const PARTNER_ORG_DAILY_LIMIT: Record<string, number> = {
   'habiganj-bar-council': 100,
+  'unlimited-vip': 999999,
 };
 const UNAFFILIATED_DAILY_LIMIT = 10;
 
 const getDailyLimit = (): number => {
   const profile = getStoredProfile();
+  const email = state.session?.user?.email || profile.email;
+  if (isUnlimitedUser(email) || (profile.partnerOrg || '').toLowerCase() === 'unlimited-vip') {
+    return 999999;
+  }
   const org = (profile.partnerOrg || '').toLowerCase();
   return PARTNER_ORG_DAILY_LIMIT[org] ?? UNAFFILIATED_DAILY_LIMIT;
 };
@@ -513,6 +528,8 @@ const getDailyLimit = (): number => {
 const workspaceTopbar = (role: Role, title?: string): string => {
   const isGuest = localStorage.getItem('justor_guest_mode') === 'true';
   const profile = getStoredProfile();
+  const userEmail = state.session?.user?.email || profile.email;
+  const isVip = isUnlimitedUser(userEmail) || (profile.partnerOrg || '').toLowerCase() === 'unlimited-vip';
   const firstName = state.session ? (profile.fullName.split(' ')[0] || ui(state.language, 'profile')) : (isGuest ? 'Guest' : '');
   const initials = isGuest ? 'G' : (profile.fullName
     .split(' ')
@@ -524,7 +541,7 @@ const workspaceTopbar = (role: Role, title?: string): string => {
 
   const dailyLimit = getDailyLimit();
   const partnerOrg = (profile.partnerOrg || '').toLowerCase();
-  const orgLabel = PARTNER_ORG_LABEL[partnerOrg] || null;
+  const orgLabel = isVip ? (state.language === 'bn' ? 'ভিআইপি আনলিমিটেড ★' : 'VIP Unlimited ★') : (PARTNER_ORG_LABEL[partnerOrg] || null);
 
   return `
   <header class="workspace-topbar">
@@ -534,9 +551,9 @@ const workspaceTopbar = (role: Role, title?: string): string => {
     </div>
     <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">&middot; ${escapeHtml(title)}</span>` : ''}</span>
     <div class="workspace-topbar-actions">
-      <span class="credit-counter-pill" data-credit-pill title="${state.language === 'bn' ? 'দৈনিক ক্রেডিট' : 'Daily credits'}">
-        ⬡ <span data-credit-remaining>${dailyLimit}</span>/<span data-credit-limit>${dailyLimit}</span>
-        ${orgLabel ? `<span class="credit-partner-tag">${orgLabel}</span>` : ''}
+      <span class="credit-counter-pill ${isVip ? 'credit-pill-vip' : ''}" data-credit-pill title="${isVip ? (state.language === 'bn' ? 'আনলিমিটেড ভিআইপি অ্যাক্সেস' : 'Unlimited VIP Access') : (state.language === 'bn' ? 'দৈনিক ক্রেডিট' : 'Daily credits')}" ${isVip ? 'style="background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.35); color: #7C3AED; font-weight: 600;"' : ''}>
+        ⬡ <span data-credit-remaining>${isVip ? '∞' : dailyLimit}</span>/<span data-credit-limit>${isVip ? '∞' : dailyLimit}</span>
+        ${orgLabel ? `<span class="credit-partner-tag" ${isVip ? 'style="background: linear-gradient(135deg, #1E38C8, #7C3AED); color: #fff; font-weight: 700;"' : ''}>${orgLabel}</span>` : ''}
       </span>
       <button class="language-switch" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
       ${state.session ? route('/profile', `
@@ -550,6 +567,12 @@ const workspaceTopbar = (role: Role, title?: string): string => {
 };
 
 const quotaLine = (_role: Role): string => {
+  const profile = getStoredProfile();
+  const userEmail = state.session?.user?.email || profile.email;
+  const isVip = isUnlimitedUser(userEmail) || (profile.partnerOrg || '').toLowerCase() === 'unlimited-vip';
+  if (isVip) {
+    return `<span class="quota-line" data-quota style="color: #6D28D9; font-weight: 600;">⭐ ${state.language === 'bn' ? 'আনলিমিটেড ভিআইপি লিগ্যাল রিসার্চ ও ওসিআর সক্রিয়' : 'Unlimited VIP Legal Research & OCR Active'}</span>`;
+  }
   const limit = getDailyLimit();
   return `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${limit}` : `${ui(state.language, 'signInQuotaPrefix')} ${limit} ${ui(state.language, 'answersPerDay')}`}</span>`;
 };
@@ -1620,16 +1643,24 @@ const profilePage = (): string => {
               <select id="prof-partnerOrg" name="partnerOrg" class="profile-select-input">
                 <option value="" ${!profile.partnerOrg ? 'selected' : ''}>${isBn ? 'স্বাধীন / কোনো অ্যাফিলিয়েশন নেই' : 'Independent — No affiliation'} (${UNAFFILIATED_DAILY_LIMIT} ${isBn ? 'ক্রেডিট/দিন' : 'credits/day'})</option>
                 <option value="habiganj-bar-council" ${profile.partnerOrg === 'habiganj-bar-council' ? 'selected' : ''}>⚖️ Habiganj Bar Council (100 ${isBn ? 'ক্রেডিট/দিন' : 'credits/day'})</option>
+                ${(isUnlimitedUser(profile.email || state.session?.user?.email) || profile.partnerOrg === 'unlimited-vip') ? `<option value="unlimited-vip" selected>⭐ VIP Unlimited Tier (Unlimited credits & OCR)</option>` : ''}
               </select>
             </div>
-            ${profile.partnerOrg === 'habiganj-bar-council' ? `
+            ${(isUnlimitedUser(profile.email || state.session?.user?.email) || profile.partnerOrg === 'unlimited-vip') ? `
+              <div class="partner-tier-badge" style="background: linear-gradient(135deg, rgba(30,56,200,0.08), rgba(124,58,237,0.12)); border: 1.5px solid #7C3AED; padding: 12px 14px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+                <span style="font-size: 26px;">⭐</span>
+                <div>
+                  <strong style="color: #6D28D9; font-size: 14px;">VIP Unlimited Access Tier — Active</strong>
+                  <span style="color: #4C1D95; font-size: 12.5px;">${isBn ? 'আপনার অ্যাকাউন্টের জন্য সকল আইনি গবেষণা, কেস অ্যানালিটিক্স এবং ভিশন ওসিআর আনলিমিটেড সক্রিয় রয়েছে।' : 'Your account has full unlimited access to legal research, case precedent intelligence, and Vision OCR.'}</span>
+                </div>
+              </div>` : (profile.partnerOrg === 'habiganj-bar-council' ? `
               <div class="partner-tier-badge">
                 <img src="/visuals/habiganj-bar-council.jpg" alt="Habiganj Bar Council" class="partner-badge-logo">
                 <div>
                   <strong>⚖️ Habiganj Bar Council Member</strong>
                   <span>${isBn ? '১০০ ক্রেডিট/দিন — অফিসিয়াল পার্টনার সুবিধা' : '100 credits/day — Official partner benefit'}</span>
                 </div>
-              </div>` : ''}
+              </div>` : '')}
           </div>
 
           <!-- Locked role -->
@@ -3187,28 +3218,42 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
       topbarTitle.textContent = `· ${activeThread.title}`;
     }
 
-    const quota = result.quota as { remaining: number; limit: number; partner_org?: string } | undefined;
+    const quota = result.quota as { remaining: number; limit: number; partner_org?: string; unlimited?: boolean } | undefined;
     if (quota) {
-      const remaining = quota.remaining;
-      const limit = quota.limit;
-      // Update credit counter pill in topbar
-      document.querySelectorAll<HTMLElement>('[data-credit-remaining]').forEach((el) => { el.textContent = String(remaining); });
-      document.querySelectorAll<HTMLElement>('[data-credit-limit]').forEach((el) => { el.textContent = String(limit); });
-      // Color-code the pill
-      document.querySelectorAll<HTMLElement>('[data-credit-pill]').forEach((pill) => {
-        const pct = limit > 0 ? remaining / limit : 0;
-        pill.classList.toggle('credit-pill-amber', pct < 0.3 && pct >= 0.1);
-        pill.classList.toggle('credit-pill-red', pct < 0.1);
-      });
-      // Update legacy quota line in composer
-      document.querySelectorAll<HTMLElement>('[data-quota]').forEach((el) => { el.textContent = `${remaining} of ${limit} credits remaining today`; });
+      const isVip = isUnlimitedUser(state.session?.user?.email || getStoredProfile().email) || quota.unlimited || quota.limit >= 999999;
+      if (isVip) {
+        document.querySelectorAll<HTMLElement>('[data-credit-remaining]').forEach((el) => { el.textContent = '∞'; });
+        document.querySelectorAll<HTMLElement>('[data-credit-limit]').forEach((el) => { el.textContent = '∞'; });
+        document.querySelectorAll<HTMLElement>('[data-credit-pill]').forEach((pill) => {
+          pill.classList.remove('credit-pill-amber', 'credit-pill-red');
+          pill.classList.add('credit-pill-vip');
+        });
+        document.querySelectorAll<HTMLElement>('[data-quota]').forEach((el) => {
+          el.textContent = '⭐ Unlimited VIP Legal Research & OCR Active';
+        });
+      } else {
+        const remaining = quota.remaining;
+        const limit = quota.limit;
+        // Update credit counter pill in topbar
+        document.querySelectorAll<HTMLElement>('[data-credit-remaining]').forEach((el) => { el.textContent = String(remaining); });
+        document.querySelectorAll<HTMLElement>('[data-credit-limit]').forEach((el) => { el.textContent = String(limit); });
+        // Color-code the pill
+        document.querySelectorAll<HTMLElement>('[data-credit-pill]').forEach((pill) => {
+          const pct = limit > 0 ? remaining / limit : 0;
+          pill.classList.toggle('credit-pill-amber', pct < 0.3 && pct >= 0.1);
+          pill.classList.toggle('credit-pill-red', pct < 0.1);
+        });
+        // Update legacy quota line in composer
+        document.querySelectorAll<HTMLElement>('[data-quota]').forEach((el) => { el.textContent = `${remaining} of ${limit} credits remaining today`; });
+      }
     }
     
     scrollArea?.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
   } catch (error) {
     clearInterval(timerInterval);
     const err = error instanceof Error ? error.message : '';
-    const isQuotaExhausted = err === 'quota-exceeded' || err.includes('quota') || err.includes('429');
+    const isVipUser = isUnlimitedUser(state.session?.user?.email || getStoredProfile().email);
+    const isQuotaExhausted = !isVipUser && (err === 'quota-exceeded' || err.includes('quota') || err.includes('429'));
     const isBn = state.language === 'bn';
     let paywallHtml = '';
     if (isQuotaExhausted) {

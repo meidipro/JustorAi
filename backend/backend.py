@@ -52,6 +52,7 @@ from backend.security_controls import (
     claim_pilot_email,
     consume_chat_quota,
     enforce_ip_rate_limit,
+    is_unlimited_user,
     job_row,
     parse_allowed_origins,
     require_admin_secret,
@@ -65,7 +66,7 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allow_headers=["Authorization", "Content-Type", "Accept", "X-Guest-Id"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "X-Guest-Id", "X-User-Email"],
 )
 
 app.include_router(learning_router)
@@ -444,6 +445,8 @@ class ChatRequest(BaseModel):
     chat_history: Optional[List[ChatMessage]] = None
     eval_mode: Optional[bool] = False
     user_id: Optional[str] = None
+    email: Optional[str] = None
+    user_email: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
 
 def resolve_request_query(req: ChatRequest) -> str:
@@ -800,20 +803,25 @@ def require_auth(request: Request) -> dict:
     return user
 
 
-async def get_user_profile_data(user_id: Optional[str]) -> dict:
+async def get_user_profile_data(user_id: Optional[str], email: Optional[str] = None) -> dict:
     """Derive user role AND partner_org server-side from Supabase profiles table.
     Never trusts client payloads alone. Returns {role, partner_org}.
     """
+    if is_unlimited_user(email):
+        return {"role": "Legal Professional", "partner_org": "unlimited-vip"}
     if not user_id or not supabase or user_id.startswith("guest-"):
         return {"role": "General Public", "partner_org": None}
     try:
         def fetch_profile():
-            return supabase.table("profiles").select("role, partner_org").eq("id", user_id).limit(1).execute()
+            return supabase.table("profiles").select("role, partner_org, email").eq("id", user_id).limit(1).execute()
         res = await asyncio.to_thread(fetch_profile)
         if res.data:
             row = res.data[0]
             raw_role = row.get("role", "")
             partner_org = row.get("partner_org") or None
+            user_email = row.get("email") or email
+            if is_unlimited_user(user_email) or (partner_org and partner_org.lower() == "unlimited-vip"):
+                return {"role": "Legal Professional", "partner_org": "unlimited-vip"}
             if raw_role in {"Legal Professional", "lawyer", "Lawyer"}:
                 role = "Legal Professional"
             elif raw_role in {"Law Student", "student", "Student"}:
@@ -2245,9 +2253,17 @@ async def analyze_document_ocr(
     Multimodal Vision OCR endpoint for Bangladeshi legal documents:
     Deeds (দলিল/বায়নাপত্র), Khatians (ই-নামজারি/খতিয়ান), FIRs (এজাহার), and Court Orders.
     Powered by Google Cloud Vertex AI (Gemini 2.5 Flash).
+    VIP Users (e.g. shakhawatofficial00@gmail.com) receive unlimited, priority processing.
     """
     if not file.filename:
         raise HTTPException(400, "No file uploaded.")
+
+    authenticated_user = get_current_user(req) if req else None
+    header_email = req.headers.get("X-User-Email") if req else None
+    user_email = (authenticated_user.get("email") if authenticated_user else None) or header_email
+    is_vip = is_unlimited_user(user_email)
+    if is_vip:
+        logger.info(f"[VIP Unlimited OCR Access verified for {user_email}]")
 
     allowed_exts = {".pdf", ".jpg", ".jpeg", ".png", ".webp"}
     ext = os.path.splitext(file.filename.lower())[1]
@@ -2258,6 +2274,11 @@ async def analyze_document_ocr(
     if not raw_bytes:
         raise HTTPException(422, "Empty file uploaded.")
 
+    # Standard limit 15MB, VIP unlimited tier up to 50MB
+    max_mb = 50 if is_vip else 15
+    if len(raw_bytes) > max_mb * 1024 * 1024:
+        raise HTTPException(413, f"File size exceeds {max_mb}MB limit.")
+
     result = await legal_ocr_service.analyze_legal_document(
         file_bytes=raw_bytes,
         filename=file.filename,
@@ -2265,6 +2286,9 @@ async def analyze_document_ocr(
     )
     if result.get("status") != "ok":
         raise HTTPException(502, detail=result.get("message", "Document OCR analysis failed."))
+
+    if is_vip:
+        result["vip_unlimited"] = True
 
     return JSONResponse(status_code=200, content=result)
 
@@ -2375,19 +2399,24 @@ async def chat(request: ChatRequest, req: Request):
         raise HTTPException(400, "Query/message cannot be empty.")
 
     authenticated_user = get_current_user(req)
+    header_email = req.headers.get("X-User-Email")
+    user_email = (authenticated_user.get("email") if authenticated_user else None) or request.email or request.user_email or header_email
     if authenticated_user:
         user_id = authenticated_user["id"]
     else:
         user_id = resolve_guest_id(req, request.user_id)
 
-    profile_data = await get_user_profile_data(authenticated_user["id"]) if authenticated_user else {"role": resolve_request_role(request), "partner_org": None}
+    profile_data = await get_user_profile_data(authenticated_user["id"] if authenticated_user else None, email=user_email)
     user_role = profile_data["role"]
     partner_org = profile_data["partner_org"]
 
-    if not getattr(req.state, "chat_limits_applied", False):
-        enforce_ip_rate_limit(req, "chat-burst", 20, 60)
-        if not authenticated_user:
-            enforce_ip_rate_limit(req, "chat-guest-hour", 10, 3600)
+    if not is_unlimited_user(user_email):
+        if not getattr(req.state, "chat_limits_applied", False):
+            enforce_ip_rate_limit(req, "chat-burst", 20, 60)
+            if not authenticated_user:
+                enforce_ip_rate_limit(req, "chat-guest-hour", 10, 3600)
+            req.state.chat_limits_applied = True
+    else:
         req.state.chat_limits_applied = True
 
     # Fast Smalltalk / Greeting Handler
@@ -2412,7 +2441,7 @@ async def chat(request: ChatRequest, req: Request):
 
     quota_state = getattr(req.state, "quota_state", None)
     if quota_state is None:
-        quota_state = consume_chat_quota(user_id, user_role, partner_org)
+        quota_state = consume_chat_quota(user_id, user_role, partner_org, user_email=user_email)
         req.state.quota_state = quota_state
 
     try:
@@ -2588,21 +2617,24 @@ async def chat_stream(request: ChatRequest, req: Request):
         raise HTTPException(400, "Query/message cannot be empty.")
 
     authenticated_user = get_current_user(req)
+    header_email = req.headers.get("X-User-Email")
+    user_email = (authenticated_user.get("email") if authenticated_user else None) or request.email or request.user_email or header_email
     if authenticated_user:
         user_id = authenticated_user["id"]
     else:
         user_id = resolve_guest_id(req, request.user_id)
-    profile_data = await get_user_profile_data(authenticated_user["id"]) if authenticated_user else {"role": resolve_request_role(request), "partner_org": None}
+    profile_data = await get_user_profile_data(authenticated_user["id"] if authenticated_user else None, email=user_email)
     user_role = profile_data["role"]
     partner_org = profile_data["partner_org"]
 
-    enforce_ip_rate_limit(req, "chat-burst", 20, 60)
-    if not authenticated_user:
-        enforce_ip_rate_limit(req, "chat-guest-hour", 10, 3600)
+    if not is_unlimited_user(user_email):
+        enforce_ip_rate_limit(req, "chat-burst", 20, 60)
+        if not authenticated_user:
+            enforce_ip_rate_limit(req, "chat-guest-hour", 10, 3600)
 
     quota_state = None
     if not is_smalltalk(query_str):
-        quota_state = consume_chat_quota(user_id, user_role, partner_org)
+        quota_state = consume_chat_quota(user_id, user_role, partner_org, user_email=user_email)
         req.state.quota_state = quota_state
     req.state.chat_limits_applied = True
 

@@ -27,7 +27,28 @@ DEFAULT_ORIGINS = [
 # Quota for verified partner organisation members (checked before role quota)
 PARTNER_ORG_QUOTA: dict[str, int] = {
     "habiganj-bar-council": 100,  # Habiganj Jela Bar Council official collaboration
+    "unlimited-vip": 999999,      # Unlimited VIP tier (unlimited responses & OCR)
 }
+
+# Explicit list of users with permanent unlimited VIP access
+UNLIMITED_EMAILS: set[str] = {
+    "shakhawatofficial00@gmail.com",
+}
+
+# Allow adding additional emails via environment variable without redeploying code
+_extra_unlimited = os.getenv("UNLIMITED_USER_EMAILS", "").strip()
+if _extra_unlimited:
+    for _email in _extra_unlimited.split(","):
+        if _email.strip():
+            UNLIMITED_EMAILS.add(_email.strip().lower())
+
+
+def is_unlimited_user(email: str | None) -> bool:
+    """Check if an email has permanent unlimited VIP access."""
+    if not email:
+        return False
+    return email.strip().lower() in UNLIMITED_EMAILS
+
 
 # Default role-based daily quota for users NOT in a partner organisation
 ROLE_DAILY_QUOTA: dict[str, int] = {
@@ -127,8 +148,10 @@ def enforce_ip_rate_limit(request: Request, bucket: str, limit: int, window_sec:
         raise HTTPException(status_code=429, detail="Too many requests. Please wait and try again.")
 
 
-def quota_for_user(user_role: str, partner_org: str | None = None) -> int:
-    """Return daily quota for a user. Partner org members get elevated limits."""
+def quota_for_user(user_role: str, partner_org: str | None = None, user_email: str | None = None) -> int:
+    """Return daily quota for a user. VIP and partner org members get elevated limits."""
+    if is_unlimited_user(user_email) or (partner_org and partner_org.strip().lower() == "unlimited-vip"):
+        return 999999
     if partner_org and partner_org.strip().lower() in PARTNER_ORG_QUOTA:
         return PARTNER_ORG_QUOTA[partner_org.strip().lower()]
     return ROLE_DAILY_QUOTA.get(user_role, ROLE_DAILY_QUOTA["General Public"])
@@ -143,11 +166,21 @@ def consume_chat_quota(
     user_id: str,
     user_role: str,
     partner_org: str | None = None,
-) -> dict[str, int]:
-    """Consume one credit and return {remaining, limit, partner_org}.
+    user_email: str | None = None,
+) -> dict[str, Any]:
+    """Consume one credit and return {remaining, limit, partner_org, unlimited}.
+    VIP users with unlimited access bypass quota tracking.
     Raises HTTP 429 if the daily limit is exhausted.
     """
-    limit = quota_for_user(user_role, partner_org)
+    if is_unlimited_user(user_email) or (partner_org and partner_org.strip().lower() == "unlimited-vip"):
+        return {
+            "remaining": 999999,
+            "limit": 999999,
+            "partner_org": "unlimited-vip",
+            "unlimited": True,
+        }
+
+    limit = quota_for_user(user_role, partner_org, user_email)
     today = date.today().isoformat()
     try:
         remaining, limit = quota_store.consume(f"{user_id}:{today}", limit)
@@ -160,7 +193,7 @@ def consume_chat_quota(
                 "Join the Founding Pilot for unlimited access."
             ),
         )
-    return {"remaining": remaining, "limit": limit, "partner_org": partner_org or ""}
+    return {"remaining": remaining, "limit": limit, "partner_org": partner_org or "", "unlimited": False}
 
 
 def admin_secret() -> str:
