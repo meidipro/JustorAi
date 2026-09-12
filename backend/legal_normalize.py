@@ -52,9 +52,40 @@ def normalize_whitespace(value: str) -> str:
     return re.sub(r"\s+", " ", value or "").strip()
 
 
+BANGLA_REQUEST_PATTERN = re.compile(
+    r'(?:'
+    r'[\u0980-\u09FF]|'  # Bengali unicode block
+    r'\b(?:'
+    r'in\s+(?:bangla|bengali|bengla)|'
+    r'(?:answer|reply|respond|response|explain|write|tell(?:\s+me)?|speak|give(?:\s+me)?(?:\s+answer)?|provide(?:\s+answer)?)\s+in\s+(?:bangla|bengali|bengla)|'
+    r'(?:bangla|bengali)\s+(?:te|language|version|please|uttor|format)|'
+    r'banglay(?:\s+bolen|\s+bolun|\s+likhun|\s+uttor|\s+answer|\s+explain)?|'
+    r'banglate|'
+    r'uttor\s+din|'
+    r'bangla\s+bhashay'
+    r')\b'
+    r')',
+    re.IGNORECASE
+)
+
+
+def is_bengali_requested(text: str | None, explicit_language: str | None = None) -> bool:
+    """
+    Returns True if:
+    1. explicit_language starts with 'bn'
+    2. text contains Bengali unicode characters
+    3. text contains explicit phrases asking for Bengali (e.g. 'answer in bangla', 'tell me in bengali', 'banglay bolen', etc.)
+    """
+    if explicit_language and explicit_language.strip().lower().startswith("bn"):
+        return True
+    if not text:
+        return False
+    return bool(BANGLA_REQUEST_PATTERN.search(text))
+
+
 def detect_language(text: str) -> Literal["BN", "EN", "MIXED"]:
     """
-    Detects whether text is pure Bengali, pure English, or mixed/Banglish.
+    Detects whether text is pure Bengali, pure English, or mixed/Banglish/Bengali-requested.
     """
     if not text:
         return "EN"
@@ -67,7 +98,10 @@ def detect_language(text: str) -> Literal["BN", "EN", "MIXED"]:
     elif has_bengali:
         return "BN"
 
-    # Check for Banglish words in pure Latin script text
+    # Check for explicit Bengali requests or Banglish words in pure Latin script text
+    if is_bengali_requested(text):
+        return "MIXED"
+
     words = set(re.findall(r'\b[a-zA-Z]+\b', text.lower()))
     if words.intersection(BANGLISH_INDICATORS):
         return "MIXED"

@@ -505,6 +505,14 @@ export const isUnlimitedUser = (email?: string | null): boolean => {
   return UNLIMITED_EMAILS.has(email.trim().toLowerCase());
 };
 
+export const isBengaliRequested = (query?: string | null, currentLanguage?: string | null): boolean => {
+  if (currentLanguage && currentLanguage.trim().toLowerCase().startsWith('bn')) return true;
+  if (!query) return false;
+  if (/[\u0980-\u09FF]/.test(query)) return true;
+  const pattern = /(?:in\s+(?:bangla|bengali|bengla)|(?:answer|reply|respond|response|explain|write|tell(?:\s+me)?|speak|give(?:\s+me)?(?:\s+answer)?|provide(?:\s+answer)?)\s+in\s+(?:bangla|bengali|bengla)|(?:bangla|bengali)\s+(?:te|language|version|please|uttor|format)|banglay|banglate|uttor\s+din|bangla\s+bhashay)/i;
+  return pattern.test(query);
+};
+
 const PARTNER_ORG_LABEL: Record<string, string> = {
   'habiganj-bar-council': 'Habiganj Bar Council',
   'unlimited-vip': 'VIP Unlimited ★',
@@ -2385,6 +2393,9 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
 };
 
 const renderResearchResult = (result: ResearchResult, role: Role = 'professional', isStreaming: boolean = false): string => {
+  const isBnResult = state.language === 'bn' || isBengaliRequested(result.shortAnswer, state.language) || isBengaliRequested(state.lastResearchQuery, state.language);
+  const cardLang: 'en' | 'bn' = isBnResult ? 'bn' : 'en';
+
   const liveGrounding = (result as any).liveWebGrounding as {
     answer?: string;
     search_queries?: string[];
@@ -2397,12 +2408,12 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
       <summary class="sources-carousel-summary" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; transition: background 0.15s ease;">
         <div class="sources-carousel-title" style="display: inline-flex; align-items: center; gap: 8px; color: #1D4ED8; font-weight: 600; font-size: 13.5px;">
           ${icon('globe', 15)}
-          <span>${state.language === 'bn' ? `ওয়েব ও গেজেট তথ্যসূত্র (${liveGrounding.sources.length})` : `Web & Gazette Sources (${liveGrounding.sources.length})`}</span>
+          <span>${cardLang === 'bn' ? `ওয়েব ও গেজেট তথ্যসূত্র (${liveGrounding.sources.length})` : `Web & Gazette Sources (${liveGrounding.sources.length})`}</span>
           <span class="sources-grounding-tag" style="background: #DBEAFE; color: #1E40AF; padding: 2px 7px; border-radius: 10px; font-size: 10.5px; font-weight: 600;">Google Live 🌐</span>
         </div>
         <span class="sources-toggle-hint" style="font-size: 12px; font-weight: 500; color: #2563EB;">
-          <span class="hint-show">${state.language === 'bn' ? 'তথ্যসূত্র দেখতে ক্লিক করুন ▼' : 'Click to show sources ▼'}</span>
-          <span class="hint-hide">${state.language === 'bn' ? 'তথ্যসূত্র লুকাতে ক্লিক করুন ▲' : 'Click to hide sources ▲'}</span>
+          <span class="hint-show">${cardLang === 'bn' ? 'তথ্যসূত্র দেখতে ক্লিক করুন ▼' : 'Click to show sources ▼'}</span>
+          <span class="hint-hide">${cardLang === 'bn' ? 'তথ্যসূত্র লুকাতে ক্লিক করুন ▲' : 'Click to hide sources ▲'}</span>
         </span>
       </summary>
       <div class="sources-carousel-track" style="margin-top: 10px;">
@@ -2439,7 +2450,7 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
     <div class="perplexity-related-section">
       <div class="related-header">
         ${icon('arrow', 14)}
-        <span>${state.language === 'bn' ? 'সম্পর্কিত অনুসন্ধান ও পরবর্তী পদক্ষেপ' : 'Related Questions & Next Steps'}</span>
+        <span>${cardLang === 'bn' ? 'সম্পর্কিত অনুসন্ধান ও পরবর্তী পদক্ষেপ' : 'Related Questions & Next Steps'}</span>
       </div>
       <div class="related-questions-list">
         ${liveGrounding.related_questions.map((q) => `
@@ -2465,14 +2476,14 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
           </div>
           ${relatedQuestionsHtml}
           <!-- Suggested Lawyer Consultation Guidance -->
-          ${renderCitizenLawyerSuggestion(query, result.shortAnswer || '', state.language)}
+          ${renderCitizenLawyerSuggestion(query, result.shortAnswer || '', cardLang)}
 
           <div class="citizen-disclaimer-box">
-            <p>${ui(state.language, 'citizenDisclaimer')}</p>
+            <p>${ui(cardLang, 'citizenDisclaimer')}</p>
           </div>
           <div class="citizen-ask-more" style="margin-top: 16px;">
             <button class="button button-secondary" type="button" data-action="focus-composer">
-              ${ui(state.language, 'guideAskAi')}
+              ${ui(cardLang, 'guideAskAi')}
             </button>
           </div>
         </article>
@@ -2491,29 +2502,29 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
       <div class="research-header-badges">
         <span class="exec-badge exec-badge-verified">
           <span class="badge-dot"></span>
-          <span>${state.language === 'bn' ? 'বাংলাদেশ আইন ভেরিফাইড' : 'Bangladesh Law Verified'}</span>
+          <span>${cardLang === 'bn' ? 'বাংলাদেশ আইন ভেরিফাইড' : 'Bangladesh Law Verified'}</span>
         </span>
         ${hasLiveSearch ? `
-          <button class="exec-badge exec-badge-google" type="button" data-action="toggle-google-sources" title="${state.language === 'bn' ? 'লাইভ তথ্যসূত্র দেখতে ক্লিক করুন' : 'Click to show Live Web Sources'}">
+          <button class="exec-badge exec-badge-google" type="button" data-action="toggle-google-sources" title="${cardLang === 'bn' ? 'লাইভ তথ্যসূত্র দেখতে ক্লিক করুন' : 'Click to show Live Web Sources'}">
             <span>🌐</span>
-            <span>${state.language === 'bn' ? 'গুগল লাইভ গেজেট' : 'Google Live Grounded'}</span>
+            <span>${cardLang === 'bn' ? 'গুগল লাইভ গেজেট' : 'Google Live Grounded'}</span>
             <span class="badge-arrow">▾</span>
           </button>
         ` : ''}
         ${sources.length > 0 ? `
-          <button class="exec-badge exec-badge-authorities" type="button" data-action="toggle-authorities-sources" title="${state.language === 'bn' ? 'আইনি রেফারেন্স দেখতে ক্লিক করুন' : 'Click to show Cited Authorities'}">
+          <button class="exec-badge exec-badge-authorities" type="button" data-action="toggle-authorities-sources" title="${cardLang === 'bn' ? 'আইনি রেফারেন্স দেখতে ক্লিক করুন' : 'Click to show Cited Authorities'}">
             <span>📚</span>
-            <span>${sources.length} ${state.language === 'bn' ? 'আইনি রেফারেন্স' : 'Authorities Cited'}</span>
+            <span>${sources.length} ${cardLang === 'bn' ? 'আইনি রেফারেন্স' : 'Authorities Cited'}</span>
             <span class="badge-arrow">▾</span>
           </button>
         ` : ''}
       </div>
       <div class="research-header-actions">
-        <button class="exec-action-btn copy-answer-btn" type="button" data-action="copy-research-answer" title="${state.language === 'bn' ? 'উত্তর কপি করুন' : 'Copy Analysis'}">
-          ${icon('copy', 13) || icon('arrow', 13)} <span>${ui(state.language, 'copyAnswer')}</span>
+        <button class="exec-action-btn copy-answer-btn" type="button" data-action="copy-research-answer" title="${cardLang === 'bn' ? 'উত্তর কপি করুন' : 'Copy Analysis'}">
+          ${icon('copy', 13) || icon('arrow', 13)} <span>${ui(cardLang, 'copyAnswer')}</span>
         </button>
-        <button class="exec-action-btn memo-print-btn" type="button" data-action="print-legal-memo" title="${state.language === 'bn' ? 'লিগ্যাল মেমো প্রিন্ট / পিডিএফ' : 'Export Legal Memo (PDF / Print)'}">
-          ${icon('source', 13)} <span>${state.language === 'bn' ? 'লিগ্যাল মেমো (PDF)' : 'Legal Memo (PDF)'}</span>
+        <button class="exec-action-btn memo-print-btn" type="button" data-action="print-legal-memo" title="${cardLang === 'bn' ? 'লিগ্যাল মেমো প্রিন্ট / পিডিএফ' : 'Export Legal Memo (PDF / Print)'}">
+          ${icon('source', 13)} <span>${cardLang === 'bn' ? 'লিগ্যাল মেমো (PDF)' : 'Legal Memo (PDF)'}</span>
         </button>
       </div>
     </div>
@@ -2521,14 +2532,14 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
 
   const directAnswerHtml = isStreaming ? `
     <section class="direct-answer-section">
-      <h3 class="sr-only">${ui(state.language, 'directAnswer')}</h3>
+      <h3 class="sr-only">${ui(cardLang, 'directAnswer')}</h3>
       <div class="direct-answer-content research-formatted-markdown" data-streaming-target>
         <span class="streaming-pulse-cursor" aria-hidden="true"></span>
       </div>
     </section>
   ` : `
     <section class="direct-answer-section">
-      <h3 class="sr-only">${ui(state.language, 'directAnswer')}</h3>
+      <h3 class="sr-only">${ui(cardLang, 'directAnswer')}</h3>
       <div class="direct-answer-content research-formatted-markdown">
         ${formatAnswerMarkdown(result.shortAnswer || '', role)}
       </div>
@@ -2537,7 +2548,7 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
 
   const keyLegalBasisHtml = (result.applicableLaw?.length || result.relevantCases?.length) ? `
     <section class="key-legal-basis-section" style="margin: 18px 0;">
-      <h3 style="font-size: 16px; margin: 0 0 8px 0; color: #1E293B;">${ui(state.language, 'keyLegalBasis')}</h3>
+      <h3 style="font-size: 16px; margin: 0 0 8px 0; color: #1E293B;">${ui(cardLang, 'keyLegalBasis')}</h3>
       <ul class="legal-basis-list" style="margin: 0; padding-left: 20px; color: #334155; font-size: 14px;">
         ${(result.applicableLaw || []).map(law => `<li style="margin-bottom: 4px;">${escapeHtml(law)}</li>`).join('')}
         ${(result.relevantCases || []).map(c => `<li style="margin-bottom: 4px;">${escapeHtml(c)}</li>`).join('')}
@@ -2550,11 +2561,11 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
       <summary class="sources-summary" style="cursor: pointer; font-weight: 600; font-size: 13.5px; color: #1E38C8; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; transition: background 0.15s ease;">
         <span style="display: inline-flex; align-items: center; gap: 8px;">
           ${icon('book', 15)}
-          <span>${ui(state.language, 'sources')} (${sources.length})</span>
+          <span>${ui(cardLang, 'sources')} (${sources.length})</span>
         </span>
         <span class="sources-expand-hint" style="font-size: 12px; font-weight: 500; color: #64748B;">
-          <span class="hint-show">${state.language === 'bn' ? 'তথ্যসূত্র দেখতে ক্লিক করুন ▼' : 'Click to show sources ▼'}</span>
-          <span class="hint-hide">${state.language === 'bn' ? 'তথ্যসূত্র লুকাতে ক্লিক করুন ▲' : 'Click to hide sources ▲'}</span>
+          <span class="hint-show">${cardLang === 'bn' ? 'তথ্যসূত্র দেখতে ক্লিক করুন ▼' : 'Click to show sources ▼'}</span>
+          <span class="hint-hide">${cardLang === 'bn' ? 'তথ্যসূত্র লুকাতে ক্লিক করুন ▲' : 'Click to hide sources ▲'}</span>
         </span>
       </summary>
       <div class="citation-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding: 12px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px;">
@@ -2574,35 +2585,35 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
     <details class="reasoning-accordion" style="margin: 18px 0;">
       <summary class="reasoning-summary" style="cursor: pointer; font-weight: 500; font-size: 13.5px; color: #64748B;">
         <span class="reasoning-icon">⚖️</span>
-        <span class="reasoning-heading">${ui(state.language, 'howAnswerProduced')}</span>
-        ${hasLiveSearch ? `<span class="reasoning-badge-google">🌐 ${state.language === 'bn' ? 'গুগল লাইভ সার্চ যুক্ত' : 'Google Search Grounded'}</span>` : ''}
+        <span class="reasoning-heading">${ui(cardLang, 'howAnswerProduced')}</span>
+        ${hasLiveSearch ? `<span class="reasoning-badge-google">🌐 ${cardLang === 'bn' ? 'গুগল লাইভ সার্চ যুক্ত' : 'Google Search Grounded'}</span>` : ''}
         <span class="reasoning-chevron">▼</span>
       </summary>
       <div class="reasoning-steps-list">
         <div class="reasoning-step-item">
           <div class="step-num">1</div>
           <div class="step-content">
-            <strong>${state.language === 'bn' ? 'আইনি বিষয় ও এখতিয়ার সনাক্তকরণ' : 'Legal Issue & Jurisdiction Identified'}</strong>
-            <p>${state.language === 'bn' ? 'সংশ্লিষ্ট আইনি ক্ষেত্র (দেওয়ানি / ফৌজদারি / এনআই অ্যাক্ট / সুনির্দিষ্ট প্রতিকার) বিশ্লেষণ ও প্রযোজ্য ধারা নির্ধারণ।' : 'Analyzed legal domains (CPC / CrPC / NI Act / SRA / MFLO) and mapped specific controlling provisions.'}</p>
+            <strong>${cardLang === 'bn' ? 'আইনি বিষয় ও এখতিয়ার সনাক্তকরণ' : 'Legal Issue & Jurisdiction Identified'}</strong>
+            <p>${cardLang === 'bn' ? 'সংশ্লিষ্ট আইনি ক্ষেত্র (দেওয়ানি / ফৌজদারি / এনআই অ্যাক্ট / সুনির্দিষ্ট প্রতিকার) বিশ্লেষণ ও প্রযোজ্য ধারা নির্ধারণ।' : 'Analyzed legal domains (CPC / CrPC / NI Act / SRA / MFLO) and mapped specific controlling provisions.'}</p>
           </div>
         </div>
         ${hasLiveSearch ? `
           <div class="reasoning-step-item is-google-step">
             <div class="step-num">🌐</div>
             <div class="step-content">
-              <strong>${state.language === 'bn' ? 'গুগল লাইভ সার্চ ও সরকারি গেজেট অনুসন্ধান' : 'Google Live Web Search & Gazette Grounding'}</strong>
-              <p>${state.language === 'bn'
+              <strong>${cardLang === 'bn' ? 'গুগল লাইভ সার্চ ও সরকারি গেজেট অনুসন্ধান' : 'Google Live Web Search & Gazette Grounding'}</strong>
+              <p>${cardLang === 'bn'
                 ? `বাস্তব সময়ে গুগল সার্চ গ্রাউন্ডিংয়ের মাধ্যমে সর্বশেষ সরকারি প্রজ্ঞাপন, গেজেট ও সার্কুলার যাচাই (${liveSources.length}টি লাইভ ওয়েব সোর্স অন্তর্ভুক্ত)।`
                 : `Queried real-time Google Search grounding to verify recent Bangladesh government notifications, official gazettes, and ministry circulars (${liveSources.length} live web source${liveSources.length === 1 ? '' : 's'} verified).`}</p>
               ${liveQueries.length > 0 ? `
                 <div class="grounding-search-queries">
-                  <span class="query-tag-label">${state.language === 'bn' ? 'অনুসন্ধান কুয়েরি:' : 'Search Queries:'}</span>
+                  <span class="query-tag-label">${cardLang === 'bn' ? 'অনুসন্ধান কুয়েরি:' : 'Search Queries:'}</span>
                   ${liveQueries.map(q => `<code class="grounding-query-pill">${escapeHtml(q)}</code>`).join(' ')}
                 </div>
               ` : ''}
               ${liveDomains.length > 0 ? `
                 <div class="grounding-domains-verified">
-                  <span class="query-tag-label">${state.language === 'bn' ? 'যাচাইকৃত পোর্টাল:' : 'Verified Portals:'}</span>
+                  <span class="query-tag-label">${cardLang === 'bn' ? 'যাচাইকৃত পোর্টাল:' : 'Verified Portals:'}</span>
                   ${liveDomains.map(d => `<span class="grounding-domain-tag">🏛️ ${escapeHtml(d)}</span>`).join(' ')}
                 </div>
               ` : ''}
@@ -2612,24 +2623,24 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
         <div class="reasoning-step-item">
           <div class="step-num">${hasLiveSearch ? '3' : '2'}</div>
           <div class="step-content">
-            <strong>${state.language === 'bn' ? 'আইনি বিধান ও নজির সংগ্রহ' : 'Primary Authorities Retrieved'}</strong>
-            <p>${state.language === 'bn' ? `ক্যানোনিকাল আইন ভাণ্ডার থেকে ${sources.length}টি প্রাথমিক বিধান ও সুপ্রিম কোর্টের নজির পর্যালোচনা।` : `Retrieved ${sources.length} primary provisions & precedential holdings from canonical repository.`}</p>
+            <strong>${cardLang === 'bn' ? 'আইনি বিধান ও নজির সংগ্রহ' : 'Primary Authorities Retrieved'}</strong>
+            <p>${cardLang === 'bn' ? `ক্যানোনিকাল আইন ভাণ্ডার থেকে ${sources.length}টি প্রাথমিক বিধান ও সুপ্রিম কোর্টের নজির পর্যালোচনা।` : `Retrieved ${sources.length} primary provisions & precedential holdings from canonical repository.`}</p>
           </div>
         </div>
         <div class="reasoning-step-item">
           <div class="step-num">${hasLiveSearch ? '4' : '3'}</div>
           <div class="step-content">
-            <strong>${state.language === 'bn' ? 'আইন ও সংশোধনী অবস্থা যাচাই' : 'Statutory & Amendment State Verification'}</strong>
-            <p>${state.language === 'bn' ? '২০২৬ সালের সংশোধনী, গেজেট কার্যকারিতা এবং বিধিবদ্ধ ধারার হুবহু নির্ভরযোগ্যতা ক্রস-ভেরিফিকেশন।' : 'Cross-referenced temporal validity (2026 amendments), gazette status, and statutory text accuracy.'}</p>
+            <strong>${cardLang === 'bn' ? 'আইন ও সংশোধনী অবস্থা যাচাই' : 'Statutory & Amendment State Verification'}</strong>
+            <p>${cardLang === 'bn' ? '২০২৬ সালের সংশোধনী, গেজেট কার্যকারিতা এবং বিধিবদ্ধ ধারার হুবহু নির্ভরযোগ্যতা ক্রস-ভেরিফিকেশন।' : 'Cross-referenced temporal validity (2026 amendments), gazette status, and statutory text accuracy.'}</p>
           </div>
         </div>
         <div class="reasoning-step-item">
           <div class="step-num">${hasLiveSearch ? '5' : '4'}</div>
           <div class="step-content">
-            <strong>${state.language === 'bn' ? 'নির্ভরযোগ্য সমন্বিত আইনি বিশ্লেষণ' : 'Grounded Legal Synthesis Generated'}</strong>
+            <strong>${cardLang === 'bn' ? 'নির্ভরযোগ্য সমন্বিত আইনি বিশ্লেষণ' : 'Grounded Legal Synthesis Generated'}</strong>
             <p>${hasLiveSearch
-              ? (state.language === 'bn' ? 'আইনি ভিত্তি ও গুগল লাইভ সার্চ তথ্যের সুনির্দিষ্ট সংযোগে তৈরি চূড়ান্ত বিশ্লেষণ।' : 'Synthesized structured legal guidance harmonizing statutory law with live verified web intelligence.')
-              : (state.language === 'bn' ? 'উদ্ধৃত কর্তৃপক্ষের কঠোর কাঠামোর মধ্যে প্রস্তুতকৃত আইনি দিকনির্দেশনা।' : 'Synthesized structured legal guidance strictly constrained to the cited authorities.')}</p>
+              ? (cardLang === 'bn' ? 'আইনি ভিত্তি ও গুগল লাইভ সার্চ তথ্যের সুনির্দিষ্ট সংযোগে তৈরি চূড়ান্ত বিশ্লেষণ।' : 'Synthesized structured legal guidance harmonizing statutory law with live verified web intelligence.')
+              : (cardLang === 'bn' ? 'উদ্ধৃত কর্তৃপক্ষের কঠোর কাঠামোর মধ্যে প্রস্তুতকৃত আইনি দিকনির্দেশনা।' : 'Synthesized structured legal guidance strictly constrained to the cited authorities.')}</p>
           </div>
         </div>
       </div>
@@ -2638,7 +2649,7 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
   const fullAnalysisHtml = (result.applicationToFacts || result.qualifications?.length || result.limitations) ? `
     <details class="full-analysis-accordion" style="margin: 18px 0;">
       <summary class="full-analysis-summary" style="cursor: pointer; font-weight: 600; font-size: 14px; color: #334155;">
-        <span>${ui(state.language, 'fullAnalysis')}</span>
+        <span>${ui(cardLang, 'fullAnalysis')}</span>
         <span class="sources-chevron">▼</span>
       </summary>
       <div class="full-analysis-body" style="padding-top: 10px;">
@@ -2651,7 +2662,7 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
 
   const counselNotice = `
     <div class="professional-counsel-trigger">
-      <p>ℹ️ ${state.language === 'bn' 
+      <p>ℹ️ ${cardLang === 'bn' 
         ? 'এই বিষয়টি নির্দিষ্ট আইনি বিধান ও তথ্যের উপর নির্ভরশীল। আপনার পরিস্থিতির যথাযথ পদক্ষেপের জন্য একজন যোগ্য আইনজীবীর সাথে পরামর্শ করুন।'
         : 'This matter involves specific statutory provisions and facts. Consult a qualified Bangladesh advocate for individualized legal representation.'}
       </p>
@@ -2661,33 +2672,33 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
   const feedbackWidget = `
     <div class="answer-feedback-card" data-feedback-widget>
       <div class="feedback-header">
-        <span class="feedback-prompt">${ui(state.language, 'feedbackPrompt')}</span>
+        <span class="feedback-prompt">${ui(cardLang, 'feedbackPrompt')}</span>
         <div class="feedback-btn-group">
-          <button class="feedback-thumb-btn" type="button" data-action="feedback-positive" title="Helpful">${ui(state.language, 'feedbackHelpful')}</button>
-          <button class="feedback-thumb-btn" type="button" data-action="feedback-negative-toggle" title="Report an issue">${ui(state.language, 'feedbackReportIssue')}</button>
+          <button class="feedback-thumb-btn" type="button" data-action="feedback-positive" title="Helpful">${ui(cardLang, 'feedbackHelpful')}</button>
+          <button class="feedback-thumb-btn" type="button" data-action="feedback-negative-toggle" title="Report an issue">${ui(cardLang, 'feedbackReportIssue')}</button>
         </div>
       </div>
       <div class="feedback-drawer" data-feedback-drawer hidden>
         <form class="feedback-form" data-action="submit-qa-feedback">
-          <label for="feedback-category"><strong>${ui(state.language, 'whatWentWrong')}</strong></label>
+          <label for="feedback-category"><strong>${ui(cardLang, 'whatWentWrong')}</strong></label>
           <select id="feedback-category" name="category" required>
-            <option value="">${ui(state.language, 'selectIssueCategory')}</option>
-            <option value="wrong_law">${ui(state.language, 'wrongLaw')}</option>
-            <option value="wrong_citation">${ui(state.language, 'wrongCitation')}</option>
-            <option value="outdated_law">${ui(state.language, 'outdatedLaw')}</option>
-            <option value="missing_authority">${ui(state.language, 'missingAuthority')}</option>
-            <option value="incomplete_answer">${ui(state.language, 'incompleteAnswer')}</option>
-            <option value="misunderstood_question">${ui(state.language, 'misunderstoodQuestion')}</option>
-            <option value="other">${ui(state.language, 'otherIssue')}</option>
+            <option value="">${ui(cardLang, 'selectIssueCategory')}</option>
+            <option value="wrong_law">${ui(cardLang, 'wrongLaw')}</option>
+            <option value="wrong_citation">${ui(cardLang, 'wrongCitation')}</option>
+            <option value="outdated_law">${ui(cardLang, 'outdatedLaw')}</option>
+            <option value="missing_authority">${ui(cardLang, 'missingAuthority')}</option>
+            <option value="incomplete_answer">${ui(cardLang, 'incompleteAnswer')}</option>
+            <option value="misunderstood_question">${ui(cardLang, 'misunderstoodQuestion')}</option>
+            <option value="other">${ui(cardLang, 'otherIssue')}</option>
           </select>
-          <textarea name="comment" rows="2" placeholder="${state.language === 'bn' ? 'ঐচ্ছিক বিবরণ (যেমন: কোন ধারা বা মামলা ভুল ছিল)...' : 'Optional details (e.g. which section or case was incorrect)...'}"></textarea>
+          <textarea name="comment" rows="2" placeholder="${cardLang === 'bn' ? 'ঐচ্ছিক বিবরণ (যেমন: কোন ধারা বা মামলা ভুল ছিল)...' : 'Optional details (e.g. which section or case was incorrect)...'}"></textarea>
           <div class="feedback-actions">
-            <button class="button button-small" type="submit">${ui(state.language, 'submitFeedback')}</button>
-            <button class="button button-small button-secondary" type="button" data-action="close-feedback-drawer">${ui(state.language, 'cancel')}</button>
+            <button class="button button-small" type="submit">${ui(cardLang, 'submitFeedback')}</button>
+            <button class="button button-small button-secondary" type="button" data-action="close-feedback-drawer">${ui(cardLang, 'cancel')}</button>
           </div>
           <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border-color, #232B3E); text-align: right;">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener" style="font-size: 12px; color: var(--justor-blue, #1E38C8); text-decoration: underline;">
-              📋 ${state.language === 'bn' ? 'ব্যবহারকারী সমীক্ষা পূরণ করুন ↗' : 'Complete User Experience Survey ↗'}
+              📋 ${cardLang === 'bn' ? 'ব্যবহারকারী সমীক্ষা পূরণ করুন ↗' : 'Complete User Experience Survey ↗'}
             </a>
           </div>
         </form>
@@ -3094,12 +3105,13 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   }, 200);
 
   try {
+    const effectiveLang = isBengaliRequested(query, state.language) ? 'bn' : state.language;
     const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
     const liveSearchPromise = state.liveSearchEnabled
       ? fetch(`${backendUrl}/api/search/live-grounding`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, language: state.language, user_role: role }),
+          body: JSON.stringify({ query, language: effectiveLang, user_role: role }),
         })
           .then((r) => (r.ok ? r.json() : null))
           .catch((err) => {
@@ -3113,7 +3125,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
       streamResearch(
         query,
         role,
-        state.language,
+        effectiveLang,
         (stepEvent) => {
           const thinkingElement = document.getElementById(thinkingId);
           if (!thinkingElement) return;
@@ -3144,7 +3156,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
       if (webAnswer.length > 30) {
         const ragAnswer = (result.shortAnswer || '').trim();
         if (ragAnswer && ragAnswer.length > 40) {
-          const sectionTitle = state.language === 'bn'
+          const sectionTitle = effectiveLang === 'bn'
             ? '🌐 বাস্তব-সময়ের সরকারি গেজেট ও সাম্প্রতিক আপডেট (Google Live Search)'
             : '🌐 Real-Time Gazette & Web Intelligence (Google Live Search)';
           result.shortAnswer = `${ragAnswer}\n\n### ${sectionTitle}\n\n${webAnswer}`;

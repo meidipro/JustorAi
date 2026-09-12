@@ -57,9 +57,17 @@ class GoogleSearchGroundingService:
                 "sources": []
             }
 
-        is_bn = language.lower().startswith("bn")
+        try:
+            from backend.legal_normalize import is_bengali_requested
+            is_bn = is_bengali_requested(query, language)
+        except Exception:
+            is_bn = language.lower().startswith("bn")
+
         lang_instruction = (
-            "Write the answer in natural, professional Bengali (বাংলা). Retain official English terms, dates, and SRO references where appropriate."
+            "🔴 MANDATORY LANGUAGE REQUIREMENT: STRICT BENGALI (বাংলা) 🔴\n"
+            "Write the entire answer in natural, professional, authoritative Bengali (বাংলায় লিখুন).\n"
+            "All explanations, headings, steps, and bullet points MUST be written in Bengali.\n"
+            "Retain official English Act names, SRO circular numbers, and dates where appropriate."
             if is_bn else
             "Write the answer in fluent, authoritative, professional English."
         )
@@ -70,6 +78,9 @@ class GoogleSearchGroundingService:
             "Provide rigorous legal analysis: controlling statutory provisions, SRO/circular dates and numbers, gazette references, and administrative scope."
         )
 
+        followup_title = "### প্রাসঙ্গিক আইনি প্রশ্ন" if is_bn else "### Related Follow-Up Questions"
+        followup_eg = "- [প্রশ্ন ১]\n- [প্রশ্ন ২]\n- [প্রশ্ন ৩]" if is_bn else "- [Follow-up question 1]\n- [Follow-up question 2]\n- [Follow-up question 3]"
+
         prompt = (
             f"User Legal Query: {query}\n\n"
             f"{lang_instruction}\n"
@@ -79,11 +90,9 @@ class GoogleSearchGroundingService:
             "1. Ground your answer strictly in live Bangladeshi legal gazettes, government notices (land.gov.bd, minlaw.gov.bd, bdlaws.minlaw.gov.bd, nbr.gov.bd, supremecourt.gov.bd), and authoritative news reporting.\n"
             "2. State concrete facts with exact dates, circular numbers, SRO numbers, and official fee amounts in BDT.\n"
             "3. Format your response cleanly using Markdown headings, bold text, and bullet points.\n"
-            "4. At the very end of your response, provide exactly 3 proactive, highly relevant follow-up legal questions in the following format:\n"
-            "### Related Follow-Up Questions\n"
-            "- [Follow-up question 1]\n"
-            "- [Follow-up question 2]\n"
-            "- [Follow-up question 3]"
+            f"4. At the very end of your response, provide exactly 3 proactive, highly relevant follow-up legal questions in the following format:\n"
+            f"{followup_title}\n"
+            f"{followup_eg}"
         )
 
         url = self._get_vertex_endpoint("gemini-2.5-flash")

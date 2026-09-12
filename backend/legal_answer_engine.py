@@ -10,6 +10,7 @@ from .evidence_builder import EvidenceBuilder
 from .legal_validation import validate_draft
 from .legal_critic import LegalCritic
 from .legal_clarification import FactSufficiencyGate
+from .legal_normalize import is_bengali_requested
 
 
 class LegalAnswerEngine:
@@ -26,11 +27,17 @@ class LegalAnswerEngine:
         base_prompt = LAWYER_PROMPT if ("lawyer" in normalized or "legal professional" in normalized) else STUDENT_PROMPT
         if language == "BN":
             base_prompt += (
-                "\n\nBILINGUAL GENERATION INSTRUCTIONS:\n"
-                "- The user query is in Bengali or mixed Banglish.\n"
-                "- Write the legal explanations, doctrines, and application in fluent, clear Bengali.\n"
-                "- RETAIN CANONICAL CITATIONS IN THEIR OFFICIAL FORMAT (e.g. 'The Registration Act, 1908-এর Section 17A', 'Article 102', 'Order 39 Rule 1').\n"
-                "- Strictly tag every claim with its exact evidence tag (e.g. [ACT-1], [DLR-1])."
+                "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                "🔴 MANDATORY LANGUAGE INSTRUCTION: STRICT BENGALI (বাংলা) 🔴\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                "- The user has requested the response in BENGALI (বাংলা).\n"
+                "- Write ALL legal explanations, doctrines, examples, and conclusions in natural, fluent BENGALI (বাংলায় লিখুন).\n"
+                "- In the JSON response, ALL string values for 'issue', 'rules[].text', 'doctrine[].text', "
+                "'application[].text', 'conclusion.text', 'key_points[].text', and 'claims[].text' MUST BE WRITTEN IN BENGALI.\n"
+                "- Do NOT write English paragraphs for explanations.\n"
+                "- Retain official citations clearly formatted (e.g. 'The Registration Act, 1908-এর Section 17A', 'The Penal Code, 1860-এর Section 302', 'Article 102', 'Order 39 Rule 1').\n"
+                "- Strictly tag every claim with its exact evidence tag (e.g. [ACT-1], [DLR-1]).\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
         return base_prompt
 
@@ -61,9 +68,10 @@ class LegalAnswerEngine:
     async def _generate(
         self,
         pack: EvidencePack,
+        language: str = "EN",
         correction_feedback: str | None = None,
     ) -> LegalAnswerDraft:
-        system_prompt = self._system_prompt(pack.persona)
+        system_prompt = self._system_prompt(pack.persona, language=language)
         if correction_feedback:
             system_prompt += (
                 "\n\nPREVIOUS DRAFT FAILED VALIDATION.\n\n"
@@ -127,19 +135,21 @@ class LegalAnswerEngine:
 
         return verified
 
-    async def answer(self, query: str, persona: str) -> dict:
+    async def answer(self, query: str, persona: str, language: str = "EN") -> dict:
+        effective_lang = "BN" if is_bengali_requested(query, language) else "EN"
         # 0. Fact Sufficiency & Interactive Clarification Gate
         clarification = FactSufficiencyGate.evaluate_fact_sufficiency(query, persona)
         if clarification and clarification.get("status") == "needs_clarification":
+            c_prompt = clarification["clarification_prompt"]
             return {
                 "status": "ok",
-                "answer": clarification["clarification_prompt"],
+                "answer": c_prompt,
                 "reason": "FACT_CLARIFICATION_REQUIRED",
                 "authorities": [],
                 "reasoning_steps": [
                     {
                         "step": 1,
-                        "title": "Legal Intent & Fact Sufficiency",
+                        "title": "আইনি উদ্দেশ্য ও তথ্যের পর্যাপ্ততা" if effective_lang == "BN" else "Legal Intent & Fact Sufficiency",
                         "summary": f"Detected {clarification['intent']} inquiry requiring missing material variables.",
                         "status": "needs_clarification"
                     }
@@ -152,7 +162,7 @@ class LegalAnswerEngine:
         except Exception as exc:
             return {
                 "status": "abstain",
-                "answer": "Justor could not reliably classify this legal query.",
+                "answer": "জাসটর এই আইনি প্রশ্নটি সঠিকভাবে শ্রেণিবদ্ধ করতে পারেনি।" if effective_lang == "BN" else "Justor could not reliably classify this legal query.",
                 "reason": "ROUTER_FAILURE",
                 "debug": str(exc),
             }
@@ -167,7 +177,7 @@ class LegalAnswerEngine:
         except Exception as exc:
             return {
                 "status": "abstain",
-                "answer": "Justor could not build a verified legal evidence set.",
+                "answer": "জাসটর যাচাইকৃত আইনি তথ্যসূত্র সংগ্রহ করতে পারেনি।" if effective_lang == "BN" else "Justor could not build a verified legal evidence set.",
                 "reason": "EVIDENCE_BUILD_FAILURE",
                 "debug": str(exc),
             }
@@ -176,22 +186,23 @@ class LegalAnswerEngine:
             return {
                 "status": "abstain",
                 "answer": (
-                    "Justor could not verify the controlling legal authority "
-                    "from its current primary-source database."
+                    "জাসটরের বর্তমান যাচাইকৃত ডাটাবেজে এই নির্দিষ্ট আইনি বিধান বা নজির পাওয়া যায়নি।"
+                    if effective_lang == "BN" else
+                    "Justor could not verify the controlling legal authority from its current primary-source database."
                 ),
                 "reason": "NO_VERIFIED_EVIDENCE",
             }
 
         # 3. First generation.
         try:
-            draft = await self._generate(pack)
+            draft = await self._generate(pack, language=effective_lang)
         except Exception as exc:
             return {
                 "status": "abstain",
-                "answer": "Justor found relevant law, but generation failed.",
+                "answer": "প্রাসঙ্গিক আইন পাওয়া গেছে, কিন্তু উত্তর তৈরিতে সমস্যা হয়েছে।" if effective_lang == "BN" else "Justor found relevant law, but generation failed.",
                 "reason": "GENERATION_FAILURE",
                 "authorities": self._authority_cards(pack),
-                "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
+                "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain", language=effective_lang),
                 "debug": str(exc),
             }
 
@@ -199,7 +210,7 @@ class LegalAnswerEngine:
 
         # 4. Fast path for perfectly valid drafts
         if validation.passed:
-            return self._success(draft, pack, route)
+            return self._success(draft, pack, route, language=effective_lang)
 
         # 5. Independent legal critic for drafts with validation notices
         critic_result = await self.critic.audit(draft, pack)
@@ -218,7 +229,7 @@ class LegalAnswerEngine:
         critic_pass = bool(critic_result.get("pass", False))
 
         if validation.passed and critic_pass:
-            return self._success(draft, pack, route)
+            return self._success(draft, pack, route, language=effective_lang)
 
         # 6. One controlled regeneration.
         feedback = json.dumps(
@@ -234,6 +245,7 @@ class LegalAnswerEngine:
         try:
             second_draft = await self._generate(
                 pack,
+                language=effective_lang,
                 correction_feedback=feedback,
             )
         except Exception:
@@ -245,28 +257,61 @@ class LegalAnswerEngine:
                 # Re-run legal critic on second draft to prevent critic bypass
                 second_critic = await self.critic.audit(second_draft, pack)
                 if bool(second_critic.get("pass", False)):
-                    return self._success(second_draft, pack, route)
+                    return self._success(second_draft, pack, route, language=effective_lang)
 
         # 7. Fail closed.
         return {
             "status": "abstain",
             "answer": (
-                "Justor identified potentially relevant law, but the generated "
-                "analysis did not pass its evidence-checked legal verification gates. "
-                "Please review the primary authorities directly."
+                "জাসটর প্রাসঙ্গিক আইন শনাক্ত করেছে, কিন্তু উৎপন্ন বিশ্লেষণ প্রমাণ যাচাইকরণ পরীক্ষায় উত্তীর্ণ হতে পারেনি। অনুগ্রহ করে সরাসরি মূল আইন ও নথিপত্র পর্যালোচনা করুন।"
+                if effective_lang == "BN" else
+                (
+                    "Justor identified potentially relevant law, but the generated "
+                    "analysis did not pass its evidence-checked legal verification gates. "
+                    "Please review the primary authorities directly."
+                )
             ),
             "reason": "LEGAL_VERIFICATION_FAILED",
             "authorities": self._authority_cards(pack),
-            "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
+            "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain", language=effective_lang),
         }
 
-    def _build_reasoning_steps(self, route, pack: EvidencePack, status: str) -> list[dict]:
-        acts_str = ", ".join(list({a.act_name for a in pack.authorities})[:2]) if pack.authorities else "Primary Legislation"
+    def _build_reasoning_steps(self, route, pack: EvidencePack, status: str, language: str = "EN") -> list[dict]:
+        is_bn = (language == "BN")
+        acts_str = ", ".join(list({a.act_name for a in pack.authorities})[:2]) if pack.authorities else ("মূল সংবিধিবদ্ধ আইন" if is_bn else "Primary Legislation")
+        domain_str = getattr(route, 'legal_domain', 'সাধারণ আইন' if is_bn else 'General Law')
+        if is_bn:
+            return [
+                {
+                    "step": 1,
+                    "title": "আইনি উদ্দেশ্য ও অনুসন্ধান শ্রেণিবিভাগ",
+                    "summary": f"আইনি ক্ষেত্র: {domain_str}। চিহ্নিত উৎস: {acts_str}।",
+                    "status": "completed"
+                },
+                {
+                    "step": 2,
+                    "title": "মূল বিধিবদ্ধ আইন ও নজির অনুসন্ধান",
+                    "summary": f"{len(pack.authorities)}টি অফিসিয়াল আইনি ধারা ও রায় সংগৃহীত হয়েছে।",
+                    "status": "completed"
+                },
+                {
+                    "step": 3,
+                    "title": "ধারা ও নজিরের যথার্থতা যাচাই",
+                    "summary": "বিধিবদ্ধ আইনের উদ্ধৃতি, সময়সীমা ও নজিরের বৈধতা যাচাই সম্পন্ন।",
+                    "status": "passed" if status == "ok" else "failed_closed"
+                },
+                {
+                    "step": 4,
+                    "title": "আইনি বিশ্লেষণ ও মতামত প্রণয়ন",
+                    "summary": "যাচাইকৃত উৎসের ভিত্তিতে বিশ্লেষণ প্রস্তুত।" if status == "ok" else "যাচাইকরণ বিধিনিষেধের কারণে মতামত বিরত রাখা হয়েছে।",
+                    "status": "completed" if status == "ok" else "abstained"
+                }
+            ]
         return [
             {
                 "step": 1,
                 "title": "Legal Intent & Routing",
-                "summary": f"Classified domain: {getattr(route, 'legal_domain', 'General Law')}. Targeted: {acts_str}.",
+                "summary": f"Classified domain: {domain_str}. Targeted: {acts_str}.",
                 "status": "completed"
             },
             {
@@ -289,12 +334,12 @@ class LegalAnswerEngine:
             }
         ]
 
-    def _success(self, draft: LegalAnswerDraft, pack: EvidencePack, route=None) -> dict:
+    def _success(self, draft: LegalAnswerDraft, pack: EvidencePack, route=None, language: str = "EN") -> dict:
         return {
             "status": "ok",
-            "answer": self.render_markdown(draft, pack),
+            "answer": self.render_markdown(draft, pack, language=language),
             "authorities": self._authority_cards(pack),
-            "reasoning_steps": self._build_reasoning_steps(route, pack, "ok"),
+            "reasoning_steps": self._build_reasoning_steps(route, pack, "ok", language=language),
         }
 
     def _authority_cards(self, pack: EvidencePack) -> list[dict]:
@@ -327,6 +372,7 @@ class LegalAnswerEngine:
         self,
         draft: LegalAnswerDraft,
         pack: EvidencePack,
+        language: str = "EN",
     ) -> str:
         def paragraph(item):
             tags = " ".join(f"[{x}]" for x in item.evidence_ids)
@@ -337,50 +383,65 @@ class LegalAnswerEngine:
             "lawyer" in pack.persona.lower()
             or "legal professional" in pack.persona.lower()
         )
+        is_bn = (language == "BN")
 
         if lawyer:
-            output.append("## ISSUE\n\n" + draft.issue)
+            h_issue = "## আইনি প্রশ্ন ও বিরোধ (The Legal Issue)" if is_bn else "## ISSUE"
+            h_rule = "## প্রযোজ্য সংবিধিবদ্ধ আইন (Controlling Statutory Law)" if is_bn else "## RULE"
+            h_doctrine = "## বিচারিক নজির ও আইনি নীতি (Precedent & Doctrine)" if is_bn else "## PRECEDENT & DOCTRINE"
+            h_app = "## ঘটনার আইনি প্রয়োগ ও বিশ্লেষণ (Application)" if is_bn else "## APPLICATION"
+            h_concl = "## সিদ্ধান্ত ও আইনি অভিমত (Conclusion)" if is_bn else "## CONCLUSION"
+
+            output.append(f"{h_issue}\n\n" + draft.issue)
             if draft.rules:
                 output.append(
-                    "## RULE\n\n"
+                    f"{h_rule}\n\n"
                     + "\n\n".join(paragraph(x) for x in draft.rules)
                 )
             if draft.doctrine:
                 output.append(
-                    "## PRECEDENT & DOCTRINE\n\n"
+                    f"{h_doctrine}\n\n"
                     + "\n\n".join(paragraph(x) for x in draft.doctrine)
                 )
             if draft.application:
                 output.append(
-                    "## APPLICATION\n\n"
+                    f"{h_app}\n\n"
                     + "\n\n".join(paragraph(x) for x in draft.application)
                 )
-            output.append("## CONCLUSION\n\n" + paragraph(draft.conclusion))
+            output.append(f"{h_concl}\n\n" + paragraph(draft.conclusion))
         else:
-            output.append("## The Legal Issue\n\n" + draft.issue)
+            h_issue = "## মূল আইনি বিষয় (The Legal Issue)" if is_bn else "## The Legal Issue"
+            h_law = "## প্রযোজ্য আইন (Applicable Law)" if is_bn else "## Applicable Law"
+            h_doctrine = "## আইনি নীতি ও তত্ত্ব (Legal Principle)" if is_bn else "## Legal Principle"
+            h_app = "## বাস্তব উদাহরণ ও প্রয়োগ (Example / Application)" if is_bn else "## Example / Application"
+            h_kp = "## গুরুত্বপূর্ণ দিকসমূহ (Key Points)" if is_bn else "## Key Points"
+            h_concl = "## সিদ্ধান্ত ও করণীয় (Conclusion)" if is_bn else "## Conclusion"
+
+            output.append(f"{h_issue}\n\n" + draft.issue)
             if draft.rules:
                 output.append(
-                    "## Applicable Law\n\n"
+                    f"{h_law}\n\n"
                     + "\n\n".join(paragraph(x) for x in draft.rules)
                 )
             if draft.doctrine:
                 output.append(
-                    "## Legal Principle\n\n"
+                    f"{h_doctrine}\n\n"
                     + "\n\n".join(paragraph(x) for x in draft.doctrine)
                 )
             if draft.application:
                 output.append(
-                    "## Example / Application\n\n"
+                    f"{h_app}\n\n"
                     + "\n\n".join(paragraph(x) for x in draft.application)
                 )
             if draft.key_points:
                 output.append(
-                    "## Key Points\n\n"
+                    f"{h_kp}\n\n"
                     + "\n".join("- " + paragraph(x) for x in draft.key_points)
                 )
-            output.append("## Conclusion\n\n" + paragraph(draft.conclusion))
+            output.append(f"{h_concl}\n\n" + paragraph(draft.conclusion))
 
-        output.append("## Verified Authorities & Evidence")
+        h_auth = "## যাচাইকৃত আইনি রেফারেন্স ও প্রমাণ (Verified Authorities)" if is_bn else "## Verified Authorities & Evidence"
+        output.append(h_auth)
 
         for source in pack.authorities:
             if source.item_type == "case":
@@ -399,42 +460,53 @@ class LegalAnswerEngine:
                     f"- **[{source.evidence_id}]** `{source.act_name}`{sec_str}{heading_str} — {badge_line}"
                 )
 
-        output.append(
-            f"\n*Current-law check performed for query date {pack.as_of_date.isoformat()}.*\n\n"
-            "⚖️ *Justor AI summarizes cited legal material to reduce research time. "
-            "Practitioners should open and verify primary authorities before relying on the proposition in professional court work.*"
-        )
+        if is_bn:
+            output.append(
+                f"\n*আইনি তথ্যের সময়সীমা যাচাই: {pack.as_of_date.isoformat()}*\n\n"
+                "⚖️ *জাসটর এআই (Justor AI) আইনি গবেষণার সুবিধার্থে অফিসিয়াল আইন ও নজির সারসংক্ষেপ করে। "
+                "আদালতে বা পেশাগত কাজে ব্যবহারের পূর্বে সংশ্লিষ্ট মূল গ্যাজেট ও নথিপত্র যাচাই করে নিন।*"
+            )
+        else:
+            output.append(
+                f"\n*Current-law check performed for query date {pack.as_of_date.isoformat()}.*\n\n"
+                "⚖️ *Justor AI summarizes cited legal material to reduce research time. "
+                "Practitioners should open and verify primary authorities before relying on the proposition in professional court work.*"
+            )
         return "\n\n".join(output)
 
-    async def answer_stream(self, query: str, persona: str):
+    async def answer_stream(self, query: str, persona: str, language: str = "EN"):
         """
         Yields real-time SSE event dictionaries:
         - {"event": "step", "data": {...}}
         - {"event": "authorities", "data": [...]}
         - {"event": "complete", "data": {...}}
         """
+        effective_lang = "BN" if is_bengali_requested(query, language) else "EN"
+        is_bn = (effective_lang == "BN")
+
         # 0. Fact Sufficiency Gate
         yield {
             "event": "step",
             "data": {
                 "step": 1,
-                "title": "Legal Intent & Fact Sufficiency",
-                "summary": "Analyzing inquiry structure and mandatory material variables...",
+                "title": "আইনি উদ্দেশ্য ও তথ্যের পর্যাপ্ততা" if is_bn else "Legal Intent & Fact Sufficiency",
+                "summary": "প্রশ্নের গঠন এবং প্রয়োজনীয় আইনি চলকসমূহ বিশ্লেষণ করা হচ্ছে..." if is_bn else "Analyzing inquiry structure and mandatory material variables...",
                 "status": "running"
             }
         }
         clarification = FactSufficiencyGate.evaluate_fact_sufficiency(query, persona)
         if clarification and clarification.get("status") == "needs_clarification":
+            c_prompt = clarification["clarification_prompt"]
             step_data = {
                 "step": 1,
-                "title": "Legal Intent & Fact Sufficiency",
-                "summary": f"Detected {clarification['intent']} inquiry requiring missing material variables.",
+                "title": "আইনি উদ্দেশ্য ও তথ্যের পর্যাপ্ততা" if is_bn else "Legal Intent & Fact Sufficiency",
+                "summary": f"চিহ্নিত অনুসন্ধান: {clarification['intent']}।" if is_bn else f"Detected {clarification['intent']} inquiry requiring missing material variables.",
                 "status": "needs_clarification"
             }
             yield {"event": "step", "data": step_data}
             complete_data = {
                 "status": "ok",
-                "answer": clarification["clarification_prompt"],
+                "answer": c_prompt,
                 "reason": "FACT_CLARIFICATION_REQUIRED",
                 "authorities": [],
                 "reasoning_steps": [step_data]
@@ -445,13 +517,14 @@ class LegalAnswerEngine:
         # 1. Route
         try:
             route = await self.router.route(query)
-            acts_target = ", ".join(getattr(route, "candidate_acts", [])[:2]) or "General Legislation"
+            acts_target = ", ".join(getattr(route, "candidate_acts", [])[:2]) or ("মূল সংবিধিবদ্ধ আইন" if is_bn else "General Legislation")
+            domain_label = getattr(route, 'legal_domain', 'সাধারণ আইন' if is_bn else 'General Law')
             yield {
                 "event": "step",
                 "data": {
                     "step": 1,
-                    "title": "Legal Intent & Routing",
-                    "summary": f"Classified domain: {getattr(route, 'legal_domain', 'General Law')}. Targeted: {acts_target}.",
+                    "title": "আইনি উদ্দেশ্য ও অনুসন্ধান শ্রেণিবিভাগ" if is_bn else "Legal Intent & Routing",
+                    "summary": f"শ্রেণিভুক্ত ক্ষেত্র: {domain_label}। চিহ্নিত উৎস: {acts_target}।" if is_bn else f"Classified domain: {domain_label}. Targeted: {acts_target}.",
                     "status": "completed"
                 }
             }
@@ -460,7 +533,7 @@ class LegalAnswerEngine:
                 "event": "complete",
                 "data": {
                     "status": "abstain",
-                    "answer": "Justor could not reliably classify this legal query.",
+                    "answer": "জাসটর এই আইনি প্রশ্নটি সঠিকভাবে শ্রেণিবদ্ধ করতে পারেনি।" if is_bn else "Justor could not reliably classify this legal query.",
                     "reason": "ROUTER_FAILURE",
                     "debug": str(exc)
                 }
@@ -472,8 +545,8 @@ class LegalAnswerEngine:
             "event": "step",
             "data": {
                 "step": 2,
-                "title": "Primary Authority Retrieval",
-                "summary": "Querying canonical statutes and Supreme Court precedents...",
+                "title": "মূল বিধিবদ্ধ আইন ও নজির অনুসন্ধান" if is_bn else "Primary Authority Retrieval",
+                "summary": "বাংলাদেশের সংবিধিবদ্ধ আইন ও সুপ্রিম কোর্টের নজির অনুসন্ধান করা হচ্ছে..." if is_bn else "Querying canonical statutes and Supreme Court precedents...",
                 "status": "running"
             }
         }
@@ -484,7 +557,7 @@ class LegalAnswerEngine:
                 "event": "complete",
                 "data": {
                     "status": "abstain",
-                    "answer": "Justor could not build a verified legal evidence set.",
+                    "answer": "জাসটর যাচাইকৃত আইনি তথ্যসূত্র সংগ্রহ করতে পারেনি।" if is_bn else "Justor could not build a verified legal evidence set.",
                     "reason": "EVIDENCE_BUILD_FAILURE",
                     "debug": str(exc)
                 }
@@ -496,7 +569,7 @@ class LegalAnswerEngine:
                 "event": "complete",
                 "data": {
                     "status": "abstain",
-                    "answer": "Justor could not verify the controlling legal authority from its current primary-source database.",
+                    "answer": "জাসটরের বর্তমান যাচাইকৃত ডাটাবেজে এই নির্দিষ্ট আইনি বিধান বা নজির পাওয়া যায়নি।" if is_bn else "Justor could not verify the controlling legal authority from its current primary-source database.",
                     "reason": "NO_VERIFIED_EVIDENCE"
                 }
             }
@@ -507,8 +580,8 @@ class LegalAnswerEngine:
             "event": "step",
             "data": {
                 "step": 2,
-                "title": "Primary Authority Retrieval",
-                "summary": f"Retrieved {len(pack.authorities)} verified provisions with official citations.",
+                "title": "মূল বিধিবদ্ধ আইন ও নজির অনুসন্ধান" if is_bn else "Primary Authority Retrieval",
+                "summary": f"{len(pack.authorities)}টি অফিসিয়াল আইনি ধারা ও রায় সংগৃহীত হয়েছে।" if is_bn else f"Retrieved {len(pack.authorities)} verified provisions with official citations.",
                 "status": "completed"
             }
         }
@@ -519,22 +592,22 @@ class LegalAnswerEngine:
             "event": "step",
             "data": {
                 "step": 3,
-                "title": "Rule & Citation Verification",
-                "summary": "Verifying statutory quotations, numeric tokens, and 7-gate invariants...",
+                "title": "ধারা ও নজিরের যথার্থতা যাচাই" if is_bn else "Rule & Citation Verification",
+                "summary": "বিধিবদ্ধ আইনের উদ্ধৃতি, সময়সীমা ও নজিরের বৈধতা যাচাই চলছে..." if is_bn else "Verifying statutory quotations, numeric tokens, and 7-gate invariants...",
                 "status": "running"
             }
         }
         try:
-            draft = await self._generate(pack)
+            draft = await self._generate(pack, language=effective_lang)
         except Exception as exc:
             yield {
                 "event": "complete",
                 "data": {
                     "status": "abstain",
-                    "answer": "Justor found relevant law, but generation failed.",
+                    "answer": "প্রাসঙ্গিক আইন পাওয়া গেছে, কিন্তু উত্তর তৈরিতে সমস্যা হয়েছে।" if is_bn else "Justor found relevant law, but generation failed.",
                     "reason": "GENERATION_FAILURE",
                     "authorities": auth_cards,
-                    "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
+                    "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain", language=effective_lang),
                     "debug": str(exc)
                 }
             }
@@ -546,18 +619,18 @@ class LegalAnswerEngine:
                 "event": "step",
                 "data": {
                     "step": 3,
-                    "title": "Rule & Citation Verification",
-                    "summary": "100% verified against primary statute text and temporal validity.",
+                    "title": "ধারা ও নজিরের যথার্থতা যাচাই" if is_bn else "Rule & Citation Verification",
+                    "summary": "১০০% অফিসিয়াল প্রাথমিক আইনের সাথে যাচাই সম্পন্ন।" if is_bn else "100% verified against primary statute text and temporal validity.",
                     "status": "passed"
                 }
             }
-            final_res = self._success(draft, pack, route)
+            final_res = self._success(draft, pack, route, language=effective_lang)
             yield {
                 "event": "step",
                 "data": {
                     "step": 4,
-                    "title": "Grounded Legal Synthesis",
-                    "summary": "Generated structured legal analysis anchored strictly to primary sources.",
+                    "title": "আইনি বিশ্লেষণ ও মতামত প্রণয়ন" if is_bn else "Grounded Legal Synthesis",
+                    "summary": "যাচাইকৃত উৎসের ভিত্তিতে পূর্ণাঙ্গ বিশ্লেষণ প্রস্তুত।" if is_bn else "Generated structured legal analysis anchored strictly to primary sources.",
                     "status": "completed"
                 }
             }
@@ -582,18 +655,18 @@ class LegalAnswerEngine:
                 "event": "step",
                 "data": {
                     "step": 3,
-                    "title": "Rule & Citation Verification",
-                    "summary": "Audit passed following secondary critic review.",
+                    "title": "ধারা ও নজিরের যথার্থতা যাচাই" if is_bn else "Rule & Citation Verification",
+                    "summary": "দ্বিতীয় পর্যায়ের নিরীক্ষায় যাচাই সফল হয়েছে।" if is_bn else "Audit passed following secondary critic review.",
                     "status": "passed"
                 }
             }
-            final_res = self._success(draft, pack, route)
+            final_res = self._success(draft, pack, route, language=effective_lang)
             yield {
                 "event": "step",
                 "data": {
                     "step": 4,
-                    "title": "Grounded Legal Synthesis",
-                    "summary": "Generated structured legal analysis anchored strictly to primary sources.",
+                    "title": "আইনি বিশ্লেষণ ও মতামত প্রণয়ন" if is_bn else "Grounded Legal Synthesis",
+                    "summary": "যাচাইকৃত উৎসের ভিত্তিতে পূর্ণাঙ্গ বিশ্লেষণ প্রস্তুত।" if is_bn else "Generated structured legal analysis anchored strictly to primary sources.",
                     "status": "completed"
                 }
             }
@@ -607,7 +680,7 @@ class LegalAnswerEngine:
         }, ensure_ascii=False)
 
         try:
-            second_draft = await self._generate(pack, correction_feedback=feedback)
+            second_draft = await self._generate(pack, language=effective_lang, correction_feedback=feedback)
         except Exception:
             second_draft = None
 
@@ -620,18 +693,18 @@ class LegalAnswerEngine:
                         "event": "step",
                         "data": {
                             "step": 3,
-                            "title": "Rule & Citation Verification",
-                            "summary": "Verified following guided regeneration.",
+                            "title": "ধারা ও নজিরের যথার্থতা যাচাই" if is_bn else "Rule & Citation Verification",
+                            "summary": "সংশোধিত খসড়া যাচাইকরণে উত্তীর্ণ হয়েছে।" if is_bn else "Verified following guided regeneration.",
                             "status": "passed"
                         }
                     }
-                    final_res = self._success(second_draft, pack, route)
+                    final_res = self._success(second_draft, pack, route, language=effective_lang)
                     yield {
                         "event": "step",
                         "data": {
                             "step": 4,
-                            "title": "Grounded Legal Synthesis",
-                            "summary": "Generated structured legal analysis anchored strictly to primary sources.",
+                            "title": "আইনি বিশ্লেষণ ও মতামত প্রণয়ন" if is_bn else "Grounded Legal Synthesis",
+                            "summary": "যাচাইকৃত উৎসের ভিত্তিতে পূর্ণাঙ্গ বিশ্লেষণ প্রস্তুত।" if is_bn else "Generated structured legal analysis anchored strictly to primary sources.",
                             "status": "completed"
                         }
                     }
@@ -643,28 +716,32 @@ class LegalAnswerEngine:
             "event": "step",
             "data": {
                 "step": 3,
-                "title": "Rule & Citation Verification",
-                "summary": "Draft did not satisfy 100% strict verification criteria. Abstaining.",
+                "title": "ধারা ও নজিরের যথার্থতা যাচাই" if is_bn else "Rule & Citation Verification",
+                "summary": "খসড়াটি ১০০% কঠোর যাচাইকরণ মানদণ্ড পূরণ করেনি।" if is_bn else "Draft did not satisfy 100% strict verification criteria. Abstaining.",
                 "status": "failed_closed"
             }
         }
         abstain_res = {
             "status": "abstain",
             "answer": (
-                "Justor identified potentially relevant law, but the generated "
-                "analysis did not pass its evidence-checked legal verification gates. "
-                "Please review the primary authorities directly."
+                "জাসটর প্রাসঙ্গিক আইন শনাক্ত করেছে, কিন্তু উৎপন্ন বিশ্লেষণ প্রমাণ যাচাইকরণ পরীক্ষায় উত্তীর্ণ হতে পারেনি। অনুগ্রহ করে সরাসরি মূল আইন ও নথিপত্র পর্যালোচনা করুন।"
+                if is_bn else
+                (
+                    "Justor identified potentially relevant law, but the generated "
+                    "analysis did not pass its evidence-checked legal verification gates. "
+                    "Please review the primary authorities directly."
+                )
             ),
             "reason": "LEGAL_VERIFICATION_FAILED",
             "authorities": self._authority_cards(pack),
-            "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain"),
+            "reasoning_steps": self._build_reasoning_steps(route, pack, "abstain", language=effective_lang),
         }
         yield {
             "event": "step",
             "data": {
                 "step": 4,
-                "title": "Grounded Legal Synthesis",
-                "summary": "Abstained due to verification constraints.",
+                "title": "আইনি বিশ্লেষণ ও মতামত প্রণয়ন" if is_bn else "Grounded Legal Synthesis",
+                "summary": "যাচাইকরণ বিধিনিষেধের কারণে মতামত বিরত রাখা হয়েছে।" if is_bn else "Abstained due to verification constraints.",
                 "status": "abstained"
             }
         }

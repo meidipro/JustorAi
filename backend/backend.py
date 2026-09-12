@@ -47,6 +47,7 @@ app = FastAPI(
 from backend.learning import router as learning_router
 from backend.ocr_service import legal_ocr_service
 from backend.search_grounding import legal_search_grounding
+from backend.legal_normalize import is_bengali_requested, normalize_bengali_text
 from backend.security_controls import (
     admin_secret,
     claim_pilot_email,
@@ -1884,15 +1885,34 @@ def log_query(**row):
     except Exception as e:
         logger.warning(f"pilot log failed (non-critical): {e}")
 
-def get_system_prompt(role: str, context: str) -> str:
+def get_system_prompt(role: str, context: str, language: str = "EN") -> str:
+    is_bn = (language == "BN")
     if context == "NO_VERIFIED_SOURCES_FOUND":
+        if is_bn:
+            return ("You are Justor AI. The verified database returned no results. "
+                    "Reply in fluent Bengali with EXACTLY: \"আমার যাচাইকৃত ডাটাবেজে এই বিষয়ে তথ্য নেই। "
+                    "অনুগ্রহ করে bdlaws.minlaw.gov.bd ওয়েবসাইটে বাংলাদেশ কোড দেখুন অথবা ১৬৪৩০ নম্বরে সরকারি লিগ্যাল এইডে যোগাযোগ করুন।\"")
         return ("You are Justor AI. The verified database returned no results. "
                 "Reply with EXACTLY: \"I don't have verified information on this "
                 "in my database yet. Please consult the Bangladesh Code at "
                 "bdlaws.minlaw.gov.bd or a licensed lawyer.\" Do not use training memory.")
-    if role == "Legal Professional": return prompt_lawyer(context)
-    if role == "Law Student":        return prompt_law_student(context)
-    return prompt_general_public(context)
+    if role == "Legal Professional": base = prompt_lawyer(context)
+    elif role == "Law Student":      base = prompt_law_student(context)
+    else:                            base = prompt_general_public(context)
+
+    if is_bn:
+        base += (
+            "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "🔴 MANDATORY LANGUAGE REQUIREMENT: STRICT BENGALI (বাংলা) 🔴\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "- The user has explicitly requested the answer in BENGALI (বাংলা).\n"
+            "- You MUST write your entire response, all explanations, steps, and legal analysis in natural, fluent BENGALI (বাংলায় উত্তর দিন).\n"
+            "- Do NOT write English explanatory paragraphs.\n"
+            "- Section titles should be in Bengali (e.g. '**আপনার জন্য এর সহজ অর্থ**', '**আইন যা বলে**', '**আপনার করণীয়**').\n"
+            "- Keep statutory citations accurate (e.g. 'The Penal Code, 1860-এর Section 302 [ACT-1]').\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        )
+    return base
 
 
 SMALL_MODELS = {"llama-3.1-8b-instant"}
@@ -2419,16 +2439,29 @@ async def chat(request: ChatRequest, req: Request):
     else:
         req.state.chat_limits_applied = True
 
+    is_bn = is_bengali_requested(query_str, request.language)
+    resolved_lang = "BN" if is_bn else (request.language or "EN").upper()
+
     # Fast Smalltalk / Greeting Handler
     if is_smalltalk(query_str):
-        greeting_text = (
-            "Peace be upon you! I am **Justor AI**, your Bangladeshi Legal Intelligence Assistant.\n\n"
-            "I can help you with:\n"
-            "- **Citizen Authority Guides**: Land registration, e-Namjari (Mutation), Khatians, DNCRP consumer compensation, divorce & denmohor procedures, and labour severance.\n"
-            "- **Statutory Law Research**: Verbatim sections and provisions from the Laws of Bangladesh (`bdlaws.minlaw.gov.bd`).\n"
-            "- **Landmark Case Ratios**: Supreme Court Appellate and High Court Division principles.\n\n"
-            "How can I assist your legal inquiry today?"
-        )
+        if is_bn:
+            greeting_text = (
+                "আসসালামু আলাইকুম! আমি **জাসটর এআই (Justor AI)**, বাংলাদেশের আইনি তথ্য ও গবেষণা সহকারী।\n\n"
+                "আমি আপনাকে নিম্নলিখিত বিষয়ে সহায়তা করতে পারি:\n"
+                "- **নাগরিক আইনি নির্দেশিকা**: জমি রেজিস্ট্রি, ই-নামজারি, খতিয়ান, ভোক্তা অধিকার ক্ষতিপূরণ, দেনমোহর ও পারিবারিক আইন, এবং শ্রম অধিকার।\n"
+                "- **বাংলাদেশের মূল সংবিধিবদ্ধ আইন**: বাংলাদেশ কোড (`bdlaws.minlaw.gov.bd`)-এর ধারা ও বিধির সরাসরি বিশ্লেষণ।\n"
+                "- **সুপ্রিম কোর্টের ঐতিহাসিক সিদ্ধান্ত (DLR)**: আপিল ও হাইকোর্ট বিভাগের নজির ও মূল অনুসিদ্ধান্ত।\n\n"
+                "আপনার আইনি প্রশ্নটি লিখুন, আমি বিস্তারিত পর্যালোচনা করে জানাতে প্রস্তুত।"
+            )
+        else:
+            greeting_text = (
+                "Peace be upon you! I am **Justor AI**, your Bangladeshi Legal Intelligence Assistant.\n\n"
+                "I can help you with:\n"
+                "- **Citizen Authority Guides**: Land registration, e-Namjari (Mutation), Khatians, DNCRP consumer compensation, divorce & denmohor procedures, and labour severance.\n"
+                "- **Statutory Law Research**: Verbatim sections and provisions from the Laws of Bangladesh (`bdlaws.minlaw.gov.bd`).\n"
+                "- **Landmark Case Ratios**: Supreme Court Appellate and High Court Division principles.\n\n"
+                "How can I assist your legal inquiry today?"
+            )
         return JSONResponse(content={
             "query_run_id": query_run_id,
             "response": greeting_text,
@@ -2448,7 +2481,7 @@ async def chat(request: ChatRequest, req: Request):
         # ── Primary Path: Legal Evidence Engine V2 ───────────────────────────
         if legal_engine_v2:
             try:
-                v2_result = await legal_engine_v2.answer(query_str, user_role)
+                v2_result = await legal_engine_v2.answer(query_str, user_role, language=resolved_lang)
                 if v2_result.get("status") in {"ok", "abstain"}:
                     status = "verified_engine_v2" if v2_result["status"] == "ok" else "abstain_verified"
                     final_answer = v2_result["answer"]
@@ -2511,19 +2544,35 @@ async def chat(request: ChatRequest, req: Request):
 
         if not ok:
             msg_map = {
-                "no_results": ("I don't have verified information on this specific topic "
-                               "in my database yet. Please consult the Bangladesh Code at "
-                               "bdlaws.minlaw.gov.bd or call Legal Aid at 16430."),
-                "wrong_act_retrieved": ("I could not locate the specific Act you asked about "
-                               "in my verified database. Please consult the Bangladesh Code "
-                               "or a licensed lawyer for this question."),
-                "section_not_exact": ("The requested statutory section was not found in my "
-                                      "verified database. Please check official sources at "
-                                      "bdlaws.minlaw.gov.bd."),
-                "out_of_scope_or_repealed": ("This specific provision (such as CPC §100, CrPC §438, "
-                                             "or Income Tax Ordinance 1984) is either out of scope, "
-                                             "repealed, or omitted under current Bangladesh law. "
-                                             "Please consult bdlaws.minlaw.gov.bd or a licensed lawyer.")
+                "no_results": (
+                    "আমার যাচাইকৃত ডাটাবেজে এই বিষয়ে তথ্য নেই। অনুগ্রহ করে bdlaws.minlaw.gov.bd ওয়েবসাইটে বাংলাদেশ কোড দেখুন অথবা ১৬৪৩০ নম্বরে সরকারি লিগ্যাল এইডে যোগাযোগ করুন।"
+                    if is_bn else
+                    ("I don't have verified information on this specific topic "
+                     "in my database yet. Please consult the Bangladesh Code at "
+                     "bdlaws.minlaw.gov.bd or call Legal Aid at 16430.")
+                ),
+                "wrong_act_retrieved": (
+                    "আমার যাচাইকৃত ডাটাবেজে আপনার প্রশ্নের নির্দিষ্ট আইনটি পাওয়া যায়নি। অনুগ্রহ করে বাংলাদেশ কোড অথবা আইনজীবীর পরামর্শ নিন।"
+                    if is_bn else
+                    ("I could not locate the specific Act you asked about "
+                     "in my verified database. Please consult the Bangladesh Code "
+                     "or a licensed lawyer for this question.")
+                ),
+                "section_not_exact": (
+                    "অনুরোধকৃত সংবিধিবদ্ধ ধারাটি আমার যাচাইকৃত ডাটাবেজে মেলেনি। অনুগ্রহ করে bdlaws.minlaw.gov.bd থেকে অফিসিয়াল বিধান যাচাই করুন।"
+                    if is_bn else
+                    ("The requested statutory section was not found in my "
+                     "verified database. Please check official sources at "
+                     "bdlaws.minlaw.gov.bd.")
+                ),
+                "out_of_scope_or_repealed": (
+                    "এই নির্দিষ্ট ধারাটি বর্তমানে বাতিল, অবলুপ্ত বা পরিবর্তিত হয়েছে। অনুগ্রহ করে bdlaws.minlaw.gov.bd অথবা আইনজীবীর শরণাপন্ন হন।"
+                    if is_bn else
+                    ("This specific provision (such as CPC §100, CrPC §438, "
+                     "or Income Tax Ordinance 1984) is either out of scope, "
+                     "repealed, or omitted under current Bangladesh law. "
+                     "Please consult bdlaws.minlaw.gov.bd or a licensed lawyer.")
+                )
             }
             msg = msg_map.get(status, "This question cannot be answered from our verified database.")
             log_query(query_run_id=query_run_id, user_id=user_id, persona=user_role, query=query_str,
@@ -2543,7 +2592,7 @@ async def chat(request: ChatRequest, req: Request):
             return JSONResponse(content=response_content)
 
         context, sources = format_retrieved_context(acts, dlrs)
-        messages = [{"role": "system", "content": get_system_prompt(user_role, context)}]
+        messages = [{"role": "system", "content": get_system_prompt(user_role, context, language=resolved_lang)}]
         messages += [{"role": m.role, "content": m.content} for m in (request.history or [])[-6:]]
         messages.append({"role": "user", "content": query_str})
 
@@ -2638,16 +2687,29 @@ async def chat_stream(request: ChatRequest, req: Request):
         req.state.quota_state = quota_state
     req.state.chat_limits_applied = True
 
+    is_bn = is_bengali_requested(query_str, request.language)
+    resolved_lang = "BN" if is_bn else (request.language or "EN").upper()
+
     async def event_generator():
         if is_smalltalk(query_str):
-            greeting_text = (
-                "Peace be upon you! I am **Justor AI**, your Bangladeshi Legal Intelligence Assistant.\n\n"
-                "I can help you with:\n"
-                "- **Citizen Authority Guides**: Land registration, e-Namjari (Mutation), Khatians, DNCRP consumer compensation, divorce & denmohor procedures, and labour severance.\n"
-                "- **Statutory Law Research**: Verbatim sections and provisions from the Laws of Bangladesh (`bdlaws.minlaw.gov.bd`).\n"
-                "- **Landmark Case Ratios**: Supreme Court Appellate and High Court Division principles.\n\n"
-                "How can I assist your legal inquiry today?"
-            )
+            if is_bn:
+                greeting_text = (
+                    "আসসালামু আলাইকুম! আমি **জাসটর এআই (Justor AI)**, বাংলাদেশের আইনি তথ্য ও গবেষণা সহকারী।\n\n"
+                    "আমি আপনাকে নিম্নলিখিত বিষয়ে সহায়তা করতে পারি:\n"
+                    "- **নাগরিক আইনি নির্দেশিকা**: জমি রেজিস্ট্রি, ই-নামজারি, খতিয়ান, ভোক্তা অধিকার ক্ষতিপূরণ, দেনমোহর ও পারিবারিক আইন, এবং শ্রম অধিকার।\n"
+                    "- **বাংলাদেশের মূল সংবিধিবদ্ধ আইন**: বাংলাদেশ কোড (`bdlaws.minlaw.gov.bd`)-এর ধারা ও বিধির সরাসরি বিশ্লেষণ।\n"
+                    "- **সুপ্রিম কোর্টের ঐতিহাসিক সিদ্ধান্ত (DLR)**: আপিল ও হাইকোর্ট বিভাগের নজির ও মূল অনুসিদ্ধান্ত।\n\n"
+                    "আপনার আইনি প্রশ্নটি লিখুন, আমি বিস্তারিত পর্যালোচনা করে জানাতে প্রস্তুত।"
+                )
+            else:
+                greeting_text = (
+                    "Peace be upon you! I am **Justor AI**, your Bangladeshi Legal Intelligence Assistant.\n\n"
+                    "I can help you with:\n"
+                    "- **Citizen Authority Guides**: Land registration, e-Namjari (Mutation), Khatians, DNCRP consumer compensation, divorce & denmohor procedures, and labour severance.\n"
+                    "- **Statutory Law Research**: Verbatim sections and provisions from the Laws of Bangladesh (`bdlaws.minlaw.gov.bd`).\n"
+                    "- **Landmark Case Ratios**: Supreme Court Appellate and High Court Division principles.\n\n"
+                    "How can I assist your legal inquiry today?"
+                )
             complete_payload = {
                 "query_run_id": query_run_id,
                 "response": greeting_text,
@@ -2658,17 +2720,17 @@ async def chat_stream(request: ChatRequest, req: Request):
                 "retrieval_status": "greeting",
                 "model_used": "direct-assistant",
                 "reasoning_steps": [
-                    {"step": 1, "title": "Assistant Greeting", "summary": "Identified conversational greeting.", "status": "completed"}
+                    {"step": 1, "title": "সহকারী সম্ভাষণ" if is_bn else "Assistant Greeting", "summary": "কথোপকথনমূলক সম্ভাষণ শনাক্ত।" if is_bn else "Identified conversational greeting.", "status": "completed"}
                 ],
                 "metadata": {"detected_act": None, "sections_found": [], "is_greeting": True}
             }
-            yield f"data: {json.dumps({'event': 'step', 'data': {'step': 1, 'title': 'Assistant Greeting', 'summary': 'Conversational inquiry.', 'status': 'completed'}}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'event': 'step', 'data': {'step': 1, 'title': 'সহকারী সম্ভাষণ' if is_bn else 'Assistant Greeting', 'summary': 'কথোপকথনমূলক অনুসন্ধান।' if is_bn else 'Conversational inquiry.', 'status': 'completed'}}, ensure_ascii=False)}\n\n"
             yield f"data: {json.dumps({'event': 'complete', 'data': complete_payload}, ensure_ascii=False)}\n\n"
             return
 
         if legal_engine_v2:
             try:
-                async for event in legal_engine_v2.answer_stream(query_str, user_role):
+                async for event in legal_engine_v2.answer_stream(query_str, user_role, language=resolved_lang):
                     if event.get("event") == "complete":
                         cdata = event.get("data", {})
                         complete_payload = {
