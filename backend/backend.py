@@ -13,7 +13,7 @@ from typing import List, Optional, Dict, Any, cast
 
 import httpx
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks, Request, Depends, Query
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse, Response, PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 from dotenv import load_dotenv
@@ -48,6 +48,7 @@ from backend.learning import router as learning_router
 from backend.ocr_service import legal_ocr_service
 from backend.search_grounding import legal_search_grounding
 from backend.matter_service import matter_service
+from backend.whatsapp_service import whatsapp_service, META_WA_VERIFY_TOKEN
 from backend.legal_normalize import is_bengali_requested, normalize_bengali_text
 from backend.security_controls import (
     admin_secret,
@@ -2067,6 +2068,20 @@ async def call_llm_with_fallbacks(models: list, messages) -> tuple:
     raise HTTPException(status_code=503, detail="AI service busy. Please try again in a moment.")
 
 
+async def _whatsapp_llm_adapter(prompt: str, system_instruction: str) -> str:
+    messages = [
+        {"role": "system", "content": system_instruction},
+        {"role": "user", "content": prompt}
+    ]
+    ans, _ = await call_llm_with_fallbacks(MODEL_CHAINS["General Public"], messages)
+    return ans
+
+try:
+    whatsapp_service.set_llm_handler(_whatsapp_llm_adapter)
+except Exception as _wa_init_err:
+    logger.warning(f"Could not inject LLM adapter to whatsapp_service: {_wa_init_err}")
+
+
 def extract_pdf_text(file_obj) -> str:
     """Extract plain text from all pages of a PDF file object."""
     reader = PyPDF2.PdfReader(file_obj)
@@ -2456,6 +2471,111 @@ async def matter_chronology(request: MatterChronologyRequest):
     if result.get("status") != "ok":
         raise HTTPException(502, detail=result.get("message", "Chronology extraction failed."))
     return JSONResponse(status_code=200, content=result)
+
+
+# ─── WhatsApp 24/7 Legal Helpline & Case Status Webhooks ─────────────────────
+
+class WhatsAppSimulateRequest(BaseModel):
+    message: Optional[str] = None
+    media_url: Optional[str] = None
+    media_type: Optional[str] = None
+    sender: Optional[str] = "+8801700000000"
+
+
+@app.post("/api/whatsapp/simulate", tags=["WhatsApp Helpline"])
+async def whatsapp_simulate(req_body: WhatsAppSimulateRequest):
+    """
+    In-App Interactive Simulator Endpoint for testing WhatsApp bot interactions.
+    """
+    reply = await whatsapp_service.handle_incoming_message(
+        sender=req_body.sender or "+8801700000000",
+        text_message=req_body.message,
+        media_url=req_body.media_url,
+        media_type=req_body.media_type
+    )
+    return JSONResponse(status_code=200, content={
+        "status": "ok",
+        "sender": req_body.sender or "+8801700000000",
+        "reply": reply
+    })
+
+
+@app.post("/api/whatsapp/twilio", tags=["WhatsApp Helpline"])
+async def whatsapp_twilio_webhook(
+    request: Request,
+    From: str = Form("whatsapp:+8801700000000"),
+    Body: Optional[str] = Form(None),
+    MediaUrl0: Optional[str] = Form(None),
+    MediaContentType0: Optional[str] = Form(None)
+):
+    """
+    Official Twilio WhatsApp Webhook Endpoint:
+    Receives incoming text or audio notes and returns a standard TwiML XML response.
+    """
+    clean_sender = From.replace("whatsapp:", "").strip()
+    reply_text = await whatsapp_service.handle_incoming_message(
+        sender=clean_sender,
+        text_message=Body,
+        media_url=MediaUrl0,
+        media_type=MediaContentType0
+    )
+    twiml = whatsapp_service.generate_twiml_response(reply_text)
+    return Response(content=twiml, media_type="application/xml")
+
+
+@app.get("/api/whatsapp/meta", tags=["WhatsApp Helpline"])
+async def whatsapp_meta_verify(
+    hub_mode: Optional[str] = Query(None, alias="hub.mode"),
+    hub_challenge: Optional[str] = Query(None, alias="hub.challenge"),
+    hub_verify_token: Optional[str] = Query(None, alias="hub.verify_token")
+):
+    """
+    Official Meta WhatsApp Cloud API Webhook Verification.
+    """
+    if hub_mode == "subscribe" and hub_verify_token == META_WA_VERIFY_TOKEN:
+        logger.info("Meta WhatsApp webhook challenge verified successfully.")
+        return PlainTextResponse(hub_challenge or "")
+    raise HTTPException(status_code=403, detail="Verification token mismatch.")
+
+
+@app.post("/api/whatsapp/meta", tags=["WhatsApp Helpline"])
+async def whatsapp_meta_webhook(request: Request):
+    """
+    Official Meta WhatsApp Cloud API Inbound Message Webhook.
+    """
+    try:
+        data = await request.json()
+    except Exception:
+        return JSONResponse({"status": "invalid_json"}, status_code=400)
+
+    entries = data.get("entry", [])
+    for entry in entries:
+        changes = entry.get("changes", [])
+        for change in changes:
+            value = change.get("value", {})
+            messages = value.get("messages", [])
+            for msg in messages:
+                from_num = msg.get("from", "")
+                msg_type = msg.get("type", "")
+                text_content = ""
+                media_url = None
+                media_type = None
+
+                if msg_type == "text":
+                    text_content = msg.get("text", {}).get("body", "")
+                elif msg_type == "audio":
+                    media_type = msg.get("audio", {}).get("mime_type", "audio/ogg")
+
+                if from_num:
+                    reply = await whatsapp_service.handle_incoming_message(
+                        sender=from_num,
+                        text_message=text_content,
+                        media_url=media_url,
+                        media_type=media_type
+                    )
+                    logger.info(f"Meta WA message processed for {from_num}. Reply length: {len(reply)}")
+
+    return JSONResponse({"status": "received"}, status_code=200)
 
 
 

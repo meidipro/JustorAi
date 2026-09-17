@@ -20,6 +20,7 @@ import { learningCatalog, getSection } from './learning/catalog';
 import { bindLearningSession, buildGoDeeperQuery, renderLearningHome } from './learning/ui';
 import { openDocumentOcrModal } from './document-ocr';
 import { openMatterWorkspaceModal } from './matter-workspace';
+import { openWhatsAppModal } from './whatsapp-modal';
 import { initVoiceInput } from './voice-input';
 import { analytics } from './analytics';
 
@@ -444,6 +445,9 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
     <button class="new-research-capsule" type="button" data-action="open-matter-modal" style="margin-top: 6px; background: linear-gradient(135deg, #1E293B, #0F172A); border: 1px solid rgba(56, 189, 248, 0.3); color: #38BDF8;">
       🧠 <span>${state.language === 'bn' ? 'মোকদ্দমা ও ডিকটাফোন' : 'Matter Intelligence'}</span>
     </button>
+    <button class="new-research-capsule" type="button" data-action="open-whatsapp-modal" style="margin-top: 6px; background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.3); color: #25D366;">
+      💬 <span>${state.language === 'bn' ? 'হোয়াটসঅ্যাপ হেল্পলাইন' : 'WhatsApp Helpline'}</span>
+    </button>
     <nav class="sidebar-main-nav" aria-label="${localizedRoleLabel(role)} navigation">
       ${items.map((item) => route(item.href, `${icon(item.icon, 18)} <span>${item.label}</span>`, item.label === active ? 'active' : '')).join('')}
     </nav>
@@ -565,6 +569,9 @@ const workspaceTopbar = (role: Role, title?: string): string => {
     <div class="workspace-topbar-actions">
       <button class="topbar-matter-btn" type="button" data-action="open-matter-modal" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও ডিকটাফোন' : 'Matter Intelligence Workspace'}" style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); color: #38BDF8; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
         🧠 <span>${state.language === 'bn' ? 'মোকদ্দমা' : 'Matters'}</span>
+      </button>
+      <button class="topbar-wa-btn" type="button" data-action="open-whatsapp-modal" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন' : 'WhatsApp Legal Helpline'}" style="background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.25); color: #25D366; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+        💬 <span>WhatsApp</span>
       </button>
       <span class="credit-counter-pill ${isVip ? 'credit-pill-vip' : ''}" data-credit-pill title="${isVip ? (state.language === 'bn' ? 'আনলিমিটেড ভিআইপি অ্যাক্সেস' : 'Unlimited VIP Access') : (state.language === 'bn' ? 'দৈনিক ক্রেডিট' : 'Daily credits')}" ${isVip ? 'style="background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.35); color: #7C3AED; font-weight: 600;"' : ''}>
         ⬡ <span data-credit-remaining>${isVip ? '∞' : dailyLimit}</span>/<span data-credit-limit>${isVip ? '∞' : dailyLimit}</span>
@@ -717,6 +724,9 @@ const renderBottomChatBar = (role: Role, placeholder: string, _quickActions?: st
           <div class="composer-left-tools">
             <button type="button" class="composer-tool-btn composer-matter-btn" data-action="open-matter-modal" aria-label="Open Matter Intelligence" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও ডিকটাফোন (Matter Intelligence)' : 'Matter Intelligence & Dictaphone'}">
               🧠
+            </button>
+            <button type="button" class="composer-tool-btn composer-wa-btn" data-action="open-whatsapp-modal" aria-label="Open WhatsApp Helpline" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন বট' : 'WhatsApp Legal Helpline Bot'}" style="color: #25D366;">
+              💬
             </button>
             <button type="button" class="composer-tool-btn composer-attach-btn" data-action="open-ocr-modal" aria-label="Upload document for OCR" title="${state.language === 'bn' ? 'দলিল বা রায় আপলোড করুন (Google Vision OCR)' : 'Upload Deed / FIR / Order (Vision OCR)'}">
               ${icon('upload', 17)}
@@ -3442,6 +3452,12 @@ document.addEventListener('click', (event) => {
         if (form) void submitResearch(form);
       }
     });
+    return;
+  }
+
+  if (action === 'open-whatsapp-modal') {
+    event.preventDefault();
+    openWhatsAppModal();
     return;
   }
 
