@@ -47,6 +47,7 @@ app = FastAPI(
 from backend.learning import router as learning_router
 from backend.ocr_service import legal_ocr_service
 from backend.search_grounding import legal_search_grounding
+from backend.matter_service import matter_service
 from backend.legal_normalize import is_bengali_requested, normalize_bengali_text
 from backend.security_controls import (
     admin_secret,
@@ -2264,6 +2265,22 @@ class SearchGroundingRequest(BaseModel):
     user_role: Optional[str] = "professional"
 
 
+class MatterVoiceNoteRequest(BaseModel):
+    text: str = Field(..., min_length=2, description="Advocate's dictated note or spoken facts")
+    language: Optional[str] = Field("bn", description="Language: bn or en")
+
+
+class MatterChronologyRequest(BaseModel):
+    text: str = Field(..., min_length=3, description="Matter facts, agreements, notices, or pleadings")
+    language: Optional[str] = Field("bn", description="Language: bn or en")
+
+
+class MatterDocumentSummaryRequest(BaseModel):
+    text: str = Field(..., min_length=10, description="Pasted judgment, order sheet, or legal text")
+    language: Optional[str] = Field("bn", description="Language: bn or en")
+
+
+
 @app.post("/api/document/ocr-analyze", tags=["Document Analysis"])
 async def analyze_document_ocr(
     file: UploadFile = File(...),
@@ -2334,6 +2351,112 @@ async def live_search_grounding(
         raise HTTPException(502, detail=result.get("message", "Live legal search grounding failed."))
 
     return JSONResponse(status_code=200, content=result)
+
+
+# ─── Matter Intelligence Endpoints (Lawyer Chambers OS) ──────────────────────
+
+@app.post("/api/matter/voice-note", tags=["Matter Intelligence"])
+async def matter_voice_note(request: MatterVoiceNoteRequest):
+    """
+    Lawyer Dictaphone Endpoint:
+    Parses dictated spoken notes into a structured matter note card
+    (Client, Opponent, Dispute Type, Amount/Property, Key Dates, BD Statutes, Missing Questions).
+    """
+    if not request.text.strip():
+        raise HTTPException(400, "Dictation text cannot be empty.")
+    result = await matter_service.parse_voice_dictation(request.text, request.language or "bn")
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Failed to parse dictation."))
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/matter/audio-consultation", tags=["Matter Intelligence"])
+async def matter_audio_consultation(
+    file: Optional[UploadFile] = File(None),
+    language: Optional[str] = Form("bn"),
+    req: Request = None,
+):
+    """
+    Audio Consultation Transcription & Intelligence Endpoint:
+    Accepts client interview audio (MP3, M4A, WAV, WEBM) and produces:
+    Full transcript, executive consultation summary, facts stated, documents mentioned,
+    and crucial follow-up questions for the lawyer.
+    """
+    if not file or not file.filename:
+        raise HTTPException(400, "No audio file provided.")
+
+    allowed_exts = {".mp3", ".m4a", ".wav", ".webm", ".ogg", ".aac"}
+    ext = os.path.splitext(file.filename.lower())[1]
+    if ext not in allowed_exts:
+        raise HTTPException(400, f"Unsupported audio format. Supported: {', '.join(allowed_exts)}")
+
+    raw_bytes = await file.read()
+    if not raw_bytes:
+        raise HTTPException(422, "Empty audio file.")
+
+    if len(raw_bytes) > 25 * 1024 * 1024:
+        raise HTTPException(413, "Audio file exceeds 25MB limit.")
+
+    mime_type = file.content_type or f"audio/{ext.lstrip('.')}"
+    result = await matter_service.summarize_consultation_audio(
+        audio_bytes=raw_bytes,
+        mime_type=mime_type,
+        filename=file.filename,
+        language=language or "bn",
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Audio consultation processing failed."))
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/matter/document-summary", tags=["Matter Intelligence"])
+async def matter_document_summary(
+    file: Optional[UploadFile] = File(None),
+    text: Optional[str] = Form(None),
+    language: Optional[str] = Form("bn"),
+):
+    """
+    Case in 60 Seconds Document Summarizer:
+    Accepts court judgment / legal text (PDF or text upload) and outputs:
+    Bench, Case No, Facts, Contested Issues, Arguments, Ratio Decidendi, and Operative Order.
+    """
+    if file and file.filename:
+        raw_bytes = await file.read()
+        mime_type = file.content_type or "application/pdf"
+        result = await matter_service.summarize_legal_document(
+            document_content=raw_bytes,
+            mime_type=mime_type,
+            filename=file.filename,
+            language=language or "bn",
+        )
+    elif text and text.strip():
+        result = await matter_service.summarize_legal_document(
+            document_content=text.strip(),
+            mime_type="text/plain",
+            filename="document.txt",
+            language=language or "bn",
+        )
+    else:
+        raise HTTPException(400, "Please provide either a document file or document text.")
+
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Document summarization failed."))
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/matter/chronology", tags=["Matter Intelligence"])
+async def matter_chronology(request: MatterChronologyRequest):
+    """
+    Matter Chronology & Timeline Extraction Endpoint:
+    Parses pleadings, notices, or facts into a sorted timeline with limitation alerts.
+    """
+    if not request.text.strip():
+        raise HTTPException(400, "Matter facts text cannot be empty.")
+    result = await matter_service.extract_matter_chronology(request.text, request.language or "bn")
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Chronology extraction failed."))
+    return JSONResponse(status_code=200, content=result)
+
 
 
 

@@ -3,16 +3,6 @@
 **Date:** September 12, 2026  
 **Audience:** Taj & Product Audit / Engineering Leadership  
 **Project:** JustorAI (Legal Intelligence & Legal Research Platform for Bangladesh)  
-**Deployment Status:** Production Live & Rebuilding on Render (`justorai-backend`)  
-**Git Provenance:**
-* **Branch:** `main`
-* **Release Commits:**
-  * `0d1bb2a` — *feat: Google Cloud live search grounding, vision OCR, voice dictation, streaming UI, and mobile layout overhaul*
-  * `2d2fc84` — *chore: add GOOGLE_CLOUD_API_KEY and GCP settings to render.yaml*
-**Environment Targets:**
-* **Production Web Application:** Live Production Frontend (`https://justorai.com` or Vercel URL)
-* **Production Backend Service:** Render ASGI Service (`justorai-backend`)
-* **Local Staging Environment:** `http://localhost:5173` (Frontend) & `http://127.0.0.1:8000` (Backend)
 
 ---
 
@@ -113,7 +103,7 @@ This report provides a comprehensive review of recent architectural, multi-modal
 To audit and verify these enhancements live in the application, execute the following steps:
 
 ### Test 1: Collapsed Sources & Interactive Reveal
-1. Navigate to the chat interface (`http://localhost:5173/workspace/professional`).
+1. Navigate to the chat interface (`https://justorai.com/workspace/student`).
 2. Ask a legal question (e.g., *"What is the punishment for cheating and forgery under Bangladesh Penal Code?"*).
 3. **Verify:**
    - The response bubble appears with the **Justor AI Logo Masthead** above it.
