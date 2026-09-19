@@ -7985,6 +7985,776 @@ button.exec-badge-authorities:hover {
   margin: 10px 0;
 }
 
+/* ─── Justor Chamber Intelligence Suite 2.0 Styles ───────────────────────── */
+
+/* 1. Hearing Preparation Pack */
+.hearing-pack-controls {
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+
+.hearing-type-select-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hearing-type-select-row label {
+  font-size: 13px;
+  color: #CBD5E1;
+}
+
+.hearing-pack-display {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.hearing-objective-banner {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.35), rgba(15, 23, 42, 0.85));
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 14px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hearing-objective-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #38BDF8;
+}
+
+.objective-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tactical-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #38BDF8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.pack-timestamp {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.objective-title {
+  margin: 0 0 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #F8FAFC;
+  line-height: 1.45;
+}
+
+.brief-lead {
+  margin: 0;
+  font-size: 13px;
+  color: #CBD5E1;
+  line-height: 1.6;
+}
+
+.hearing-authorities-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.auth-col .auth-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94A3B8;
+  margin-bottom: 8px;
+}
+
+.precedent-badge {
+  display: inline-block;
+  background: #1E293B;
+  color: #FBBF24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.evidence-dual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.evidence-box {
+  background: #0F172A;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.evidence-box.in-hand {
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.evidence-box.in-hand h4 {
+  color: #34D399;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.evidence-box.risky {
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.evidence-box.risky h4 {
+  color: #F87171;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.evidence-box ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #CBD5E1;
+  line-height: 1.6;
+}
+
+.tactics-arguments-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.tactic-card {
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.tactic-card.opposing {
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.tactic-card.opposing h4 {
+  color: #FBBF24;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.tactic-card.rebuttal {
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.tactic-card.rebuttal h4 {
+  color: #60A5FA;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.tactic-card ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #CBD5E1;
+  line-height: 1.6;
+}
+
+.witness-deck-section h4 {
+  font-size: 14px;
+  color: #F8FAFC;
+  margin: 0 0 12px;
+}
+
+.witness-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.witness-question-card {
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.witness-target-tag {
+  font-size: 11.5px;
+  color: #38BDF8;
+}
+
+.witness-q-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #F1F5F9;
+  line-height: 1.5;
+  background: #1E293B;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border-left: 3px solid #38BDF8;
+}
+
+.witness-admission {
+  font-size: 12px;
+  color: #34D399;
+  line-height: 1.45;
+}
+
+.witness-caution {
+  font-size: 11.5px;
+  color: #F87171;
+  line-height: 1.45;
+  background: rgba(239, 68, 68, 0.06);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.closing-prayer-card {
+  background: #0F172A;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.prayer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.prayer-header h4 {
+  margin: 0;
+  font-size: 13.5px;
+  color: #A78BFA;
+}
+
+.prayer-quote {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #EDE9FE;
+  font-style: italic;
+  background: rgba(124, 58, 237, 0.06);
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 3px solid #A78BFA;
+}
+
+.pack-footer-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* 2. Consistency Checker & Evidence Matrix */
+.audit-controls-bar {
+  margin-bottom: 18px;
+}
+
+.consistency-results-display {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.integrity-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+
+.score-badge-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.9));
+  border: 2px solid #38BDF8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+.score-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: #38BDF8;
+}
+
+.score-lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+}
+
+.integrity-details h4 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: #F8FAFC;
+}
+
+.integrity-details p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #CBD5E1;
+}
+
+.contradictions-section h4,
+.evidence-matrix-section h4 {
+  font-size: 14px;
+  color: #F8FAFC;
+  margin: 0 0 12px;
+}
+
+.contradictions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contradiction-card {
+  background: #0F172A;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.contradiction-card.critical {
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.contradiction-card.warning {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.contra-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.contra-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.contra-pill.critical {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.contra-pill.warning {
+  background: #F59E0B;
+  color: #0F172A;
+}
+
+.contra-category {
+  font-size: 11.5px;
+  color: #94A3B8;
+}
+
+.contra-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #F1F5F9;
+}
+
+.contra-sources-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.contra-source {
+  background: #1E293B;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.source-lbl {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94A3B8;
+  margin-bottom: 4px;
+}
+
+.contra-source p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #E2E8F0;
+}
+
+.contra-impact {
+  font-size: 12.5px;
+  color: #F87171;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.contra-remedy {
+  font-size: 12.5px;
+  color: #34D399;
+  line-height: 1.5;
+}
+
+.no-contradictions-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 10px;
+  padding: 14px 18px;
+  color: #34D399;
+  font-size: 13px;
+}
+
+.evidence-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+  background: #0F172A;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.evidence-matrix-table th {
+  background: #1E293B;
+  color: #94A3B8;
+  font-weight: 600;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.evidence-matrix-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.issue-cell {
+  color: #F8FAFC;
+  width: 25%;
+}
+
+.evidence-cell {
+  color: #CBD5E1;
+  width: 30%;
+}
+
+.status-cell {
+  width: 15%;
+}
+
+.matrix-status-pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.matrix-status-pill.proved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.matrix-status-pill.partial {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.matrix-status-pill.vulnerable {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.matrix-status-pill.missing {
+  background: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.gap-cell {
+  color: #94A3B8;
+  width: 30%;
+}
+
+/* 3. Legal Memo Generator */
+.memo-composer-card {
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.memo-quick-prompts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.memo-tag-btn {
+  background: #1E293B;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #93C5FD;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.memo-tag-btn:hover {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #3B82F6;
+}
+
+.legal-memos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.legal-memo-document {
+  background: #080D1A;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  font-family: 'Times New Roman', 'Kalpurush', Georgia, serif;
+}
+
+.memo-doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  font-family: inherit;
+}
+
+.memo-badge {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #38BDF8;
+}
+
+.memo-date {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.memo-meta-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #E2E8F0;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+  margin-bottom: 18px;
+}
+
+.memo-section {
+  margin-bottom: 18px;
+}
+
+.memo-section h5 {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+  color: #38BDF8;
+  font-family: sans-serif;
+  font-weight: 700;
+}
+
+.memo-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #F1F5F9;
+  margin: 0;
+}
+
+.memo-text.highlight {
+  background: rgba(56, 189, 248, 0.06);
+  border-left: 3px solid #38BDF8;
+  padding: 10px 14px;
+  border-radius: 4px;
+}
+
+.memo-section ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13.5px;
+  color: #E2E8F0;
+  line-height: 1.65;
+}
+
+.statutes-callouts,
+.precedents-callouts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statute-callout,
+.precedent-callout {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: sans-serif;
+}
+
+.statute-callout strong {
+  display: block;
+  font-size: 12.5px;
+  color: #60A5FA;
+  margin-bottom: 4px;
+}
+
+.statute-callout p,
+.precedent-callout p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #CBD5E1;
+}
+
+.precedent-callout strong {
+  display: block;
+  font-size: 12.5px;
+  color: #FBBF24;
+  margin-bottom: 4px;
+}
+
+.irac-card {
+  background: rgba(30, 58, 138, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #E2E8F0;
+}
+
+.memo-section.recommendation {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.sources-snippets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.source-snippet-card {
+  background: #0B101D;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: sans-serif;
+}
+
+.src-title {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #38BDF8;
+  margin-bottom: 4px;
+}
+
+.src-passage {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+.memo-action-bar {
+  display: flex;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 16px;
+  flex-wrap: wrap;
+  font-family: sans-serif;
+}
+
 /* ─── Justor WhatsApp Helpline & Status Simulator ───────────────────────────── */
 
 .whatsapp-modal-card {
@@ -8699,6 +9469,26 @@ button.exec-badge-authorities:hover {
   .matter-intro-callout {
     padding: 10px 12px !important;
     margin-bottom: 12px !important;
+  }
+  .evidence-dual-grid,
+  .tactics-arguments-grid,
+  .contra-sources-grid,
+  .hearing-type-select-row {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .integrity-summary-card {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 12px !important;
+  }
+  .table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .evidence-matrix-table {
+    min-width: 520px !important;
   }
   .dictaphone-composer-card,
   .chronology-composer,

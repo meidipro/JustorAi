@@ -2078,8 +2078,9 @@ async def _whatsapp_llm_adapter(prompt: str, system_instruction: str) -> str:
 
 try:
     whatsapp_service.set_llm_handler(_whatsapp_llm_adapter)
+    matter_service.set_llm_handler(_whatsapp_llm_adapter)
 except Exception as _wa_init_err:
-    logger.warning(f"Could not inject LLM adapter to whatsapp_service: {_wa_init_err}")
+    logger.warning(f"Could not inject LLM adapter to services: {_wa_init_err}")
 
 
 def extract_pdf_text(file_obj) -> str:
@@ -2295,6 +2296,23 @@ class MatterDocumentSummaryRequest(BaseModel):
     language: Optional[str] = Field("bn", description="Language: bn or en")
 
 
+class MatterHearingPackRequest(BaseModel):
+    matter: Dict[str, Any] = Field(..., description="Full matter state object")
+    hearing_type: Optional[str] = Field("general", description="Type of hearing: general, bail, injunction, examination, argument")
+    language: Optional[str] = Field("bn", description="Language: bn or en")
+
+
+class MatterConsistencyRequest(BaseModel):
+    matter: Dict[str, Any] = Field(..., description="Full matter state object")
+    language: Optional[str] = Field("bn", description="Language: bn or en")
+
+
+class MatterLegalMemoRequest(BaseModel):
+    matter: Dict[str, Any] = Field(..., description="Full matter state object")
+    question_presented: str = Field(..., min_length=3, description="Legal question or issue to analyze")
+    language: Optional[str] = Field("bn", description="Language: bn or en")
+
+
 
 @app.post("/api/document/ocr-analyze", tags=["Document Analysis"])
 async def analyze_document_ocr(
@@ -2470,6 +2488,64 @@ async def matter_chronology(request: MatterChronologyRequest):
     result = await matter_service.extract_matter_chronology(request.text, request.language or "bn")
     if result.get("status") != "ok":
         raise HTTPException(502, detail=result.get("message", "Chronology extraction failed."))
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/matter/hearing-pack", tags=["Matter Intelligence"])
+async def matter_hearing_pack(request: MatterHearingPackRequest):
+    """
+    One-Click Hearing Preparation Pack:
+    Synthesizes tactical bench objectives, key facts, evidence in hand vs. missing,
+    anticipated opposing arguments with counter-authorities, and cross-examination questions.
+    """
+    if not request.matter:
+        raise HTTPException(400, "Matter data cannot be empty.")
+    result = await matter_service.generate_hearing_pack(
+        matter=request.matter,
+        hearing_type=request.hearing_type or "general",
+        language=request.language or "bn"
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Hearing pack generation failed."))
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/matter/consistency-check", tags=["Matter Intelligence"])
+async def matter_consistency_check(request: MatterConsistencyRequest):
+    """
+    Matter Consistency Checker & Evidence Matrix:
+    Audits matter facts across documents/notes for factual contradictions
+    (dates, monetary sums, plot/khatian numbers, names) and maps evidence strength.
+    """
+    if not request.matter:
+        raise HTTPException(400, "Matter data cannot be empty.")
+    result = await matter_service.check_matter_consistency_and_evidence(
+        matter=request.matter,
+        language=request.language or "bn"
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Consistency check failed."))
+    return JSONResponse(status_code=200, content=result)
+
+
+@app.post("/api/matter/legal-memo", tags=["Matter Intelligence"])
+async def matter_legal_memo(request: MatterLegalMemoRequest):
+    """
+    Source-Linked Legal Memo Generator:
+    Drafts an advocate-grade formal legal memorandum (IRAC method) grounded in matter facts,
+    referencing Bangladesh Code statutes and DLR/BLD precedents.
+    """
+    if not request.matter:
+        raise HTTPException(400, "Matter data cannot be empty.")
+    if not request.question_presented or not request.question_presented.strip():
+        raise HTTPException(400, "Question presented cannot be empty.")
+    result = await matter_service.generate_legal_memo(
+        matter=request.matter,
+        question_presented=request.question_presented.strip(),
+        language=request.language or "bn"
+    )
+    if result.get("status") != "ok":
+        raise HTTPException(502, detail=result.get("message", "Legal memo generation failed."))
     return JSONResponse(status_code=200, content=result)
 
 

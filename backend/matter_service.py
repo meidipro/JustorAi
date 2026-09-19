@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import io
+import re
 import json
 import base64
 import logging
@@ -20,18 +21,47 @@ GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID", "justorai-508321").strip()
 VERTEX_LOCATION = os.getenv("VERTEX_LOCATION", "us-central1").strip()
 
 
+def _clean_json_text(text: str) -> Optional[Dict[str, Any]]:
+    """Robustly extracts JSON dictionary from raw model text."""
+    if not text:
+        return None
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
+        cleaned = re.sub(r"\s*```$", "", cleaned)
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        # Fallback regex for outermost { ... }
+        m = re.search(r"(\{.*\})", cleaned, re.DOTALL)
+        if m:
+            try:
+                return json.loads(m.group(1))
+            except Exception:
+                pass
+    return None
+
+
 class JustorMatterService:
     """
-    Justor Matter Intelligence Service
+    Justor Matter Intelligence Service (Chamber OS)
     Empowers legal practitioners with workflow automation:
-    1. Lawyer Dictaphone: Quick voice notes -> structured matter notes.
-    2. Consultation Audio Intelligence: Audio recordings -> transcript + legal summary + missing questions.
+    1. Lawyer Dictaphone: Voice/text notes -> structured matter notes.
+    2. Consultation Audio: Ingest audio -> transcript + legal summary + missing questions.
     3. Legal Document & Judgment Summarization: 60-second case breakdown with Ratio Decidendi.
     4. Matter Chronology & Timeline: Automated date-ordered timeline with statutory limitation alerts.
+    5. One-Click Hearing Preparation Pack: Court-ready hearing objectives, evidence checklist & witness questions.
+    6. Matter Consistency Checker & Evidence Matrix: Cross-document contradiction audit & proof gaps.
+    7. Source-Linked Legal Memo Generator: Formal advocate IRAC legal memorandum with statutory authorities.
     """
 
     def __init__(self, api_key: Optional[str] = None):
         self._explicit_key = api_key
+        self._llm_handler = None
+
+    def set_llm_handler(self, handler):
+        """Allows injecting Justor's full multi-model fallback cascade from backend.py."""
+        self._llm_handler = handler
 
     @property
     def api_key(self) -> str:
@@ -44,29 +74,20 @@ class JustorMatterService:
         )
 
     def _get_api_urls(self, model_name: str = "gemini-2.5-flash") -> list[str]:
-        """Returns primary Google AI Studio endpoint and optional Vertex endpoint."""
+        """Returns primary Google AI Studio endpoint."""
         urls = []
         if self.api_key:
-            # Google AI Studio endpoint (Primary for API keys starting with AIza)
             urls.append(
                 f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
-                f"?key={self.api_key}"
-            )
-            # Vertex AI Express URL fallback (for GCP environments with enabled express keys)
-            urls.append(
-                f"https://aiplatform.googleapis.com/v1beta1/projects/{GCP_PROJECT_ID}"
-                f"/locations/{VERTEX_LOCATION}/publishers/google/models/{model_name}:generateContent"
                 f"?key={self.api_key}"
             )
         return urls
 
     async def _call_gemini_json(self, contents: list, system_prompt: Optional[str] = None) -> Optional[Dict[str, Any]]:
-        """Invokes Gemini 2.5 Flash with JSON schema response."""
+        """Invokes Gemini 2.5 Flash with JSON schema response and fallback cascade."""
         urls = self._get_api_urls("gemini-2.5-flash")
-        if not urls:
-            logger.error("No API key configured for Matter Service.")
-            return None
 
+        # Prepare direct payload for Gemini
         body: Dict[str, Any] = {
             "contents": contents,
             "generationConfig": {
@@ -78,9 +99,10 @@ class JustorMatterService:
         if system_prompt:
             body["systemInstruction"] = {"parts": [{"text": system_prompt}]}
 
+        # Try direct Gemini endpoint
         for url in urls:
             try:
-                async with httpx.AsyncClient(timeout=45.0) as client:
+                async with httpx.AsyncClient(timeout=12.0) as client:
                     resp = await client.post(url, json=body)
                     if resp.status_code == 200:
                         data = resp.json()
@@ -88,26 +110,136 @@ class JustorMatterService:
                         if candidates and "content" in candidates[0]:
                             parts = candidates[0]["content"].get("parts", [])
                             text = "".join(p.get("text", "") for p in parts if "text" in p).strip()
-                            if text:
-                                return json.loads(text)
+                            parsed = _clean_json_text(text)
+                            if parsed:
+                                return parsed
                     else:
                         logger.warning(f"Gemini API returned {resp.status_code}: {resp.text[:120]}")
             except Exception as e:
                 logger.warning(f"Error calling Gemini endpoint ({url[:40]}...): {e}")
                 continue
 
+        # Fallback to injected multi-model LLM handler (Groq/OpenRouter/DashScope)
+        if self._llm_handler:
+            try:
+                prompt_text = ""
+                for c in contents:
+                    for p in c.get("parts", []):
+                        if "text" in p:
+                            prompt_text += p["text"] + "\n"
+                
+                json_enforcing_prompt = (
+                    (system_prompt or "") + "\n\n"
+                    "CRITICAL: You MUST respond ONLY in valid, strictly parsable JSON. Do not include introductory text or Markdown code blocks."
+                )
+                res = await self._llm_handler(prompt_text, json_enforcing_prompt)
+                parsed = _clean_json_text(res)
+                if parsed:
+                    return parsed
+            except Exception as ex:
+                logger.warning(f"Injected fallback LLM handler failed in matter_service: {ex}")
+
         return None
+
+    def _extract_matter_dossier(self, matter: Dict[str, Any]) -> str:
+        """Serializes an entire legal matter into a cohesive factual dossier."""
+        lines: List[str] = []
+        lines.append(f"MATTER TITLE: {matter.get('title', 'Untitled Matter')}")
+        if matter.get("caseNumber"): lines.append(f"CASE NUMBER: {matter.get('caseNumber')}")
+        if matter.get("court"): lines.append(f"COURT: {matter.get('court')}")
+        lines.append(f"CLIENT: {matter.get('clientName', 'Unknown Client')}")
+        lines.append(f"MATTER TYPE: {matter.get('matterType', 'General Legal Matter')}")
+        if matter.get("summary"): lines.append(f"SUMMARY: {matter.get('summary')}")
+
+        # Notes
+        notes = matter.get("notes", [])
+        if isinstance(notes, list) and notes:
+            lines.append("\n=== ADVOCATE NOTES & DICTATION ===")
+            for idx, n in enumerate(notes, 1):
+                if not isinstance(n, dict):
+                    continue
+                data = n.get("data") if isinstance(n.get("data"), dict) else n
+                lines.append(f"Note #{idx} ({n.get('createdAt', '')}):")
+                if n.get("text"): lines.append(f"  Note text: {n.get('text')}")
+                if data.get("client_name"): lines.append(f"  Client: {data['client_name']}")
+                if data.get("opponent_name"): lines.append(f"  Opponent: {data['opponent_name']}")
+                if data.get("claim_amount"): lines.append(f"  Claim Amount: {data['claim_amount']}")
+                if data.get("property_details"): lines.append(f"  Property: {data['property_details']}")
+                if data.get("dispute_summary"): lines.append(f"  Summary: {data['dispute_summary']}")
+                if data.get("statutory_provisions") and isinstance(data["statutory_provisions"], list):
+                    lines.append(f"  Statutes: {', '.join(str(x) for x in data['statutory_provisions'])}")
+                if data.get("next_actions") and isinstance(data["next_actions"], list):
+                    lines.append(f"  Actions: {', '.join(str(x) for x in data['next_actions'])}")
+
+        # Consultations
+        consultations = matter.get("consultations", [])
+        if isinstance(consultations, list) and consultations:
+            lines.append("\n=== CLIENT CONSULTATION AUDIO TRANSCRIPTS ===")
+            for idx, c in enumerate(consultations, 1):
+                if not isinstance(c, dict):
+                    continue
+                data = c.get("data") if isinstance(c.get("data"), dict) else c
+                lines.append(f"Consultation #{idx} ({c.get('filename', '')}):")
+                if data.get("consultation_summary"): lines.append(f"  Summary: {data['consultation_summary']}")
+                if data.get("client_facts") and isinstance(data["client_facts"], list):
+                    lines.append(f"  Client Facts: {' | '.join(str(x) for x in data['client_facts'])}")
+                if data.get("documents_mentioned") and isinstance(data["documents_mentioned"], list):
+                    lines.append(f"  Documents Mentioned: {', '.join(str(x) for x in data['documents_mentioned'])}")
+                if data.get("red_flags_and_risks") and isinstance(data["red_flags_and_risks"], list):
+                    lines.append(f"  Red Flags: {', '.join(str(x) for x in data['red_flags_and_risks'])}")
+                if data.get("transcript"): lines.append(f"  Transcript Snippet: {str(data['transcript'])[:600]}...")
+
+        # Document Summaries
+        summaries = matter.get("summaries", [])
+        if isinstance(summaries, list) and summaries:
+            lines.append("\n=== LEGAL DOCUMENTS & JUDGMENTS IN FILE ===")
+            for idx, s in enumerate(summaries, 1):
+                if not isinstance(s, dict):
+                    continue
+                data = s.get("data") if isinstance(s.get("data"), dict) else s
+                lines.append(f"Document #{idx} ({s.get('filename', '')}):")
+                if data.get("case_title"): lines.append(f"  Title: {data['case_title']}")
+                if data.get("court"): lines.append(f"  Court/Bench: {data['court']} {data.get('bench', '')}")
+                if data.get("facts_brief"): lines.append(f"  Facts: {data['facts_brief']}")
+                if data.get("legal_issues") and isinstance(data["legal_issues"], list):
+                    lines.append(f"  Issues: {' | '.join(str(x) for x in data['legal_issues'])}")
+                if data.get("ratio_decidendi"): lines.append(f"  Ratio Decidendi: {data['ratio_decidendi']}")
+                if data.get("operative_order"): lines.append(f"  Operative Order: {data['operative_order']}")
+
+        # Chronology
+        chronology = matter.get("chronology")
+        timeline: List[Dict[str, Any]] = []
+        alerts: List[Dict[str, Any]] = []
+        if isinstance(chronology, dict):
+            timeline = chronology.get("timeline", []) if isinstance(chronology.get("timeline"), list) else []
+            alerts = chronology.get("limitation_alerts", []) if isinstance(chronology.get("limitation_alerts"), list) else []
+        elif isinstance(chronology, list):
+            timeline = chronology
+
+        if timeline:
+            lines.append("\n=== MATTER CHRONOLOGY & TIMELINE ===")
+            for event in timeline:
+                if isinstance(event, dict):
+                    d_str = event.get("date_str") or event.get("date") or "Date"
+                    title = event.get("title") or event.get("event") or ""
+                    desc = event.get("description") or event.get("significance") or ""
+                    imp = event.get("importance", "standard")
+                    lines.append(f"  [{d_str}] {title}: {desc} (Importance: {imp})")
+
+        if alerts:
+            lines.append("\n=== STATUTORY LIMITATION ALERTS ===")
+            for alert in alerts:
+                if isinstance(alert, dict):
+                    lines.append(f"  - {alert.get('provision', '')}: {str(alert.get('status', '')).upper()} -> {alert.get('warning', '')}")
+
+        return "\n".join(lines)
 
     async def parse_voice_dictation(
         self,
         text: str,
         language: str = "bn"
     ) -> Dict[str, Any]:
-        """
-        Parses raw dictated notes into a structured matter note card.
-        Extracts client name, matter type, dispute summary, claim amounts, limitation dates,
-        relevant Bangladesh statutes, and missing questions.
-        """
+        """Parses raw dictated notes into a structured matter note card."""
         is_bn = language.lower().startswith("bn")
         system_instruction = (
             "You are Justor AI's Senior Chamber Practice Assistant for Bangladesh Advocates.\n"
@@ -117,7 +249,7 @@ class JustorMatterService:
             "- Legal dispute type (e.g. NI Act Cheque Dishonour, Specific Relief Title/Eviction, Section 498 CrPC Bail, Family MFLO)\n"
             "- Disputed amount (BDT / Taka) or property description (Mouza, Khatian, Dag)\n"
             "- Crucial dates mentioned\n"
-            "- Controlling Bangladesh statutes and sections (e.g. 'The Negotiable Instruments Act, 1881, Section 138')\n"
+            "- Controlling Bangladesh statutes and sections\n"
             "- Crucial questions the advocate still needs to ask the client\n"
             "- Immediate actionable next steps\n"
             + ("Output all explanatory text in natural Bengali (বাংলা)." if is_bn else "Output in clear legal English.")
@@ -151,59 +283,46 @@ class JustorMatterService:
         filename: str = "consultation.mp3",
         language: str = "bn"
     ) -> Dict[str, Any]:
-        """
-        Multimodal audio ingestion for client consultations.
-        Transcribes audio (Bengali/English) and extracts:
-        - Transcript
-        - Consultation summary
-        - Key client facts
-        - Documents mentioned (Khatian, Sale deed, Mutation, Bank memo, etc.)
-        - Crucial dates
-        - Red flags & missing legal questions
-        """
+        """Multimodal audio ingestion for client consultations."""
         is_bn = language.lower().startswith("bn")
         b64_data = base64.b64encode(audio_bytes).decode("utf-8")
 
-        prompt = (
-            "You are Justor AI's Legal Consultation Audio Transcriber and Analyst for Bangladesh.\n"
-            "Listen to this client-advocate consultation recording.\n"
-            "Tasks:\n"
-            "1. Transcribe the conversation accurately in the original spoken languages (Bengali, Banglish, and English).\n"
-            "2. Generate an executive consultation summary.\n"
-            "3. Extract all concrete facts stated by the client.\n"
-            "4. List all documents mentioned (e.g. Sale Deed/বায়া দলিল, Khatian/খতিয়ান, Mutation/নামজারি, Cheque/চেক, Dishonour Memo, Postal A/D Receipt).\n"
-            "5. Extract all dates and timelines.\n"
-            "6. Identify potential legal risks, limitation traps, or missing evidentiary links.\n"
-            "7. Formulate 4-6 specific follow-up questions the lawyer must ask the client.\n\n"
-            "Return valid JSON matching this schema:\n"
-            "{\n"
-            '  "matter_title": "string",\n'
-            '  "transcript": "string verbatim transcription",\n'
-            '  "consultation_summary": "string",\n'
-            '  "client_facts": ["fact 1", "fact 2"],\n'
-            '  "documents_mentioned": ["doc 1", "doc 2"],\n'
-            '  "crucial_dates": [{"date": "string", "event": "string"}],\n'
-            '  "statutory_provisions": ["Act and Section names"],\n'
-            '  "red_flags_and_risks": ["risk 1", "risk 2"],\n'
-            '  "questions_to_ask_client": ["question 1", "question 2"]\n'
-            "}"
+        system_instruction = (
+            "You are Justor AI's Multimodal Consultation Analyst for Bangladesh Legal Chambers.\n"
+            "Analyze the client consultation audio recording (in Bengali, English, or mixed).\n"
+            "Produce an exhaustive legal breakdown formatted strictly as JSON with keys:\n"
+            "- matter_title: concise title of the dispute\n"
+            "- transcript: verbatim spoken transcript\n"
+            "- consultation_summary: 2-3 paragraph executive summary\n"
+            "- client_facts: array of material facts alleged by client\n"
+            "- documents_mentioned: array of deeds, khatians, receipts, notices, cheques, memos mentioned\n"
+            "- crucial_dates: array of objects {date, event}\n"
+            "- statutory_provisions: controlling Bangladesh acts and sections\n"
+            "- red_flags_and_risks: weaknesses in client's case or potential procedural bars\n"
+            "- questions_to_ask_client: key missing facts to elicit\n"
+            + ("Write summary and notes in natural legal Bengali (বাংলা)." if is_bn else "Write in clear legal English.")
         )
 
-        contents = [
-            {
-                "role": "user",
-                "parts": [
-                    {"inlineData": {"mimeType": mime_type, "data": b64_data}},
-                    {"text": prompt}
-                ]
-            }
-        ]
+        prompt = f"Analyze client consultation recording: {filename}."
 
-        result = await self._call_gemini_json(contents)
+        contents = [{
+            "role": "user",
+            "parts": [
+                {
+                    "inlineData": {
+                        "mimeType": mime_type,
+                        "data": b64_data
+                    }
+                },
+                {"text": prompt}
+            ]
+        }]
+
+        result = await self._call_gemini_json(contents, system_instruction)
         if not result:
             return {
                 "status": "error",
-                "message": "Audio transcription failed. Please check audio clarity and size.",
+                "message": "Failed to analyze consultation audio.",
                 "data": {}
             }
 
@@ -214,62 +333,41 @@ class JustorMatterService:
 
     async def summarize_legal_document(
         self,
-        document_content: Union[str, bytes],
-        mime_type: str = "text/plain",
-        filename: str = "document.txt",
+        text_content: str,
+        filename: str = "document.pdf",
         language: str = "bn"
     ) -> Dict[str, Any]:
-        """
-        'Case in 60 Seconds' analyzer for judgments, court orders, and legal pleadings.
-        Extracts:
-        - Court, Bench / Judges, Case Number, Parties
-        - Facts in brief
-        - Contested Legal Issues
-        - Petitioner Arguments vs Respondent Arguments
-        - Ratio Decidendi (the core binding rule of law)
-        - Final Operative Decision
-        - Study Mode FIRAC summary
-        """
+        """Case in 60 Seconds: judgment/petition summarization with Ratio Decidendi."""
         is_bn = language.lower().startswith("bn")
-        
-        parts: list = []
-        if isinstance(document_content, bytes) and mime_type.startswith("application/pdf"):
-            b64_pdf = base64.b64encode(document_content).decode("utf-8")
-            parts.append({"inlineData": {"mimeType": "application/pdf", "data": b64_pdf}})
-            prompt_intro = "Analyze this uploaded court judgment / legal document PDF."
-        elif isinstance(document_content, bytes):
-            text = document_content.decode("utf-8", errors="ignore")
-            parts.append({"text": f"Document Text:\n{text[:25000]}"})
-            prompt_intro = "Analyze this court judgment / legal document text."
-        else:
-            parts.append({"text": f"Document Text:\n{document_content[:25000]}"})
-            prompt_intro = "Analyze this court judgment / legal document text."
-
-        prompt = (
-            f"{prompt_intro}\n"
-            "You are Justor AI's Senior Judicial Case Summarizer for Bangladesh Law.\n"
-            "Produce an executive 'Case in 60 Seconds' summary:\n"
-            "1. Case Header: Court (e.g. Appellate Division / High Court Division), Bench/Judges, Case Number, Date of Decision, Parties.\n"
-            "2. Facts in Brief: Concise 3-4 sentence background.\n"
-            "3. Contested Issues: Core legal questions framed by the court.\n"
-            "4. Arguments: Petitioner/Appellant's stance vs Respondent/State's stance.\n"
-            "5. Statutory Provisions & Precedents Cited: Bangladesh statutes, articles of the Constitution, and landmark precedents.\n"
-            "6. Ratio Decidendi: The exact binding legal principle or doctrine articulated by the court.\n"
-            "7. Operative Order / Decision: The final ruling (Rule made absolute, Appeal allowed/dismissed, Bail granted/rejected, Sentence modified).\n"
-            "8. Study Mode: A simplified FIRAC (Facts, Issue, Rule, Analysis, Conclusion) explanation for students.\n\n"
-            "Return valid JSON with keys: case_title, court, bench, case_number, decision_date, parties (petitioner, respondent), "
-            "facts_brief, legal_issues (list), petitioner_arguments (list), respondent_arguments (list), "
-            "statutes_cited (list), precedents_cited (list), ratio_decidendi, operative_order, study_mode_firac (facts, issue, rule, analysis, conclusion)."
+        system_instruction = (
+            "You are Justor AI's Supreme Court & District Court Judgment Analyst for Bangladesh.\n"
+            "Break down the judgment, order, or petition into a 'Case in 60 Seconds' executive briefing.\n"
+            "Return JSON with:\n"
+            "- case_title: Parties involved\n"
+            "- court: Court jurisdiction\n"
+            "- bench: Presiding judge(s)\n"
+            "- case_number: e.g. Criminal Revision No. 123 of 2024\n"
+            "- decision_date: Date delivered\n"
+            "- facts_brief: Material facts in 3-4 sentences\n"
+            "- legal_issues: Array of core points of law\n"
+            "- petitioner_arguments: Array of key arguments\n"
+            "- respondent_arguments: Array of counter arguments\n"
+            "- statutes_cited: Acts and sections cited\n"
+            "- precedents_cited: Reported decisions (DLR / BLD / BLC)\n"
+            "- ratio_decidendi: The authoritative principle of law established\n"
+            "- operative_order: The final decree or direction\n"
+            "- study_mode_firac: Object with {facts, issue, rule, analysis, conclusion}\n"
+            + ("Output all explanatory text in legal Bengali (বাংলা)." if is_bn else "Output in legal English.")
         )
-        parts.append({"text": prompt})
 
-        contents = [{"role": "user", "parts": parts}]
-        result = await self._call_gemini_json(contents)
+        prompt = f"Document ({filename}):\n\"\"\"\n{text_content[:25000]}\n\"\"\""
+        contents = [{"role": "user", "parts": [{"text": prompt}]}]
+        result = await self._call_gemini_json(contents, system_instruction)
 
         if not result:
             return {
                 "status": "error",
-                "message": "Failed to generate document summary.",
+                "message": "Failed to summarize legal document.",
                 "data": {}
             }
 
@@ -283,10 +381,7 @@ class JustorMatterService:
         events_text: str,
         language: str = "bn"
     ) -> Dict[str, Any]:
-        """
-        Parses case pleadings, notices, and facts into an ordered chronological timeline.
-        Detects statutory limitation alerts under Bangladesh Limitation Act, NI Act, CPC, and CrPC.
-        """
+        """Extracts date-ordered timeline and highlights statutory limitation risks."""
         is_bn = language.lower().startswith("bn")
         prompt = (
             "You are Justor AI's Legal Chronology & Limitation Specialist for Bangladesh Law.\n"
@@ -329,6 +424,208 @@ class JustorMatterService:
             return {
                 "status": "error",
                 "message": "Failed to extract matter chronology.",
+                "data": {}
+            }
+
+        return {
+            "status": "ok",
+            "data": result
+        }
+
+    # ════════════════════════════════════════════════════════════════════════════
+    # NEW CHAMBER SUITE 2.0 CAPABILITIES
+    # ════════════════════════════════════════════════════════════════════════════
+
+    async def generate_hearing_pack(
+        self,
+        matter: Dict[str, Any],
+        hearing_type: str = "general",
+        language: str = "bn"
+    ) -> Dict[str, Any]:
+        """
+        One-Click Hearing Preparation Pack:
+        Synthesizes the entire matter file into an executive court brief for tomorrow's hearing.
+        Includes tactical objectives, proof checklist, opposing argument anticipations, and cross-examination questions.
+        """
+        is_bn = language.lower().startswith("bn")
+        dossier = self._extract_matter_dossier(matter)
+
+        system_instruction = (
+            "You are Justor AI's Senior Court Trial Strategist for Bangladesh Advocates.\n"
+            "Prepare an exhaustive, courtroom-ready 'Hearing Preparation Pack' based strictly on the provided matter file.\n"
+            f"Hearing Type Focus: {hearing_type.upper()} (e.g., BAIL, CHARGE_HEARING, DEPOSITION_CROSS, INJUNCTION, FINAL_ARGUMENT).\n\n"
+            "Generate JSON with the following structure:\n"
+            "{\n"
+            '  "hearing_title": "Case Title and Court Forum",\n'
+            '  "today_objective": "Single most important tactical objective the advocate must achieve today",\n'
+            '  "case_brief": "Executive factual summary for quick bench reference (3-4 sentences)",\n'
+            '  "key_chronology_highlights": ["Array of the 3-5 most critical dates to keep at fingertips"],\n'
+            '  "governing_statutes": ["Array of controlling Bangladesh Act & Section provisions with short statutory rules"],\n'
+            '  "precedents": ["Array of applicable Supreme Court DLR / BLD / BLC citations with ratio"],\n'
+            '  "evidence_in_hand": ["Key documents and exhibits ready to present today"],\n'
+            '  "evidence_missing_or_risky": ["Missing proofs or vulnerabilities opponent might exploit"],\n'
+            '  "anticipated_opposing_arguments": ["Points the opposing counsel will likely raise"],\n'
+            '  "effective_counter_arguments": ["Counter-arguments and statutory rebuttals to neutralize opponent"],\n'
+            '  "witness_questions": [\n'
+            '    {\n'
+            '      "target": "Witness name or designation",\n'
+            '      "question": "Exact question to put in cross or examination-in-chief",\n'
+            '      "intended_admission": "Fact this question establishes",\n'
+            '      "caution": "Warning on how to handle hostile answer"\n'
+            '    }\n'
+            '  ],\n'
+            '  "closing_prayer": "Concise, authoritative verbal submission / prayer to state before the Bench"\n'
+            "}\n"
+            + ("Output all explanatory and tactical text in professional legal Bengali (বাংলা)." if is_bn else "Output in professional legal English.")
+        )
+
+        prompt = f"FULL MATTER RECORD DOSSIER:\n\"\"\"\n{dossier}\n\"\"\"\n\nGenerate the courtroom Hearing Preparation Pack for: {hearing_type}."
+
+        contents = [{"role": "user", "parts": [{"text": prompt}]}]
+        result = await self._call_gemini_json(contents, system_instruction)
+
+        if not result:
+            return {
+                "status": "error",
+                "message": "Failed to generate hearing preparation pack.",
+                "data": {}
+            }
+
+        return {
+            "status": "ok",
+            "data": result
+        }
+
+    async def check_matter_consistency_and_evidence(
+        self,
+        matter: Dict[str, Any],
+        language: str = "bn"
+    ) -> Dict[str, Any]:
+        """
+        Matter Consistency Checker & Evidence Matrix:
+        Cross-checks all consultation transcripts, pleadings, deeds, and notes in the matter file
+        to detect factual contradictions (dates, sums, dags, names) and builds an Evidence Matrix.
+        """
+        is_bn = language.lower().startswith("bn")
+        dossier = self._extract_matter_dossier(matter)
+
+        system_instruction = (
+            "You are Justor AI's Chief Litigation Auditor and Evidence Analyst for Bangladesh Courts.\n"
+            "Thoroughly cross-examine all parts of the matter dossier (client consultations, notes, documents, and chronology).\n\n"
+            "Tasks:\n"
+            "1. DETECT CONTRADICTIONS: Look for:\n"
+            "   - Date clashes (e.g. petition says notice sent 12th, postal receipt says 15th).\n"
+            "   - Financial mismatches (cheque sum vs. claimed debt in consultation vs. statutory notice amount).\n"
+            "   - Property description inconsistencies (CS/SA/RS/BS Dag numbers, Khatian numbers, Mouza, land quantity).\n"
+            "   - Party spelling variations or conflicting factual statements.\n"
+            "2. BUILD EVIDENCE MATRIX: For every essential legal ingredient of the claim or defense, evaluate what document proves it and identify what is missing.\n\n"
+            "Generate JSON with structure:\n"
+            "{\n"
+            '  "audit_summary": "High-level integrity verdict of the case record",\n'
+            '  "integrity_score": "e.g. 85%",\n'
+            '  "contradictions": [\n'
+            '    {\n'
+            '      "category": "date_inconsistency | amount_mismatch | property_mismatch | party_mismatch | factual_conflict",\n'
+            '      "severity": "critical | warning | minor",\n'
+            '      "title": "Short title of conflict",\n'
+            '      "source_a": "Document or note A stating X",\n'
+            '      "source_b": "Document or note B stating Y",\n'
+            '      "impact": "How opposing counsel could exploit this defect",\n'
+            '      "remedy": "Specific corrective step for advocate to harmonize before trial"\n'
+            '    }\n'
+            '  ],\n'
+            '  "evidence_matrix": [\n'
+            '    {\n'
+            '      "legal_issue": "Material fact / element to be established",\n'
+            '      "supporting_evidence": "Document or witness currently in file",\n'
+            '      "status": "proven | partial | missing | vulnerable",\n'
+            '      "evidence_gap": "Exact missing proof required under Bangladesh Evidence Act"\n'
+            '    }\n'
+            '  ]\n'
+            "}\n"
+            + ("Output all analysis and recommendations in natural legal Bengali (বাংলা)." if is_bn else "Output in clear legal English.")
+        )
+
+        prompt = f"MATTER DOSSIER TO AUDIT:\n\"\"\"\n{dossier}\n\"\"\"\n\nAudit all documents for internal contradictions and generate the Evidence Matrix."
+
+        contents = [{"role": "user", "parts": [{"text": prompt}]}]
+        result = await self._call_gemini_json(contents, system_instruction)
+
+        if not result:
+            return {
+                "status": "error",
+                "message": "Failed to audit matter consistency.",
+                "data": {}
+            }
+
+        return {
+            "status": "ok",
+            "data": result
+        }
+
+    async def generate_legal_memo(
+        self,
+        matter: Dict[str, Any],
+        question_presented: str,
+        language: str = "bn"
+    ) -> Dict[str, Any]:
+        """
+        Source-Linked Legal Memo Generator:
+        Generates a formal, rigorous advocate memorandum (IRAC format)
+        grounded strictly in the matter facts and Bangladesh statutory/precedential corpus.
+        """
+        is_bn = language.lower().startswith("bn")
+        dossier = self._extract_matter_dossier(matter)
+
+        system_instruction = (
+            "You are Justor AI's Senior Legal Research Counsel for Bangladesh Chambers.\n"
+            "Draft a comprehensive, formal Legal Memorandum addressing the Question Presented.\n"
+            "Adhere strictly to the facts in the Matter Dossier. Do NOT invent external facts.\n"
+            "Apply canonical Bangladesh statutory provisions (Bangladesh Code) and Supreme Court precedential case law.\n\n"
+            "Generate JSON with structure:\n"
+            "{\n"
+            '  "memo_title": "LEGAL MEMORANDUM: [Subject Matter]",\n'
+            '  "matter_title": "Case / Client title",\n'
+            '  "date": "Date of Memorandum",\n'
+            '  "question_presented": "Specific legal question analyzed",\n'
+            '  "short_answer": "Definitive 1-2 paragraph legal conclusion answering the question directly",\n'
+            '  "statement_of_facts": "Clean, chronologically ordered statement of material facts sourced from the matter record",\n'
+            '  "statutory_authorities": [\n'
+            '    {\n'
+            '      "act": "Name of Statute (e.g. Negotiable Instruments Act, 1881)",\n'
+            '      "section": "Section number",\n'
+            '      "rule": "Statutory rule and requirements",\n'
+            '      "application": "How it controls our client\'s position"\n'
+            '    }\n'
+            '  ],\n'
+            '  "judicial_precedents": [\n'
+            '    {\n'
+            '      "citation": "Case Citation (e.g. 54 DLR (AD) 12)",\n'
+            '      "parties": "Parties name",\n'
+            '      "ratio": "Principle of law laid down by Supreme Court",\n'
+            '      "application": "Relevance to current matter"\n'
+            '    }\n'
+            '  ],\n'
+            '  "legal_analysis": "Comprehensive IRAC analysis (Issue, Rule, Application to Facts, Analysis of Merits)",\n'
+            '  "counterarguments_and_rebuttals": "Anticipated arguments from the other side and how to defeat them",\n'
+            '  "conclusion_and_recommendations": "Actionable chamber steps, filings, and advice for the advocate"\n'
+            "}\n"
+            + ("Output all explanatory and legal analysis in authoritative legal Bengali (বাংলা)." if is_bn else "Output in authoritative legal English.")
+        )
+
+        prompt = (
+            f"QUESTION PRESENTED FOR OPINION:\n\"{question_presented}\"\n\n"
+            f"MATTER RECORD DOSSIER:\n\"\"\"\n{dossier}\n\"\"\"\n\n"
+            "Draft the complete formal Legal Memorandum."
+        )
+
+        contents = [{"role": "user", "parts": [{"text": prompt}]}]
+        result = await self._call_gemini_json(contents, system_instruction)
+
+        if not result:
+            return {
+                "status": "error",
+                "message": "Failed to generate legal memorandum.",
                 "data": {}
             }
 
