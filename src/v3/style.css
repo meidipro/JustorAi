@@ -9473,7 +9473,9 @@ button.exec-badge-authorities:hover {
   .evidence-dual-grid,
   .tactics-arguments-grid,
   .contra-sources-grid,
-  .hearing-type-select-row {
+  .hearing-type-select-row,
+  .hearing-authorities-row,
+  .witness-cards-grid {
     grid-template-columns: 1fr !important;
     flex-direction: column !important;
     align-items: stretch !important;
@@ -9489,6 +9491,25 @@ button.exec-badge-authorities:hover {
   }
   .evidence-matrix-table {
     min-width: 520px !important;
+  }
+  .legal-memo-document {
+    padding: 14px 12px !important;
+    border-radius: 10px !important;
+  }
+  .prayer-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  .prayer-header button,
+  .pack-footer-actions button,
+  .memo-action-bar button {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .prayer-quote {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
   }
   .dictaphone-composer-card,
   .chronology-composer,
