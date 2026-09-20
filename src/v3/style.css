@@ -9615,6 +9615,33 @@ button.exec-badge-authorities:hover {
   }
 }
 
+@media (max-width: 480px) {
+  .statute-callout-header,
+  .precedent-callout-header,
+  .source-snippet-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  .btn-jump-provision {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 6px 10px !important;
+  }
+  .provision-modal-drawer {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .audio-ethics-consent-banner {
+    font-size: 11px !important;
+    padding: 8px 10px !important;
+  }
+  .consent-checkbox-row label {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+}
+
 /* ── 4. WhatsApp Helpline Modal & Phone Simulator Responsive Tuning ─────────── */
 @media (max-width: 860px) {
   .whatsapp-modal-card {
