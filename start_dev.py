@@ -9,8 +9,15 @@ def main():
     print("\n[1/2] Starting FastAPI Backend on port 10000...")
     backend_env = os.environ.copy()
     
-    # Check if .venv exists
-    python_cmd = ".venv\\Scripts\\python.exe" if os.path.exists(".venv") else "python"
+    # Check if .venv exists (cross-platform)
+    venv_bin = os.path.join(".venv", "bin", "python")
+    venv_win = os.path.join(".venv", "Scripts", "python.exe")
+    if os.path.exists(venv_bin):
+        python_cmd = venv_bin
+    elif os.path.exists(venv_win):
+        python_cmd = venv_win
+    else:
+        python_cmd = "python"
     
     backend_process = subprocess.Popen(
         [python_cmd, "-m", "uvicorn", "backend.backend:app", "--host", "0.0.0.0", "--port", "10000", "--reload"],
