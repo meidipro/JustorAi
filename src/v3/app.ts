@@ -2576,8 +2576,9 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
     </section>
   ` : '';
 
+  const selectedIdx = Math.min(Math.max(0, state.selectedSource ?? 0), Math.max(0, sources.length - 1));
   const sourcesListHtml = sources.length ? `
-    <details class="sources-collapsible" style="margin: 18px 0;">
+    <details class="sources-collapsible" style="margin: 18px 0;" open>
       <summary class="sources-summary" style="cursor: pointer; font-weight: 600; font-size: 13.5px; color: #1E38C8; display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; transition: background 0.15s ease;">
         <span style="display: inline-flex; align-items: center; gap: 8px;">
           ${icon('book', 15)}
@@ -2590,13 +2591,16 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
       </summary>
       <div class="citation-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding: 12px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px;">
         ${sources.map((source, index) => `
-          <button type="button" data-result-source="${index}" class="citation-chip ${index === 0 ? 'active' : ''}" aria-label="Inspect authority [${index + 1}]: ${escapeHtml(source.authority || source.title)}">
+          <button type="button" data-result-source="${index}" class="citation-chip ${index === selectedIdx ? 'active' : ''}" aria-label="Inspect authority [${index + 1}]: ${escapeHtml(source.authority || source.title)}">
             <span>[${index + 1}]</span>
             <strong>${escapeHtml(source.authority || source.title)}</strong>
             ${source.provision ? `<span>— ${escapeHtml(source.provision)}</span>` : ''}
             ${verificationBadge(source.verificationStatus || source.status)}
           </button>
         `).join('')}
+      </div>
+      <div class="active-authority-panel-wrapper" style="margin-top: 14px;">
+        ${sourcePanel(sources[selectedIdx], 'result-source-panel')}
       </div>
     </details>
   ` : '';
@@ -3666,9 +3670,11 @@ document.addEventListener('click', (event) => {
     }
     if (idx >= 0) {
       state.selectedSource = idx;
+      const sourcesDetails = document.querySelector<HTMLDetailsElement>('.sources-collapsible');
+      if (sourcesDetails) sourcesDetails.open = true;
       document.querySelectorAll('[data-result-source]').forEach((button, i) => button.classList.toggle('active', i === idx));
       const panel = document.querySelector<HTMLElement>('[data-source-panel]');
-      if (panel) panel.outerHTML = sourcePanel(sources[idx]);
+      if (panel) panel.outerHTML = sourcePanel(sources[idx], 'result-source-panel');
       const s = sources[idx];
       void openProvisionModal(s.authority || s.title, s.provision || s.citation || '');
     }
@@ -3696,7 +3702,11 @@ document.addEventListener('click', (event) => {
     const sources = state.lastResearch?.authorities || [];
     if (idx >= 0 && idx < sources.length) {
       state.selectedSource = idx;
+      const sourcesDetails = document.querySelector<HTMLDetailsElement>('.sources-collapsible');
+      if (sourcesDetails) sourcesDetails.open = true;
       document.querySelectorAll('[data-result-source]').forEach((button, i) => button.classList.toggle('active', i === idx));
+      const panel = document.querySelector<HTMLElement>('[data-source-panel]');
+      if (panel) panel.outerHTML = sourcePanel(sources[idx], 'result-source-panel');
       const s = sources[idx];
       if (s) void openProvisionModal(s.authority || s.title, s.provision || s.citation || '');
     }
@@ -3870,6 +3880,8 @@ document.addEventListener('click', (event) => {
     state.selectedSource = index;
     document.querySelectorAll('[data-result-source]').forEach((button) => button.classList.toggle('active', button === resultSource));
     const s = state.lastResearch.authorities?.[index];
+    const panel = document.querySelector<HTMLElement>('[data-source-panel]');
+    if (s && panel) panel.outerHTML = sourcePanel(s, 'result-source-panel');
     if (s) void openProvisionModal(s.authority || s.title, s.provision || s.citation || '');
   }
   const proofSource = target.closest<HTMLButtonElement>('[data-proof-source]');

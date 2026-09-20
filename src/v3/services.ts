@@ -310,12 +310,19 @@ const normalizeResearch = (payload: Record<string, unknown>): ResearchResult => 
         summary: String(s.summary ?? s.detail ?? ''),
         status: String(s.status ?? 'completed'),
       }))
-    : [
-        { step: 1, title: 'Legal Intent & Statutory Routing', summary: 'Analyzed jurisdiction and targeted primary controlling Acts.', status: 'completed' },
-        { step: 2, title: 'Primary Authority Retrieval', summary: `Retrieved ${sources.length} verified statutory provisions and judicial precedents.`, status: 'completed' },
-        { step: 3, title: '7-Gate Deterministic Verification', summary: 'Verified quote exactness, 2026 amendment rules, and primary badges.', status: 'passed' },
-        { step: 4, title: 'Grounded Legal Synthesis', summary: 'Generated structured legal breakdown strictly within verified sources.', status: 'completed' },
-      ];
+    : sources.length > 0
+      ? [
+          { step: 1, title: 'Statutory Jurisdiction & Intent', summary: 'Parsed query parameters and identified applicable Bangladesh legal framework.', status: 'completed' },
+          { step: 2, title: 'Primary Authority Retrieval', summary: `Retrieved ${sources.length} canonical statutory section${sources.length === 1 ? '' : 's'} and judicial precedent records.`, status: 'completed' },
+          { step: 3, title: 'Authority Grounding', summary: `Anchored legal analysis to ${sources.length} verified primary source${sources.length === 1 ? '' : 's'}.`, status: 'completed' },
+          { step: 4, title: 'Legal Synthesis', summary: 'Synthesized structured legal guidance strictly grounded in retrieved authorities.', status: 'completed' },
+        ]
+      : [
+          { step: 1, title: 'Inquiry Classification', summary: 'Analyzed query context and general legal principles.', status: 'completed' },
+          { step: 2, title: 'Primary Authority Check', summary: 'No direct statutory provisions indexed in local repository for this exact query.', status: 'unverified' },
+          { step: 3, title: 'Verification Notice', summary: 'Unanchored response — practitioners should verify with primary legal gazettes.', status: 'unverified' },
+          { step: 4, title: 'Informational Synthesis', summary: 'Generated general guidance without binding authority certification.', status: 'completed' },
+        ];
 
   return {
     shortAnswer: String(payload.shortAnswer ?? payload.answer ?? payload.response ?? ''),

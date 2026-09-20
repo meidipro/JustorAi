@@ -1288,7 +1288,7 @@ ACT_NAME_MAP = {
     r'trademarks? act|trademark 2009': 'Trademarks Act, 2009',
     r'penal code|\bipc\b|\bpc\b|defamation|দণ্ডবিধি|দন্ডবিধি': 'The Penal Code, 1860',
     r'code of criminal procedure|\bcrpc\b|ফৌজদারি|ফৌজদারী|সিআরপিসি|পুলিশ হেফাজত|রিমান্ড|এজাহার|এফআইআর': 'The Code of Criminal Procedure, 1898',
-    r'code of civil procedure|\bcpc\b|দেওয়ানী|দেওয়ানী|সিপিসি|অস্থায়ী নিষেধাজ্ঞা|আরজি প্রত্যাখ্যান': 'The Code of Civil Procedure, 1908',
+    r'code of civil procedure|\bcpc\b|দেওয়ানী|দেওয়ানী|সিপিসি|অস্থায়ী নিষেধাজ্ঞা|অস্থায়ী নিষেধাজ্ঞা|অন্তর্বর্তীকালীন নিষেধাজ্ঞা|আরজি প্রত্যাখ্যান|আদেশ ৩৯|আদেশ ৭|order 39|order xxxix|order vii|order 7': 'The Code of Civil Procedure, 1908',
     r'constitution|সংবিধান|অনুচ্ছেদ|রিট পিটিশন|মৌলিক অধিকার': "The Constitution of the People's Republic of Bangladesh",
     r'evidence act|সাক্ষ্য আইন': 'The Evidence Act, 1872',
     r'limitation act|তামাদি|তামাদী': 'The Limitation Act, 1908',
@@ -1299,10 +1299,10 @@ ACT_NAME_MAP = {
     r'consumers?.?right|ভোক্তা অধিকার': "Consumers' Right Protection Act, 2009",
     r'hindu law|hindu succession|hindu woman|hindu female|hindu widow|hindu women.*property|dayabhaga|mitakshara': "The Hindu Women's Rights to Property Act, 1937",
     r'civil courts? act|classes of civil courts|jurisdiction of civil court|assistant judge|subordinate judge|joint district judge|property dispute.*crore|original civil jurisdiction': 'The Civil Courts Act, 1887',
-    r'specific relief act|\bsra\b|সুনির্দিষ্ট প্রতিকার': 'The Specific Relief Act, 1877',
+    r'specific relief act|\bsra\b|সুনির্দিষ্ট প্রতিকার|চিরস্থায়ী নিষেধাজ্ঞা|চিরস্থায়ী নিষেধাজ্ঞা|বাধ্যতামূলক নিষেধাজ্ঞা|দখল পুনরুদ্ধার|বেদখল|অনধিকার দখল|ধারা ৯|ধারা ৮|ধারা ৪২|section 9 specific relief|recovery of possession': 'The Specific Relief Act, 1877',
     r'contract act|চুক্তি আইন': 'The Contract Act, 1872',
     r'registration act|রেজিস্ট্রেশন|নিবন্ধন আইন': 'The Registration Act, 1908',
-    r'negotiable instruments? act|\bni act\b|হস্তান্তরযোগ্য দলিল|চেক ডিজঅনার|চেক বাউন্স': 'The Negotiable Instruments Act, 1881',
+    r'negotiable instruments? act|\bni act\b|হস্তান্তরযোগ্য দলিল|চেক ডিজঅনার|চেক বাউন্স|dishonour of cheque|cheque bounce|section 138|ধারা ১৩৮': 'The Negotiable Instruments Act, 1881',
     r'ict act|information.*communication.*technology': 'The Information & Communication Technology Act, 2006',
     r'partnership act|অংশীদারি আইন': 'The Partnership Act, 1932',
     r'sale of goods act|পণ্য বিক্রয়|পণ্য বিক্রয়': 'The Sale of Goods Act, 1930',
@@ -1316,15 +1316,66 @@ ACT_NAME_MAP = {
     r'suits valuation act': 'The Suits Valuation Act, 1887',
 }
 
+_ROMAN_NUMERALS = {
+    'i': 1, 'ii': 2, 'iii': 3, 'iv': 4, 'v': 5,
+    'vi': 6, 'vii': 7, 'viii': 8, 'ix': 9, 'x': 10,
+    'xi': 11, 'xii': 12, 'xiii': 13, 'xiv': 14, 'xv': 15,
+    'xvi': 16, 'xvii': 17, 'xviii': 18, 'xix': 19, 'xx': 20,
+    'xxi': 21, 'xxii': 22, 'xxiii': 23, 'xxiv': 24, 'xxv': 25,
+    'xxvi': 26, 'xxvii': 27, 'xxviii': 28, 'xxix': 29, 'xxx': 30,
+    'xxxi': 31, 'xxxii': 32, 'xxxiii': 33, 'xxxiv': 34, 'xxxv': 35,
+    'xxxvi': 36, 'xxxvii': 37, 'xxxviii': 38, 'xxxix': 39, 'xl': 40
+}
+
+def _parse_order_rule(text: str) -> list[str]:
+    results = []
+    # Match English / Roman Orders: e.g. "Order 39 Rule 1", "Order XXXIX", "Order 7"
+    order_pattern = (
+        r'(?:order|\bO\.)\s*([0-9]+|[IVXLCDMivxlcdm]+)'
+        r'(?:\s*(?:rule|\bR\.)\s*([0-9]+[A-Za-z]?))?'
+    )
+    for m in re.finditer(order_pattern, text, re.IGNORECASE):
+        raw_order = m.group(1).lower()
+        order_num = _ROMAN_NUMERALS.get(raw_order, raw_order)
+        rule_num = m.group(2)
+        if rule_num:
+            results.append(f"Order {order_num} Rule {rule_num}")
+            results.append(f"Order {order_num}")
+        else:
+            results.append(f"Order {order_num}")
+
+    # Match Bengali Orders: e.g. "আদেশ ৩৯", "আদেশ ৩৯ নিয়ম ১"
+    bn_digits = str.maketrans("০১২৩৪৫৬৭৮৯", "0123456789")
+    bn_order_pattern = (
+        r'(?:আদেশ|অর্ডার)\s*([০-৯0-9]+)'
+        r'(?:\s*(?:নিয়ম|বিধি|রুল)\s*([০-৯0-9]+[A-Za-z]?))?'
+    )
+    for m in re.finditer(bn_order_pattern, text):
+        order_num = m.group(1).translate(bn_digits)
+        rule_num = m.group(2).translate(bn_digits) if m.group(2) else None
+        if rule_num:
+            results.append(f"Order {order_num} Rule {rule_num}")
+            results.append(f"Order {order_num}")
+        else:
+            results.append(f"Order {order_num}")
+    return results
+
 async def classify_query(query: str) -> dict:
     from backend.legal_normalize import normalize_bengali_text
     norm_query = normalize_bengali_text(query)
 
     section_pattern = (
-        r"(?:section|sec\.?|dhara|\u09a7\u09be\u09b0\u09be|article|\u0985\u09a8\u09c1\u099a\u09cd\u099b\u09c7\u09a6|rule)"
+        r"(?:section|sec\.?|dhara|\u09a7\u09be\u09b0\u09be|article|\u0985\u09a8\u09c1\u099a\u09cd\u099b\u09c7\u09a6|rule|\u09a8\u09bf\u09af\u09bc\u09ae|\u09b0\u09c1\u09b2)"
         r"\s*(\d+[A-Za-z]?)"
     )
     sections = re.findall(section_pattern, norm_query, re.IGNORECASE)
+    
+    # Check for Order and Rule provisions (CPC)
+    orders = _parse_order_rule(query) + _parse_order_rule(norm_query)
+    for o in orders:
+        if o not in sections:
+            sections.insert(0, o)
+
     if not sections:
         sections = re.findall(r'\b(\d+[A-Za-z]?)\b', norm_query)
 
@@ -1332,13 +1383,13 @@ async def classify_query(query: str) -> dict:
 {{
   "is_personal_law_question": true|false,
   "personal_law": "Muslim"|"Hindu"|"Christian"|"General"|null,
-  "legal_domain": "Inheritance"|"Tenancy"|"Property"|"Criminal Procedure"|"Tax"|"Other",
+  "legal_domain": "Inheritance"|"Tenancy"|"Property"|"Civil Procedure"|"Criminal Procedure"|"Commercial & Banking"|"Tax"|"Constitutional"|"Other",
   "candidate_acts": ["Act names actually relevant to answering this"]
 }}
-A question is NOT a personal-law question just because it mentions a
-relationship (grandfather, wife) or a religion in passing. "I am Muslim,
-my grandfather gifted me land" is a property/registration question -
-the legal issue is gift formality, not religious inheritance.
+Guidance:
+- "জমিতে অনধিকার প্রবেশ ঠেকাতে নিষেধাজ্ঞা" (injunction against trespass on land) or temporary injunction is a "Civil Procedure" or "Property" issue under The Code of Civil Procedure, 1908 (Order XXXIX / Order 39) or The Specific Relief Act, 1877. It is NOT Criminal Procedure.
+- Cheque dishonour or bounce is "Commercial & Banking" under The Negotiable Instruments Act, 1881.
+- A question is NOT a personal-law question just because it mentions a relationship or religion in passing.
 Question: {norm_query}"""
 
     classification = {}
@@ -1393,7 +1444,45 @@ Question: {norm_query}"""
         detected_act = classification["candidate_acts"][0]
 
     q_lower = query.lower()
+    norm_lower = norm_query.lower()
+
     # Domain Topic Anchors for high-priority legal questions
+    # 1. Injunctions & Civil Trespass / Dispossession
+    if any(k in norm_lower or k in q_lower for k in [
+        "নিষেধাজ্ঞা", "injunction", "order 39", "order xxxix", "আদেশ ৩৯",
+        "অস্থায়ী নিষেধাজ্ঞা", "অস্থায়ী নিষেধাজ্ঞা", "interim injunction", "temporary injunction"
+    ]):
+        if any(k in norm_lower or k in q_lower for k in ["চিরস্থায়ী", "চিরস্থায়ী", "perpetual"]):
+            detected_act = "The Specific Relief Act, 1877"
+            if "54" not in sections:
+                sections.insert(0, "54")
+            classification["legal_domain"] = "Property"
+        else:
+            detected_act = "The Code of Civil Procedure, 1908"
+            if not any("Order 39" in s or "39" in s for s in sections):
+                sections.insert(0, "Order 39")
+            classification["legal_domain"] = "Civil Procedure"
+
+    # 2. Dispossession / Section 9 Specific Relief Act
+    if any(k in norm_lower or k in q_lower for k in [
+        "বেদখল", "দখল পুনরুদ্ধার", "অনধিকার দখল", "dispossession", "recovery of possession", "section 9", "ধারা ৯"
+    ]) and ("crpc" not in q_lower and "145" not in q_lower):
+        if not detected_act or detected_act == "The Code of Criminal Procedure, 1898":
+            detected_act = "The Specific Relief Act, 1877"
+        if "9" not in sections:
+            sections.insert(0, "9")
+        if classification.get("legal_domain") == "Criminal Procedure":
+            classification["legal_domain"] = "Property"
+
+    # 3. NI Act Cheque Dishonour
+    if any(k in norm_lower or k in q_lower for k in [
+        "চেক ডিজঅনার", "চেক বাউন্স", "cheque dishonour", "dishonour of cheque", "cheque bounce", "ni act", "138", "ধারা ১৩৮"
+    ]):
+        detected_act = "The Negotiable Instruments Act, 1881"
+        classification["legal_domain"] = "Commercial & Banking"
+        if "138" not in sections:
+            sections.insert(0, "138")
+
     if "grandson" in q_lower or "predeceased" in q_lower or "son of another son" in q_lower:
         detected_act = "The Muslim Family Laws Ordinance, 1961"
         if "4" not in sections:
@@ -1444,6 +1533,15 @@ Question: {norm_query}"""
         if "4" not in sections:
             sections.insert(0, "4")
 
+    # Injunction protection: ensure civil injunction is never tagged as Criminal Procedure
+    legal_domain = classification.get("legal_domain", "Other")
+    if detected_act == "The Code of Civil Procedure, 1908" and legal_domain in ("Criminal Procedure", "Other"):
+        legal_domain = "Civil Procedure"
+    elif detected_act == "The Specific Relief Act, 1877" and legal_domain in ("Criminal Procedure", "Other"):
+        legal_domain = "Property"
+    elif detected_act == "The Negotiable Instruments Act, 1881" and legal_domain in ("Criminal Procedure", "Other"):
+        legal_domain = "Commercial & Banking"
+
     return {
         "is_dlr_request": any(k in query.lower() for k in
             ["dlr", "case law", "judgment", "\u09a8\u099c\u09c0\u09b0", "precedent", "court held"]),
@@ -1454,7 +1552,7 @@ Question: {norm_query}"""
         "detected_act": detected_act,
         "personal_law": classification.get("personal_law"),
         "is_personal_law_question": classification.get("is_personal_law_question", False),
-        "legal_domain": classification.get("legal_domain", "Other")
+        "legal_domain": legal_domain
     }
 
 def _act_matches(chunk_act: str, detected: str) -> bool:

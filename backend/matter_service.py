@@ -387,11 +387,27 @@ class JustorMatterService:
             "You are Justor AI's Legal Chronology & Limitation Specialist for Bangladesh Law.\n"
             "Extract all chronological events, dates, agreements, notices, and occurrences from this matter text:\n"
             f"\"\"\"\n{events_text}\n\"\"\"\n\n"
+            "MANDATORY STATUTORY AUTHORITIES & TIME LIMITS TO ENFORCE:\n"
+            "1. Negotiable Instruments Act, 1881 (Section 138 timeline & 2026 Amendment):\n"
+            "   - Bank Memo: Cheque must be presented within 6 months of issue date.\n"
+            "   - Statutory Notice: Legal notice in writing must be served within 30 days of receiving the dishonour memo (s.138(1)(b)).\n"
+            "   - 15-Day Payment Window & PREMATURE FILING BAR (s.138(1)(c)): The drawer has 15 full days from receipt of notice to pay. "
+            "CAUSE OF ACTION ARISES ONLY ON DAY 16. A complaint filed before the 15-day period expires is legally premature, void ab initio, and liable to be quashed under s.561A CrPC. You MUST flag any premature filing as a fatal defect!\n"
+            "   - Complaint Deadline: Complaint must be filed within 30 days after the 15-day notice window expires (s.141(b)).\n"
+            "   - 2026 NI Act Amendment (Tk 5 Lakh Threshold & ADR): For cheque claims up to BDT 5,00,000 (Tk 5 lakh), mandatory ADR/mediation and summary recovery procedure applies. Flag whether claim is above/below Tk 5 lakh.\n"
+            "2. Code of Civil Procedure, 1908 (Order XXXIX Rules 1, 2, 3 - Injunctions):\n"
+            "   - Assess the 3-part test for temporary injunction: (a) Prima facie case, (b) Balance of convenience/inconvenience, (c) Irreparable loss/injury.\n"
+            "   - Order XXXIX Rule 3: Ex-parte ad-interim injunction requires showing immediate irreparable harm, otherwise prior notice is mandatory.\n"
+            "3. Specific Relief Act, 1877 (Section 9 Dispossession):\n"
+            "   - Summary suit for recovery of possession must be filed within 6 MONTHS from the date of dispossession without consent. Title is not investigated.\n"
+            "4. The Limitation Act, 1908:\n"
+            "   - Article 113/115: 3 years for suit for specific performance or breach of contract.\n"
+            "   - Article 142/144: 12 years for suit for possession based on title or adverse possession.\n\n"
             "Tasks:\n"
             "1. Identify every date or time milestone mentioned (even relative ones like 'two weeks later').\n"
             "2. Order all events chronologically from earliest to most recent.\n"
-            "3. Tag each event's importance: 'critical' (e.g. cheque dishonour, notice served, suit filing, dispossession) or 'standard'.\n"
-            "4. Identify any STATUTORY LIMITATION RISKS under Bangladesh law (e.g., 30 days to serve NI Act notice, 30 days to file NI Act complaint after notice expiry, 6 months for s.9 Specific Relief Act, 3 years for contract breach).\n\n"
+            "3. Tag each event's importance: 'critical' (e.g. cheque dishonour, notice served, premature filing, suit filing, dispossession) or 'standard'.\n"
+            "4. Calculate exact statutory limitation windows and identify any STATUTORY LIMITATION RISKS or DEFECTS (especially premature NI Act filings or s.9 expiry).\n\n"
             "Return valid JSON with keys:\n"
             "{\n"
             '  "matter_title": "string",\n'
@@ -407,13 +423,13 @@ class JustorMatterService:
             '  ],\n'
             '  "limitation_alerts": [\n'
             '    {\n'
-            '      "provision": "Act and Section name",\n'
-            '      "rule": "Statutory time limit rule",\n'
-            '      "status": "expired | urgent | active | compliant",\n'
-            '      "warning": "Detailed risk advice"\n'
+            '      "provision": "Act and Section / Order name",\n'
+            '      "rule": "Statutory time limit or legal test",\n'
+            '      "status": "expired | urgent | active | compliant | premature_defect",\n'
+            '      "warning": "Detailed risk advice (including 2026 amendment threshold & premature bar if applicable)"\n'
             '    }\n'
             '  ],\n'
-            '  "summary": "2-3 sentence overview of timeline"\n'
+            '  "summary": "2-3 sentence overview of timeline and statutory standing"\n'
             "}"
         )
 
