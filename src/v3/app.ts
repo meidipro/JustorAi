@@ -166,6 +166,9 @@ const icon = (name: string, size = 20): string => {
     upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
     mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>',
     globe: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    briefcase: '<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>',
+    whatsapp: '<path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/>',
+    fileText: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] ?? paths.source}</svg>`;
 };
@@ -442,11 +445,11 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
     <button class="new-research-capsule" type="button" data-action="new-research">
       ${icon('plus', 16)} <span>${role === 'professional' ? 'New Research' : role === 'student' ? 'New Study Chat' : 'New Legal Inquiry'}</span>
     </button>
-    <button class="new-research-capsule" type="button" data-action="open-matter-modal" style="margin-top: 6px; background: linear-gradient(135deg, #1E293B, #0F172A); border: 1px solid rgba(56, 189, 248, 0.3); color: #38BDF8;">
-      🧠 <span>${state.language === 'bn' ? 'মোকদ্দমা ও ডিকটাফোন' : 'Matter Intelligence'}</span>
+    <button class="new-research-capsule matter-capsule-btn" type="button" data-action="open-matter-modal">
+      ${icon('briefcase', 15)} <span>${state.language === 'bn' ? 'মোকদ্দমা ও চেম্বার' : 'Chamber OS · Matters'}</span>
     </button>
-    <button class="new-research-capsule" type="button" data-action="open-whatsapp-modal" style="margin-top: 6px; background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.3); color: #25D366;">
-      💬 <span>${state.language === 'bn' ? 'হোয়াটসঅ্যাপ হেল্পলাইন' : 'WhatsApp Helpline'}</span>
+    <button class="new-research-capsule whatsapp-capsule-btn" type="button" data-action="open-whatsapp-modal">
+      ${icon('whatsapp', 15)} <span>${state.language === 'bn' ? 'হোয়াটসঅ্যাপ হেল্পলাইন' : 'WhatsApp Helpline'}</span>
     </button>
     <nav class="sidebar-main-nav" aria-label="${localizedRoleLabel(role)} navigation">
       ${items.map((item) => route(item.href, `${icon(item.icon, 18)} <span>${item.label}</span>`, item.label === active ? 'active' : '')).join('')}
@@ -567,11 +570,11 @@ const workspaceTopbar = (role: Role, title?: string): string => {
     </div>
     <span class="workspace-topbar-role">${localizedRoleLabel(role)}${title ? ` <span class="topbar-thread-title">&middot; ${escapeHtml(title)}</span>` : ''}</span>
     <div class="workspace-topbar-actions">
-      <button class="topbar-matter-btn" type="button" data-action="open-matter-modal" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও ডিকটাফোন' : 'Matter Intelligence Workspace'}" style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); color: #38BDF8; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
-        🧠 <span>${state.language === 'bn' ? 'মোকদ্দমা' : 'Matters'}</span>
+      <button class="topbar-matter-btn" type="button" data-action="open-matter-modal" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও চেম্বার ওএস' : 'Chamber OS · Legal Workspace'}">
+        ${icon('briefcase', 13)} <span>${state.language === 'bn' ? 'চেম্বার ওএস' : 'Chamber OS'}</span>
       </button>
-      <button class="topbar-wa-btn" type="button" data-action="open-whatsapp-modal" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন' : 'WhatsApp Legal Helpline'}" style="background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.25); color: #25D366; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
-        💬 <span>WhatsApp</span>
+      <button class="topbar-wa-btn" type="button" data-action="open-whatsapp-modal" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন' : 'WhatsApp Legal Helpline'}">
+        ${icon('whatsapp', 13)} <span>WhatsApp</span>
       </button>
       <span class="credit-counter-pill ${isVip ? 'credit-pill-vip' : ''}" data-credit-pill title="${isVip ? (state.language === 'bn' ? 'আনলিমিটেড ভিআইপি অ্যাক্সেস' : 'Unlimited VIP Access') : (state.language === 'bn' ? 'দৈনিক ক্রেডিট' : 'Daily credits')}" ${isVip ? 'style="background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.35); color: #7C3AED; font-weight: 600;"' : ''}>
         ⬡ <span data-credit-remaining>${isVip ? '∞' : dailyLimit}</span>/<span data-credit-limit>${isVip ? '∞' : dailyLimit}</span>
@@ -722,11 +725,11 @@ const renderBottomChatBar = (role: Role, placeholder: string, _quickActions?: st
       <form class="chat-floating-composer" data-research-form data-role="${role}" ${context ? `data-context-id="${escapeHtml(context.id)}" data-context-title="${escapeHtml(context.title)}" data-context-topic="${escapeHtml(context.topic)}"` : ''}>
         <div class="composer-input-box">
           <div class="composer-left-tools">
-            <button type="button" class="composer-tool-btn composer-matter-btn" data-action="open-matter-modal" aria-label="Open Matter Intelligence" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও ডিকটাফোন (Matter Intelligence)' : 'Matter Intelligence & Dictaphone'}">
-              🧠
+            <button type="button" class="composer-tool-btn composer-matter-btn" data-action="open-matter-modal" aria-label="Open Chamber OS" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও চেম্বার ওএস (Chamber OS)' : 'Chamber OS · Matter Workspace & Dictaphone'}">
+              ${icon('briefcase', 16)}
             </button>
-            <button type="button" class="composer-tool-btn composer-wa-btn" data-action="open-whatsapp-modal" aria-label="Open WhatsApp Helpline" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন বট' : 'WhatsApp Legal Helpline Bot'}" style="color: #25D366;">
-              💬
+            <button type="button" class="composer-tool-btn composer-wa-btn" data-action="open-whatsapp-modal" aria-label="Open WhatsApp Helpline" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন বট' : 'WhatsApp Legal Helpline Bot'}">
+              ${icon('whatsapp', 16)}
             </button>
             <button type="button" class="composer-tool-btn composer-attach-btn" data-action="open-ocr-modal" aria-label="Upload document for OCR" title="${state.language === 'bn' ? 'দলিল বা রায় আপলোড করুন (Google Vision OCR)' : 'Upload Deed / FIR / Order (Vision OCR)'}">
               ${icon('upload', 17)}

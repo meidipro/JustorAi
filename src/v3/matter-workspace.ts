@@ -284,6 +284,39 @@ export function setActiveMatterId(id: string): void {
   localStorage.setItem(ACTIVE_MATTER_KEY, id);
 }
 
+function cIcon(name: string, size = 16, className = ''): string {
+  const cls = className ? ` class="${className}"` : '';
+  const paths: Record<string, string> = {
+    scales: '<path d="M12 3v18M7 21h10M4 7h16M6 7 3 13h6L6 7Zm12 0-3 6h6l-3-6Z"/>',
+    gavel: '<path d="m14 13 5 5M7 6l4 4M3 10l7-7 4 4-7 7zM14 17l3-3M2 21h8M14 21h8"/>',
+    memo: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2zM9 7h6M9 11h6"/>',
+    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>',
+    headphones: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+    vault: '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    sparkle: '<path d="m12 3 1.912 5.885L20 10.8l-5.088 3.915L16.824 21 12 16.915 7.176 21l1.912-6.285L4 10.8l6.088-1.915z"/>',
+    copy: '<rect width="13" height="13" x="9" y="9" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    alert: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    pen: '<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+    book: '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+    folder: '<path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>',
+    calendar: '<rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    fileText: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
+    quote: '<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>',
+  };
+  return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"${cls}>${paths[name] || paths.doc}</svg>`;
+}
+
 function escapeHtml(str: string): string {
   return (str || '')
     .replace(/&/g, '&amp;')
@@ -395,19 +428,29 @@ export function openMatterWorkspaceModal(
         <!-- Header -->
         <div class="matter-modal-header">
           <div class="matter-header-left">
-            <span class="matter-badge-kicker">
-              🧠 Justor Chamber Intelligence Suite 2.0 · Bangladesh
-            </span>
+            <div class="matter-brand-badge-row">
+              <span class="matter-badge-kicker">
+                ${cIcon('scales', 13)}
+                <span>JUSTOR CHAMBER OS</span>
+              </span>
+              <span class="matter-security-pill">
+                ${cIcon('shield', 11)}
+                <span>CHAPTER II ETHICS COMPLIANT</span>
+              </span>
+            </div>
             <div class="matter-selector-row">
-              <select id="matter-select" class="matter-select">
-                ${matters.map((m) => `
-                  <option value="${m.id}" ${m.id === currentMatter.id ? 'selected' : ''}>
-                    📁 ${escapeHtml(m.title)} (${escapeHtml(m.clientName || 'General')})
-                  </option>
-                `).join('')}
-              </select>
-              <button type="button" class="button button-small button-outline" id="new-matter-btn">
-                ➕ ${isBn ? 'নতুন মোকদ্দমা' : 'New Matter'}
+              <div class="matter-select-container">
+                <select id="matter-select" class="matter-select">
+                  ${matters.map((m) => `
+                    <option value="${m.id}" ${m.id === currentMatter.id ? 'selected' : ''}>
+                      ${escapeHtml(m.title)} · ${escapeHtml(m.clientName || 'General Client')}
+                    </option>
+                  `).join('')}
+                </select>
+              </div>
+              <button type="button" class="button button-small button-outline new-docket-btn" id="new-matter-btn">
+                ${cIcon('plus', 13)}
+                <span>${isBn ? 'নতুন মোকদ্দমা' : 'New Docket'}</span>
               </button>
             </div>
           </div>
@@ -417,28 +460,28 @@ export function openMatterWorkspaceModal(
         <!-- Navigation Tabs Bar -->
         <div class="matter-tabs-bar">
           <button type="button" class="matter-tab-btn ${currentTab === 'dictaphone' ? 'active' : ''}" data-tab="dictaphone">
-            🎙️ ${isBn ? 'ডিকটাফোন' : 'Dictaphone'}
+            ${cIcon('mic', 15)} <span>${isBn ? 'ডিকটাফোন' : 'Dictaphone'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'consultation' ? 'active' : ''}" data-tab="consultation">
-            🎧 ${isBn ? 'পরামর্শ অডিও' : 'Consultation Audio'}
+            ${cIcon('headphones', 15)} <span>${isBn ? 'পরামর্শ অডিও' : 'Consultations'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'summarizer' ? 'active' : ''}" data-tab="summarizer">
-            📄 ${isBn ? 'কেস সামারি (৬০ সে.)' : 'Case in 60s'}
+            ${cIcon('doc', 15)} <span>${isBn ? 'কেস সামারি' : 'Case in 60s'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'chronology' ? 'active' : ''}" data-tab="chronology">
-            ⏳ ${isBn ? 'কালপঞ্জি ও তামাদি' : 'Chronology'}
+            ${cIcon('clock', 15)} <span>${isBn ? 'কালপঞ্জি ও তামাদি' : 'Chronology'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'hearing_pack' ? 'active' : ''}" data-tab="hearing_pack">
-            🏛️ ${isBn ? 'হিয়ারিং প্যাক' : 'Hearing Pack'}
+            ${cIcon('gavel', 15)} <span>${isBn ? 'হিয়ারিং স্ট্র্যাটেজি' : 'Hearing Strategy'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'consistency' ? 'active' : ''}" data-tab="consistency">
-            ⚖️ ${isBn ? 'সঙ্গতি ও এভিডেন্স' : 'Consistency & Proof'}
+            ${cIcon('scales', 15)} <span>${isBn ? 'সঙ্গতি ও প্রুফ' : 'Proof Audit'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'legal_memo' ? 'active' : ''}" data-tab="legal_memo">
-            📝 ${isBn ? 'লিগ্যাল মেমো' : 'Legal Memo'}
+            ${cIcon('memo', 15)} <span>${isBn ? 'লিগ্যাল মেমো' : 'Legal Memo'}</span>
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'overview' ? 'active' : ''}" data-tab="overview">
-            📁 ${isBn ? 'ফাইল ভল্ট' : 'Matter Vault'}
+            ${cIcon('vault', 15)} <span>${isBn ? 'চেম্বার ভল্ট' : 'Chamber Vault'}</span>
           </button>
         </div>
 
@@ -454,11 +497,16 @@ export function openMatterWorkspaceModal(
 
   const renderTabBody = (): string => {
     // ── 1. DICTAPHONE ──
+    // ── 1. DICTAPHONE & QUICK VOICE NOTES ──
     if (currentTab === 'dictaphone') {
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>🎙️ ${isBn ? 'আইনজীবীর ভয়েস ডিকটাফোন' : 'Lawyer Chambers Dictaphone'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('mic', 12)}
+              <span>CHAMBERS AUDIO & NOTE INTELLIGENCE</span>
+            </div>
+            <strong>${isBn ? 'আইনজীবীর ভয়েস ডিকটাফোন' : 'Lawyer Chambers Dictaphone & Brief Builder'}</strong>
             <p>${isBn 
               ? 'ক্লায়েন্টের সাথে বৈঠকের পর বা আদালত থেকে বের হয়ে দ্রুত মুখে বলুন। Justor AI পক্ষগণের নাম, টাকার অংক, তারিখ, এনআই অ্যাক্ট বা প্যানেল কোডের ধারা ও পরবর্তী পদক্ষেপ সাজিয়ে দেবে।'
               : 'Dictate or speak quick notes after a client conference or hearing. Justor AI automatically extracts parties, claim amounts, dates, relevant Bangladesh statutes, and immediate next actions.'}
@@ -467,15 +515,20 @@ export function openMatterWorkspaceModal(
 
           <div class="dictaphone-composer-card">
             <div class="dictaphone-input-header">
-              <span class="composer-label">📝 ${isBn ? 'আপনার মুখে বলা বিবরণ বা নোট:' : 'Dictated or Typed Facts:'}</span>
+              <span class="composer-label">
+                ${cIcon('pen', 13)}
+                <span>${isBn ? 'আপনার মুখে বলা বিবরণ বা নোট:' : 'Dictated or Typed Facts:'}</span>
+              </span>
               <button type="button" class="dictate-mic-btn" id="dictate-mic-toggle">
-                🎤 <span>${isBn ? 'ভয়েস টাইপিং' : 'Start Speaking'}</span>
+                ${cIcon('mic', 13)}
+                <span>${isBn ? 'ভয়েস টাইপিং' : 'Start Speaking'}</span>
               </button>
             </div>
             <textarea id="dictate-text" class="dictate-textarea" rows="4" placeholder="${isBn ? 'উদাহরণ: মক্কেল রহিম উদ্দিন আজ এসেছিলেন। পূবালী ব্যাংকের ৫ লাখ টাকার চেক বাউন্স করেছে। গত ১২ আগস্ট লিগ্যাল নোটিশ পাঠিয়েছিলেন...' : 'Example: Client Rahim came today regarding a cheque dishonour matter. Cheque amount 5 lakh taka, Pubali bank, notice served on 12 August...'}"></textarea>
             <div class="dictate-actions">
               <button type="button" class="button button-primary" id="dictate-submit-btn">
-                ⚡ ${isBn ? 'স্ট্রাকচার্ড নোট তৈরি করুন' : 'Structure into Matter Note'}
+                ${cIcon('sparkle', 13)}
+                <span>${isBn ? 'স্ট্রাকচার্ড নোট তৈরি করুন' : 'Structure Matter Record'}</span>
               </button>
             </div>
           </div>
@@ -487,31 +540,48 @@ export function openMatterWorkspaceModal(
 
           <!-- Existing Notes List -->
           <div class="matter-notes-list">
-            <h4>📋 ${isBn ? 'সংরক্ষিত ডিকটেশন ও নোটসমূহ' : 'Saved Dictation Notes'} (${currentMatter.notes.length})</h4>
+            <div class="section-badge-header">
+              <span class="sec-num">${currentMatter.notes.length}</span>
+              <h5 class="sec-title">${isBn ? 'সংরক্ষিত ডিকটেশন ও নোটসমূহ' : 'Saved Dictation Records'}</h5>
+            </div>
             ${currentMatter.notes.length === 0 ? `<p class="empty-hint">${isBn ? 'এখনো কোনো নোট সংরক্ষণ করা হয়নি।' : 'No dictation notes saved yet.'}</p>` : ''}
             ${currentMatter.notes.map((n, idx) => `
               <div class="matter-note-card">
                 <div class="note-card-header">
-                  <strong>#${idx + 1} · ${escapeHtml(n.data.client_name || currentMatter.clientName || 'Note')} — ${escapeHtml(n.data.matter_type || 'General')}</strong>
+                  <div class="note-title-wrap">
+                    <span class="note-idx-pill">#${idx + 1}</span>
+                    <strong class="note-client-title">${escapeHtml(n.data.client_name || currentMatter.clientName || 'Note')} — ${escapeHtml(n.data.matter_type || 'General')}</strong>
+                  </div>
                   <span class="note-date">${new Date(n.createdAt).toLocaleDateString()}</span>
                 </div>
                 <p class="note-summary"><strong>${isBn ? 'সারসংক্ষেপ:' : 'Dispute Summary:'}</strong> ${escapeHtml(n.data.dispute_summary || n.rawText)}</p>
-                ${n.data.claim_amount ? `<p class="note-pill">💰 ${isBn ? 'দাবীকৃত অংক:' : 'Claim Amount:'} <strong>${escapeHtml(n.data.claim_amount)}</strong></p>` : ''}
+                ${n.data.claim_amount ? `
+                  <div class="note-financial-row">
+                    <span class="financial-chip">
+                      ${cIcon('scales', 12)}
+                      <span>${isBn ? 'দাবীকৃত অংক:' : 'Claim Amount:'} <strong>${escapeHtml(n.data.claim_amount)}</strong></span>
+                    </span>
+                  </div>
+                ` : ''}
                 ${n.data.statutory_provisions?.length ? `
                   <div class="note-sections">
-                    <span>⚖️ ${isBn ? 'প্রাসঙ্গিক আইন:' : 'Relevant Laws:'}</span>
-                    ${n.data.statutory_provisions.map((s) => `<span class="statute-badge">${escapeHtml(s)}</span>`).join('')}
+                    <span class="note-sections-lbl">${cIcon('book', 12)} ${isBn ? 'প্রাসঙ্গিক আইন:' : 'Relevant Laws:'}</span>
+                    <div class="tag-row">${n.data.statutory_provisions.map((s) => `<span class="statute-badge">${escapeHtml(s)}</span>`).join('')}</div>
                   </div>
                 ` : ''}
                 ${n.data.missing_questions?.length ? `
                   <div class="note-red-flags">
-                    <strong>❓ ${isBn ? 'ক্লায়েন্টকে যে প্রশ্নগুলো করতে হবে:' : 'Questions Still to Ask Client:'}</strong>
+                    <div class="inquiry-title">
+                      ${cIcon('alert', 12)}
+                      <span>${isBn ? 'ক্লায়েন্টকে যে প্রশ্নগুলো করতে হবে:' : 'Unresolved Client Inquiries & Evidence Needed:'}</span>
+                    </div>
                     <ul>${n.data.missing_questions.map((q) => `<li>${escapeHtml(q)}</li>`).join('')}</ul>
                   </div>
                 ` : ''}
                 <div class="note-actions">
                   <button type="button" class="button button-small button-outline send-matter-prompt-btn" data-goal="${escapeHtml(n.data.dispute_summary || n.rawText)}">
-                    ⚖️ ${isBn ? 'Justor AI-তে গবেষণা করুন' : 'Research Grounds in Justor AI'}
+                    ${cIcon('search', 12)}
+                    <span>${isBn ? 'Justor AI-তে গবেষণা করুন' : 'Research Grounds in Justor AI'}</span>
                   </button>
                 </div>
               </div>
@@ -526,7 +596,11 @@ export function openMatterWorkspaceModal(
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>🎧 ${isBn ? 'পরামর্শ অডিও রূপান্তর ও বিশ্লেষণ' : 'Client Consultation Audio Intelligence'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('headphones', 12)}
+              <span>AUDIO FORENSICS & TRANSCRIPTION</span>
+            </div>
+            <strong>${isBn ? 'পরামর্শ অডিও রূপান্তর ও বিশ্লেষণ' : 'Client Consultation Audio Intelligence'}</strong>
             <p>${isBn 
               ? 'মক্কেলের সাথে ২০-৩০ মিনিটের আইনি পরামর্শের অডিও (MP3/M4A/WAV) আপলোড করুন। সম্পূর্ণ বাংলা-ইংরেজি ট্রান্সক্রিপ্ট, উল্লেখিত দলিলসমূহ এবং আইনি ঝুঁকি স্বয়ংক্রিয়ভাবে বের হয়ে আসবে।'
               : 'Upload a 15-30 min audio recording of your client interview or witness conference. Justor AI extracts verbatim transcript, mentioned documents, timeline, and missing evidentiary questions.'}
@@ -535,36 +609,36 @@ export function openMatterWorkspaceModal(
 
           <div class="audio-upload-zone" id="audio-dropzone">
             <input type="file" id="consultation-audio-file" accept=".mp3,.m4a,.wav,.webm,.ogg" style="display:none;" />
-            <div class="audio-drop-icon">🎧</div>
-            <strong>${isBn ? 'পরামর্শের অডিও ফাইল আপলোড করুন (MP3, M4A, WAV, WEBM)' : 'Drop Consultation Audio File (MP3, M4A, WAV, WEBM)'}</strong>
-            <small>${isBn ? 'সর্বোচ্চ আকার: ২৫ মেগাবাইট' : 'Maximum file size: 25MB'}</small>
+            <div class="audio-drop-icon">${cIcon('headphones', 32)}</div>
+            <strong class="audio-drop-title">${isBn ? 'পরামর্শের অডিও ফাইল আপলোড করুন (MP3, M4A, WAV, WEBM)' : 'Drop Consultation Audio File (MP3, M4A, WAV, WEBM)'}</strong>
+            <small class="audio-drop-sub">${isBn ? 'সর্বোচ্চ আকার: ২৫ মেগাবাইট · আইনজীবী-মক্কেল কথোপকথন এনক্রিপ্টেড' : 'Maximum file size: 25MB · Advocate-Client Privilege Protected'}</small>
             <button type="button" class="button button-small button-primary" id="select-audio-btn">
-              📁 ${isBn ? 'ফাইল নির্বাচন করুন' : 'Select Audio File'}
+              ${cIcon('upload', 13)}
+              <span>${isBn ? 'ফাইল নির্বাচন করুন' : 'Select Audio File'}</span>
             </button>
             <span id="selected-audio-name" class="selected-filename"></span>
           </div>
 
-          <div class="audio-ethics-consent-banner" style="margin: 14px 0; padding: 12px 14px; background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 8px; font-size: 13px; color: #92400E;">
-            <div style="display: flex; align-items: flex-start; gap: 8px;">
-              <span style="font-size: 16px;">⚖️</span>
-              <div>
-                <strong>${isBn ? 'বার কাউন্সিল পেশাগত আচরণ ও মক্কেল গোপনীয়তা সম্মতি:' : 'Bar Council Professional Conduct & Confidentiality Compliance:'}</strong>
-                <p style="margin: 4px 0 8px; font-size: 12px; line-height: 1.4; color: #78350F;">
-                  ${isBn 
-                    ? 'বাংলাদেশ বার কাউন্সিল ক্যাননস অফ প্রফেশনাল কনডাক্ট (অধ্যায় ২) অনুযায়ী আইনজীবী-মক্কেল কথোপকথন বিশেষ অধিকারপ্রাপ্ত (Privileged) ও গোপনীয়। অডিও রেকর্ড বা এআই বিশ্লেষণের পূর্বে মক্কেলের সুস্পষ্ট সম্মতি আবশ্যক।'
-                    : 'Under Chapter II of the Bangladesh Bar Council Canons of Professional Conduct, advocate-client communications are legally privileged and confidential. Recording or AI processing requires express client informed consent.'}
-                </p>
-                <label style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: #1E293B; font-size: 12.5px;">
-                  <input type="checkbox" id="consultation-consent-checkbox" style="width: 16px; height: 16px; accent-color: #1E38C8; cursor: pointer;" />
-                  <span>${isBn ? 'আমি প্রত্যয়ন করছি যে মক্কেল এই পরামর্শের অডিও রেকর্ডিং ও এআই বিশ্লেষণে সুস্পষ্ট সম্মতি প্রদান করেছেন।' : 'I certify that the client has expressly consented to audio recording and AI analysis of this consultation.'}</span>
-                </label>
-              </div>
+          <div class="audio-ethics-card">
+            <div class="ethics-card-header">
+              ${cIcon('shield', 14)}
+              <strong>${isBn ? 'বার কাউন্সিল পেশাগত আচরণ ও মক্কেল গোপনীয়তা সম্মতি:' : 'Bar Council Professional Conduct & Confidentiality Compliance:'}</strong>
             </div>
+            <p class="ethics-card-body">
+              ${isBn 
+                ? 'বাংলাদেশ বার কাউন্সিল ক্যাননস অফ প্রফেশনাল কনডাক্ট (অধ্যায় ২) অনুযায়ী আইনজীবী-মক্কেল কথোপকথন বিশেষ অধিকারপ্রাপ্ত (Privileged) ও গোপনীয়। অডিও রেকর্ড বা এআই বিশ্লেষণের পূর্বে মক্কেলের সুস্পষ্ট সম্মতি আবশ্যক।'
+                : 'Under Chapter II of the Bangladesh Bar Council Canons of Professional Conduct, advocate-client communications are legally privileged and confidential. Recording or AI processing requires express client informed consent.'}
+            </p>
+            <label class="ethics-consent-label">
+              <input type="checkbox" id="consultation-consent-checkbox" />
+              <span>${isBn ? 'আমি প্রত্যয়ন করছি যে মক্কেল এই পরামর্শের অডিও রেকর্ডিং ও এআই বিশ্লেষণে সুস্পষ্ট সম্মতি প্রদান করেছেন।' : 'I certify that the client has expressly consented to audio recording and AI analysis of this consultation.'}</span>
+            </label>
           </div>
 
-          <div class="dictate-actions" style="margin-top:12px;">
+          <div class="dictate-actions" style="margin-top:14px;">
             <button type="button" class="button button-primary" id="consultation-process-btn" disabled>
-              ⚡ ${isBn ? 'অডিও ট্রান্সক্রিপ্ট ও আইনি ব্রিফ তৈরি করুন' : 'Transcribe & Generate Legal Brief'}
+              ${cIcon('sparkle', 13)}
+              <span>${isBn ? 'অডিও ট্রান্সক্রিপ্ট ও আইনি ব্রিফ তৈরি করুন' : 'Transcribe & Generate Legal Brief'}</span>
             </button>
           </div>
 
@@ -574,36 +648,42 @@ export function openMatterWorkspaceModal(
           </div>
 
           <div class="consultation-records-list">
-            <h4>🎧 ${isBn ? 'বিশ্লেষিত আইনি পরামর্শসমূহ' : 'Analyzed Consultation Recordings'} (${currentMatter.consultations.length})</h4>
+            <div class="section-badge-header">
+              <span class="sec-num">${currentMatter.consultations.length}</span>
+              <h5 class="sec-title">${isBn ? 'বিশ্লেষিত আইনি পরামর্শসমূহ' : 'Analyzed Consultation Recordings'}</h5>
+            </div>
             ${currentMatter.consultations.length === 0 ? `<p class="empty-hint">${isBn ? 'এখনো কোনো অডিও পরামর্শ যোগ করা হয়নি।' : 'No consultation audios added yet.'}</p>` : ''}
             ${currentMatter.consultations.map((c, idx) => `
               <div class="consultation-card">
                 <div class="note-card-header">
-                  <strong>#${idx + 1} · ${escapeHtml(c.data.matter_title || c.filename)}</strong>
+                  <div class="note-title-wrap">
+                    <span class="note-idx-pill">#${idx + 1}</span>
+                    <strong class="note-client-title">${escapeHtml(c.data.matter_title || c.filename)}</strong>
+                  </div>
                   <span class="note-date">${new Date(c.createdAt).toLocaleDateString()}</span>
                 </div>
                 ${c.data.consultation_summary ? `<p class="consult-summary">${escapeHtml(c.data.consultation_summary)}</p>` : ''}
                 ${c.data.client_facts?.length ? `
                   <div class="client-facts-block">
-                    <strong>📌 ${isBn ? 'মক্কেলের বর্ণিত মূল তথ্য:' : 'Material Facts Alleged:'}</strong>
-                    <ul>${c.data.client_facts.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+                    <div class="block-subtitle">${cIcon('doc', 12)} <span>${isBn ? 'মক্কেলের বর্ণিত মূল তথ্য:' : 'Material Facts Alleged:'}</span></div>
+                    <ul class="clean-bullet-list">${c.data.client_facts.map((f) => `<li><span class="bullet-dot"></span><span>${escapeHtml(f)}</span></li>`).join('')}</ul>
                   </div>
                 ` : ''}
                 ${c.data.documents_mentioned?.length ? `
                   <div class="docs-mentioned-block">
-                    <strong>📑 ${isBn ? 'উল্লেখিত দলিল ও প্রমাণাদি:' : 'Documents Mentioned:'}</strong>
-                    <div class="tag-row">${c.data.documents_mentioned.map((d) => `<span class="doc-tag">📄 ${escapeHtml(d)}</span>`).join('')}</div>
+                    <div class="block-subtitle">${cIcon('folder', 12)} <span>${isBn ? 'উল্লেখিত দলিল ও প্রমাণাদি:' : 'Documents Mentioned:'}</span></div>
+                    <div class="tag-row">${c.data.documents_mentioned.map((d) => `<span class="doc-tag">${cIcon('doc', 11)} ${escapeHtml(d)}</span>`).join('')}</div>
                   </div>
                 ` : ''}
                 ${c.data.red_flags_and_risks?.length ? `
                   <div class="red-flags-block">
-                    <strong>⚠️ ${isBn ? 'মক্কেলের মামলার দুর্বলতা / আইনি ঝুঁকি:' : 'Evidentiary Vulnerabilities & Risks:'}</strong>
+                    <div class="inquiry-title">${cIcon('alert', 12)} <span>${isBn ? 'মক্কেলের মামলার দুর্বলতা / আইনি ঝুঁকি:' : 'Evidentiary Vulnerabilities & Risks:'}</span></div>
                     <ul>${c.data.red_flags_and_risks.map((r) => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
                   </div>
                 ` : ''}
                 ${c.data.transcript ? `
                   <details class="transcript-details">
-                    <summary>📜 ${isBn ? 'সম্পূর্ণ শ্রুতিলিপি (Verbatim Transcript)' : 'View Full Transcript'}</summary>
+                    <summary>${cIcon('fileText', 12)} <span>${isBn ? 'সম্পূর্ণ শ্রুতিলিপি (Verbatim Transcript)' : 'View Full Transcript'}</span></summary>
                     <pre class="transcript-pre">${escapeHtml(c.data.transcript)}</pre>
                   </details>
                 ` : ''}
@@ -619,7 +699,11 @@ export function openMatterWorkspaceModal(
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>📄 ${isBn ? '৬০ সেকেন্ডে রায় ও পিটিশন সারসংক্ষেপ' : 'Case in 60 Seconds: Ratio Decidendi & Briefing'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('gavel', 12)}
+              <span>EXECUTIVE JUDGMENT BRIEFING</span>
+            </div>
+            <strong>${isBn ? '৬০ সেকেন্ডে রায় ও পিটিশন সারসংক্ষেপ' : 'Case in 60 Seconds: Ratio Decidendi & Briefing'}</strong>
             <p>${isBn 
               ? 'হাইকোর্ট বিভাগের দীর্ঘ রায়, আদেশের নকল বা প্রতিপক্ষের পিটিশন পেস্ট করুন। Justor AI এক নজরে মূল অনুসিদ্ধান্ত (Ratio Decidendi) ও পয়েন্ট অব ল বের করে দেবে।'
               : 'Paste Supreme Court judgments or petitions. Justor AI extracts the Ratio Decidendi, statutory provisions, bench ruling, and FIRAC analysis.'}
@@ -630,7 +714,8 @@ export function openMatterWorkspaceModal(
             <textarea id="judgment-text" class="dictate-textarea" rows="5" placeholder="${isBn ? 'এখানে রায়, মামলার আরজি বা লিখিত জবাবের মূল পাঠ পেস্ট করুন...' : 'Paste judgment, plaint, or written statement text here...'}" style="min-height:130px;"></textarea>
             <div class="dictate-actions" style="margin-top:10px;">
               <button type="button" class="button button-primary" id="summarize-judgment-btn">
-                ⚡ ${isBn ? '৬০ সেকেন্ডে বিশ্লেষণ করুন' : 'Generate 60s Briefing'}
+                ${cIcon('sparkle', 13)}
+                <span>${isBn ? '৬০ সেকেন্ডে বিশ্লেষণ করুন' : 'Generate 60s Briefing'}</span>
               </button>
             </div>
           </div>
@@ -641,31 +726,37 @@ export function openMatterWorkspaceModal(
           </div>
 
           <div class="matter-notes-list">
-            <h4>📄 ${isBn ? 'সংরক্ষিত রায়ের সারসংক্ষেপসমূহ' : 'Saved Judgment Briefs'} (${currentMatter.summaries.length})</h4>
+            <div class="section-badge-header">
+              <span class="sec-num">${currentMatter.summaries.length}</span>
+              <h5 class="sec-title">${isBn ? 'সংরক্ষিত রায়ের সারসংক্ষেপসমূহ' : 'Saved Judgment Briefs'}</h5>
+            </div>
             ${currentMatter.summaries.length === 0 ? `<p class="empty-hint">${isBn ? 'এখনো কোনো রায় সংক্ষেপ করা হয়নি।' : 'No judgment briefs added yet.'}</p>` : ''}
             ${currentMatter.summaries.map((s, idx) => `
               <div class="judgment-brief-card">
                 <div class="note-card-header">
-                  <strong>#${idx + 1} · ${escapeHtml(s.data.case_title || s.filename)}</strong>
+                  <div class="note-title-wrap">
+                    <span class="note-idx-pill">#${idx + 1}</span>
+                    <strong class="note-client-title">${escapeHtml(s.data.case_title || s.filename)}</strong>
+                  </div>
                   <span class="note-date">${new Date(s.createdAt).toLocaleDateString()}</span>
                 </div>
-                ${s.data.court ? `<div class="bench-badge">🏛️ ${escapeHtml(s.data.court)} ${s.data.bench ? `· ${escapeHtml(s.data.bench)}` : ''}</div>` : ''}
+                ${s.data.court ? `<div class="bench-badge">${cIcon('gavel', 12)} <span>${escapeHtml(s.data.court)} ${s.data.bench ? `· ${escapeHtml(s.data.bench)}` : ''}</span></div>` : ''}
                 ${s.data.ratio_decidendi ? `
                   <div class="ratio-box">
-                    <span class="ratio-label">⚖️ ${isBn ? 'আইনি অনুসিদ্ধান্ত (Ratio Decidendi):' : 'Authoritative Ratio Decidendi:'}</span>
-                    <p>${escapeHtml(s.data.ratio_decidendi)}</p>
+                    <div class="ratio-label">${cIcon('quote', 13)} <span>${isBn ? 'আইনি অনুসিদ্ধান্ত (Ratio Decidendi):' : 'Authoritative Ratio Decidendi:'}</span></div>
+                    <p class="ratio-p">${escapeHtml(s.data.ratio_decidendi)}</p>
                   </div>
                 ` : ''}
                 ${s.data.facts_brief ? `<p class="facts-brief"><strong>${isBn ? 'ঘটনা সংক্ষেপ:' : 'Factual Matrix:'}</strong> ${escapeHtml(s.data.facts_brief)}</p>` : ''}
                 ${s.data.statutes_cited?.length ? `
                   <div class="note-sections">
-                    <span>📜 ${isBn ? 'প্রযোজ্য আইন:' : 'Statutes Cited:'}</span>
-                    ${s.data.statutes_cited.map((st) => `<span class="statute-badge">${escapeHtml(st)}</span>`).join('')}
+                    <span class="note-sections-lbl">${cIcon('book', 12)} ${isBn ? 'প্রযোজ্য আইন:' : 'Statutes Cited:'}</span>
+                    <div class="tag-row">${s.data.statutes_cited.map((st) => `<span class="statute-badge">${escapeHtml(st)}</span>`).join('')}</div>
                   </div>
                 ` : ''}
                 ${s.data.study_mode_firac?.analysis ? `
                   <details class="firac-details">
-                    <summary>🎓 ${isBn ? 'FIRAC পদ্ধতি (আইন শিক্ষার্থীদের জন্য)' : 'FIRAC Framework Analysis'}</summary>
+                    <summary>${cIcon('book', 12)} <span>${isBn ? 'FIRAC পদ্ধতি (আইন শিক্ষার্থীদের জন্য)' : 'FIRAC Framework Analysis'}</span></summary>
                     <div class="firac-grid">
                       <div><strong>Facts:</strong> ${escapeHtml(s.data.study_mode_firac.facts || '')}</div>
                       <div><strong>Issue:</strong> ${escapeHtml(s.data.study_mode_firac.issue || '')}</div>
@@ -688,7 +779,11 @@ export function openMatterWorkspaceModal(
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>⏳ ${isBn ? 'মামলার ইন্টারেক্টিভ কালপঞ্জি ও তামাদি সর্তকতা' : 'Interactive Matter Chronology & Limitation Alerts'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('calendar', 12)}
+              <span>PROCEDURAL TIME LIMITS & SCHEDULES</span>
+            </div>
+            <strong>${isBn ? 'মামলার ইন্টারেক্টিভ কালপঞ্জি ও তামাদি সর্তকতা' : 'Interactive Matter Chronology & Limitation Alerts'}</strong>
             <p>${isBn 
               ? 'চুক্তি, নোটিশ, চেক ডিজঅনার বা এফআইআরের তারিখসমূহ পেস্ট করুন। Justor AI কালানুক্রমিক টাইমলাইন এবং তামাদি আইনের (Limitation Act) তামাদি ঝুঁকি নির্দেশ করবে।'
               : 'Paste pleadings, notices, or dispute events. Justor AI builds a date-sorted timeline with real-time statutory limitation alerts.'}
@@ -699,7 +794,8 @@ export function openMatterWorkspaceModal(
             <textarea id="chronology-input-text" class="dictate-textarea" rows="4" placeholder="${isBn ? 'ঘটনা এবং তারিখ পেস্ট করুন (যেমন: ১২/০৩/২০২৩ তারিখে চুক্তি সই, ১৫/০৪/২০২৩ তারিখে চেক ডিজঅনার, ১০/০৫/২০২৩ লিগ্যাল নোটিশ প্রাপ্তি...)' : 'Paste dates and dispute events here...'}" style="min-height:90px;"></textarea>
             <div class="dictate-actions" style="margin-top:8px;">
               <button type="button" class="button button-primary" id="generate-chronology-btn">
-                ⚡ ${isBn ? 'কালপঞ্জি তৈরি করুন' : 'Generate Chronology & Alerts'}
+                ${cIcon('sparkle', 13)}
+                <span>${isBn ? 'কালপঞ্জি তৈরি করুন' : 'Generate Chronology & Alerts'}</span>
               </button>
             </div>
           </div>
@@ -714,7 +810,10 @@ export function openMatterWorkspaceModal(
               <!-- Limitation Alerts -->
               ${chron.limitation_alerts?.length ? `
                 <div class="limitation-alerts-section">
-                  <h4>🚨 ${isBn ? 'তামাদি আইন ও সংবিধিবদ্ধ সময়সীমার সতর্কতা' : 'Statutory Limitation Alerts'}</h4>
+                  <div class="section-badge-header">
+                    <span class="sec-num">${chron.limitation_alerts.length}</span>
+                    <h5 class="sec-title">${isBn ? 'তামাদি আইন ও সংবিধিবদ্ধ সময়সীমার সতর্কতা' : 'Statutory Limitation & Filing Alerts'}</h5>
+                  </div>
                   <div class="alerts-grid">
                     ${chron.limitation_alerts.map((al) => `
                       <div class="limitation-pill ${al.status}">
@@ -723,7 +822,7 @@ export function openMatterWorkspaceModal(
                           <span class="alert-provision">${escapeHtml(al.provision)}</span>
                         </div>
                         <p class="alert-warning">${escapeHtml(al.warning)}</p>
-                        <small class="alert-rule">⚖️ ${escapeHtml(al.rule)}</small>
+                        <small class="alert-rule">${cIcon('scales', 11)} ${escapeHtml(al.rule)}</small>
                       </div>
                     `).join('')}
                   </div>
@@ -732,19 +831,22 @@ export function openMatterWorkspaceModal(
 
               <!-- Visual Timeline -->
               <div class="timeline-tree">
-                <h4>📅 ${isBn ? 'কালানুক্রমিক ঘটনার তালিকা' : 'Chronological Event Chain'} (${chron.timeline?.length || 0})</h4>
+                <div class="section-badge-header">
+                  <span class="sec-num">${chron.timeline?.length || 0}</span>
+                  <h5 class="sec-title">${isBn ? 'কালানুক্রমিক ঘটনার তালিকা' : 'Chronological Event Chain'}</h5>
+                </div>
                 <div class="timeline-nodes">
                   ${(chron.timeline || []).map((node, i) => `
                     <div class="timeline-node ${node.importance === 'critical' ? 'critical-node' : ''}">
                       <div class="node-marker">${i + 1}</div>
                       <div class="node-content">
                         <div class="node-header">
-                          <span class="node-date">📅 ${escapeHtml(node.date_str)}</span>
-                          ${node.importance === 'critical' ? `<span class="badge-critical">${isBn ? 'গুরুত্বপূর্ণ তারিখ' : 'Critical Date'}</span>` : ''}
+                          <span class="node-date">${cIcon('calendar', 11)} ${escapeHtml(node.date_str)}</span>
+                          ${node.importance === 'critical' ? `<span class="badge-critical">${cIcon('alert', 10)} ${isBn ? 'গুরুত্বপূর্ণ তারিখ' : 'Critical Date'}</span>` : ''}
                         </div>
                         <strong class="node-title">${escapeHtml(node.title)}</strong>
                         <p class="node-desc">${escapeHtml(node.description)}</p>
-                        ${node.source_reference ? `<small class="node-source">📑 ${escapeHtml(node.source_reference)}</small>` : ''}
+                        ${node.source_reference ? `<small class="node-source">${cIcon('doc', 11)} ${escapeHtml(node.source_reference)}</small>` : ''}
                       </div>
                     </div>
                   `).join('')}
@@ -764,7 +866,11 @@ export function openMatterWorkspaceModal(
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>🏛️ ${isBn ? 'এক ক্লিকে শুনানির প্রস্তুতি প্যাক (Courtroom Hearing Pack)' : 'One-Click Courtroom Hearing Preparation Pack'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('target', 12)}
+              <span>COURTROOM ADVOCACY & STRATEGY</span>
+            </div>
+            <strong>${isBn ? 'এক ক্লিকে শুনানির প্রস্তুতি প্যাক (Courtroom Hearing Pack)' : 'One-Click Courtroom Hearing Preparation Pack'}</strong>
             <p>${isBn 
               ? 'দক্ষিণ-পূর্ব এশিয়ার শীর্ষ লিগ্যাল-টেক ধারণার আলোকে: বেঞ্চে দাঁড়িয়ে আজ কী অর্জন করতে হবে, কোন প্রমাণ সঙ্গে আছে আর কোনটি অনুপস্থিত, প্রতিপক্ষের সম্ভাব্য যুক্তি ও খণ্ডন, এবং জেরা করার ধারালো প্রশ্নমালা।'
               : 'Inspired by leading Singapore & SEA legal chambers AI: synthesizes today\'s prime bench objective, ready vs. missing evidence, counter-arguments, and witness cross-examination cards.'}
@@ -783,7 +889,8 @@ export function openMatterWorkspaceModal(
                 <option value="final_argument">${isBn ? 'চূড়ান্ত যুক্তি-তর্ক (Final Arguments)' : 'Final Submissions & Arguments'}</option>
               </select>
               <button type="button" class="button button-primary" id="generate-hearing-pack-btn">
-                ⚡ ${isBn ? 'হিয়ারিং প্যাক তৈরি করুন' : 'Generate Hearing Pack'}
+                ${cIcon('sparkle', 13)}
+                <span>${isBn ? 'হিয়ারিং প্যাক তৈরি করুন' : 'Generate Hearing Pack'}</span>
               </button>
             </div>
           </div>
@@ -798,7 +905,10 @@ export function openMatterWorkspaceModal(
               <!-- Top Objective Banner -->
               <div class="hearing-objective-banner">
                 <div class="objective-header">
-                  <span class="tactical-badge">🎯 ${isBn ? 'আজকের মূল বেঞ্চ লক্ষ্য' : 'Today\'s Core Tactical Objective'}</span>
+                  <span class="tactical-badge">
+                    ${cIcon('target', 11)}
+                    <span>${isBn ? 'আজকের মূল বেঞ্চ লক্ষ্য' : 'Today\'s Core Tactical Objective'}</span>
+                  </span>
                   ${pack.generatedAt ? `<span class="pack-timestamp">Generated: ${new Date(pack.generatedAt).toLocaleDateString()}</span>` : ''}
                 </div>
                 <h3 class="objective-title">${escapeHtml(pack.today_objective || 'Achieve favorable order')}</h3>
@@ -810,14 +920,14 @@ export function openMatterWorkspaceModal(
                 <div class="hearing-authorities-row">
                   ${pack.governing_statutes?.length ? `
                     <div class="auth-col">
-                      <span class="auth-title">📜 ${isBn ? 'প্রযোজ্য ধারা:' : 'Controlling Sections:'}</span>
+                      <span class="auth-title">${cIcon('book', 12)} ${isBn ? 'প্রযোজ্য ধারা:' : 'Controlling Sections:'}</span>
                       <div class="tag-row">${pack.governing_statutes.map((s) => `<span class="statute-badge">${escapeHtml(s)}</span>`).join('')}</div>
                     </div>
                   ` : ''}
                   ${pack.precedents?.length ? `
                     <div class="auth-col">
-                      <span class="auth-title">⚖️ ${isBn ? 'সুপ্রিম কোর্টের নজির:' : 'Leading Precedents:'}</span>
-                      <div class="tag-row">${pack.precedents.map((p) => `<span class="precedent-badge">📖 ${escapeHtml(p)}</span>`).join('')}</div>
+                      <span class="auth-title">${cIcon('gavel', 12)} ${isBn ? 'সুপ্রিম কোর্টের নজির:' : 'Leading Precedents:'}</span>
+                      <div class="tag-row">${pack.precedents.map((p) => `<span class="precedent-badge">${escapeHtml(p)}</span>`).join('')}</div>
                     </div>
                   ` : ''}
                 </div>
@@ -826,15 +936,15 @@ export function openMatterWorkspaceModal(
               <!-- Evidence Battle Board: In-Hand vs Missing/Risky -->
               <div class="evidence-dual-grid">
                 <div class="evidence-box in-hand">
-                  <h4>✅ ${isBn ? 'হাতে প্রস্তুত প্রমাণাদি ও প্রদর্শনী' : 'Evidence in Hand (Ready for Bench)'}</h4>
+                  <h4>${cIcon('check', 13)} <span>${isBn ? 'হাতে প্রস্তুত প্রমাণাদি ও প্রদর্শনী' : 'Evidence in Hand (Ready for Bench)'}</span></h4>
                   ${pack.evidence_in_hand?.length ? `
-                    <ul>${pack.evidence_in_hand.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul>
+                    <ul class="clean-bullet-list">${pack.evidence_in_hand.map((e) => `<li><span class="bullet-dot green"></span><span>${escapeHtml(e)}</span></li>`).join('')}</ul>
                   ` : `<p class="empty-hint">${isBn ? 'কোনো তালিকা নেই।' : 'None noted.'}</p>`}
                 </div>
                 <div class="evidence-box risky">
-                  <h4>⚠️ ${isBn ? 'অনুপস্থিত বা ঝুঁকিপূর্ণ নথি (প্রতিপক্ষ আক্রমণ করতে পারে)' : 'Missing Proofs / Opponent Targets'}</h4>
+                  <h4>${cIcon('alert', 13)} <span>${isBn ? 'অনুপস্থিত বা ঝুঁকিপূর্ণ নথি (প্রতিপক্ষ আক্রমণ করতে পারে)' : 'Missing Proofs / Opponent Targets'}</span></h4>
                   ${pack.evidence_missing_or_risky?.length ? `
-                    <ul>${pack.evidence_missing_or_risky.map((e) => `<li>${escapeHtml(e)}</li>`).join('')}</ul>
+                    <ul class="clean-bullet-list">${pack.evidence_missing_or_risky.map((e) => `<li><span class="bullet-dot red"></span><span>${escapeHtml(e)}</span></li>`).join('')}</ul>
                   ` : `<p class="empty-hint">${isBn ? 'কোনো তালিকা নেই।' : 'None noted.'}</p>`}
                 </div>
               </div>
@@ -842,15 +952,15 @@ export function openMatterWorkspaceModal(
               <!-- Tactical Arguments Matrix -->
               <div class="tactics-arguments-grid">
                 <div class="tactic-card opposing">
-                  <h4>🛡️ ${isBn ? 'প্রতিপক্ষের সম্ভাব্য যুক্তি' : 'Anticipated Opposing Arguments'}</h4>
+                  <h4>${cIcon('shield', 13)} <span>${isBn ? 'প্রতিপক্ষের সম্ভাব্য যুক্তি' : 'Anticipated Opposing Arguments'}</span></h4>
                   ${pack.anticipated_opposing_arguments?.length ? `
-                    <ul>${pack.anticipated_opposing_arguments.map((a) => `<li>${escapeHtml(a)}</li>`).join('')}</ul>
+                    <ul class="clean-bullet-list">${pack.anticipated_opposing_arguments.map((a) => `<li><span class="bullet-dot amber"></span><span>${escapeHtml(a)}</span></li>`).join('')}</ul>
                   ` : `<p class="empty-hint">${isBn ? 'কোনো তথ্য নেই।' : 'None noted.'}</p>`}
                 </div>
                 <div class="tactic-card rebuttal">
-                  <h4>⚔️ ${isBn ? 'আপনার তাৎক্ষণিক খণ্ডন ও জবাব' : 'Effective Statutory Rebuttals'}</h4>
+                  <h4>${cIcon('zap', 13)} <span>${isBn ? 'আপনার তাৎক্ষণিক খণ্ডন ও জবাব' : 'Effective Statutory Rebuttals'}</span></h4>
                   ${pack.effective_counter_arguments?.length ? `
-                    <ul>${pack.effective_counter_arguments.map((c) => `<li>${escapeHtml(c)}</li>`).join('')}</ul>
+                    <ul class="clean-bullet-list">${pack.effective_counter_arguments.map((c) => `<li><span class="bullet-dot blue"></span><span>${escapeHtml(c)}</span></li>`).join('')}</ul>
                   ` : `<p class="empty-hint">${isBn ? 'কোনো তথ্য নেই।' : 'None noted.'}</p>`}
                 </div>
               </div>
@@ -858,14 +968,25 @@ export function openMatterWorkspaceModal(
               <!-- Witness Cross-Examination Deck -->
               ${pack.witness_questions?.length ? `
                 <div class="witness-deck-section">
-                  <h4>🎯 ${isBn ? 'জেরা ও সাক্ষ্য গ্রহণের প্রশ্নমালা' : 'Witness Cross-Examination & Trial Deck'}</h4>
+                  <div class="section-badge-header">
+                    <span class="sec-num">${pack.witness_questions.length}</span>
+                    <h5 class="sec-title">${isBn ? 'জেরা ও সাক্ষ্য গ্রহণের প্রশ্নমালা' : 'Witness Cross-Examination & Trial Deck'}</h5>
+                  </div>
                   <div class="witness-cards-grid">
                     ${pack.witness_questions.map((w, idx) => `
                       <div class="witness-question-card">
                         <div class="witness-target-tag">Target: <strong>${escapeHtml(w.target || 'Witness')}</strong> (#${idx + 1})</div>
                         <div class="witness-q-text">"${escapeHtml(w.question || '')}"</div>
-                        <div class="witness-admission"><strong>🎯 ${isBn ? 'লক্ষ্য:' : 'Goal:'}</strong> ${escapeHtml(w.intended_admission || '')}</div>
-                        ${w.caution ? `<div class="witness-caution"><strong>⚠️ ${isBn ? 'সতর্কতা:' : 'Caution:'}</strong> ${escapeHtml(w.caution)}</div>` : ''}
+                        <div class="witness-admission">
+                          <span class="witness-meta-lbl">${cIcon('target', 11)} ${isBn ? 'লক্ষ্য:' : 'Goal:'}</span>
+                          <span>${escapeHtml(w.intended_admission || '')}</span>
+                        </div>
+                        ${w.caution ? `
+                          <div class="witness-caution">
+                            <span class="witness-meta-lbl">${cIcon('alert', 11)} ${isBn ? 'সতর্কতা:' : 'Caution:'}</span>
+                            <span>${escapeHtml(w.caution)}</span>
+                          </div>
+                        ` : ''}
                       </div>
                     `).join('')}
                   </div>
@@ -876,9 +997,10 @@ export function openMatterWorkspaceModal(
               ${pack.closing_prayer ? `
                 <div class="closing-prayer-card">
                   <div class="prayer-header">
-                    <h4>🗣️ ${isBn ? 'বেঞ্চের সামনে সমাপনী মৌখিক প্রার্থনা (Verbal Submission)' : 'Stand-up Closing Submission & Prayer'}</h4>
+                    <h4>${cIcon('quote', 13)} <span>${isBn ? 'বেঞ্চের সামনে সমাপনী মৌখিক প্রার্থনা (Verbal Submission)' : 'Stand-up Closing Submission & Prayer'}</span></h4>
                     <button type="button" class="button button-small button-outline" id="copy-prayer-btn" data-text="${escapeHtml(pack.closing_prayer)}">
-                      📋 ${isBn ? 'প্রার্থনা কপি করুন' : 'Copy Prayer'}
+                      ${cIcon('copy', 12)}
+                      <span>${isBn ? 'প্রার্থনা কপি করুন' : 'Copy Prayer'}</span>
                     </button>
                   </div>
                   <blockquote class="prayer-quote">${escapeHtml(pack.closing_prayer)}</blockquote>
@@ -888,7 +1010,8 @@ export function openMatterWorkspaceModal(
               <!-- Footer Bridge Action -->
               <div class="pack-footer-actions">
                 <button type="button" class="button button-secondary send-matter-prompt-btn" data-goal="${isBn ? 'এই হিয়ারিং প্যাকের তথ্যের আলোকে আজকের শুনানির জন্য একটি পূর্ণাঙ্গ লিখিত সাবমিশন বা পিটিশন ড্রাফট করুন।' : 'Draft a comprehensive written submission for court based on this hearing pack.'}">
-                  ⚖️ ${isBn ? 'Justor AI-তে ড্রাফট তৈরি করুন' : 'Draft Full Written Submission in Justor'}
+                  ${cIcon('pen', 13)}
+                  <span>${isBn ? 'Justor AI-তে ড্রাফট তৈরি করুন' : 'Draft Full Written Submission in Justor'}</span>
                 </button>
               </div>
             </div>
@@ -905,7 +1028,11 @@ export function openMatterWorkspaceModal(
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>⚖️ ${isBn ? 'মোকদ্দমা সঙ্গতি ও এভিডেন্স ম্যাট্রিক্স (Consistency & Proof Audit)' : 'Matter Consistency Checker & Evidence Matrix'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('scales', 12)}
+              <span>CONTRADICTION DETECTOR & PROOF AUDIT</span>
+            </div>
+            <strong>${isBn ? 'মোকদ্দমা সঙ্গতি ও এভিডেন্স ম্যাট্রিক্স (Consistency & Proof Audit)' : 'Matter Consistency Checker & Evidence Matrix'}</strong>
             <p>${isBn 
               ? 'ফাইলের আরজি, নোটিশ, রশিদ ও ডিকটেশনের মধ্যে তারিখের অমিল, টাকার গরমিল বা দাগ নম্বরের অসঙ্গতি স্বয়ংক্রিয়ভাবে চিহ্নিত করুন এবং মামলায় প্রতিটি দাবি প্রমাণের জন্য প্রয়োজনীয় দলিলের শূন্যতা যাচাই করুন।'
               : 'Cross-audits all documents, pleadings, and notes for factual contradictions (dates, claim sums, CS/SA/RS Dag & Khatian numbers) and builds an evidentiary proof matrix.'}
@@ -914,7 +1041,8 @@ export function openMatterWorkspaceModal(
 
           <div class="audit-controls-bar">
             <button type="button" class="button button-primary" id="run-consistency-btn">
-              🔍 ${isBn ? 'ফাইলের সঙ্গতি ও প্রমাণাদি অডিট চালান' : 'Run Consistency & Evidence Audit'}
+              ${cIcon('search', 13)}
+              <span>${isBn ? 'ফাইলের সঙ্গতি ও প্রমাণাদি অডিট চালান' : 'Run Consistency & Evidence Audit'}</span>
             </button>
           </div>
 
@@ -932,14 +1060,17 @@ export function openMatterWorkspaceModal(
                   <span class="score-lbl">${isBn ? 'রেকর্ডের দৃঢ়তা' : 'Record Integrity'}</span>
                 </div>
                 <div class="integrity-details">
-                  <h4>📋 ${isBn ? 'আইনি অডিট ফলাফল' : 'Litigation Record Audit Verdict'}</h4>
+                  <h4>${cIcon('shield', 14)} <span>${isBn ? 'আইনি অডিট ফলাফল' : 'Litigation Record Audit Verdict'}</span></h4>
                   <p>${escapeHtml(audit.audit_summary || 'Audit complete.')}</p>
                 </div>
               </div>
 
               <!-- Factual Contradictions Section -->
               <div class="contradictions-section">
-                <h4>⚠️ ${isBn ? 'চিহ্নিত তথ্যগত বৈপরীত্য ও অসঙ্গতি' : 'Detected Factual Contradictions'} (${audit.contradictions?.length || 0})</h4>
+                <div class="section-badge-header">
+                  <span class="sec-num">${audit.contradictions?.length || 0}</span>
+                  <h5 class="sec-title">${isBn ? 'চিহ্নিত তথ্যগত বৈপরীত্য ও অসঙ্গতি' : 'Detected Factual Contradictions'}</h5>
+                </div>
                 ${audit.contradictions?.length ? `
                   <div class="contradictions-list">
                     ${audit.contradictions.map((c) => `
@@ -951,29 +1082,32 @@ export function openMatterWorkspaceModal(
                         <h5 class="contra-title">${escapeHtml(c.title || 'Inconsistent Statements')}</h5>
                         <div class="contra-sources-grid">
                           <div class="contra-source a">
-                            <span class="source-lbl">📌 Source A:</span>
+                            <span class="source-lbl">${cIcon('doc', 11)} Source A:</span>
                             <p>${escapeHtml(c.source_a || '')}</p>
                           </div>
                           <div class="contra-source b">
-                            <span class="source-lbl">📌 Source B:</span>
+                            <span class="source-lbl">${cIcon('doc', 11)} Source B:</span>
                             <p>${escapeHtml(c.source_b || '')}</p>
                           </div>
                         </div>
-                        ${c.impact ? `<div class="contra-impact"><strong>⚠️ ${isBn ? 'আইনি প্রভাব:' : 'Courtroom Impact:'}</strong> ${escapeHtml(c.impact)}</div>` : ''}
-                        ${c.remedy ? `<div class="contra-remedy"><strong>💡 ${isBn ? 'আইনজীবীর করণীয় প্রতিকার:' : 'Recommended Cure:'}</strong> ${escapeHtml(c.remedy)}</div>` : ''}
+                        ${c.impact ? `<div class="contra-impact"><strong>${isBn ? 'আইনি প্রভাব:' : 'Courtroom Impact:'}</strong> ${escapeHtml(c.impact)}</div>` : ''}
+                        ${c.remedy ? `<div class="contra-remedy"><strong>${isBn ? 'আইনজীবীর করণীয় প্রতিকার:' : 'Recommended Cure:'}</strong> ${escapeHtml(c.remedy)}</div>` : ''}
                       </div>
                     `).join('')}
                   </div>
                 ` : `
                   <div class="no-contradictions-box">
-                    <span>✅ ${isBn ? 'নথি ও তথ্যের মধ্যে কোনো স্পষ্ট বৈপরীত্য পাওয়া যায়নি।' : 'No material factual contradictions detected across current matter entries.'}</span>
+                    <span>${cIcon('check', 14)} ${isBn ? 'নথি ও তথ্যের মধ্যে কোনো স্পষ্ট বৈপরীত্য পাওয়া যায়নি।' : 'No material factual contradictions detected across current matter entries.'}</span>
                   </div>
                 `}
               </div>
 
               <!-- Evidentiary Proof Matrix Section -->
               <div class="evidence-matrix-section">
-                <h4>📊 ${isBn ? 'দাবির উপাদান ও প্রমাণের ম্যাট্রিক্স (Evidence Matrix)' : 'Evidentiary Proof Matrix'}</h4>
+                <div class="section-badge-header">
+                  <span class="sec-num">${audit.evidence_matrix?.length || 0}</span>
+                  <h5 class="sec-title">${isBn ? 'দাবির উপাদান ও প্রমাণের ম্যাট্রিক্স (Evidence Matrix)' : 'Evidentiary Proof Matrix'}</h5>
+                </div>
                 ${audit.evidence_matrix?.length ? `
                   <div class="table-responsive">
                     <table class="evidence-matrix-table">
@@ -1005,7 +1139,8 @@ export function openMatterWorkspaceModal(
               <!-- Chat Bridge -->
               <div class="pack-footer-actions">
                 <button type="button" class="button button-secondary send-matter-prompt-btn" data-goal="${isBn ? 'এই মোকদ্দমার প্রমাণের ঘাটতি এবং অসঙ্গতিগুলো কীভাবে আইনি পদ্ধতিতে আদালতে সমাধান করা যায় তার স্ট্র্যাটেজি তৈরি করুন।' : 'Formulate a litigation strategy to resolve the detected evidence gaps and contradictions under Bangladesh procedural law.'}">
-                  ⚖️ ${isBn ? 'Justor AI-তে সমাধানের কৌশল খুঁজুন' : 'Research Solutions in Justor AI'}
+                  ${cIcon('search', 13)}
+                  <span>${isBn ? 'Justor AI-তে সমাধানের কৌশল খুঁজুন' : 'Research Solutions in Justor AI'}</span>
                 </button>
               </div>
             </div>
@@ -1022,7 +1157,11 @@ export function openMatterWorkspaceModal(
       return `
         <div class="matter-tab-content">
           <div class="matter-intro-callout">
-            <strong>📝 ${isBn ? 'উৎস-সংযুক্ত লিগ্যাল মেমোরেন্ডাম জেনারেটর (IRAC Method)' : 'Source-Linked Legal Memorandum Generator'}</strong>
+            <div class="intro-callout-badge">
+              ${cIcon('memo', 12)}
+              <span>IRAC CITATION-GROUNDED MEMORANDA</span>
+            </div>
+            <strong>${isBn ? 'উৎস-সংযুক্ত লিগ্যাল মেমোরেন্ডাম জেনারেটর (IRAC Method)' : 'Source-Linked Legal Memorandum Generator'}</strong>
             <p>${isBn 
               ? 'ইন্দোনেশিয়ার Hukumonline AIlex ও সিঙ্গাপুরের Pair-a-Legal আদলে: মোকদ্দমার যেকোনো প্রশ্ন উপস্থাপন করুন। Justor AI বাংলাদেশ কোড, সুপ্রিম কোর্টের নজির (DLR/BLD) ও IRAC মেথডে প্রফেশনাল লিগ্যাল মেমো প্রস্তুত করবে।'
               : 'Drafts formal IRAC advocate legal memoranda grounded strictly in matter facts with direct statutory sections and Supreme Court (DLR/BLD) authorities.'}
@@ -1036,16 +1175,19 @@ export function openMatterWorkspaceModal(
             <div class="memo-quick-prompts">
               <span>${isBn ? 'দ্রুত পরামর্শ:' : 'Quick Issues:'}</span>
               <button type="button" class="memo-tag-btn" data-q="${isBn ? 'এনআই অ্যাক্টের ১৩৮ ধারা অনুযায়ী সিকিউরিটি চেক ডিজঅনার হলে মামলা চলবে কি না?' : 'Whether dishonour of a cheque issued as security attracts Section 138 of NI Act?'}">
-                🏷️ ${isBn ? 'এনআই অ্যাক্ট সিকিউরিটি চেক' : 'NI Act Security Cheque'}
+                ${cIcon('book', 11)}
+                <span>${isBn ? 'এনআই অ্যাক্ট সিকিউরিটি চেক' : 'NI Act Security Cheque'}</span>
               </button>
               <button type="button" class="memo-tag-btn" data-q="${isBn ? 'অস্থায়ী নিষেধাজ্ঞার ৩টি মূল শর্ত (Prima Facie Case, Balance of Convenience, Irreparable Loss) কীভাবে পূরণ হবে?' : 'Whether the requirements of prima facie case and irreparable loss are satisfied for temporary injunction under Order 39 CPC?'}">
-                🏷️ ${isBn ? 'অস্থায়ী নিষেধাজ্ঞার শর্ত' : 'Temporary Injunction Order 39'}
+                ${cIcon('book', 11)}
+                <span>${isBn ? 'অস্থায়ী নিষেধাজ্ঞার শর্ত' : 'Temporary Injunction Order 39'}</span>
               </button>
             </div>
 
             <div class="dictate-actions" style="margin-top:10px;">
               <button type="button" class="button button-primary" id="generate-memo-btn">
-                ⚡ ${isBn ? 'আনুষ্ঠানিক লিগ্যাল মেমো তৈরি করুন' : 'Generate Formal Legal Memo'}
+                ${cIcon('sparkle', 13)}
+                <span>${isBn ? 'আনুষ্ঠানিক লিগ্যাল মেমো তৈরি করুন' : 'Generate Formal Legal Memo'}</span>
               </button>
             </div>
           </div>
@@ -1057,108 +1199,222 @@ export function openMatterWorkspaceModal(
 
           <!-- Existing Legal Memos -->
           <div class="legal-memos-list">
-            <h4>📑 ${isBn ? 'সংরক্ষিত আইনি মেমোরেন্ডামসমূহ' : 'Drafted Legal Memoranda'} (${memos.length})</h4>
-            ${memos.length === 0 ? `<p class="empty-hint">${isBn ? 'এখনো কোনো মেমো তৈরি করা হয়নি।' : 'No legal memos drafted yet.'}</p>` : ''}
+            <div class="memos-list-header">
+              <span class="memos-count-badge">${memos.length} ${isBn ? 'টি সংরক্ষিত মেমো' : 'Memoranda On Record'}</span>
+              <h4 class="memos-list-title">${isBn ? 'চেম্বার আইনি মেমোরেন্ডাম ভল্ট' : 'Chambers Legal Memoranda'}</h4>
+            </div>
+            ${memos.length === 0 ? `<div class="empty-state-card"><p class="empty-hint">${isBn ? 'এই মোকদ্দমায় এখনো কোনো আনুষ্ঠানিক লিগ্যাল মেমোরেন্ডাম তৈরি করা হয়নি। উপরে আইনি প্রশ্ন লিখে তৈরি করুন।' : 'No legal memoranda on record. Formulate an inquiry above to draft your first partner-grade opinion.'}</p></div>` : ''}
             ${memos.map((memo, idx) => `
               <div class="legal-memo-document">
-                <div class="memo-doc-header">
-                  <div class="memo-badge">JUSTOR LEGAL MEMORANDUM #${idx + 1}</div>
-                  <span class="memo-date">${new Date(memo.createdAt).toLocaleDateString()}</span>
+                <!-- Top Work Product Classification Ribbon -->
+                <div class="memo-watermark-band">
+                  <div class="memo-ribbon-left">
+                    <span class="memo-seal-icon">${cIcon('scales', 13)}</span>
+                    <span class="memo-ribbon-tag">MEMORANDUM OF LAW #${idx + 1}</span>
+                  </div>
+                  <span class="memo-classification">CONFIDENTIAL ATTORNEY WORK PRODUCT · PRIVILEGED</span>
                 </div>
 
-                <div class="memo-meta-table">
-                  <div><strong>TO:</strong> Senior Advocates & Chambers Briefing Counsel</div>
-                  <div><strong>FROM:</strong> Justor AI Chamber Intelligence</div>
-                  <div><strong>MATTER:</strong> ${escapeHtml(currentMatter.title)} (${escapeHtml(currentMatter.court || 'Court of Bangladesh')})</div>
-                  <div><strong>RE:</strong> ${escapeHtml(memo.question_presented)}</div>
+                <!-- Formal Chambers Header Grid -->
+                <div class="memo-metadata-box">
+                  <div class="meta-item">
+                    <span class="meta-label">TO:</span>
+                    <span class="meta-value">Briefing Counsel & Senior Advocates</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">FROM:</span>
+                    <span class="meta-value">Justor Chamber Practice Intelligence</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">MATTER:</span>
+                    <span class="meta-value highlight">${escapeHtml(currentMatter.title)}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">FORUM:</span>
+                    <span class="meta-value">${escapeHtml(currentMatter.court || 'Supreme Court / District Judiciary')}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">DATE:</span>
+                    <span class="meta-value">${new Date(memo.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  </div>
+                  <div class="meta-item">
+                    <span class="meta-label">DOCKET:</span>
+                    <span class="meta-value docket">${escapeHtml(currentMatter.caseNumber || 'Pre-Filing Advisory')}</span>
+                  </div>
                 </div>
 
+                <!-- 01. Question Presented -->
                 <div class="memo-section">
-                  <h5>📌 I. QUESTION PRESENTED</h5>
-                  <p class="memo-text highlight">${escapeHtml(memo.question_presented)}</p>
+                  <div class="section-badge-header">
+                    <span class="sec-num">01</span>
+                    <h5 class="sec-title">${isBn ? 'আইনি প্রশ্ন (Question Presented)' : 'Question Presented'}</h5>
+                  </div>
+                  <p class="memo-lead-text">${escapeHtml(memo.question_presented)}</p>
                 </div>
 
+                <!-- 02. Executive Legal Conclusion -->
                 ${memo.short_answer ? `
                   <div class="memo-section">
-                    <h5>⚡ II. SHORT ANSWER</h5>
-                    <p class="memo-text font-medium">${escapeHtml(memo.short_answer)}</p>
+                    <div class="section-badge-header">
+                      <span class="sec-num">02</span>
+                      <h5 class="sec-title">${isBn ? 'নির্বাহী আইনি সিদ্ধান্ত (Executive Conclusion)' : 'Executive Legal Conclusion'}</h5>
+                    </div>
+                    <div class="memo-conclusion-card">
+                      <p>${escapeHtml(memo.short_answer)}</p>
+                    </div>
                   </div>
                 ` : ''}
 
+                <!-- 03. Statement of Material Facts -->
                 ${memo.facts_considered?.length ? `
                   <div class="memo-section">
-                    <h5>📋 III. MATERIAL FACTS CONSIDERED</h5>
-                    <ul>${memo.facts_considered.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+                    <div class="section-badge-header">
+                      <span class="sec-num">03</span>
+                      <h5 class="sec-title">${isBn ? 'মোকদ্দমার উপাদান ও প্রাসঙ্গিক ঘটনাবলী' : 'Statement of Material Facts'}</h5>
+                    </div>
+                    <ul class="memo-facts-list">
+                      ${memo.facts_considered.map((f) => `
+                        <li>
+                          <span class="fact-bullet">•</span>
+                          <span>${escapeHtml(f)}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
                   </div>
                 ` : ''}
 
+                <!-- 04. Governing Statutory Provisions -->
                 ${memo.applicable_statutes?.length ? `
                   <div class="memo-section">
-                    <h5>📜 IV. CONTROLLING STATUTORY PROVISIONS</h5>
+                    <div class="section-badge-header">
+                      <span class="sec-num">04</span>
+                      <h5 class="sec-title">${isBn ? 'প্রযোজ্য সংবিধিবদ্ধ বিধান ও ধারা (Bangladesh Code)' : 'Governing Statutory Provisions'}</h5>
+                    </div>
                     <div class="statutes-callouts">
                       ${memo.applicable_statutes.map((st) => `
                         <div class="statute-callout interactive-citation" data-act="${escapeHtml(st.act || '')}" data-sec="${escapeHtml(st.section || '')}">
                           <div class="statute-callout-header">
-                            <strong>${escapeHtml(st.act || 'Act')} — ${escapeHtml(st.section || 'Section')}</strong>
-                            <button type="button" class="btn-jump-provision" data-act="${escapeHtml(st.act || '')}" data-sec="${escapeHtml(st.section || '')}" data-passage="${escapeHtml(st.exact_passage || st.rule_of_law || '')}" title="View verified statutory provision">
-                              🔍 ${isBn ? 'ধারা দেখুন ↗' : 'Inspect Provision ↗'}
+                            <div class="auth-header-left">
+                              <span class="auth-type-pill statute">STATUTE</span>
+                              <strong class="auth-name">${escapeHtml(st.act || 'Act')} — ${escapeHtml(st.section || 'Section')}</strong>
+                            </div>
+                            <button type="button" class="btn-jump-provision" data-act="${escapeHtml(st.act || '')}" data-sec="${escapeHtml(st.section || '')}" data-passage="${escapeHtml(st.exact_passage || st.rule_of_law || '')}" title="Inspect verified statutory gazette text">
+                              ${cIcon('book', 13)}
+                              <span>${isBn ? 'পূর্ণ ধারা দেখুন' : 'Inspect Provision'}</span>
+                              ${cIcon('external', 11)}
                             </button>
                           </div>
-                          <p>${escapeHtml(st.rule_of_law || '')}</p>
+                          <p class="auth-body-text">${escapeHtml(st.rule_of_law || '')}</p>
                         </div>
                       `).join('')}
                     </div>
                   </div>
                 ` : ''}
 
+                <!-- 05. Binding Supreme Court Precedents -->
                 ${memo.relevant_precedents?.length ? `
                   <div class="memo-section">
-                    <h5>⚖️ V. AUTHORITATIVE PRECEDENTS (DLR / BLD / BLC)</h5>
+                    <div class="section-badge-header">
+                      <span class="sec-num">05</span>
+                      <h5 class="sec-title">${isBn ? 'সুপ্রিম কোর্টের নির্দেশক নজির (DLR / BLD / BLC)' : 'Binding Precedents & Case Law'}</h5>
+                    </div>
                     <div class="precedents-callouts">
                       ${memo.relevant_precedents.map((pr) => `
                         <div class="precedent-callout interactive-citation" data-act="Supreme Court of Bangladesh" data-sec="${escapeHtml(pr.case_citation || '')}">
                           <div class="precedent-callout-header">
-                            <strong>📖 ${escapeHtml(pr.case_citation || 'Case Law')}</strong>
-                            <button type="button" class="btn-jump-provision" data-act="Supreme Court of Bangladesh" data-sec="${escapeHtml(pr.case_citation || '')}" data-passage="${escapeHtml(pr.exact_passage || pr.principle_held || '')}" title="View precedent holding">
-                              ⚖️ ${isBn ? 'নজির দেখুন ↗' : 'Inspect Case ↗'}
+                            <div class="auth-header-left">
+                              <span class="auth-type-pill precedent">REPORTED PRECEDENT</span>
+                              <strong class="auth-name law-report">${escapeHtml(pr.case_citation || 'Case Law')}</strong>
+                            </div>
+                            <button type="button" class="btn-jump-provision" data-act="Supreme Court of Bangladesh" data-sec="${escapeHtml(pr.case_citation || '')}" data-passage="${escapeHtml(pr.exact_passage || pr.principle_held || '')}" title="View judicial holding">
+                              ${cIcon('gavel', 13)}
+                              <span>${isBn ? 'নজির দেখুন' : 'Inspect Precedent'}</span>
+                              ${cIcon('external', 11)}
                             </button>
                           </div>
-                          <p>${escapeHtml(pr.principle_held || '')}</p>
+                          <p class="auth-body-text holding">${escapeHtml(pr.principle_held || '')}</p>
                         </div>
                       `).join('')}
                     </div>
                   </div>
                 ` : ''}
 
+                <!-- 06. IRAC Legal Analysis & Merits -->
                 ${memo.irac_analysis?.application ? `
                   <div class="memo-section">
-                    <h5>🧠 VI. IRAC LEGAL ANALYSIS</h5>
-                    <div class="irac-card">
-                      ${memo.irac_analysis.issue ? `<div><strong>Issue:</strong> ${escapeHtml(memo.irac_analysis.issue)}</div>` : ''}
-                      ${memo.irac_analysis.rule ? `<div><strong>Rule of Law:</strong> ${escapeHtml(memo.irac_analysis.rule)}</div>` : ''}
-                      ${memo.irac_analysis.application ? `<div><strong>Application to Matter Facts:</strong> ${escapeHtml(memo.irac_analysis.application)}</div>` : ''}
-                      ${memo.irac_analysis.conclusion ? `<div><strong>Legal Conclusion:</strong> ${escapeHtml(memo.irac_analysis.conclusion)}</div>` : ''}
+                    <div class="section-badge-header">
+                      <span class="sec-num">06</span>
+                      <h5 class="sec-title">${isBn ? 'আইনি বিশ্লেষণ ও প্রয়োগ (IRAC Method)' : 'IRAC Legal Analysis & Merits'}</h5>
+                    </div>
+                    <div class="irac-card-elevated">
+                      <div class="irac-item issue">
+                        <div class="irac-item-header">
+                          <span class="irac-tag">ISSUE</span>
+                          <span class="irac-sub">Legal Question Identified</span>
+                        </div>
+                        <p>${escapeHtml(memo.irac_analysis.issue || memo.question_presented)}</p>
+                      </div>
+                      <div class="irac-item rule">
+                        <div class="irac-item-header">
+                          <span class="irac-tag">RULE</span>
+                          <span class="irac-sub">Governing Doctrine & Standard</span>
+                        </div>
+                        <p>${escapeHtml(memo.irac_analysis.rule || 'Applicable statutory rules and Supreme Court ratio decidendi.')}</p>
+                      </div>
+                      <div class="irac-item application">
+                        <div class="irac-item-header">
+                          <span class="irac-tag">APPLICATION</span>
+                          <span class="irac-sub">Synthesis to Matter Record</span>
+                        </div>
+                        <div class="irac-prose">${escapeHtml(memo.irac_analysis.application || '')}</div>
+                      </div>
+                      <div class="irac-item conclusion">
+                        <div class="irac-item-header">
+                          <span class="irac-tag">CONCLUSION</span>
+                          <span class="irac-sub">Definitive Finding</span>
+                        </div>
+                        <p>${escapeHtml(memo.irac_analysis.conclusion || memo.short_answer || '')}</p>
+                      </div>
                     </div>
                   </div>
                 ` : ''}
 
+                <!-- 07. Procedural Risks & Counterarguments -->
                 ${memo.counterarguments_and_risks?.length ? `
                   <div class="memo-section">
-                    <h5>🛡️ VII. COUNTERARGUMENTS & PROCEDURAL RISKS</h5>
-                    <ul>${memo.counterarguments_and_risks.map((cr) => `<li>${escapeHtml(cr)}</li>`).join('')}</ul>
+                    <div class="section-badge-header">
+                      <span class="sec-num">07</span>
+                      <h5 class="sec-title">${isBn ? 'প্রতিপক্ষের সম্ভাব্য যুক্তি ও পদ্ধতিগত ঝুঁকি' : 'Anticipated Counterarguments & Procedural Risks'}</h5>
+                    </div>
+                    <ul class="memo-risks-list">
+                      ${memo.counterarguments_and_risks.map((cr) => `
+                        <li class="risk-item">
+                          <span class="risk-indicator"></span>
+                          <span>${escapeHtml(cr)}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
                   </div>
                 ` : ''}
 
+                <!-- 08. Practical Recommendation -->
                 ${memo.final_recommendation ? `
                   <div class="memo-section recommendation">
-                    <h5>💡 VIII. PRACTICAL LITIGATION RECOMMENDATION</h5>
-                    <p class="memo-text">${escapeHtml(memo.final_recommendation)}</p>
+                    <div class="section-badge-header">
+                      <span class="sec-num">08</span>
+                      <h5 class="sec-title">${isBn ? 'চেম্বার কর্মপরিকল্পনা ও পরামর্শ' : 'Practical Litigation Strategy & Next Steps'}</h5>
+                    </div>
+                    <p class="recommendation-text">${escapeHtml(memo.final_recommendation)}</p>
                   </div>
                 ` : ''}
 
+                <!-- 09. Primary Source Citations -->
                 ${memo.source_citations?.length ? `
                   <div class="memo-section sources">
-                    <h5>🔗 IX. EXACT SOURCE PASSAGES & CITATIONS</h5>
+                    <div class="section-badge-header">
+                      <span class="sec-num">09</span>
+                      <h5 class="sec-title">${isBn ? 'যাচাইকৃত মূল উদ্ধৃতি ও দলিলসূত্র' : 'Primary Source Passages & Citations'}</h5>
+                    </div>
                     <div class="sources-snippets">
                       ${memo.source_citations.map((src) => {
                         const actName = src.act || src.title || 'Statute';
@@ -1166,9 +1422,13 @@ export function openMatterWorkspaceModal(
                         return `
                         <div class="source-snippet-card interactive-citation" data-act="${escapeHtml(actName)}" data-sec="${escapeHtml(secRef)}">
                           <div class="source-snippet-header">
-                            <span class="src-title">📖 ${escapeHtml(src.title || 'Citation')}</span>
+                            <div class="src-title-group">
+                              <span class="quote-glyph">“</span>
+                              <strong class="src-title">${escapeHtml(src.title || 'Citation')}</strong>
+                            </div>
                             <button type="button" class="btn-jump-provision" data-act="${escapeHtml(actName)}" data-sec="${escapeHtml(secRef)}" data-passage="${escapeHtml(src.passage || '')}" title="Open canonical source passage">
-                              ${isBn ? 'মূল ধারা/উদ্ধৃতি দেখুন ↗' : 'View Source Authority ↗'}
+                              ${cIcon('external', 13)}
+                              <span>${isBn ? 'মূল ধারা দেখুন' : 'View Source'}</span>
                             </button>
                           </div>
                           <blockquote class="src-passage">${escapeHtml(src.passage || '')}</blockquote>
@@ -1179,12 +1439,12 @@ export function openMatterWorkspaceModal(
                 ` : ''}
 
                 <!-- Memo Actions -->
-                <div class="memo-action-bar">
+                <div class="memo-action-bar-elevated">
                   <button type="button" class="button button-small button-outline copy-memo-btn" data-id="${memo.id}">
-                    📋 ${isBn ? 'মেমো কপি করুন' : 'Copy Memorandum'}
+                    ${cIcon('copy', 14)} <span>${isBn ? 'মেমো কপি করুন' : 'Copy Memorandum'}</span>
                   </button>
-                  <button type="button" class="button button-small button-secondary send-matter-prompt-btn" data-goal="${isBn ? `এই লিগ্যাল মেমোরেন্ডামের সুনির্দিষ্ট আইনি ভিত্তি ও নজিরের আলোকে আদালতের জন্য একটি আনুষ্ঠানিক আরজি বা পিটিশন ড্রাফট করুন:\n\nবিষয়: ${escapeHtml(memo.question_presented)}\n\nসিদ্ধান্ত: ${escapeHtml(memo.short_answer || '')}\n\nআইনি বিশ্লেষণ: ${escapeHtml(memo.irac_analysis?.application || '')}` : `Draft formal court pleading/petition strictly grounded in this legal memo:\n\nQuestion: ${escapeHtml(memo.question_presented)}\n\nShort Answer: ${escapeHtml(memo.short_answer || '')}\n\nIRAC Analysis: ${escapeHtml(memo.irac_analysis?.application || '')}`}">
-                    ✍️ ${isBn ? 'Justor AI-তে ড্রাফট করুন' : 'Draft Pleading in Justor'}
+                  <button type="button" class="button button-small button-primary send-matter-prompt-btn" data-goal="${isBn ? `এই লিগ্যাল মেমোরেন্ডামের সুনির্দিষ্ট আইনি ভিত্তি ও নজিরের আলোকে আদালতের জন্য একটি আনুষ্ঠানিক আরজি বা পিটিশন ড্রাফট করুন:\n\nবিষয়: ${escapeHtml(memo.question_presented)}\n\nসিদ্ধান্ত: ${escapeHtml(memo.short_answer || '')}\n\nআইনি বিশ্লেষণ: ${escapeHtml(memo.irac_analysis?.application || '')}` : `Draft formal court pleading/petition strictly grounded in this legal memo:\n\nQuestion: ${escapeHtml(memo.question_presented)}\n\nShort Answer: ${escapeHtml(memo.short_answer || '')}\n\nIRAC Analysis: ${escapeHtml(memo.irac_analysis?.application || '')}`}">
+                    ${cIcon('pen', 14)} <span>${isBn ? 'Justor AI-তে ড্রাফট করুন' : 'Draft Pleading in Justor'}</span>
                   </button>
                 </div>
               </div>
@@ -1200,56 +1460,67 @@ export function openMatterWorkspaceModal(
         <div class="matter-tab-content">
           <div class="matter-vault-container">
             <div class="vault-header">
-              <div>
-                <h3>📁 ${escapeHtml(currentMatter.title)}</h3>
-                <span class="vault-client">👤 ${isBn ? 'মক্কেল:' : 'Client:'} <strong>${escapeHtml(currentMatter.clientName || 'Unspecified')}</strong></span>
-                <span class="vault-type">⚖️ ${isBn ? 'মোকদ্দমার ধরন:' : 'Matter Type:'} <strong>${escapeHtml(currentMatter.matterType || 'General Litigation')}</strong></span>
-                ${currentMatter.court ? `<span class="vault-court">🏛️ ${escapeHtml(currentMatter.court)}</span>` : ''}
+              <div class="vault-header-info">
+                <div class="vault-title-wrap">
+                  ${cIcon('folder', 18)}
+                  <h3 class="vault-title">${escapeHtml(currentMatter.title)}</h3>
+                </div>
+                <div class="vault-meta-row">
+                  <span class="vault-meta-item">${cIcon('user', 12)} <span>${isBn ? 'মক্কেল:' : 'Client:'} <strong>${escapeHtml(currentMatter.clientName || 'Unspecified')}</strong></span></span>
+                  <span class="vault-meta-item">${cIcon('scales', 12)} <span>${isBn ? 'মোকদ্দমা:' : 'Type:'} <strong>${escapeHtml(currentMatter.matterType || 'General Litigation')}</strong></span></span>
+                  ${currentMatter.court ? `<span class="vault-meta-item">${cIcon('gavel', 12)} <span>${escapeHtml(currentMatter.court)}</span></span>` : ''}
+                </div>
               </div>
               <button type="button" class="button button-secondary button-small" id="edit-matter-title-btn">
-                ✏️ ${isBn ? 'বিবরণ সম্পাদনা' : 'Edit Details'}
+                ${cIcon('pen', 12)}
+                <span>${isBn ? 'বিবরণ সম্পাদনা' : 'Edit Details'}</span>
               </button>
             </div>
 
             <div class="vault-stats-grid">
               <div class="vault-stat-box">
                 <span class="stat-num">${currentMatter.notes.length}</span>
-                <span class="stat-lbl">🎙️ ${isBn ? 'ডিকটেশন নোট' : 'Dictation Notes'}</span>
+                <span class="stat-lbl">${cIcon('mic', 12)} ${isBn ? 'ডিকটেশন নোট' : 'Dictation Notes'}</span>
               </div>
               <div class="vault-stat-box">
                 <span class="stat-num">${currentMatter.consultations.length}</span>
-                <span class="stat-lbl">🎧 ${isBn ? 'পরামর্শ অডিও' : 'Consultations'}</span>
+                <span class="stat-lbl">${cIcon('headphones', 12)} ${isBn ? 'পরামর্শ অডিও' : 'Consultations'}</span>
               </div>
               <div class="vault-stat-box">
                 <span class="stat-num">${currentMatter.summaries.length}</span>
-                <span class="stat-lbl">📄 ${isBn ? 'রায়ের সারসংক্ষেপ' : 'Judgment Briefs'}</span>
+                <span class="stat-lbl">${cIcon('gavel', 12)} ${isBn ? 'রায়ের সারসংক্ষেপ' : 'Judgment Briefs'}</span>
               </div>
               <div class="vault-stat-box">
                 <span class="stat-num">${currentMatter.chronology?.timeline?.length || 0}</span>
-                <span class="stat-lbl">⏳ ${isBn ? 'কালপঞ্জি ঘটনা' : 'Timeline Events'}</span>
+                <span class="stat-lbl">${cIcon('calendar', 12)} ${isBn ? 'কালপঞ্জি ঘটনা' : 'Timeline Events'}</span>
               </div>
               <div class="vault-stat-box">
                 <span class="stat-num">${currentMatter.hearingPack ? '1' : '0'}</span>
-                <span class="stat-lbl">🏛️ ${isBn ? 'হিয়ারিং প্যাক' : 'Hearing Pack'}</span>
+                <span class="stat-lbl">${cIcon('target', 12)} ${isBn ? 'হিয়ারিং প্যাক' : 'Hearing Pack'}</span>
               </div>
               <div class="vault-stat-box">
                 <span class="stat-num">${currentMatter.legalMemos?.length || 0}</span>
-                <span class="stat-lbl">📝 ${isBn ? 'লিগ্যাল মেমো' : 'Legal Memos'}</span>
+                <span class="stat-lbl">${cIcon('memo', 12)} ${isBn ? 'লিগ্যাল মেমো' : 'Legal Memos'}</span>
               </div>
             </div>
 
             <div class="vault-rag-bridge">
-              <h4>🚀 ${isBn ? 'Justor AI দিয়ে মোকদ্দমার খসড়া ও আইনি গবেষণা' : 'Matter-Aware Legal RAG Bridge'}</h4>
+              <div class="bridge-header">
+                ${cIcon('sparkle', 14)}
+                <h4>${isBn ? 'Justor AI দিয়ে মোকদ্দমার খসড়া ও আইনি গবেষণা' : 'Matter-Aware Legal RAG Bridge'}</h4>
+              </div>
               <p>${isBn 
                 ? 'এই মোকদ্দমার সকল তথ্য, কালপঞ্জি ও প্রমাণ সরাসরি Justor AI-এর আরএজি সার্চে যুক্ত করে নোটিশ, জামিন পিটিশন বা সিভিল রিভিশন ড্রাফট করুন।' 
                 : 'Pre-infuses this matter\'s entire facts, chronology, and evidence matrix directly into Justor AI\'s Bangladesh legal RAG engine.'}
               </p>
               <div class="bridge-actions">
                 <button type="button" class="button button-primary send-matter-prompt-btn" data-goal="${isBn ? 'এই মোকদ্দমার তথ্যের ভিত্তিতে একটি আনুষ্ঠানিক লিগ্যাল নোটিশ বা আরজি ড্রাফট করুন।' : 'Draft a formal legal notice or plaint based on this matter file.'}">
-                  ✍️ ${isBn ? 'লিগ্যাল নোটিশ ড্রাফট করুন' : 'Draft Legal Demand Notice'}
+                  ${cIcon('pen', 13)}
+                  <span>${isBn ? 'লিগ্যাল নোটিশ ড্রাফট করুন' : 'Draft Legal Demand Notice'}</span>
                 </button>
                 <button type="button" class="button button-secondary send-matter-prompt-btn" data-goal="${isBn ? 'দেওয়ানি কার্যবিধির অর্ডার ৩৯ বা ফৌজদারি কার্যবিধির ৪৯৮ ধারায় সুপ্রিম কোর্টের নজিরসহ প্রার্থনার গ্রাউন্ডস বের করুন।' : 'Research strongest grounds and Supreme Court of Bangladesh precedents for bail or injunction.'}">
-                  ⚖️ ${isBn ? 'জামিন / নিষেধাজ্ঞার নজির খুঁজুন' : 'Research Grounds & Case Law'}
+                  ${cIcon('search', 13)}
+                  <span>${isBn ? 'জামিন / নিষেধাজ্ঞার নজির খুঁজুন' : 'Research Grounds & Case Law'}</span>
                 </button>
               </div>
             </div>
@@ -1368,7 +1639,7 @@ export function openMatterWorkspaceModal(
               recognition.start();
               isRec = true;
               dictateMicToggle.classList.add('is-recording');
-              dictateMicToggle.innerHTML = `🔴 <span>${isBn ? 'রেকর্ড হচ্ছে...' : 'Recording...'}</span>`;
+              dictateMicToggle.innerHTML = `<span class="pulse-dot"></span><span>${isBn ? 'রেকর্ড হচ্ছে...' : 'Recording...'}</span>`;
             } catch (err) {
               console.warn('Speech start error:', err);
             }
@@ -1376,7 +1647,7 @@ export function openMatterWorkspaceModal(
             if (recognition) recognition.stop();
             isRec = false;
             dictateMicToggle.classList.remove('is-recording');
-            dictateMicToggle.innerHTML = `🎤 <span>${isBn ? 'ভয়েস টাইপিং' : 'Start Speaking'}</span>`;
+            dictateMicToggle.innerHTML = `${cIcon('mic', 13)} <span>${isBn ? 'ভয়েস টাইপিং' : 'Start Speaking'}</span>`;
           }
         });
       }
@@ -1448,7 +1719,7 @@ export function openMatterWorkspaceModal(
       fileInput?.addEventListener('change', () => {
         if (fileInput.files && fileInput.files[0]) {
           selectedFile = fileInput.files[0];
-          filenameSpan.textContent = `📎 ${selectedFile.name} (${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB)`;
+          filenameSpan.textContent = `${selectedFile.name} (${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB)`;
           updateBtnState();
         }
       });
@@ -1617,9 +1888,9 @@ export function openMatterWorkspaceModal(
         const text = btn.getAttribute('data-text') || '';
         if (text) {
           navigator.clipboard.writeText(text);
-          btn.textContent = isBn ? '✅ কপি করা হয়েছে' : '✅ Copied!';
+          btn.innerHTML = `${cIcon('check', 12)} <span>${isBn ? 'কপি সম্পন্ন' : 'Copied!'}</span>`;
           setTimeout(() => {
-            btn.textContent = isBn ? '📋 প্রার্থনা কপি করুন' : 'Copy Prayer';
+            btn.innerHTML = `${cIcon('copy', 12)} <span>${isBn ? 'প্রার্থনা কপি করুন' : 'Copy Prayer'}</span>`;
           }, 2000);
         }
       });
@@ -1780,9 +2051,9 @@ export function openMatterWorkspaceModal(
             ].filter(Boolean).join('\n\n');
 
             navigator.clipboard.writeText(memoText);
-            btn.textContent = isBn ? '✅ কপি হয়েছে' : '✅ Copied!';
+            btn.innerHTML = `${cIcon('check', 14)} <span>${isBn ? 'কপি সম্পন্ন' : 'Copied!'}</span>`;
             setTimeout(() => {
-              btn.textContent = isBn ? '📋 মেমো কপি করুন' : 'Copy Memorandum';
+              btn.innerHTML = `${cIcon('copy', 14)} <span>${isBn ? 'মেমো কপি করুন' : 'Copy Memorandum'}</span>`;
             }, 2000);
           }
         });

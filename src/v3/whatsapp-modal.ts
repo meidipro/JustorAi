@@ -15,10 +15,24 @@ const DEFAULT_MESSAGES: WhatsAppMessage[] = [
   {
     id: 'm1',
     sender: 'bot',
-    text: '⚖️ *আসসালামু আলাইকুম! আমি জাসটর এআই (Justor AI) — ২৪/৭ স্মার্ট আইনি হেল্পলাইন।*\n\nআমি আপনাকে বাংলাদেশ আইনের ভিত্তিতে তথ্য, পরামর্শ ও মামলার বর্তমান অবস্থা জানাতে প্রস্তুত।\n\n🔹 যে কোনো আইনি প্রশ্ন লিখে বা ভয়েস মেসেজ পাঠিয়ে দিন।\n🔹 মামলার অবস্থা জানতে: `STATUS <রেফারেন্স>`\n🔹 আইনজীবীর চেম্বার পরামর্শের জন্য লিখুন: `ADVOCATE`',
+    text: '*আসসালামু আলাইকুম! আমি জাসটর এআই (Justor AI) — ২৪/৭ স্মার্ট আইনি হেল্পলাইন।*\n\nআমি আপনাকে বাংলাদেশ আইনের ভিত্তিতে তথ্য, পরামর্শ ও মামলার বর্তমান অবস্থা জানাতে প্রস্তুত।\n\n- যে কোনো আইনি প্রশ্ন লিখে বা ভয়েস মেসেজ পাঠিয়ে দিন।\n- মামলার অবস্থা জানতে: `STATUS <রেফারেন্স>`\n- আইনজীবীর চেম্বার পরামর্শের জন্য লিখুন: `ADVOCATE`',
     time: '10:00 AM'
   }
 ];
+
+const waSvg = (name: 'phone' | 'code' | 'scale' | 'refresh' | 'mic' | 'target' | 'flask' | 'check', size = 16): string => {
+  const paths: Record<string, string> = {
+    phone: '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+    code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    scale: '<path d="M12 3v18M7 21h10M4 7h16M6 7 3 13h6L6 7Zm12 0-3 6h6l-3-6Z"/>',
+    refresh: '<path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/>',
+    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>',
+    target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    flask: '<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7M7 16h10"/>',
+    check: '<polyline points="20 6 9 17 4 12"/>',
+  };
+  return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; display: inline-block;">${paths[name] || paths.phone}</svg>`;
+};
 
 export function openWhatsAppModal(): void {
   const existing = document.getElementById('justor-whatsapp-modal');
@@ -53,8 +67,8 @@ export function openWhatsAppModal(): void {
       </header>
 
       <div class="whatsapp-tabs">
-        <button type="button" class="whatsapp-tab active" data-tab="simulator">📱 Interactive Simulator</button>
-        <button type="button" class="whatsapp-tab" data-tab="integration">⚙️ Webhook & Deployment Guide</button>
+        <button type="button" class="whatsapp-tab active" data-tab="simulator">${waSvg('phone', 14)} <span>Interactive Simulator</span></button>
+        <button type="button" class="whatsapp-tab" data-tab="integration">${waSvg('code', 14)} <span>Webhook & Deployment Guide</span></button>
       </div>
 
       <div class="whatsapp-tab-content active" id="wa-content-simulator">
@@ -65,7 +79,7 @@ export function openWhatsAppModal(): void {
             <div class="whatsapp-app-bar">
               <div class="whatsapp-contact-info">
                 <div class="whatsapp-avatar">
-                  <span>⚖️</span>
+                  <span>${waSvg('scale', 14)}</span>
                   <span class="whatsapp-online-dot"></span>
                 </div>
                 <div class="whatsapp-contact-text">
@@ -77,7 +91,7 @@ export function openWhatsAppModal(): void {
                 </div>
               </div>
               <div class="whatsapp-app-bar-actions">
-                <button type="button" class="wa-icon-btn" id="wa-clear-chat-btn" title="Clear Chat">🔄</button>
+                <button type="button" class="wa-icon-btn" id="wa-clear-chat-btn" title="Clear Chat">${waSvg('refresh', 13)}</button>
               </div>
             </div>
 
@@ -101,7 +115,7 @@ export function openWhatsAppModal(): void {
             <!-- WhatsApp Message Input Footer -->
             <div class="whatsapp-input-bar">
               <button type="button" class="wa-voice-btn" id="wa-voice-toggle-btn" title="Simulate Voice Message">
-                <span id="wa-mic-icon">🎙️</span>
+                <span id="wa-mic-icon">${waSvg('mic', 16)}</span>
               </button>
               <input type="text" id="whatsapp-message-input" placeholder="Type a message or case ID..." autocomplete="off" />
               <button type="button" class="wa-send-btn" id="whatsapp-send-btn" aria-label="Send">
@@ -115,8 +129,8 @@ export function openWhatsAppModal(): void {
           <!-- Simulator Control Panel & Feature Highlights -->
           <div class="whatsapp-sim-sidebar">
             <div class="whatsapp-sim-card">
-              <h4>🎯 What This Solves (Adalat AI Alternative)</h4>
-              <p>Adalat AI charges state courts millions for proprietary WhatsApp chatbots. Justor delivers the exact same 24/7 experience to ordinary citizens and client litigants with zero delay.</p>
+              <h4>${waSvg('target', 14)} <span>Chamber Helpline Standard</span></h4>
+              <p>Justor delivers 24/7 client conversational experience to ordinary citizens and litigants with zero delay.</p>
               <ul>
                 <li><strong>Statutory RAG:</strong> Grounded in 46,000+ provisions of Bangladesh Code (NI Act, Penal Code, CPC, CrPC).</li>
                 <li><strong>Voice Reasoning:</strong> Accepts spoken voice notes in Bengali/English and answers with practical legal steps.</li>
@@ -126,7 +140,7 @@ export function openWhatsAppModal(): void {
             </div>
 
             <div class="whatsapp-sim-card">
-              <h4>🧪 Quick Test Scenarios</h4>
+              <h4>${waSvg('flask', 14)} <span>Quick Test Scenarios</span></h4>
               <div class="wa-test-scenarios">
                 <button type="button" class="wa-scenario-btn" data-query="বাদী হিসেবে চেক ডিজঅনারের মামলা করতে আমার কি কি কাগজপত্র লাগবে?">
                   <strong>1. Evidence Checklist</strong>
@@ -251,7 +265,7 @@ TWILIO_AUTH_TOKEN=your_twilio_token</code></pre>
       return `
         <div class="whatsapp-bubble-row ${isUser ? 'user-row' : 'bot-row'}">
           <div class="whatsapp-bubble ${isUser ? 'user-bubble' : 'bot-bubble'}">
-            ${m.isVoice ? '<div class="wa-voice-tag">🎙️ <em>Spoken Voice Query</em></div>' : ''}
+            ${m.isVoice ? `<div class="wa-voice-tag">${waSvg('mic', 12)} <em>Spoken Voice Query</em></div>` : ''}
             <div class="wa-bubble-content">${formattedBody}</div>
             <div class="wa-bubble-meta">
               <span class="wa-bubble-time">${m.time}</span>
