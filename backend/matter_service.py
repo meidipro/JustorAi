@@ -605,26 +605,47 @@ class JustorMatterService:
             '  "date": "Date of Memorandum",\n'
             '  "question_presented": "Specific legal question analyzed",\n'
             '  "short_answer": "Definitive 1-2 paragraph legal conclusion answering the question directly",\n'
-            '  "statement_of_facts": "Clean, chronologically ordered statement of material facts sourced from the matter record",\n'
+            '  "statement_of_facts": [\n'
+            '    "Chronological material fact from matter record",\n'
+            '    "Another verified fact from matter record"\n'
+            '  ],\n'
             '  "statutory_authorities": [\n'
             '    {\n'
-            '      "act": "Name of Statute (e.g. Negotiable Instruments Act, 1881)",\n'
-            '      "section": "Section number",\n'
-            '      "rule": "Statutory rule and requirements",\n'
-            '      "application": "How it controls our client\'s position"\n'
+            '      "act": "Name of Statute (e.g. Negotiable Instruments Act, 1881 / The Code of Civil Procedure, 1908)",\n'
+            '      "section": "Section or Order & Rule (e.g. Section 138 / Order XXXIX Rule 1)",\n'
+            '      "rule": "Statutory rule and legal requirements",\n'
+            '      "application": "How it controls our client\'s position",\n'
+            '      "exact_passage": "Verbatim or precise statutory text excerpt from the Bangladesh Code"\n'
             '    }\n'
             '  ],\n'
             '  "judicial_precedents": [\n'
             '    {\n'
-            '      "citation": "Case Citation (e.g. 54 DLR (AD) 12)",\n'
+            '      "citation": "Official Law Report Citation (e.g. 54 DLR (AD) 12 / 18 BLD (HCD) 34)",\n'
             '      "parties": "Parties name",\n'
-            '      "ratio": "Principle of law laid down by Supreme Court",\n'
-            '      "application": "Relevance to current matter"\n'
+            '      "ratio": "Principle of law laid down by Supreme Court of Bangladesh",\n'
+            '      "application": "Relevance to current matter facts",\n'
+            '      "exact_passage": "Direct quote or key holding from the judgment"\n'
             '    }\n'
             '  ],\n'
-            '  "legal_analysis": "Comprehensive IRAC analysis (Issue, Rule, Application to Facts, Analysis of Merits)",\n'
-            '  "counterarguments_and_rebuttals": "Anticipated arguments from the other side and how to defeat them",\n'
-            '  "conclusion_and_recommendations": "Actionable chamber steps, filings, and advice for the advocate"\n'
+            '  "irac_analysis": {\n'
+            '    "issue": "Legal issue defined concisely",\n'
+            '    "rule": "Controlling principles of statutory and case law",\n'
+            '    "application": "Thorough application of the legal rules to the matter dossier facts",\n'
+            '    "conclusion": "Definitive legal conclusion on this issue"\n'
+            '  },\n'
+            '  "counterarguments_and_rebuttals": [\n'
+            '    "Anticipated argument or procedural objection from opposing counsel and specific legal counter-strategy"\n'
+            '  ],\n'
+            '  "conclusion_and_recommendations": "Actionable chamber steps, filings, limitation deadlines, and advice for the advocate",\n'
+            '  "source_citations": [\n'
+            '    {\n'
+            '      "title": "Short title (e.g. NI Act 1881, s. 138 or 54 DLR (AD) 12)",\n'
+            '      "act": "Statute name or Court",\n'
+            '      "section": "Section, Order, or Precedent Citation",\n'
+            '      "passage": "Exact verbatim source passage or statutory extract that directly supports the memorandum",\n'
+            '      "authority_type": "statute | precedent | gazette"\n'
+            '    }\n'
+            '  ]\n'
             "}\n"
             + ("Output all explanatory and legal analysis in authoritative legal Bengali (বাংলা)." if is_bn else "Output in authoritative legal English.")
         )
@@ -632,7 +653,7 @@ class JustorMatterService:
         prompt = (
             f"QUESTION PRESENTED FOR OPINION:\n\"{question_presented}\"\n\n"
             f"MATTER RECORD DOSSIER:\n\"\"\"\n{dossier}\n\"\"\"\n\n"
-            "Draft the complete formal Legal Memorandum."
+            "Draft the complete formal Legal Memorandum with exact source citations and passages."
         )
 
         contents = [{"role": "user", "parts": [{"text": prompt}]}]
@@ -645,9 +666,72 @@ class JustorMatterService:
                 "data": {}
             }
 
+        # Normalize keys for bidirectional frontend compatibility
+        statutes = result.get("statutory_authorities") or result.get("applicable_statutes") or []
+        precedents = result.get("judicial_precedents") or result.get("relevant_precedents") or []
+        facts = result.get("statement_of_facts") or result.get("facts_considered") or []
+        irac = result.get("irac_analysis")
+        if not irac and result.get("legal_analysis"):
+            irac = {"application": result["legal_analysis"]}
+        counterargs = result.get("counterarguments_and_rebuttals") or result.get("counterarguments_and_risks") or []
+        recom = result.get("conclusion_and_recommendations") or result.get("final_recommendation") or ""
+
+        # Ensure source_citations is fully populated with exact passages
+        source_citations = result.get("source_citations") or []
+        if not source_citations:
+            for s in statutes:
+                if isinstance(s, dict):
+                    source_citations.append({
+                        "title": f"{s.get('act', 'Act')} {s.get('section', '')}".strip(),
+                        "act": s.get("act", ""),
+                        "section": s.get("section", ""),
+                        "passage": s.get("exact_passage") or s.get("rule") or s.get("rule_of_law") or s.get("application", ""),
+                        "authority_type": "statute"
+                    })
+            for p in precedents:
+                if isinstance(p, dict):
+                    source_citations.append({
+                        "title": p.get("citation") or p.get("case_citation") or p.get("parties", "Precedent"),
+                        "act": "Supreme Court of Bangladesh",
+                        "section": p.get("citation") or p.get("case_citation", ""),
+                        "passage": p.get("exact_passage") or p.get("ratio") or p.get("principle_held") or p.get("application", ""),
+                        "authority_type": "precedent"
+                    })
+
+        normalized: Dict[str, Any] = {
+            "memo_title": result.get("memo_title") or f"LEGAL MEMORANDUM: {question_presented[:40]}",
+            "question_presented": result.get("question_presented") or question_presented,
+            "short_answer": result.get("short_answer") or "",
+            "statement_of_facts": facts if isinstance(facts, list) else [facts],
+            "facts_considered": facts if isinstance(facts, list) else [facts],
+            "statutory_authorities": statutes,
+            "applicable_statutes": [
+                {
+                    "act": s.get("act", ""),
+                    "section": s.get("section", ""),
+                    "rule_of_law": s.get("rule") or s.get("rule_of_law") or s.get("application", ""),
+                    "exact_passage": s.get("exact_passage", "")
+                } for s in statutes if isinstance(s, dict)
+            ],
+            "judicial_precedents": precedents,
+            "relevant_precedents": [
+                {
+                    "case_citation": p.get("citation") or p.get("case_citation") or (f"{p.get('parties')} ({p.get('citation')})" if p.get("parties") else "Precedent"),
+                    "principle_held": p.get("ratio") or p.get("principle_held") or p.get("application", ""),
+                    "exact_passage": p.get("exact_passage", "")
+                } for p in precedents if isinstance(p, dict)
+            ],
+            "irac_analysis": irac if isinstance(irac, dict) else {"application": str(irac)},
+            "counterarguments_and_rebuttals": counterargs if isinstance(counterargs, list) else [counterargs],
+            "counterarguments_and_risks": counterargs if isinstance(counterargs, list) else [counterargs],
+            "conclusion_and_recommendations": recom,
+            "final_recommendation": recom,
+            "source_citations": source_citations
+        }
+
         return {
             "status": "ok",
-            "data": result
+            "data": normalized
         }
 
 

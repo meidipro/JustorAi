@@ -149,10 +149,12 @@ export interface LegalMemo {
     act?: string;
     section?: string;
     rule_of_law?: string;
+    exact_passage?: string;
   }>;
   relevant_precedents?: Array<{
     case_citation?: string;
     principle_held?: string;
+    exact_passage?: string;
   }>;
   irac_analysis?: {
     issue?: string;
@@ -164,6 +166,8 @@ export interface LegalMemo {
   final_recommendation?: string;
   source_citations?: Array<{
     title?: string;
+    act?: string;
+    section?: string;
     passage?: string;
     authority_type?: string;
   }>;
@@ -319,7 +323,8 @@ function buildMatterAwarePrompt(matter: LegalMatter, taskDescription: string): s
 
 export function openMatterWorkspaceModal(
   language: 'en' | 'bn' = 'en',
-  onSendToChat?: (prompt: string) => void
+  onSendToChat?: (prompt: string) => void,
+  onViewProvision?: (act: string, sectionRef: string) => void
 ): void {
   // Remove existing modal if any
   const existing = document.querySelector('.matter-modal-backdrop');
@@ -1092,8 +1097,13 @@ export function openMatterWorkspaceModal(
                     <h5>📜 IV. CONTROLLING STATUTORY PROVISIONS</h5>
                     <div class="statutes-callouts">
                       ${memo.applicable_statutes.map((st) => `
-                        <div class="statute-callout">
-                          <strong>${escapeHtml(st.act || 'Act')} — ${escapeHtml(st.section || 'Section')}</strong>
+                        <div class="statute-callout interactive-citation" data-act="${escapeHtml(st.act || '')}" data-sec="${escapeHtml(st.section || '')}">
+                          <div class="statute-callout-header">
+                            <strong>${escapeHtml(st.act || 'Act')} — ${escapeHtml(st.section || 'Section')}</strong>
+                            <button type="button" class="btn-jump-provision" data-act="${escapeHtml(st.act || '')}" data-sec="${escapeHtml(st.section || '')}" data-passage="${escapeHtml(st.exact_passage || st.rule_of_law || '')}" title="View verified statutory provision">
+                              🔍 ${isBn ? 'ধারা দেখুন ↗' : 'Inspect Provision ↗'}
+                            </button>
+                          </div>
                           <p>${escapeHtml(st.rule_of_law || '')}</p>
                         </div>
                       `).join('')}
@@ -1106,8 +1116,13 @@ export function openMatterWorkspaceModal(
                     <h5>⚖️ V. AUTHORITATIVE PRECEDENTS (DLR / BLD / BLC)</h5>
                     <div class="precedents-callouts">
                       ${memo.relevant_precedents.map((pr) => `
-                        <div class="precedent-callout">
-                          <strong>📖 ${escapeHtml(pr.case_citation || 'Case Law')}</strong>
+                        <div class="precedent-callout interactive-citation" data-act="Supreme Court of Bangladesh" data-sec="${escapeHtml(pr.case_citation || '')}">
+                          <div class="precedent-callout-header">
+                            <strong>📖 ${escapeHtml(pr.case_citation || 'Case Law')}</strong>
+                            <button type="button" class="btn-jump-provision" data-act="Supreme Court of Bangladesh" data-sec="${escapeHtml(pr.case_citation || '')}" data-passage="${escapeHtml(pr.exact_passage || pr.principle_held || '')}" title="View precedent holding">
+                              ⚖️ ${isBn ? 'নজির দেখুন ↗' : 'Inspect Case ↗'}
+                            </button>
+                          </div>
                           <p>${escapeHtml(pr.principle_held || '')}</p>
                         </div>
                       `).join('')}
@@ -1145,12 +1160,20 @@ export function openMatterWorkspaceModal(
                   <div class="memo-section sources">
                     <h5>🔗 IX. EXACT SOURCE PASSAGES & CITATIONS</h5>
                     <div class="sources-snippets">
-                      ${memo.source_citations.map((src) => `
-                        <div class="source-snippet-card">
-                          <span class="src-title">📖 ${escapeHtml(src.title || 'Citation')}</span>
+                      ${memo.source_citations.map((src) => {
+                        const actName = src.act || src.title || 'Statute';
+                        const secRef = src.section || src.title || '';
+                        return `
+                        <div class="source-snippet-card interactive-citation" data-act="${escapeHtml(actName)}" data-sec="${escapeHtml(secRef)}">
+                          <div class="source-snippet-header">
+                            <span class="src-title">📖 ${escapeHtml(src.title || 'Citation')}</span>
+                            <button type="button" class="btn-jump-provision" data-act="${escapeHtml(actName)}" data-sec="${escapeHtml(secRef)}" data-passage="${escapeHtml(src.passage || '')}" title="Open canonical source passage">
+                              ${isBn ? 'মূল ধারা/উদ্ধৃতি দেখুন ↗' : 'View Source Authority ↗'}
+                            </button>
+                          </div>
                           <blockquote class="src-passage">${escapeHtml(src.passage || '')}</blockquote>
                         </div>
-                      `).join('')}
+                      `}).join('')}
                     </div>
                   </div>
                 ` : ''}
@@ -1160,7 +1183,7 @@ export function openMatterWorkspaceModal(
                   <button type="button" class="button button-small button-outline copy-memo-btn" data-id="${memo.id}">
                     📋 ${isBn ? 'মেমো কপি করুন' : 'Copy Memorandum'}
                   </button>
-                  <button type="button" class="button button-small button-secondary send-matter-prompt-btn" data-goal="${isBn ? `এই লিগ্যাল মেমোরেন্ডামের উপর ভিত্তি করে আদালতে আরজি বা পিটিশন ড্রাফট করুন: ${escapeHtml(memo.question_presented)}` : `Draft formal court pleading or petition based on this legal memo: ${escapeHtml(memo.question_presented)}`}">
+                  <button type="button" class="button button-small button-secondary send-matter-prompt-btn" data-goal="${isBn ? `এই লিগ্যাল মেমোরেন্ডামের সুনির্দিষ্ট আইনি ভিত্তি ও নজিরের আলোকে আদালতের জন্য একটি আনুষ্ঠানিক আরজি বা পিটিশন ড্রাফট করুন:\n\nবিষয়: ${escapeHtml(memo.question_presented)}\n\nসিদ্ধান্ত: ${escapeHtml(memo.short_answer || '')}\n\nআইনি বিশ্লেষণ: ${escapeHtml(memo.irac_analysis?.application || '')}` : `Draft formal court pleading/petition strictly grounded in this legal memo:\n\nQuestion: ${escapeHtml(memo.question_presented)}\n\nShort Answer: ${escapeHtml(memo.short_answer || '')}\n\nIRAC Analysis: ${escapeHtml(memo.irac_analysis?.application || '')}`}">
                     ✍️ ${isBn ? 'Justor AI-তে ড্রাফট করুন' : 'Draft Pleading in Justor'}
                   </button>
                 </div>
@@ -1294,6 +1317,21 @@ export function openMatterWorkspaceModal(
         if (onSendToChat) {
           backdrop.remove();
           onSendToChat(enrichedPrompt);
+        }
+      });
+    });
+
+    // Global Citation / Provision Inspector Handler
+    backdrop.querySelectorAll<HTMLButtonElement>('.btn-jump-provision').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const act = btn.getAttribute('data-act') || '';
+        const sec = btn.getAttribute('data-sec') || '';
+        const passage = btn.getAttribute('data-passage') || '';
+        if (onViewProvision && (act || sec)) {
+          onViewProvision(act, sec);
+        } else if (passage) {
+          alert(`${act ? act + ' — ' : ''}${sec}\n\n${passage}`);
         }
       });
     });
@@ -1657,11 +1695,60 @@ export function openMatterWorkspaceModal(
           });
           const res = await resp.json();
           if (resp.ok && res.status === 'ok' && res.data) {
+            const raw = res.data;
+            const applicable_statutes = (raw.applicable_statutes || raw.statutory_authorities || []).map((s: any) => ({
+              act: s.act || s.statute || '',
+              section: s.section || s.provision || '',
+              rule_of_law: s.rule_of_law || s.rule || s.application || '',
+              exact_passage: s.exact_passage || '',
+            }));
+            const relevant_precedents = (raw.relevant_precedents || raw.judicial_precedents || []).map((p: any) => ({
+              case_citation: p.case_citation || p.citation || (p.parties ? `${p.parties} (${p.citation || ''})` : ''),
+              principle_held: p.principle_held || p.ratio || p.application || '',
+              exact_passage: p.exact_passage || '',
+            }));
+            const facts_considered = Array.isArray(raw.facts_considered)
+              ? raw.facts_considered
+              : (Array.isArray(raw.statement_of_facts) ? raw.statement_of_facts : (raw.statement_of_facts ? [raw.statement_of_facts] : []));
+            const irac_analysis = raw.irac_analysis || (typeof raw.legal_analysis === 'object' ? raw.legal_analysis : {
+              application: typeof raw.legal_analysis === 'string' ? raw.legal_analysis : '',
+            });
+            const counterarguments_and_risks = Array.isArray(raw.counterarguments_and_risks)
+              ? raw.counterarguments_and_risks
+              : (Array.isArray(raw.counterarguments_and_rebuttals) ? raw.counterarguments_and_rebuttals : (raw.counterarguments_and_rebuttals ? [raw.counterarguments_and_rebuttals] : []));
+            const final_recommendation = raw.final_recommendation || raw.conclusion_and_recommendations || '';
+            const source_citations = Array.isArray(raw.source_citations) && raw.source_citations.length > 0
+              ? raw.source_citations
+              : [
+                  ...applicable_statutes.map((s: any) => ({
+                    title: `${s.act}${s.section ? ' — ' + s.section : ''}`,
+                    act: s.act,
+                    section: s.section,
+                    passage: s.exact_passage || s.rule_of_law,
+                    authority_type: 'statute',
+                  })),
+                  ...relevant_precedents.map((p: any) => ({
+                    title: p.case_citation,
+                    act: 'Supreme Court of Bangladesh',
+                    section: p.case_citation,
+                    passage: p.exact_passage || p.principle_held,
+                    authority_type: 'precedent',
+                  })),
+                ];
+
             if (!currentMatter.legalMemos) currentMatter.legalMemos = [];
             currentMatter.legalMemos.unshift({
               id: 'memo_' + Date.now(),
               question_presented: question,
-              ...res.data,
+              memo_title: raw.memo_title || `LEGAL MEMORANDUM: ${question.slice(0, 45)}`,
+              short_answer: raw.short_answer || '',
+              facts_considered,
+              applicable_statutes,
+              relevant_precedents,
+              irac_analysis,
+              counterarguments_and_risks,
+              final_recommendation,
+              source_citations,
               createdAt: new Date().toISOString(),
             });
             saveStoredMatters(matters);
