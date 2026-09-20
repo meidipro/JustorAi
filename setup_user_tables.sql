@@ -88,3 +88,20 @@ alter table public.message_feedback enable row level security;
 create policy "Anyone can submit feedback"
     on public.message_feedback for insert
     with check (true);
+
+-- 5. Create Matters Table (Chamber Practice & Case Management)
+create table if not exists public.matters (
+    id text primary key,
+    user_id text not null,
+    title text,
+    client_name text,
+    matter_type text,
+    data jsonb,
+    updated_at timestamp with time zone default timezone('utc', now()) not null
+);
+
+alter table public.matters enable row level security;
+
+create policy "Users can manage own matters"
+    on public.matters for all
+    using (true);

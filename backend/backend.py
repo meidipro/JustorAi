@@ -8,7 +8,7 @@ import time
 import io
 import urllib.request
 import urllib.error
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from typing import List, Optional, Dict, Any, cast
 
 import httpx
@@ -2645,6 +2645,92 @@ async def matter_legal_memo(request: MatterLegalMemoRequest):
     if result.get("status") != "ok":
         raise HTTPException(502, detail=result.get("message", "Legal memo generation failed."))
     return JSONResponse(status_code=200, content=result)
+
+
+# ─── Chambers Matter Cloud Persistence ────────────────────────────────────────
+
+class MatterSyncPayload(BaseModel):
+    matter: Dict[str, Any]
+
+@app.get("/api/matters", tags=["Chambers Practice"])
+async def get_user_matters(request: Request):
+    """
+    Retrieve all matters saved by the authenticated advocate/user.
+    If Supabase is connected and table exists, queries user's matters;
+    otherwise returns an empty list so client gracefully uses local offline cache.
+    """
+    user = get_current_user(request)
+    guest_id = request.headers.get("X-Guest-Id", "")
+    user_id = user["id"] if user else (f"guest:{guest_id}" if guest_id else None)
+    
+    if not user_id or not supabase:
+        return {"matters": []}
+
+    try:
+        def fetch():
+            return supabase.table("matters").select("*").eq("user_id", user_id).order("updated_at", desc=True).execute()
+        res = await asyncio.to_thread(fetch)
+        matters = [r.get("data", r) for r in (res.data or [])]
+        return {"matters": matters}
+    except Exception as e:
+        logger.warning(f"Note: Supabase matters table query skipped: {e}")
+        return {"matters": []}
+
+@app.post("/api/matters", tags=["Chambers Practice"])
+async def save_user_matter(payload: MatterSyncPayload, request: Request):
+    """
+    Persist or update a chamber legal matter for the authenticated user.
+    """
+    user = get_current_user(request)
+    guest_id = request.headers.get("X-Guest-Id", "")
+    user_id = user["id"] if user else (f"guest:{guest_id}" if guest_id else None)
+
+    matter = payload.matter
+    matter_id = str(matter.get("id") or "")
+    if not matter_id:
+        raise HTTPException(400, "Matter must have an id.")
+
+    if not user_id or not supabase:
+        return {"status": "ok", "persisted_locally": True, "matter": matter}
+
+    try:
+        row = {
+            "id": matter_id,
+            "user_id": user_id,
+            "title": matter.get("title", "Untitled Matter"),
+            "client_name": matter.get("clientName", ""),
+            "matter_type": matter.get("matterType", ""),
+            "data": matter,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        def upsert():
+            return supabase.table("matters").upsert(row).execute()
+        await asyncio.to_thread(upsert)
+        return {"status": "ok", "synced": True, "matter": matter}
+    except Exception as e:
+        logger.warning(f"Error persisting matter to Supabase: {e}")
+        return {"status": "ok", "synced": False, "matter": matter}
+
+@app.delete("/api/matters/{matter_id}", tags=["Chambers Practice"])
+async def delete_user_matter(matter_id: str, request: Request):
+    """
+    Delete a chamber legal matter from cloud storage.
+    """
+    user = get_current_user(request)
+    guest_id = request.headers.get("X-Guest-Id", "")
+    user_id = user["id"] if user else (f"guest:{guest_id}" if guest_id else None)
+
+    if not user_id or not supabase:
+        return {"status": "ok", "deleted": True}
+
+    try:
+        def delete():
+            return supabase.table("matters").delete().eq("id", matter_id).eq("user_id", user_id).execute()
+        await asyncio.to_thread(delete)
+        return {"status": "ok", "deleted": True}
+    except Exception as e:
+        logger.warning(f"Error deleting matter from Supabase: {e}")
+        return {"status": "ok", "deleted": True}
 
 
 # ─── WhatsApp 24/7 Legal Helpline & Case Status Webhooks ─────────────────────

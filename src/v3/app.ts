@@ -3448,13 +3448,20 @@ document.addEventListener('click', (event) => {
   if (action === 'open-matter-modal' || action === 'open-matter-workspace') {
     event.preventDefault();
     openMatterWorkspaceModal(state.language, (matterPrompt) => {
-      const textarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea[name="query"]');
-      if (textarea) {
-        textarea.value = matterPrompt;
-        textarea.dispatchEvent(new Event('input', { bubbles: true }));
-        const form = textarea.closest<HTMLFormElement>('form');
-        if (form) void submitResearch(form);
+      const homePath = localizedPath('/', state.language);
+      if (window.location.pathname !== homePath && !window.location.pathname.endsWith('/')) {
+        navigate(homePath);
       }
+      setTimeout(() => {
+        const textarea = document.querySelector<HTMLTextAreaElement>('.composer-input-box textarea[name="query"], .chat-floating-composer textarea');
+        if (textarea) {
+          textarea.value = matterPrompt;
+          textarea.dispatchEvent(new Event('input', { bubbles: true }));
+          textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const form = textarea.closest<HTMLFormElement>('form');
+          if (form) void submitResearch(form);
+        }
+      }, 150);
     });
     return;
   }

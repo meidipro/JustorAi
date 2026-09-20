@@ -32,6 +32,7 @@ export interface MatterNote {
 export interface MatterConsultation {
   id: string;
   filename: string;
+  client_consent_verified?: boolean;
   data: {
     matter_title?: string;
     transcript?: string;
@@ -189,8 +190,64 @@ export interface LegalMatter {
   legalMemos?: LegalMemo[];
 }
 
+import { authService } from './services';
+
 const STORAGE_KEY = 'justor_matters_v1';
 const ACTIVE_MATTER_KEY = 'justor_active_matter_id';
+const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
+
+async function getAuthHeaders(): Promise<HeadersInit> {
+  const session = await authService.session();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`;
+  }
+  const guestId = localStorage.getItem('justor_guest_id');
+  if (guestId) {
+    headers['X-Guest-Id'] = guestId;
+  }
+  return headers;
+}
+
+export async function syncMatterToCloud(matter: LegalMatter): Promise<void> {
+  try {
+    const headers = await getAuthHeaders();
+    await fetch(`${backendUrl}/api/matters`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ matter }),
+    });
+  } catch (err) {
+    console.warn('Failed to sync matter to cloud:', err);
+  }
+}
+
+export async function deleteMatterFromCloud(matterId: string): Promise<void> {
+  try {
+    const headers = await getAuthHeaders();
+    await fetch(`${backendUrl}/api/matters/${encodeURIComponent(matterId)}`, {
+      method: 'DELETE',
+      headers,
+    });
+  } catch (err) {
+    console.warn('Failed to delete matter from cloud:', err);
+  }
+}
+
+export async function fetchRemoteMatters(): Promise<LegalMatter[]> {
+  try {
+    const headers = await getAuthHeaders();
+    const resp = await fetch(`${backendUrl}/api/matters`, { headers });
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return Array.isArray(data.matters) ? data.matters : [];
+  } catch (err) {
+    console.warn('Failed to fetch remote matters:', err);
+    return [];
+  }
+}
 
 export function getStoredMatters(): LegalMatter[] {
   try {
@@ -204,6 +261,10 @@ export function getStoredMatters(): LegalMatter[] {
 export function saveStoredMatters(matters: LegalMatter[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(matters));
+    const active = getActiveMatter();
+    if (active) {
+      void syncMatterToCloud(active);
+    }
   } catch (e) {
     console.warn('Failed to save matters to storage:', e);
   }
@@ -291,10 +352,34 @@ export function openMatterWorkspaceModal(
   let currentMatter = getActiveMatter() || matters[0];
   let currentTab: 'dictaphone' | 'consultation' | 'summarizer' | 'chronology' | 'hearing_pack' | 'consistency' | 'legal_memo' | 'overview' = 'dictaphone';
 
-  const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
-
   const backdrop = document.createElement('div');
   backdrop.className = 'matter-modal-backdrop';
+
+  // Asynchronous background cloud sync: merges any matters updated on other devices
+  void fetchRemoteMatters().then((remoteMatters) => {
+    if (remoteMatters && remoteMatters.length > 0) {
+      const local = getStoredMatters();
+      const localMap = new Map(local.map((m) => [m.id, m]));
+      let changed = false;
+      for (const rm of remoteMatters) {
+        if (!localMap.has(rm.id)) {
+          localMap.set(rm.id, rm);
+          changed = true;
+        } else {
+          const lm = localMap.get(rm.id)!;
+          if (new Date(rm.updatedAt || 0) > new Date(lm.updatedAt || 0)) {
+            localMap.set(rm.id, rm);
+            changed = true;
+          }
+        }
+      }
+      if (changed) {
+        const merged = Array.from(localMap.values());
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        renderModalContent();
+      }
+    }
+  });
 
   const renderModalContent = () => {
     matters = getStoredMatters();
@@ -452,6 +537,24 @@ export function openMatterWorkspaceModal(
               📁 ${isBn ? 'ফাইল নির্বাচন করুন' : 'Select Audio File'}
             </button>
             <span id="selected-audio-name" class="selected-filename"></span>
+          </div>
+
+          <div class="audio-ethics-consent-banner" style="margin: 14px 0; padding: 12px 14px; background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 8px; font-size: 13px; color: #92400E;">
+            <div style="display: flex; align-items: flex-start; gap: 8px;">
+              <span style="font-size: 16px;">⚖️</span>
+              <div>
+                <strong>${isBn ? 'বার কাউন্সিল পেশাগত আচরণ ও মক্কেল গোপনীয়তা সম্মতি:' : 'Bar Council Professional Conduct & Confidentiality Compliance:'}</strong>
+                <p style="margin: 4px 0 8px; font-size: 12px; line-height: 1.4; color: #78350F;">
+                  ${isBn 
+                    ? 'বাংলাদেশ বার কাউন্সিল ক্যাননস অফ প্রফেশনাল কনডাক্ট (অধ্যায় ২) অনুযায়ী আইনজীবী-মক্কেল কথোপকথন বিশেষ অধিকারপ্রাপ্ত (Privileged) ও গোপনীয়। অডিও রেকর্ড বা এআই বিশ্লেষণের পূর্বে মক্কেলের সুস্পষ্ট সম্মতি আবশ্যক।'
+                    : 'Under Chapter II of the Bangladesh Bar Council Canons of Professional Conduct, advocate-client communications are legally privileged and confidential. Recording or AI processing requires express client informed consent.'}
+                </p>
+                <label style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: #1E293B; font-size: 12.5px;">
+                  <input type="checkbox" id="consultation-consent-checkbox" style="width: 16px; height: 16px; accent-color: #1E38C8; cursor: pointer;" />
+                  <span>${isBn ? 'আমি প্রত্যয়ন করছি যে মক্কেল এই পরামর্শের অডিও রেকর্ডিং ও এআই বিশ্লেষণে সুস্পষ্ট সম্মতি প্রদান করেছেন।' : 'I certify that the client has expressly consented to audio recording and AI analysis of this consultation.'}</span>
+                </label>
+              </div>
+            </div>
           </div>
 
           <div class="dictate-actions" style="margin-top:12px;">
@@ -1281,10 +1384,23 @@ export function openMatterWorkspaceModal(
       const fileInput = backdrop.querySelector('#consultation-audio-file') as HTMLInputElement;
       const selectBtn = backdrop.querySelector('#select-audio-btn') as HTMLButtonElement;
       const processBtn = backdrop.querySelector('#consultation-process-btn') as HTMLButtonElement;
+      const consentCheckbox = backdrop.querySelector('#consultation-consent-checkbox') as HTMLInputElement;
       const filenameSpan = backdrop.querySelector('#selected-audio-name') as HTMLElement;
       const loading = backdrop.querySelector('#consultation-loading') as HTMLElement;
 
       let selectedFile: File | null = null;
+
+      const updateBtnState = () => {
+        const hasFile = Boolean(selectedFile);
+        const hasConsent = Boolean(consentCheckbox?.checked);
+        if (hasFile && hasConsent) {
+          processBtn.removeAttribute('disabled');
+        } else {
+          processBtn.setAttribute('disabled', 'true');
+        }
+      };
+
+      consentCheckbox?.addEventListener('change', updateBtnState);
 
       selectBtn?.addEventListener('click', () => fileInput?.click());
       dropzone?.addEventListener('click', (e) => {
@@ -1295,12 +1411,16 @@ export function openMatterWorkspaceModal(
         if (fileInput.files && fileInput.files[0]) {
           selectedFile = fileInput.files[0];
           filenameSpan.textContent = `📎 ${selectedFile.name} (${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB)`;
-          processBtn.removeAttribute('disabled');
+          updateBtnState();
         }
       });
 
       processBtn?.addEventListener('click', async () => {
         if (!selectedFile) return;
+        if (!consentCheckbox?.checked) {
+          alert(isBn ? 'অনুগ্রহ করে মক্কেলের অডিও রেকর্ডিং সম্মতির বক্সে টিক দিন।' : 'Please certify client consent before processing consultation audio.');
+          return;
+        }
         loading.style.display = 'flex';
         processBtn.setAttribute('disabled', 'true');
 
@@ -1318,6 +1438,7 @@ export function openMatterWorkspaceModal(
             currentMatter.consultations.unshift({
               id: 'consult_' + Date.now(),
               filename: selectedFile.name,
+              client_consent_verified: true,
               data: res.data,
               createdAt: new Date().toISOString(),
             });
