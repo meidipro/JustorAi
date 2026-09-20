@@ -33,18 +33,19 @@
 
 ---
 
-### 3. 📝 Source-Linked Legal Memo Generator (IRAC Method)
-* **Feature Name:** Legal Memorandum Generator
+### 3. 📝 Source-Linked Legal Memo Generator (IRAC Method & Authority Jumper)
+* **Feature Name:** Legal Memorandum Generator with Interactive Citations
 * **Role:** Automatically drafts a formal, partner-grade legal memorandum on any complex legal question grounded in the matter facts:
   - **Chambers Header:** Formal memo styling (TO, FROM, MATTER, DATE, QUESTION PRESENTED).
   - **Executive Short Answer:** Bottom-line conclusion in 2–3 sentences.
-  - **Material Facts Considered:** Distillation of facts extracted from the matter record.
+  - **Material Facts Considered:** Distillation of material facts extracted from the matter record.
   - **Controlling Statutory Provisions:** Full statutory rules from the Bangladesh Code (Penal Code, CrPC, CPC, Limitation Act, TPA, NI Act).
-  - **Binding Supreme Court Precedents:** Official law report citations (**DLR, BLD, BLC, ALR**) with principles held.
+  - **Binding Supreme Court Precedents:** Official law report citations (**DLR, BLD, BLC, ALR**) with ratio decidendi.
   - **IRAC Legal Analysis:** Deep analysis (*Issue*, *Rule of Law*, *Application to Client Facts*, *Conclusion*).
   - **Counterarguments & Vulnerabilities:** Anticipated opposing arguments and procedural risks.
   - **Practical Recommendation:** Next litigation steps for the advocate.
-  - **Source Quotations:** Verifiable statutory sections and judicial holdings with 1-click citation copy.
+  - **Interactive Authority Jumpers (NEW):** Every single statute, precedent, and source quotation has an interactive **`[🔍 Inspect Provision ↗]`** / **`[⚖️ Inspect Case ↗]`** button that opens the verified gazette text in a slide-out drawer on top of the memo.
+  - **1-Click Pleading Bridge (NEW):** "Draft Pleading in Justor" button packages the entire IRAC analysis and authorities into the AI composer to start court petition drafting immediately.
 * **Where It Is:**
   - **UI Location:** Top Navigation → **Chamber OS** modal → `📝 Legal Memo` tab.
   - **Backend Endpoint:** `POST /api/matter/legal-memo`
@@ -52,12 +53,15 @@
 
 ---
 
-### 4. 🚀 Matter-Aware Legal Research Bridge
+### 4. 🚀 Matter-Aware Legal Research & Pleading Bridge
 * **Feature Name:** Matter-Aware Legal RAG Bridge
-* **Role:** Connects the active matter file directly into Justor AI's deep legal RAG chat without forcing the advocate to re-type or re-explain the case. Clicking "Research in Justor AI" automatically pre-infuses parties, court forum, case number, facts, timeline, and statutes into the chat composer.
+* **Role:** Connects the active matter file directly into Justor AI's deep legal RAG chat without forcing the advocate to re-type or re-explain the case:
+  - Automatically redirects across routes if opened from any page.
+  - Pre-infuses parties, court forum, case number, material facts, chronology timeline, and controlling statutes into the composer.
+  - Pre-drafts formal plaints, petitions, and legal notices with zero manual copy-pasting.
 * **Where It Is:**
-  - **UI Location:** Top Navigation → **Chamber OS** modal → "Research in Justor AI" & "Draft in Justor" buttons on every note, hearing pack, audit, and memo.
-  - **Code:** `src/v3/matter-workspace.ts` (`buildMatterAwarePrompt()`)
+  - **UI Location:** Top Navigation → **Chamber OS** modal → "Research in Justor AI" & "Draft Pleading in Justor" buttons on every note, hearing pack, audit, and memo.
+  - **Code:** `src/v3/matter-workspace.ts` (`buildMatterAwarePrompt()`), `src/v3/app.ts`
 
 ---
 
@@ -71,9 +75,11 @@
 
 ---
 
-### 6. 🎧 Client Consultation Audio Intelligence
-* **Feature Name:** Consultation Audio Analyzer
-* **Role:** Accepts 15–30 minute audio recordings of client interviews or witness conferences (MP3, M4A, WAV, WEBM up to 25MB). Transcribes verbatim speech, generates a 2–3 paragraph summary, identifies material client facts, lists mentioned documents/deeds, and highlights evidentiary red flags and legal risks.
+### 6. 🎧 Client Consultation Audio Intelligence & Ethics Compliance
+* **Feature Name:** Consultation Audio Analyzer (with Bar Council Ethics Banner)
+* **Role:** Accepts 15–30 minute audio recordings of client interviews or witness conferences (MP3, M4A, WAV, WEBM up to 25MB). Transcribes verbatim speech, generates a 2–3 paragraph summary, identifies material client facts, lists mentioned documents/deeds, and highlights evidentiary red flags and legal risks:
+  - **Bangladesh Bar Council Canons of Professional Conduct Compliance (NEW):** Displays a formal Chapter II advisory notice warning advocates of privileged communication rules.
+  - **Mandatory Consent Checkbox (NEW):** Requires the advocate to certify client consent before enabling audio upload or processing, saving `client_consent_verified: true` into the permanent matter audit trail.
 * **Where It Is:**
   - **UI Location:** Top Navigation → **Chamber OS** modal → `🎧 Consultation Audio` tab.
   - **Backend Endpoint:** `POST /api/matter/audio-consultation`
@@ -91,9 +97,11 @@
 
 ---
 
-### 8. ⏳ Interactive Matter Chronology & Limitation Alerts
+### 8. ⏳ Interactive Matter Chronology & 2026 Limitation Alerts
 * **Feature Name:** Matter Chronology & Limitation Tracker
-* **Role:** Converts dispute events into an interactive chronological timeline. Cross-checks the **Limitation Act, 1908** schedules to trigger real-time statutory limitation alerts (`compliant`, `active`, `urgent`, `expired`).
+* **Role:** Converts dispute events into an interactive chronological timeline. Cross-checks the **Limitation Act, 1908** schedules to trigger real-time statutory limitation alerts (`compliant`, `active`, `urgent`, `expired`):
+  - **2026 NI Act Amendment Engine (NEW):** Explicitly enforces the 2026 Tk 5 Lakh threshold, mandatory ADR notice window, and flags premature cheque dishonour filings (filed before 15-day statutory demand expiry) as void ab initio.
+  - **CPC Order XXXIX Injunction Test (NEW):** Formulates prima facie case, balance of convenience, and irreparable loss metrics directly from dispute dates.
 * **Where It Is:**
   - **UI Location:** Top Navigation → **Chamber OS** modal → `⏳ Chronology` tab.
   - **Backend Endpoint:** `POST /api/matter/chronology`
@@ -101,13 +109,16 @@
 
 ---
 
-### 9. 📁 Matter Vault & Client-Side Privacy
-* **Feature Name:** Matter Vault
-* **Role:** Central workspace hub that saves all case files, notes, audio briefings, hearing packs, and legal memos safely in the advocate's own browser. Guarantees attorney-client confidentiality by ensuring zero unauthorized server-side storage of confidential notes.
+### 9. 📁 Matter Vault & Hybrid Cloud Persistence
+* **Feature Name:** Matter Vault (Local-First + Cloud Sync)
+* **Role:** Central workspace hub that saves all case files, notes, audio briefings, hearing packs, and legal memos:
+  - **Zero Latency Offline Operation:** Loads instantly (0ms) from the advocate's browser storage (`localStorage['justor_legal_matters_vault_v1']`), guaranteeing 100% functionality without internet or database locks.
+  - **Supabase Cloud Sync (NEW):** When signed in, background bi-directional synchronization syncs matter files to Supabase with Row Level Security (RLS) for multi-device chamber practice.
 * **Where It Is:**
   - **UI Location:** Top Navigation → **Chamber OS** modal → `📁 Matter Vault` tab.
-  - **Client Storage:** `localStorage['justor_matters_v1']`
-  - **Code:** `src/v3/matter-workspace.ts`
+  - **Backend Endpoints:** `GET /api/matters`, `POST /api/matters`, `DELETE /api/matters/{id}`
+  - **Database:** Supabase `public.matters` table (`setup_user_tables.sql`)
+  - **Code:** `src/v3/matter-workspace.ts`, `backend/backend.py`
 
 ---
 
@@ -138,6 +149,18 @@
   - Dual-column grids (In-Hand vs. Risky evidence, argument rebuttals) stack into single-column cards.
   - Touch-scrollable Evidence Matrix tables (`-webkit-overflow-scrolling: touch`) preventing page distortion.
   - Minimum 44px touch targets on buttons, mic controls, and dropdowns.
+  - Dedicated 360px–480px media query for small phones (iPhone SE/Android) with stacked citation headers and full-width touch jumpers.
 * **Where It Is:**
   - **UI Location:** Global styling applied automatically across all devices.
-  - **Code:** `src/v3/style.css` (media queries `@media (max-width: 768px)`)
+  - **Code:** `src/v3/style.css` (media queries `@media (max-width: 768px)` and `@media (max-width: 480px)`)
+
+---
+
+### 13. 🔍 True Authority Architecture & Domain Precision
+* **Feature Name:** True Authority Telemetry & Bilingual Domain Parser
+* **Role:** Replaces brittle heuristics and mock UI indicators with deterministic legal rigor:
+  - **Zero Fake Badges:** Eliminated hardcoded "4 steps verified / 7-gate" badges; telemetry now dynamically reflects the exact number of verified Bangladesh statutes and Supreme Court judgments retrieved.
+  - **Mounted Authority Panel:** Interactive authority inspection chips (`data-result-source`, `click-citation`) dynamically mount and open full statutory gazette text on click.
+  - **CPC Order & Rule Bilingual Regex:** Accurately classifies both English (`Order 39 Rule 1`, `Order XXXIX`) and Bengali (`আদেশ ৩৯ নিয়ম ১`, `আদেশ ৩৯ রুল ২`) injunction pleadings under Civil Procedure without criminal misclassification.
+* **Where It Is:**
+  - **Code:** `backend/backend.py`, `src/v3/app.ts`, `src/v3/services.ts`
