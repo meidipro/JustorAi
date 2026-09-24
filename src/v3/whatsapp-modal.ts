@@ -127,13 +127,14 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
             </div>
 
             <!-- Quick Suggestions Row -->
+            <!-- Quick Suggestions Row -->
             <div class="whatsapp-quick-chips">
-              <button type="button" class="wa-chip" data-query="CAUSELIST">📅 কার্যতালিকা (CAUSELIST)</button>
-              <button type="button" class="wa-chip" data-query="PRECEDENT 138 NI Act notice limitation">📚 নজির (PRECEDENT)</button>
-              <button type="button" class="wa-chip" data-query="DRAFT NOTICE 138 NI Act Cheque 10 Lakh BDT">📝 নোটিশ ড্রাফট</button>
-              <button type="button" class="wa-chip" data-query="#${matterId} অন্তর্বর্তীকালীন জামিন মঞ্জুর, আগামী ২০ নভেম্বর জবাব দাখিল।">🎙️ কোর্ট ডিকটেশন (#)</button>
-              <button type="button" class="wa-chip" data-query="STATUS ${matterId}">📂 STATUS ${matterId}</button>
-              <button type="button" class="wa-chip" data-query="DOCS ${matterId}">📑 দলিলের চেকলিস্ট</button>
+              <button type="button" class="wa-chip" data-query="What needs my attention?">🌅 আজকের ব্রিফিং</button>
+              <button type="button" class="wa-chip" data-query="Rahim matter—hearing Sunday. Opposite party submitted this affidavit.">⚡ অটোনোমাস ইনটেক</button>
+              <button type="button" class="wa-chip" data-query="Summarize this case">📂 মামলার সারসংক্ষেপ</button>
+              <button type="button" class="wa-chip" data-query="Prepare me for tomorrow hearing">🎯 হিয়ারিং প্যাক</button>
+              <button type="button" class="wa-chip" data-query="DEADLINES">⏳ তামাদি অ্যালার্ট</button>
+              <button type="button" class="wa-chip" data-query="CAUSELIST">📅 কার্যতালিকা</button>
             </div>
 
             <!-- WhatsApp Message Input Footer -->
@@ -153,38 +154,38 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
           <!-- Simulator Control Panel & Feature Highlights -->
           <div class="whatsapp-sim-sidebar">
             <div class="whatsapp-sim-card">
-              <h4>${waSvg('target', 14)} <span>Lawyer Chamber Benefits</span></h4>
-              <p>Justor Chamber OS WhatsApp integration eliminates repetitive client phone calls and streamlines court corridor notes:</p>
+              <h4>${waSvg('target', 14)} <span>Autonomous Chamber OS Workflows</span></h4>
+              <p>Justor AI functions as your autonomous junior associate right inside WhatsApp:</p>
               <ul>
-                <li><strong>24/7 Client Case Tracker:</strong> Clients send <code>STATUS ${escapeHtml(matterId)}</code> and receive instant verified hearing dates without calling you late at night.</li>
-                <li><strong>Court Corridor Dictation:</strong> Send a voice note or text starting with <code>#${escapeHtml(matterId)}</code> from High Court or District Court; it automatically files into your Chamber OS Vault.</li>
-                <li><strong>Mandatory Evidence Checklists:</strong> Clients request <code>DOCS ${escapeHtml(matterId)}</code> to know exact originals and photocopies needed for court.</li>
-                <li><strong>Meta WhatsApp Cloud API Free Tier:</strong> 1,000 conversations every month free directly through Meta.</li>
+                <li><strong>Autonomous Matter Resolution:</strong> Natural language intake connects messages to the correct chamber matter without needing rigid syntax.</li>
+                <li><strong>Contradiction & Evidence Auditing:</strong> Automatically detects inconsistencies between affidavits, depositions, and notices.</li>
+                <li><strong>Auto-Generated Hearing Packs:</strong> Instant courtroom objectives, statutory grounds, and cross-examination questions.</li>
+                <li><strong>Morning Daily Brief:</strong> Alerts you to upcoming hearings, evidence gaps, and statutory limitation deadlines.</li>
               </ul>
             </div>
 
             <div class="whatsapp-sim-card">
-              <h4>${waSvg('flask', 14)} <span>Advocate Quick Actions</span></h4>
+              <h4>${waSvg('flask', 14)} <span>Advocate Phase-1 Actions</span></h4>
               <div class="wa-test-scenarios">
-                <button type="button" class="wa-scenario-btn" data-query="CAUSELIST">
-                  <strong>1. View Chamber Daily Cause List</strong>
-                  <span>See hearing dates and stages for all active matters</span>
+                <button type="button" class="wa-scenario-btn" data-query="What needs my attention?">
+                  <strong>1. Daily Chamber Briefing</strong>
+                  <span>"What needs my attention?" — Active cases & gaps</span>
                 </button>
-                <button type="button" class="wa-scenario-btn" data-query="PRECEDENT Section 498 CrPC anticipatory bail guidelines">
-                  <strong>2. Supreme Court Precedents & Citations</strong>
-                  <span>Get controlling DLR/BLD ratio and submission tips</span>
+                <button type="button" class="wa-scenario-btn" data-query="Rahim matter—hearing Sunday. Opposite party submitted this affidavit.">
+                  <strong>2. Autonomous Matter Intake & Audit</strong>
+                  <span>Auto-matches docket, updates pack & flags contradictions</span>
                 </button>
-                <button type="button" class="wa-scenario-btn" data-query="#${matterId} অন্তর্বর্তীকালীন স্থগিতাদেশ ৬ মাসের জন্য মঞ্জুর হয়েছে। পরবর্তী তারিখ ১৫ নভেম্বর।">
-                  <strong>3. Court Corridor Dictation Sync</strong>
-                  <span>Simulate filing court corridor note into matter vault</span>
+                <button type="button" class="wa-scenario-btn" data-query="Summarize this case">
+                  <strong>3. 60-Second Case Summary</strong>
+                  <span>Executive breakdown of parties, claims, and orders</span>
                 </button>
-                <button type="button" class="wa-scenario-btn" data-query="DRAFT NOTICE 138 NI Act Cheque 500,000 BDT dishonor">
-                  <strong>4. Draft Statutory Legal Demand Notice</strong>
-                  <span>Generate ready-to-dispatch 30-day legal notice</span>
+                <button type="button" class="wa-scenario-btn" data-query="Prepare me for tomorrow hearing">
+                  <strong>4. Court Hearing Preparation Pack</strong>
+                  <span>Objectives, statutory grounds, and cross-exam questions</span>
                 </button>
-                <button type="button" class="wa-scenario-btn" data-query="STATUS ${matterId}">
-                  <strong>5. Client Case Status Lookup</strong>
-                  <span>Verify what your client sees for this active docket</span>
+                <button type="button" class="wa-scenario-btn" data-query="DEADLINES">
+                  <strong>5. Statutory Limitation & Deadline Alerts</strong>
+                  <span>Track critical procedural dates & filing windows</span>
                 </button>
               </div>
             </div>

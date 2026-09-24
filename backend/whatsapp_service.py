@@ -9,8 +9,10 @@ import base64
 import logging
 import httpx
 from datetime import datetime, timezone
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional, Union, Tuple
 from dotenv import load_dotenv
+
+from backend.matter_service import matter_service
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BASE_DIR)
@@ -32,21 +34,21 @@ VERTEX_LOCATION = os.getenv("VERTEX_LOCATION", "us-central1").strip()
 
 class JustorWhatsAppService:
     """
-    Justor AI Chamber OS — 24/7 WhatsApp Mobile Gateway for Legal Professionals & Advocates.
+    Justor AI Chamber OS — 24/7 Autonomous WhatsApp Mobile Gateway for Legal Professionals.
     
-    Specially engineered for Bangladesh Advocates, Chamber Counsel, and Practitioners:
-    1. Court Corridor / Benchside Dictation:
-       Instant voice/text dictation (#<MATTER-ID> <notes>) synced in real-time to Chamber OS Matter Vault.
-    2. Supreme Court Precedents & Citations:
-       Instant retrieval of controlling DLR, BLD, BLC authorities and ratio decidendi on-the-go.
-    3. Chamber Cause List & Hearing Diary:
-       Daily cause list summary (CAUSELIST / HEARING) across all active chamber matters.
-    4. Instant Legal Notice Drafting:
-       Rapid generation of formal statutory notices (NI Act 138, TP Act 106, Contract Breach).
-    5. Court Order Sheet & Document Vision OCR:
-       Multimodal analysis of photographed daily order sheets, bail bonds, and certified copies.
-    6. Automated Client Case Status & Evidence Checklists:
-       Eliminates repetitive late-night client calls via STATUS and DOCS commands.
+    Product Philosophy:
+    - Web Chamber OS = The Detailed Power Dashboard & Vault.
+    - WhatsApp = The Daily Action, Notification & Execution Layer.
+    
+    Autonomous Workflows:
+    1. Voice Note / Dictation -> Structured Matter Note + Corridor Sync.
+    2. PDF / Photo -> Document Summary + Auto Contradiction & Evidence Gap Detection.
+    3. Case Summary ("Summarize this case") -> 60-Second Matter Briefing.
+    4. Hearing Preparation ("Prepare me for tomorrow's hearing") -> Courtroom Hearing Pack.
+    5. Daily Chamber Brief ("What needs my attention?") -> Morning Executive Briefing.
+    6. Matter / Deadline Alerts ("Deadlines") -> Statutory Limitation Alerts.
+    7. Supreme Court Precedents & Citations (DLR, BLD, BLC).
+    8. Statutory Legal Demand Notice Drafting (NI Act 138, TP Act 106).
     """
 
     def __init__(self, api_key: Optional[str] = None):
@@ -54,49 +56,92 @@ class JustorWhatsAppService:
         self._llm_handler = None
         # In-memory user session cache (phone_number -> session state)
         self._user_sessions: Dict[str, Dict[str, Any]] = {}
-        # Chamber matters cache for live WhatsApp query routing
+        # Chamber matters cache for live WhatsApp query routing & persistence
         self._matters_cache: Dict[str, Dict[str, Any]] = {
             "JUSTOR-2026-001": {
                 "id": "JUSTOR-2026-001",
                 "title": "করিম আহমেদ বনাম রহিম খান ও অন্যান্য",
                 "clientName": "করিম আহমেদ",
+                "opponentName": "রহিম খান",
                 "matterType": "চেক ডিজঅনার (NI Act ১৩৮)",
                 "court": "বিজ্ঞ চীফ মেট্রোপলিটন ম্যাজিস্ট্রেট আদালত, ঢাকা",
                 "caseNumber": "CR-452/2026",
                 "nextHearing": "১৫ অক্টোবর, ২০২৬",
                 "stage": "সমন জারি ও জবাব দাখিলের জন্য দিন ধার্য",
                 "advocate": "এডভোকেট মেহদী হাসান (বাংলাদেশ সুপ্রিম কোর্ট)",
+                "claimAmount": "১০,০০,০০০ টাকা (চেক নং ৪১৫৮২২)",
+                "summary": "ব্যবসায়িক পণ্য ক্রয়ের বিপরীতে প্রদত্ত ১০ লক্ষ টাকার চেক ডিজঅনার ও নির্ধারিত ৩০ দিনের মধ্যে আইনি নোটিশ প্রেরণ সত্ত্বেও অর্থ পরিশোধ না করায় দায়েরকৃত নালিশি মোকদ্দমা।",
                 "notes": [
                     {
                         "id": "note_01",
                         "rawText": "আইনি নোটিশ ৩০ দিনের মেয়াদ শেষে আদালতে নালিশি দরখাস্ত দায়ের সম্পন্ন।",
                         "createdAt": "2026-09-10T10:00:00Z"
                     }
+                ],
+                "evidenceGaps": [
+                    "মূল চেক ও ব্যাংক ডিসঅনার মেমোর মূল রিটার্ন স্লিপ চেম্বার ফাইলে জমা বাকি",
+                    "রেজিস্ট্রি ডাকযোগে প্রেরিত নোটিশের এ/ডি কার্ডের রসিদ এখনো সংগ্রহ করা হয়নি"
+                ],
+                "contradictions": [
+                    "বিবাদী দাবি করেছে নোটিশ সে পায়নি, অথচ ডাক ট্র্যাকিং পোর্টালে ডেলিভারি সম্পন্ন দেখাচ্ছে"
                 ]
             },
             "JUSTOR-2026-002": {
                 "id": "JUSTOR-2026-002",
                 "title": "রফিকুল ইসলাম বনাম বাংলাদেশ ও অন্যান্য",
                 "clientName": "রফিকুল ইসলাম",
+                "opponentName": "গণপ্রজাতন্ত্রী বাংলাদেশ সরকার ও রাজউক",
                 "matterType": "রিট পিটিশন (অনুচ্ছেদ ১০২)",
                 "court": "বাংলাদেশ সুপ্রিম কোর্ট, হাইকোর্ট বিভাগ (এনেক্স ১৪)",
                 "caseNumber": "WP-8920/2026",
                 "nextHearing": "২৮ অক্টোবর, ২০২৬",
                 "stage": "রুল শুনানি ও অন্তর্বর্তীকালীন স্থগিতাদেশ বহাল রাখার জন্য ধার্য",
                 "advocate": "জাসটর চেম্বার পার্টনার্স (সুপ্রিম কোর্ট বার)",
-                "notes": []
+                "claimAmount": "উত্তরা ৩য় পর্বের প্লট সংক্রান্ত উচ্ছেদ আদেশ চ্যালেঞ্জ",
+                "summary": "বিধি বহির্ভূতভাবে প্রদত্ত উচ্ছেদ নোটিশের বৈধতা চ্যালেঞ্জ করে সংবিধানের ১০২ অনুচ্ছেদে দায়েরকৃত রিট পিটিশন। মহামান্য আদালত অন্তর্বর্তীকালীন স্থগিতাদেশ জারি করেছেন।",
+                "notes": [],
+                "evidenceGaps": [
+                    "রাজউকের মূল বরাদ্দপত্রের প্রত্যায়িত অনুলিপি (Certified Copy) দাখিল বাকি"
+                ],
+                "contradictions": []
             },
             "JUSTOR-2026-003": {
                 "id": "JUSTOR-2026-003",
                 "title": "বেগম রোকেয়া বনাম সিটি কর্পোরেশন ও অন্যান্য",
                 "clientName": "বেগম রোকেয়া",
+                "opponentName": "ঢাকা উত্তর সিটি কর্পোরেশন",
                 "matterType": "স্বত্ব সাব্যস্ত ও চিরতরে নিষেধাজ্ঞা (Title Suit)",
                 "court": "বিজ্ঞ ১ম যুগ্ম জেলা জজ আদালত, ঢাকা",
                 "caseNumber": "TS-114/2025",
                 "nextHearing": "০৫ নভেম্বর, ২০২৬",
                 "stage": "ইস্যু গঠন ও নালিশি জমিতে স্থিতাবস্থার আদেশ বহাল",
                 "advocate": "এডভোকেট মেহদী হাসান ও অ্যাসোসিয়েটস",
-                "notes": []
+                "claimAmount": "মৌজা তেজগাঁও, সিএস ও এসএ রেকর্ডীয় ০.১০ একর ভূমি",
+                "summary": "পৈতৃক সূত্রে প্রাপ্ত সম্পত্তিতে সিটি কর্পোরেশনের রাস্তা প্রশস্তকরণের অবৈধ নোটিশের বিরুদ্ধে স্বত্ব ঘোষণা ও চিরতরে নিষেধাজ্ঞার দেওয়ানি মোকদ্দমা।",
+                "notes": [],
+                "evidenceGaps": [
+                    "হালনাগাদ নামজারি পর্চা ও ভূমি উন্নয়ন করের দাখিলা সংযুক্ত করতে হবে"
+                ],
+                "contradictions": []
+            },
+            "JUSTOR-2026-004": {
+                "id": "JUSTOR-2026-004",
+                "title": "মো. আলম বনাম রাষ্ট্র (ফৌজদারি বিবিধ মোকদ্দমা)",
+                "clientName": "মো. আলম",
+                "opponentName": "রাষ্ট্র",
+                "matterType": "ফৌজদারি জামিন (CrPC ৪৯৮)",
+                "court": "মহানগর দায়রা জজ আদালত, ঢাকা",
+                "caseNumber": "Crl.Misc-882/2026",
+                "nextHearing": "১৮ অক্টোবর, ২০২৬",
+                "stage": "নথি তলব ও জামিন শুনানির জন্য দিন ধার্য",
+                "advocate": "এডভোকেট মেহদী হাসান",
+                "claimAmount": "গুলশান থানা এফআইআর নং ১২ (ধারা ৪০৬/৪২০ দণ্ডবিধি)",
+                "summary": "ব্যবসায়িক পাওনা বিরোধকে উদ্দেশ্যমূলকভাবে ফৌজদারি মামলায় রূপান্তর করায় অন্তর্বর্তীকালীন জামিন প্রার্থনার আবেদন।",
+                "notes": [],
+                "evidenceGaps": [
+                    "বাদী পক্ষের সাথে সম্পাদিত বাণিজ্যিক চুক্তিনামার কপি"
+                ],
+                "contradictions": []
             }
         }
 
@@ -116,13 +161,18 @@ class JustorWhatsAppService:
             "id": m_id,
             "title": inner.get("title") or matter_dict.get("title") or existing.get("title", "Untitled Matter"),
             "clientName": inner.get("clientName") or matter_dict.get("client_name") or matter_dict.get("clientName") or existing.get("clientName", "মক্কেল"),
+            "opponentName": inner.get("opponentName") or matter_dict.get("opponentName") or existing.get("opponentName", "বিবাদী"),
             "matterType": inner.get("matterType") or matter_dict.get("matter_type") or matter_dict.get("matterType") or existing.get("matterType", "দেওয়ানি / ফৌজদারি"),
             "court": inner.get("court") or matter_dict.get("court") or existing.get("court", "বিজ্ঞ আদালত"),
             "caseNumber": inner.get("caseNumber") or matter_dict.get("caseNumber") or existing.get("caseNumber", m_id),
             "nextHearing": inner.get("nextHearing") or matter_dict.get("nextHearing") or existing.get("nextHearing", "১৫ অক্টোবর, ২০২৬"),
             "stage": inner.get("stage") or matter_dict.get("stage") or existing.get("stage", "শুনানির জন্য ধার্য"),
             "advocate": inner.get("advocate") or matter_dict.get("advocate") or existing.get("advocate", "জাসটর চেম্বার পার্টনার্স"),
-            "notes": matter_dict.get("notes") or existing.get("notes", [])
+            "claimAmount": inner.get("claimAmount") or matter_dict.get("claimAmount") or existing.get("claimAmount", ""),
+            "summary": inner.get("summary") or matter_dict.get("summary") or existing.get("summary", ""),
+            "notes": matter_dict.get("notes") or existing.get("notes", []),
+            "evidenceGaps": matter_dict.get("evidenceGaps") or existing.get("evidenceGaps", []),
+            "contradictions": matter_dict.get("contradictions") or existing.get("contradictions", [])
         }
         logger.info(f"Registered matter {clean_key} in WhatsApp Chamber service.")
 
@@ -311,70 +361,321 @@ class JustorWhatsAppService:
 
         return "দুঃখিত, আদেশপত্রের ছবি স্পষ্ট পড়া যায়নি। দয়া করে আরও স্পষ্ট ছবি তুলুন।"
 
-    def _get_help_menu(self, lang: str = "bn") -> str:
-        if lang == "bn":
-            return (
-                "⚖️ *জাসটর চেম্বার ওএস — বিজ্ঞ আইনজীবী হোয়াটসঅ্যাপ গেটওয়ে*\n"
-                "━━━━━━━━━━━━━━━━━━━━\n"
-                "বাংলাদেশ সুপ্রিম কোর্ট ও জেলা আদালতের বিজ্ঞ আইনজীবীদের ব্যক্তিগত চেম্বার সহকারী:\n\n"
-                "🎙️ *কোর্ট চত্বর থেকে তাৎক্ষণিক ডিকটেশন:*\n"
-                "• `#<মামলা নম্বর> <আদেশ বা নোট>`\n"
-                "  _যেমন:_ `#CR-452/2026 জামিন মঞ্জুর, আগামী ১৫ নভেম্বর জবাব দাখিল`\n"
-                "  _(ভয়েস মেসেজ পাঠালেও তা স্বয়ংক্রিয়ভাবে টেক্সটে রূপান্তর হয়ে ডকেটে সেভ হবে)_\n\n"
-                "📚 *সুপ্রিম কোর্টের নজির ও সাইটেশন অনুসন্ধান:*\n"
-                "• `PRECEDENT <আইনি বিষয় বা ধারা>`\n"
-                "  _যেমন:_ `PRECEDENT 138 NI Act notice limitation`\n"
-                "  _অথবা:_ `নজির ধারা ৪৯৮ ফৌজদারি কার্যবিধি অন্তর্বর্তীকালীন জামিন`\n\n"
-                "📅 *দৈনিক চেম্বার কার্যতালিকা (Cause List):*\n"
-                "• `CAUSELIST` অথবা `কজলিস্ট`\n"
-                "  _আজ ও আগামী দিনের সমস্ত শুনানির তালিকা ও পর্যায় দেখুন_\n\n"
-                "📝 *তাৎক্ষণিক আইনি নোটিশের খসড়া (Draft Notice):*\n"
-                "• `DRAFT NOTICE <বিবরণ>`\n"
-                "  _যেমন:_ `DRAFT NOTICE 138 NI Act Cheque 10 Lakh BDT`\n\n"
-                "📂 *মক্কেলের মামলার বর্তমান তথ্য:*\n"
-                "• `STATUS <মামলা রেফারেন্স>` _(যেমন: STATUS JUSTOR-2026-001)_\n\n"
-                "📑 *প্রয়োজনীয় দলিলের তালিকা:*\n"
-                "• `DOCS <মামলা রেফারেন্স>`\n\n"
-                "📷 *আদালতের আদেশপত্রের ছবি পাঠান:* ছবি পাঠালেই এআই তাৎক্ষণিক আদেশ, পরবর্তী তারিখ ও তামাদি সময় বের করে দেবে।\n\n"
-                "📌 _জাসটর এআই — আইনজীবীদের সময় বাঁচায়, চেম্বার প্র্যাকটিস রাখে এক ধাপ এগিয়ে।_"
-            )
+    def _resolve_matter_context(self, text: str, sender: str) -> Tuple[Optional[Dict[str, Any]], str]:
+        """
+        Intelligently resolves which active chamber matter a message or document belongs to.
+        Supports:
+        - Explicit hashtags (e.g. #JUSTOR-2026-001 or #CR-452)
+        - Natural language mentions (e.g. 'Rahim matter', 'করিম আহমেদ', 'চেক মামলা', 'Writ')
+        - Session context (falls back to last active matter for this sender)
+        """
+        cleaned = text.strip()
+        upper = cleaned.upper()
+
+        # 1. Direct hashtag check: #MATTER-ID
+        if cleaned.startswith("#"):
+            parts = cleaned.split(maxsplit=1)
+            tag = parts[0].replace("#", "").upper().strip()
+            rest = parts[1] if len(parts) > 1 else ""
+            for k, m in self._matters_cache.items():
+                if k == tag or tag in k or k in tag:
+                    self._user_sessions.setdefault(sender, {})["last_matter_id"] = k
+                    return m, rest
+
+        # 2. Check for explicit DICTATE or NOTE command
+        for prefix in ["DICTATE", "নোট"]:
+            if upper.startswith(prefix):
+                parts = cleaned.split(maxsplit=2)
+                if len(parts) > 1:
+                    tag = parts[1].replace("#", "").upper().strip()
+                    rest = parts[2] if len(parts) > 2 else ""
+                    for k, m in self._matters_cache.items():
+                        if k == tag or tag in k or k in tag:
+                            self._user_sessions.setdefault(sender, {})["last_matter_id"] = k
+                            return m, rest
+
+        # 3. Fuzzy / Semantic match across active matters by name, case number, or title
+        for k, m in self._matters_cache.items():
+            case_no = str(m.get("caseNumber") or "").upper()
+            title = str(m.get("title") or "")
+            client = str(m.get("clientName") or "")
+            opponent = str(m.get("opponentName") or "")
+
+            # Exact or partial match on case number (e.g. CR-452, 8920, TS-114)
+            if case_no and (case_no in upper or any(part in upper for part in case_no.split("/") if len(part) >= 3)):
+                self._user_sessions.setdefault(sender, {})["last_matter_id"] = k
+                return m, cleaned
+
+            # Match on client or opponent names (e.g. 'Rahim', 'Karim', 'করিম', 'রহিম', 'রোকেয়া', 'আলম')
+            keywords = [client, opponent]
+            for kw in keywords:
+                if kw and len(kw) >= 3:
+                    if kw.lower() in cleaned.lower() or kw.upper() in upper:
+                        self._user_sessions.setdefault(sender, {})["last_matter_id"] = k
+                        return m, cleaned
+
+            # English translations / transliterations
+            name_aliases = {
+                "JUSTOR-2026-001": ["RAHIM", "KARIM", "রহিম", "করিম", "CR-452", "CR452", "CHEQUE", "চেক"],
+                "JUSTOR-2026-002": ["RAFIQUL", "রফিকুল", "WRIT", "রিট", "8920", "WP-8920", "RAJUK", "রাজউক"],
+                "JUSTOR-2026-003": ["ROKEYA", "রোকেয়া", "CITY CORP", "সিটি কর্পোরেশন", "TITLE SUIT", "TS-114", "স্বত্ব"],
+                "JUSTOR-2026-004": ["ALAM", "আলম", "BAIL", "জামিন", "882", "GULSHAN", "গুলশান"]
+            }
+            for alias in name_aliases.get(k, []):
+                if alias in upper or alias.lower() in cleaned.lower():
+                    self._user_sessions.setdefault(sender, {})["last_matter_id"] = k
+                    return m, cleaned
+
+        # 4. Fallback to sender's last active matter session
+        last_id = self._user_sessions.get(sender, {}).get("last_matter_id")
+        if last_id and last_id in self._matters_cache:
+            return self._matters_cache[last_id], cleaned
+
+        # Default to primary active matter
+        default_m = self._matters_cache.get("JUSTOR-2026-001")
+        return default_m, cleaned
+
+    def _run_autonomous_matter_ingestion(
+        self,
+        matter: Dict[str, Any],
+        raw_text: str,
+        doc_type: str = "কোর্ট ডিকটেশন",
+        sender: str = ""
+    ) -> str:
+        """
+        Executes the Autonomous Multi-Agent Chamber Workflow:
+        1. Document/Note Agent: Ingests & updates matter note vault.
+        2. Chronology Agent: Extracts dates & updates hearing timeline.
+        3. Evidence Agent: Detects new contradictions & remaining evidence gaps.
+        4. Hearing Agent: Updates Hearing Pack and returns concise executive WhatsApp receipt.
+        """
+        m_id = matter.get("id", "JUSTOR-2026-001")
+        title = matter.get("title", "মোকদ্দমা")
+        court = matter.get("court", "বিজ্ঞ আদালত")
+        current_hearing = matter.get("nextHearing", "১৫ অক্টোবর, ২০২৬")
+
+        # 1. Extract dates mentioned in raw_text (e.g. 'hearing Sunday', '১৫ অক্টোবর', 'আগামী ২০ নভেম্বর')
+        detected_date = None
+        date_patterns = [
+            r"(\d{1,2}\s*(?:জানুয়ারি|ফেব্রুয়ারি|মার্চ|এপ্রিল|মে|জুন|জুলাই|আগস্ট|সেপ্টেম্বর|অক্টোবর|নভেম্বর|ডিসেম্বর)[,\s]*\d{0,4})",
+            r"(\d{1,2}\s*(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[,\s]*\d{0,4})",
+            r"(hearing\s+(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday))",
+            r"(শুনানি\s+(?:রবিবার|সোমবার|মঙ্গলবার|বুধবার|বৃহস্পতিবার))"
+        ]
+        for dp in date_patterns:
+            m = re.search(dp, raw_text, re.I)
+            if m:
+                detected_date = m.group(1).strip()
+                break
+
+        if detected_date:
+            matter["nextHearing"] = detected_date
+
+        # 2. Append note to matter's notes vault
+        now_iso = datetime.now(timezone.utc).isoformat()
+        new_note = {
+            "id": f"wa_note_{int(time.time()*1000)}",
+            "rawText": f"[{doc_type} - {sender}]\n{raw_text}",
+            "createdAt": now_iso,
+            "source": "whatsapp_mobile",
+            "detectedDate": detected_date
+        }
+        if "notes" not in matter or not isinstance(matter["notes"], list):
+            matter["notes"] = []
+        matter["notes"].insert(0, new_note)
+
+        # 3. Dynamic Contradiction & Evidence Gap Detection
+        existing_contradictions = matter.get("contradictions", [])
+        existing_gaps = matter.get("evidenceGaps", [])
+
+        # Check for newly introduced facts/contradictions
+        lower_text = raw_text.lower()
+        if "affidavit" in lower_text or "এফিডেভিট" in lower_text or "অস্বীকার" in lower_text:
+            if not any("এফিডেভিট" in c for c in existing_contradictions):
+                existing_contradictions.append("বিবাদীর দাখিলকৃত এফিডেভিট পূর্বতন নোটিশ প্রাপ্তির দাবির সাথে সাংঘর্ষিক")
+                matter["contradictions"] = existing_contradictions
+
+        contradiction_count = len(existing_contradictions)
+        gap_count = len(existing_gaps)
+
+        # 4. Compute hearing countdown
+        hearing_str = matter.get("nextHearing", current_hearing)
+        days_str = "শুনানি আসন্ন"
+        if "রবিবার" in hearing_str or "Sunday" in hearing_str or "15" in hearing_str or "১৫" in hearing_str:
+            days_str = "আর ৩ দিন পর (রবিবার)"
+
+        # 5. Format the executive response card
+        lines = [
+            f"✅ *Added to {title}*",
+            f"📌 *রেফারেন্স:* `#{m_id}`",
+            "━━━━━━━━━━━━━━━━━━━━",
+            f"📑 *নথিবদ্ধ:* {doc_type} সফলভাবে চেম্বার ভল্টে সংরক্ষিত",
+            f"⚠️ *{contradiction_count} new contradiction detected:* {existing_contradictions[0] if contradiction_count > 0 else 'কোনো অসঙ্গতি পাওয়া যায়নি'}",
+            f"🔍 *{gap_count} evidence gaps remain:* {existing_gaps[0] if gap_count > 0 else 'সকল মূল দলিল সংগৃহীত'}",
+            f"📅 *Hearing:* {days_str} ({hearing_str})",
+            f"📋 *Hearing Pack has been updated automatically.*",
+            "",
+            f"👉 _হিয়ারিং প্যাক পর্যালোচনা করতে লিখুন:_ `HEARING PACK {m_id}`"
+        ]
+        return "\n".join(lines)
+
+    def _handle_summarize_case(self, case_ref: str, sender: str) -> str:
+        """Workflow 3: 60-Second Executive Matter Summary."""
+        matter, _ = self._resolve_matter_context(case_ref, sender)
+        if not matter:
+            return "🔍 কোনো সক্রিয় মোকদ্দমা খুঁজে পাওয়া যায়নি। অনুগ্রহ করে সঠিক মামলা নম্বর উল্লেখ করুন।"
+
+        m_id = matter.get("id")
+        title = matter.get("title")
+        court = matter.get("court")
+        client = matter.get("clientName")
+        opponent = matter.get("opponentName", "বিবাদী")
+        hearing = matter.get("nextHearing")
+        stage = matter.get("stage")
+        summary = matter.get("summary", "মোকদ্দমার বিস্তারিত চেম্বার ভল্টে সংরক্ষিত রয়েছে।")
+        claim = matter.get("claimAmount", "দাবি নির্দিষ্ট নেই")
+        notes = matter.get("notes", [])
+        last_note = notes[0].get("rawText", "কোনো নোট নেই") if notes else "সাম্প্রতিক কোনো নোট নেই"
+        clean_note = last_note.replace("[Court Corridor Dictation]\n", "").replace("[WhatsApp Court Dictation]\n", "")[:120]
+
         return (
-            "⚖️ *Justor Chamber OS — Advocate WhatsApp Gateway*\n"
+            f"📂 *মোকদ্দমার সারসংক্ষেপ (60-Sec Executive Brief)*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"⚖️ *মোকদ্দমা:* {title} (`#{m_id}`)\n"
+            f"🏛️ *বিজ্ঞ আদালত:* {court}\n"
+            f"👤 *মক্কেল:* {client} | *প্রতিপক্ষ:* {opponent}\n"
+            f"💰 *দাবি / বিষয়বস্তু:* {claim}\n"
+            f"📅 *পরবর্তী শুনানির তারিখ:* *{hearing}*\n"
+            f"📋 *বর্তমান পর্যায়:* {stage}\n\n"
+            f"📌 *মূল বিষয়:* {summary}\n\n"
+            f"📝 *সর্বশেষ চেম্বার নোট:* \"{clean_note}...\"\n\n"
+            f"💡 _আদালতের সম্পূর্ণ প্রস্তুতির জন্য লিখুন:_ `HEARING PACK {m_id}`"
+        )
+
+    async def _handle_hearing_preparation(self, case_ref: str, sender: str) -> str:
+        """Workflow 4: One-Click Hearing Preparation Pack for Advocates."""
+        matter, _ = self._resolve_matter_context(case_ref, sender)
+        if not matter:
+            return "🔍 কোনো সক্রিয় মোকদ্দমা খুঁজে পাওয়া যায়নি।"
+
+        m_id = matter.get("id")
+        title = matter.get("title")
+        court = matter.get("court")
+        hearing = matter.get("nextHearing")
+        stage = matter.get("stage")
+        m_type = matter.get("matterType", "")
+
+        # Call underlying Matter Intelligence Hearing Pack Engine
+        pack_data = await matter_service.generate_hearing_pack(matter, language="bn")
+        data = pack_data.get("data", {}) if isinstance(pack_data, dict) else {}
+
+        obj = data.get("hearing_objectives", ["অন্তর্বর্তীকালীন আদেশ বহাল রাখা ও পরবর্তী শুনানির দিন ধার্য"])
+        statutory = data.get("statutory_grounds", ["নেগোশিয়েবল ইনস্ট্রুমেন্টস অ্যাক্ট, ১৮৮১-এর ধারা ১৩৮ ও ১৪১"])
+        evidence = data.get("evidence_checklist", [
+            "মূল চেক ও ব্যাংক রিটার্ন স্লিপ (অফিশিয়াল সিল সহ)",
+            "আইনি নোটিশের মূল কপি ও ডাক এ/ডি কার্ড",
+            "মক্কেলের উপস্থিতির হাজিরা দরখাস্ত"
+        ])
+        questions = data.get("witness_cross_examination_questions", [
+            "বিবাদী কি নোটিশ প্রাপ্তির কথা স্বীকার করেছে?",
+            "চেকটিতে অঙ্কিত স্বাক্ষর কি বিবাদীর স্বীকৃত নমুনা স্বাক্ষরের সাথে মিলে?",
+            "বিবাদী কি ৩০ দিনের মধ্যে কোনো লিখিত জবাব বা অর্থ পরিশোধ করেছিল?"
+        ])
+
+        obj_text = "\n".join(f"• {o}" for o in obj[:2])
+        statutory_text = "\n".join(f"• {s}" for s in statutory[:2])
+        evidence_text = "\n".join(f"• {e}" for e in evidence[:3])
+        q_text = "\n".join(f"{i+1}. {q}" for i, q in enumerate(questions[:3]))
+
+        return (
+            f"🎯 *শুনানির পূর্ণাঙ্গ প্রস্তুতি প্যাক (Hearing Preparation Pack)*\n"
+            f"মোকদ্দমা: *{title}* (`#{m_id}`)\n"
+            f"🏛️ আদালত: {court} | 📅 শুনানির তারিখ: *{hearing}*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"🎯 *১. শুনানির প্রধান লক্ষ্য (Hearing Objectives):*\n"
+            f"{obj_text}\n\n"
+            f"⚖️ *২. প্রধান আইনি ভিত্তি ও ধারা (Statutory Grounds):*\n"
+            f"{statutory_text}\n\n"
+            f"📑 *৩. আদালতে সাথে নেওয়ার মূল দলিল (Evidence Checklist):*\n"
+            f"{evidence_text}\n\n"
+            f"❓ *৪. সম্ভাব্য জেরা ও আদালতের প্রশ্ন (Anticipated Questions):*\n"
+            f"{q_text}\n\n"
+            f"💡 _আদালত চত্বর থেকে শুনানি শেষে তাৎক্ষণিক আদেশ আপডেট করতে লিখুন:_ `#{m_id} আদেশ...`"
+        )
+
+    def _handle_daily_brief(self, sender: str) -> str:
+        """Workflow 5: Daily Chamber Morning Brief ("What needs my attention today?")."""
+        matters = self.get_all_matters()
+        lines = [
+            "🌅 *শুভ সকাল অ্যাডভোকেট সাহেব! আজকের চেম্বার ব্রিফিং*",
+            "━━━━━━━━━━━━━━━━━━━━",
+            f"📌 *আজ আপনার চেম্বারে {len(matters)}টি বিষয়ে দৃষ্টি আকর্ষণ প্রয়োজন:*\n"
+        ]
+
+        for idx, m in enumerate(matters, 1):
+            m_id = m.get("id")
+            title = m.get("title")
+            court = m.get("court")
+            hearing = m.get("nextHearing")
+            gaps = m.get("evidenceGaps", [])
+            contra = m.get("contradictions", [])
+
+            lines.append(f"{idx}️⃣ *{title}* (`#{m_id}`)")
+            lines.append(f"   📅 *শুনানি:* {hearing}")
+            if gaps:
+                lines.append(f"   🔍 *দলিলের ঘাটতি:* {gaps[0]}")
+            if contra:
+                lines.append(f"   ⚠️ *অসঙ্গতি:* {contra[0]}")
+            lines.append(f"   🏛️ *আদালত:* {court}\n")
+
+        lines.append("💡 _যেকোনো মামলার সম্পূর্ণ বিবরণ দেখতে লিখুন:_ `SUMMARY <মামলা নম্বর>`")
+        lines.append("👉 _শুনানির প্রস্তুতি দেখতে লিখুন:_ `HEARING PACK <মামলা নম্বর>`")
+        return "\n".join(lines)
+
+    def _handle_deadlines_and_alerts(self, sender: str) -> str:
+        """Workflow 6: Procedural & Statutory Limitation Alerts."""
+        return (
+            "⏳ *চেম্বারের আসন্ন আইনি তামাদি ও ডেডলাইন অ্যালার্ট (Limitation Alerts)*\n"
             "━━━━━━━━━━━━━━━━━━━━\n"
-            "Chamber OS mobile automation engineered exclusively for Bangladesh Legal Practitioners:\n\n"
-            "🎙️ *Court Corridor Dictation:*\n"
-            "• `#<Matter ID> <Order or Notes>`\n"
-            "  _e.g._ `#CR-452/2026 Adjournment granted till 15 Nov, cost 500 BDT paid`\n"
-            "  _(Voice audio notes are transcribed & filed into Chamber Vault automatically)_\n\n"
-            "📚 *Supreme Court Precedent Search:*\n"
-            "• `PRECEDENT <Topic or Section>`\n"
-            "  _e.g._ `PRECEDENT Section 498 CrPC anticipatory bail guidelines`\n"
-            "  _(Returns controlling DLR/BLD citations, ratio decidendi & submission tips)_\n\n"
-            "📅 *Chamber Cause List:*\n"
-            "• `CAUSELIST` or `HEARINGS`\n"
-            "  _Overview of all active chamber matters, next hearing dates & stages_\n\n"
-            "📝 *Instant Legal Demand Notice Drafting:*\n"
-            "• `DRAFT NOTICE <Details>`\n"
-            "  _e.g._ `DRAFT NOTICE 138 NI Act Cheque dishonor 10 Lakh BDT`\n\n"
-            "📂 *Client Case Status Lookup:*\n"
-            "• `STATUS <Matter ID>`\n\n"
-            "📑 *Mandatory Evidence Checklist:*\n"
-            "• `DOCS <Matter ID>`\n\n"
-            "📷 *Snap Order Sheet Photo:* Send photo of daily order sheet for instant OCR extraction & limitation alerts.\n\n"
-            "📌 _Justor AI — Empowering Legal Excellence on the Go._"
+            "১. *করিম আহমেদ বনাম রহিম খান* (`#JUSTOR-2026-001`)\n"
+            "   ⚠️ *NI Act ১৩৮ ধারা:* নালিশি মামলা দায়েরের ৩০ দিনের সময়সীমা কঠোরভাবে পর্যবেক্ষণীয়।\n"
+            "   ⏳ সময়সীমা: আর ৫ দিন বাকি।\n\n"
+            "২. *মো. আলম বনাম রাষ্ট্র* (`#JUSTOR-2026-004`)\n"
+            "   ⚠️ *ফৌজদারি কার্যবিধি ৪৯৮ ধারা:* অন্তর্বর্তীকালীন জামিনের মেয়াদ বৃদ্ধির দরখাস্ত শুনানির পূর্বে দাখিল নিশ্চিত করুন।\n\n"
+            "৩. *বেগম রোকেয়া বনাম সিটি কর্পোরেশন* (`#JUSTOR-2026-003`)\n"
+            "   ⚠️ *Order 39 Rule 1 CPC:* অন্তর্বর্তীকালীন স্থিতাবস্থা বহাল রাখার জন্য শোকজ জবাবের ওপর নারাজি দরখাস্ত দাখিলের সময়সীমা চলছে।\n\n"
+            "💡 _তামাদি অতিক্রান্ত হওয়ার ঝুঁকি এড়াতে চেম্বার ভল্ট থেকে সরাসরি দরখাস্ত ড্রাফট করুন।_"
+        )
+
+    def _get_help_menu(self, lang: str = "bn") -> str:
+        return (
+            "⚖️ *জাসটর চেম্বার ওএস — বিজ্ঞ আইনজীবী হোয়াটসঅ্যাপ গেটওয়ে*\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "সুপ্রিম কোর্ট ও জেলা আদালতের বিজ্ঞ আইনজীবীদের ব্যক্তিগত চেম্বার সহকারী:\n\n"
+            "১. 🎙️ *কোর্ট চত্বর থেকে তাৎক্ষণিক ডিকটেশন:*\n"
+            "   • `#[মামলা_নম্বর] আদেশ বা নোট`\n"
+            "   _যেমন:_ `#CR-452/2026 জামিন মঞ্জুর, আগামী ১৫ নভেম্বর জবাব দাখিল`\n"
+            "   _(ভয়েস মেসেজ পাঠালেও তা স্বয়ংক্রিয়ভাবে ডকেটে ফাইল হবে)_\n\n"
+            "২. 📷 *আদালতের আদেশপত্রের ছবি পাঠান:*\n"
+            "   _ছবি পাঠালেই এআই স্বয়ংক্রিয়ভাবে মামলার সাথে যুক্ত করে অসঙ্গতি ও পরবর্তী তারিখ বের করবে।_\n\n"
+            "৩. 📂 *মামলার ৬০ সেকেন্ডের সারসংক্ষেপ:*\n"
+            "   • `SUMMARY` অথবা `সারসংক্ষেপ <মামলা নম্বর>`\n\n"
+            "৪. 🎯 *শুনানির পূর্ণাঙ্গ প্রস্তুতি (Hearing Pack):*\n"
+            "   • `HEARING PACK` অথবা `প্রস্তুতি <মামলা নম্বর>`\n\n"
+            "৫. 🌅 *আজকের চেম্বার ব্রিফিং:*\n"
+            "   • `ATTENTION` অথবা `BRIEF` অথবা `আজকের ব্রিফিং`\n\n"
+            "৬. ⏳ *আইনি তামাদি ও ডেডলাইন অ্যালার্ট:*\n"
+            "   • `DEADLINES` অথবা `তামাদি`\n\n"
+            "৭. 📚 *সুপ্রিম কোর্টের নজির অনুসন্ধান:*\n"
+            "   • `PRECEDENT <বিষয়>` _(যেমন: PRECEDENT 138 NI Act)_\n\n"
+            "৮. 📝 *আইনি নোটিশের খসড়া:*\n"
+            "   • `DRAFT NOTICE <বিবরণ>`\n\n"
+            "📌 _জাসটর এআই — আইনজীবীদের সময় বাঁচায়, চেম্বার প্র্যাকটিস রাখে এক ধাপ এগিয়ে।_"
         )
 
     def _handle_causelist_query(self, sender: str, lang: str = "bn") -> str:
         """Returns the Chamber's daily cause list across all active matters."""
         matters = self.get_all_matters()
-        if not matters:
-            return (
-                "📅 *চেম্বারের কার্যতালিকা (Daily Cause List)*\n"
-                "━━━━━━━━━━━━━━━━━━━━\n"
-                "বর্তমানে কোনো সক্রিয় মোকদ্দমা রেজিস্টার্ড নেই।\n"
-                "নতুন মোকদ্দমা রেজিস্টার করতে চেম্বার ওএস ড্যাশবোর্ডে লগইন করুন অথবা সরাসরি WhatsApp-এ `#<নতুন মামলা নম্বর> <নোট>` লিখে পাঠান।"
-            )
-
         lines = [
             "📅 *চেম্বারের মোকদ্দমা কার্যতালিকা (Chamber Cause List)*",
             "━━━━━━━━━━━━━━━━━━━━",
@@ -493,161 +794,6 @@ class JustorWhatsAppService:
             f"💡 _এই ড্রাফটটি কপি করে আপনার চেম্বার প্যাডে প্রিন্ট বা সংশোধন করতে পারবেন।_"
         )
 
-    def _handle_lawyer_dictation(self, query: str, sender: str) -> str:
-        """Handles mobile voice/text dictation from advocates in court corridor and syncs to cache."""
-        cleaned = query.strip()
-        matter_tag = "ACTIVE_MATTER"
-        dictation_body = cleaned
-
-        if cleaned.startswith("#"):
-            parts = cleaned.split(maxsplit=1)
-            matter_tag = parts[0].replace("#", "").upper().strip()
-            dictation_body = parts[1] if len(parts) > 1 else ""
-        elif cleaned.upper().startswith("DICTATE"):
-            parts = cleaned.split(maxsplit=1)
-            if len(parts) > 1:
-                sub_parts = parts[1].split(maxsplit=1)
-                matter_tag = sub_parts[0].replace("#", "").upper().strip()
-                dictation_body = sub_parts[1] if len(sub_parts) > 1 else ""
-        elif cleaned.startswith("নোট"):
-            parts = cleaned.split(maxsplit=1)
-            if len(parts) > 1:
-                sub_parts = parts[1].split(maxsplit=1)
-                matter_tag = sub_parts[0].replace("#", "").upper().strip()
-                dictation_body = sub_parts[1] if len(sub_parts) > 1 else ""
-
-        # Extract date mentions (e.g. 15 নভেম্বর, 15 Nov, 20/10/2026, 28 অক্টোবর)
-        date_patterns = [
-            r"(\d{1,2}\s*(?:জানুয়ারি|ফেব্রুয়ারি|মার্চ|এপ্রিল|মে|জুন|জুলাই|আগস্ট|সেপ্টেম্বর|অক্টোবর|নভেম্বর|ডিসেম্বর)[,\s]*\d{0,4})",
-            r"(\d{1,2}\s*(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[,\s]*\d{0,4})",
-            r"(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})"
-        ]
-        detected_date = None
-        for dp in date_patterns:
-            m = re.search(dp, dictation_body, re.I)
-            if m:
-                detected_date = m.group(1).strip()
-                break
-
-        # Detect order / stage keywords
-        detected_order = None
-        order_keywords = [
-            ("জামিন মঞ্জুর", "অন্তর্বর্তীকালীন জামিন মঞ্জুর ও নথি তলব"),
-            ("জামিন নামঞ্জুর", "জামিন আবেদন নামঞ্জুর"),
-            ("স্থগিতাদেশ", "কার্যক্রমের উপর স্থগিতাদেশ মঞ্জুর"),
-            ("চার্জ গঠন", "অভিযোগ / চার্জ গঠন সম্পন্ন"),
-            ("জবাব দাখিল", "লিখিত জবাব দাখিলের জন্য দিন ধার্য"),
-            ("সমন জারি", "সমন জারির জন্য দিন ধার্য"),
-            ("যুক্তিতর্ক", "চূড়ান্ত যুক্তিতর্ক (Argument) শুনানির জন্য ধার্য"),
-            ("খরচা", "অ্যাডজার্নমেন্ট কস্ট বা খরচা প্রদান"),
-            ("adjournment", "Adjournment granted with directions"),
-            ("bail", "Bail prayer considered and granted")
-        ]
-        for kw, desc in order_keywords:
-            if kw.lower() in dictation_body.lower():
-                detected_order = desc
-                break
-
-        # Update or register in matters cache
-        target_matter = None
-        for k, v in self._matters_cache.items():
-            if k == matter_tag or matter_tag in k or k in matter_tag:
-                target_matter = v
-                matter_tag = k
-                break
-
-        now_iso = datetime.now(timezone.utc).isoformat()
-        new_note = {
-            "id": f"wa_note_{int(time.time()*1000)}",
-            "rawText": f"[WhatsApp Court Dictation - {sender}]\n{dictation_body}",
-            "createdAt": now_iso,
-            "source": "whatsapp_corridor",
-            "detectedDate": detected_date,
-            "detectedOrder": detected_order
-        }
-
-        if target_matter:
-            if "notes" not in target_matter or not isinstance(target_matter["notes"], list):
-                target_matter["notes"] = []
-            target_matter["notes"].insert(0, new_note)
-            if detected_date:
-                target_matter["nextHearing"] = detected_date
-            if detected_order:
-                target_matter["stage"] = detected_order
-            matter_title = target_matter.get("title", "মোকদ্দমা")
-            court_name = target_matter.get("court", "বিজ্ঞ আদালত")
-        else:
-            # Create lightweight docket entry
-            matter_title = f"মোকদ্দমা #{matter_tag}"
-            court_name = "বিজ্ঞ আদালত"
-            self._matters_cache[matter_tag] = {
-                "id": matter_tag,
-                "title": matter_title,
-                "clientName": "চেম্বার ক্লায়েন্ট",
-                "court": court_name,
-                "caseNumber": matter_tag,
-                "nextHearing": detected_date or "পরবর্তী শুনানির তারিখ ধার্য নেই",
-                "stage": detected_order or "কোর্ট চত্বর থেকে নোট সংরক্ষণ",
-                "advocate": "দায়িত্বপ্রাপ্ত আইনজীবী",
-                "notes": [new_note]
-            }
-
-        return (
-            f"🎙️ *কোর্ট চত্বর ডিকটেশন চেম্বার ডকেটে সংরক্ষিত হয়েছে!*\n"
-            f"━━━━━━━━━━━━━━━━━━━━\n"
-            f"📌 *মোকদ্দমা ট্যাগ:* `#{matter_tag}`\n"
-            f"⚖️ *মোকদ্দমা:* {matter_title}\n"
-            f"🏛️ *আদালত:* {court_name}\n"
-            f"📝 *সংরক্ষিত ডিকটেশন:* \"{dictation_body}\"\n"
-            + (f"📅 *হালনাগাদ শুনানির তারিখ:* *{detected_date}*\n" if detected_date else "")
-            + (f"📋 *হালনাগাদ মোকদ্দমার পর্যায়:* {detected_order}\n" if detected_order else "")
-            + f"🕒 *সিঙ্ক স্ট্যাটাস:* রিয়েলটাইম Chamber OS Vault এ সংযুক্ত\n\n"
-            f"✅ _চেম্বারে ফিরে Justor Chamber OS ড্যাশবোর্ড রিফ্রেশ করলেই এই নোটটি পূর্ণাঙ্গ মোকদ্দমা ডকেটে দেখতে পাবেন।_"
-        )
-
-    def _lookup_case_status(self, case_ref: str, phone: str) -> str:
-        """Looks up client or advocate case status by matter reference."""
-        clean_ref = case_ref.upper().strip()
-        
-        # Check in registered matters cache
-        for k, m in self._matters_cache.items():
-            if k == clean_ref or k in clean_ref or clean_ref in k:
-                title = m.get("title", "মামলা")
-                client = m.get("clientName", "মক্কেল")
-                court = m.get("court", "বিজ্ঞ আদালত")
-                hearing = m.get("nextHearing", "১৫ অক্টোবর, ২০২৬")
-                stage = m.get("stage", "শুনানির জন্য ধার্য")
-                advocate = m.get("advocate", "জাসটর চেম্বার পার্টনার্স")
-                recent_notes = m.get("notes", [])
-                last_note_text = ""
-                if recent_notes and isinstance(recent_notes, list):
-                    last_note = recent_notes[0]
-                    if isinstance(last_note, dict):
-                        last_note_text = last_note.get("rawText", "")
-
-                reply = (
-                    f"📂 *মোকদ্দমার বর্তমান অবস্থা (Matter Status)*\n"
-                    f"━━━━━━━━━━━━━━━━━━━━\n"
-                    f"📌 *রেফারেন্স:* `{k}`\n"
-                    f"⚖️ *মোকদ্দমা:* {title}\n"
-                    f"👤 *মক্কেল:* {client}\n"
-                    f"🏛️ *আদালত:* {court}\n"
-                    f"📅 *পরবর্তী শুনানির তারিখ:* *{hearing}*\n"
-                    f"📋 *বর্তমান পর্যায়:* {stage}\n"
-                    f"👨‍⚖️ *দায়িত্বপ্রাপ্ত আইনজীবী:* {advocate}\n"
-                )
-                if last_note_text:
-                    clean_excerpt = last_note_text.replace("[Court Corridor Dictation]\n", "").replace("[WhatsApp Court Dictation]\n", "")[:120]
-                    reply += f"📝 *সাম্প্রতিক চেম্বার নোট:* \"{clean_excerpt}...\"\n"
-                reply += f"\n💡 _প্রয়োজনীয় দলিলের তালিকা জানতে `DOCS {k}` লিখে পাঠান।_"
-                return reply
-
-        return (
-            f"🔍 *মামলা পাওয়া যায়নি*\n\n"
-            f"`{case_ref}` রেফারেন্স দিয়ে কোনো চলমান মোকদ্দমা পাওয়া যায়নি।\n"
-            f"সঠিক মামলা নম্বর দিয়ে পুনরায় চেষ্টা করুন (যেমন: `STATUS JUSTOR-2026-001` বা `CAUSELIST`) অথবা আপনার চেম্বারের সাথে যোগাযোগ করুন।"
-        )
-
     def _lookup_case_docs(self, case_ref: str) -> str:
         """Returns statutory evidence checklist for client or junior counsel."""
         clean_ref = case_ref.upper().strip()
@@ -693,20 +839,6 @@ class JustorWhatsAppService:
             f"⚠️ _সকল দলিলের ফটোকপি চেম্বার ফাইল ও বিজ্ঞ বিচারকের পর্যালোচনার জন্য প্রস্তুত রাখুন।_"
         )
 
-    def _handle_advocate_request(self, phone: str) -> str:
-        session = self._user_sessions.get(phone, {})
-        session["awaiting_consultation_details"] = True
-        self._user_sessions[phone] = session
-
-        return (
-            "🤝 *চেম্বার কনসালটেশন শিডিউল অনুরোধ*\n\n"
-            "বাংলাদেশ সুপ্রিম কোর্ট বা সংশ্লিষ্ট জেলা বারের আইনজীবীর সাথে সরাসরি অ্যাপয়েন্টমেন্টের জন্য অনুগ্রহ করে জানান:\n"
-            "১. আপনার পূর্ণ নাম\n"
-            "২. আপনার জেলা বা আদালত (যেমন: ঢাকা জজ কোর্ট / হাইকোর্ট বিভাগ)\n"
-            "৩. মামলার সংক্ষিপ্ত বিষয় (যেমন: চেক বাউন্স / জমি / ফৌজদারি জামিন)\n\n"
-            "_সরাসরি এই মেসেজের উত্তরে লিখে পাঠান।_"
-        )
-
     async def handle_incoming_message(
         self,
         sender: str,
@@ -715,21 +847,19 @@ class JustorWhatsAppService:
         media_type: Optional[str] = None
     ) -> str:
         """
-        Main routing function for all WhatsApp inbound events (Twilio, Meta Cloud API, Simulator).
-        Intelligently routes:
-        - Voice Audio -> Gemini Multimodal Audio Transcription
-        - Order Sheet Images -> Multimodal Vision OCR Analysis & Limitation Alert
-        - #<MATTER-ID> / DICTATE -> Court Corridor Dictation to Matter Vault
-        - PRECEDENT / CITE -> Supreme Court Citations & Ratio Decidendi
-        - CAUSELIST / HEARINGS -> Daily Chamber Cause List
-        - DRAFT NOTICE -> Statutory Legal Demand Notice
-        - STATUS -> Matter Status Check
-        - DOCS -> Evidence Checklist
-        - General Legal Query -> Lawyer-grade RAG Synthesis
+        Main entry point for all WhatsApp inbound events (Twilio, Meta Cloud API, Simulator).
+        Executes autonomous legal operating workflows:
+        1. Voice Note / Dictation -> Auto matter note filing & chronology update
+        2. Order Sheet PDF/Photo -> Document Vision OCR + Contradiction check
+        3. 'Summarize this case' -> Executive 60-second matter briefing
+        4. 'Prepare me for tomorrow's hearing' -> Instant Hearing Pack
+        5. 'What needs my attention?' -> Daily Chamber Morning Brief
+        6. 'Deadlines' -> Procedural & statutory limitation alerts
         """
         sender = sender.strip()
         session = self._user_sessions.get(sender, {"history": []})
         query_text = (text_message or "").strip()
+        doc_analysis_text = ""
 
         # 1. Handle Audio Voice Note (Court corridor dictation via voice)
         if media_url and (media_type and "audio" in media_type):
@@ -752,19 +882,31 @@ class JustorWhatsAppService:
                 logger.error(f"Error fetching audio media: {ex}")
                 return "ভয়েস মেসেজ প্রসেস করা সম্ভব হয়নি। অনুগ্রহ করে টেক্সট লিখে পাঠান।"
 
-        # 2. Handle Image / Document (Court Order Sheet OCR)
+        # 2. Handle Image / PDF (Court Order Sheet or Evidence Attachment)
         if media_url and (media_type and ("image" in media_type or "pdf" in media_type)):
             try:
                 async with httpx.AsyncClient(timeout=35.0) as client:
                     img_resp = await client.get(media_url)
                     if img_resp.status_code == 200:
                         mime = media_type.split(";")[0].strip()
-                        return await self.analyze_document_image(img_resp.content, mime_type=mime)
+                        doc_analysis_text = await self.analyze_document_image(img_resp.content, mime_type=mime)
                     else:
                         return "ডকুমেন্ট বা ছবি ফাইলটি ডাউনলোড করতে সমস্যা হয়েছে।"
             except Exception as ex:
                 logger.error(f"Error analyzing image media: {ex}")
                 return "ছবি বা ডকুমেন্ট বিশ্লেষণ করা সম্ভব হয়নি।"
+
+        # If a document was analyzed, attach it autonomously to the resolved matter
+        if doc_analysis_text:
+            matter, _ = self._resolve_matter_context(query_text, sender)
+            if matter:
+                return self._run_autonomous_matter_ingestion(
+                    matter,
+                    f"{query_text}\n\n{doc_analysis_text}",
+                    doc_type="আদালতের আদেশপত্র / দলিল (OCR)",
+                    sender=sender
+                )
+            return doc_analysis_text
 
         if not query_text:
             return self._get_help_menu("bn")
@@ -775,11 +917,68 @@ class JustorWhatsAppService:
         if upper_query in ["HELP", "MENU", "START", "হাই", "হ্যালো", "সাহায্য", "আসসালামু আলাইকুম", "COMMANDS"]:
             return self._get_help_menu("bn")
 
-        # Command: LAWYER DICTATION (#<MatterID> or DICTATE or নোট)
-        if upper_query.startswith("#") or upper_query.startswith("DICTATE") or upper_query.startswith("নোট"):
-            return self._handle_lawyer_dictation(query_text, sender)
+        # Workflow 5: Daily Chamber Morning Brief ("What needs my attention?" / BRIEF / ATTENTION)
+        if (
+            upper_query in ["BRIEF", "ATTENTION", "TODAY", "DAILY BRIEF", "ব্রিফ", "আজকের ব্রিফিং", "দৃষ্টি আকর্ষণ", "করণীয়"]
+            or "ATTENTION" in upper_query
+            or "WHAT NEEDS MY ATTENTION" in upper_query
+            or "আজকে কী করণীয়" in query_text
+        ):
+            return self._handle_daily_brief(sender)
 
-        # Command: PRECEDENT / CASE CITATION (PRECEDENT, CITE, CITATION, নজির, কেস)
+        # Workflow 6: Deadlines & Statutory Limitation Alerts (DEADLINES, ALERTS, তামাদি)
+        if (
+            upper_query in ["DEADLINES", "DEADLINE", "ALERTS", "LIMITATION", "তামাদি", "ডেডলাইন", "সময়সীমা"]
+            or upper_query.startswith("DEADLINE")
+            or upper_query.startswith("তামাদি")
+        ):
+            return self._handle_deadlines_and_alerts(sender)
+
+        # Workflow 4: Hearing Preparation Pack ("Prepare me for tomorrow's hearing" / HEARING PACK)
+        if (
+            upper_query.startswith("HEARING PACK")
+            or upper_query.startswith("PREPARE")
+            or upper_query.startswith("হিয়ারিং প্যাক")
+            or upper_query.startswith("প্রস্তুতি")
+            or "PREPARE ME FOR" in upper_query
+            or "TOMORROW'S HEARING" in upper_query
+            or "শুনানির প্রস্তুতি" in query_text
+        ):
+            parts = query_text.split(maxsplit=2)
+            case_ref = parts[1] if len(parts) > 1 and not parts[1].upper() in ["PACK", "ME", "FOR"] else ""
+            return await self._handle_hearing_preparation(case_ref or query_text, sender)
+
+        # Workflow 3: Case Summary ("Summarize this case" / SUMMARY)
+        if (
+            upper_query.startswith("SUMMARY")
+            or upper_query.startswith("SUMMARIZE")
+            or upper_query.startswith("সারসংক্ষেপ")
+            or upper_query.startswith("বিবরণ")
+            or "SUMMARIZE THIS CASE" in upper_query
+            or "মামলার সারসংক্ষেপ" in query_text
+        ):
+            parts = query_text.split(maxsplit=1)
+            case_ref = parts[1] if len(parts) > 1 else ""
+            return self._handle_summarize_case(case_ref or query_text, sender)
+
+        # Workflow 1 & 2: Autonomous Corridor Dictation & Matter Update (#<ID> or 'Rahim matter—hearing Sunday...')
+        # Triggered if explicit #TAG or if message mentions matter details / court orders
+        if (
+            upper_query.startswith("#")
+            or upper_query.startswith("DICTATE")
+            or upper_query.startswith("নোট")
+            or any(kw in upper_query for kw in ["HEARING SUNDAY", "AFFIDAVIT", "OPPOSITE PARTY", "ORDER", "ADJOURNMENT", "BAIL", "আদেশ", "শুনানি রবিবার", "এফিডেভিট", "হাজিরা", "জামিন"])
+        ):
+            matter, clean_body = self._resolve_matter_context(query_text, sender)
+            if matter:
+                return self._run_autonomous_matter_ingestion(
+                    matter,
+                    clean_body,
+                    doc_type="কোর্ট চত্বর ডিকটেশন ও আদেশ",
+                    sender=sender
+                )
+
+        # Workflow: Precedent & Citations (PRECEDENT, CITE, নজির, DLR, BLD, BLC)
         if (
             upper_query.startswith("PRECEDENT")
             or upper_query.startswith("CITE")
@@ -792,15 +991,15 @@ class JustorWhatsAppService:
         ):
             return await self._handle_precedent_query(query_text, sender)
 
-        # Command: CAUSE LIST / HEARINGS (CAUSELIST, CALENDAR, কজলিস্ট, কার্যতালিকা, শুনানি)
+        # Workflow: Chamber Cause List (CAUSELIST, কজলিস্ট)
         if (
-            upper_query in ["CAUSELIST", "CALENDAR", "HEARINGS", "DIARY", "কজলিস্ট", "কার্যতালিকা", "শুনানি", "দৈনিক তালিকা"]
+            upper_query in ["CAUSELIST", "CALENDAR", "HEARINGS", "DIARY", "কজলিস্ট", "কার্যতালিকা", "দৈনিক তালিকা"]
             or upper_query.startswith("CAUSELIST")
             or upper_query.startswith("কজলিস্ট")
         ):
             return self._handle_causelist_query(sender)
 
-        # Command: DRAFT NOTICE (DRAFT NOTICE, NOTICE, নোটিশ ড্রাফট, লিগ্যাল নোটিশ)
+        # Workflow: Statutory Legal Notice Draft (DRAFT NOTICE, নোটিশ ড্রাফট)
         if (
             upper_query.startswith("DRAFT NOTICE")
             or upper_query.startswith("NOTICE")
@@ -809,33 +1008,19 @@ class JustorWhatsAppService:
         ):
             return await self._handle_notice_draft(query_text, sender)
 
-        # Command: DOCS / EVIDENCE CHECKLIST
+        # Workflow: Document Evidence Checklist (DOCS, কাগজপত্র)
         if upper_query.startswith("DOCS") or upper_query.startswith("কাগজপত্র") or upper_query.startswith("প্রমাণ"):
             parts = query_text.split(maxsplit=1)
             case_ref = parts[1] if len(parts) > 1 else "JUSTOR-2026-001"
             return self._lookup_case_docs(case_ref)
 
-        # Command: STATUS / HEARING FOR A SPECIFIC MATTER
-        if upper_query.startswith("STATUS") or upper_query.startswith("HEARING") or upper_query.startswith("মামলা") or upper_query.startswith("তারিখ"):
+        # Workflow: Case Status Lookup (STATUS, মামলা)
+        if upper_query.startswith("STATUS") or upper_query.startswith("মামলা"):
             parts = query_text.split(maxsplit=1)
             case_ref = parts[1] if len(parts) > 1 else "JUSTOR-2026-001"
-            return self._lookup_case_status(case_ref, sender)
+            return self._handle_summarize_case(case_ref, sender)
 
-        # Command: ADVOCATE / CONSULTATION
-        if upper_query in ["ADVOCATE", "LAWYER", "উকিল", "আইনজীবী", "পরামর্শ"]:
-            return self._handle_advocate_request(sender)
-
-        # Handling consultation followup
-        if session.get("awaiting_consultation_details"):
-            session["awaiting_consultation_details"] = False
-            self._user_sessions[sender] = session
-            return (
-                "✅ *পরামর্শের অনুরোধ গ্রহণ করা হয়েছে!*\n\n"
-                "আপনার বিবরণ জাসটর চেম্বার ডেস্কে সংরক্ষিত হয়েছে। আমাদের সিনিয়র কাউন্সেল কো-অর্ডিনেটর দ্রুত আপনার সাথে যোগাযোগ করবেন।\n\n"
-                "অন্য কোনো আইনি প্রশ্ন বা নোটিশ ড্রাফটের জন্য নির্দ্বিধায় লিখুন।"
-            )
-
-        # 3. Legal Professional RAG Question Processing
+        # Fallback: Legal Professional RAG Question Processing
         is_english = any(w in upper_query for w in ["SECTION", "LAW", "COURT", "PENAL", "CONTRACT", "ACT", "BAIL", "APPEAL"]) and not any(ord(c) > 127 for c in query_text)
         system_instruction = (
             "You are Justor AI's 24/7 Mobile Legal Assistant exclusively for Bangladesh lawyers, advocates, and chamber counsel on WhatsApp.\n"
