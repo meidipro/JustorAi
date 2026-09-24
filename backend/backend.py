@@ -2860,7 +2860,8 @@ async def whatsapp_meta_webhook(request: Request):
                         media_url=media_url,
                         media_type=media_type
                     )
-                    logger.info(f"Meta WA message processed for {from_num}. Reply length: {len(reply)}")
+                    await whatsapp_service.send_meta_whatsapp_message(to_phone=from_num, text=reply)
+                    logger.info(f"Meta WA message processed and dispatched to {from_num}. Reply length: {len(reply)}")
 
     return JSONResponse({"status": "received"}, status_code=200)
 

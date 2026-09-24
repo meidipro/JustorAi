@@ -1038,6 +1038,38 @@ class JustorWhatsAppService:
         response = await self._call_gemini_chat(prompt, system_instruction)
         return response
 
+    async def send_meta_whatsapp_message(self, to_phone: str, text: str) -> bool:
+        """Sends an outbound WhatsApp message back to the user via Meta Cloud API."""
+        if not META_WA_PHONE_NUMBER_ID or not META_WA_ACCESS_TOKEN:
+            logger.warning("META_WA_PHONE_NUMBER_ID or META_WA_ACCESS_TOKEN not set; skipping outbound Meta message.")
+            return False
+
+        clean_to = to_phone.replace("+", "").replace(" ", "").replace("-", "").strip()
+        url = f"https://graph.facebook.com/v19.0/{META_WA_PHONE_NUMBER_ID}/messages"
+        headers = {
+            "Authorization": f"Bearer {META_WA_ACCESS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": clean_to,
+            "type": "text",
+            "text": {"preview_url": False, "body": text}
+        }
+        try:
+            async with httpx.AsyncClient(timeout=20.0) as client:
+                resp = await client.post(url, json=payload, headers=headers)
+                if resp.status_code in [200, 201]:
+                    logger.info(f"Meta outbound message sent successfully to {clean_to}")
+                    return True
+                else:
+                    logger.error(f"Meta outbound error ({resp.status_code}): {resp.text}")
+                    return False
+        except Exception as e:
+            logger.error(f"Failed to send Meta WhatsApp message to {clean_to}: {e}")
+            return False
+
     def generate_twiml_response(self, message_text: str) -> str:
         """Generates standard TwiML XML string for Twilio WhatsApp Webhook."""
         import xml.sax.saxutils as saxutils
