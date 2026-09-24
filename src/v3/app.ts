@@ -19,7 +19,7 @@ import { chatStore, type ChatThread } from './chatStore';
 import { learningCatalog, getSection } from './learning/catalog';
 import { bindLearningSession, buildGoDeeperQuery, renderLearningHome } from './learning/ui';
 import { openDocumentOcrModal } from './document-ocr';
-import { openMatterWorkspaceModal } from './matter-workspace';
+import { openMatterWorkspaceModal, getActiveMatter } from './matter-workspace';
 import { openWhatsAppModal } from './whatsapp-modal';
 import { initVoiceInput } from './voice-input';
 import { analytics } from './analytics';
@@ -448,9 +448,11 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
     <button class="new-research-capsule matter-capsule-btn" type="button" data-action="open-matter-modal">
       ${icon('briefcase', 15)} <span>${state.language === 'bn' ? 'মোকদ্দমা ও চেম্বার' : 'Chamber OS · Matters'}</span>
     </button>
-    <button class="new-research-capsule whatsapp-capsule-btn" type="button" data-action="open-whatsapp-modal">
-      ${icon('whatsapp', 15)} <span>${state.language === 'bn' ? 'হোয়াটসঅ্যাপ হেল্পলাইন' : 'WhatsApp Helpline'}</span>
+    ${role === 'professional' ? `
+    <button class="new-research-capsule whatsapp-capsule-btn" type="button" data-action="open-whatsapp-modal" title="${state.language === 'bn' ? 'চেম্বার হোয়াটসঅ্যাপ অটোমেশন' : 'Chamber WhatsApp Gateway'}">
+      ${icon('whatsapp', 15)} <span>${state.language === 'bn' ? 'চেম্বার হোয়াটসঅ্যাপ' : 'Chamber WhatsApp'}</span>
     </button>
+    ` : ''}
     <nav class="sidebar-main-nav" aria-label="${localizedRoleLabel(role)} navigation">
       ${items.map((item) => route(item.href, `${icon(item.icon, 18)} <span>${item.label}</span>`, item.label === active ? 'active' : '')).join('')}
     </nav>
@@ -573,9 +575,11 @@ const workspaceTopbar = (role: Role, title?: string): string => {
       <button class="topbar-matter-btn" type="button" data-action="open-matter-modal" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও চেম্বার ওএস' : 'Chamber OS · Legal Workspace'}">
         ${icon('briefcase', 13)} <span>${state.language === 'bn' ? 'চেম্বার ওএস' : 'Chamber OS'}</span>
       </button>
-      <button class="topbar-wa-btn" type="button" data-action="open-whatsapp-modal" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন' : 'WhatsApp Legal Helpline'}">
-        ${icon('whatsapp', 13)} <span>WhatsApp</span>
+      ${role === 'professional' ? `
+      <button class="topbar-wa-btn" type="button" data-action="open-whatsapp-modal" title="${state.language === 'bn' ? 'আইনজীবী চেম্বার হোয়াটসঅ্যাপ' : 'Lawyer Chamber WhatsApp Gateway'}">
+        ${icon('whatsapp', 13)} <span>Chamber WA</span>
       </button>
+      ` : ''}
       <span class="credit-counter-pill ${isVip ? 'credit-pill-vip' : ''}" data-credit-pill title="${isVip ? (state.language === 'bn' ? 'আনলিমিটেড ভিআইপি অ্যাক্সেস' : 'Unlimited VIP Access') : (state.language === 'bn' ? 'দৈনিক ক্রেডিট' : 'Daily credits')}" ${isVip ? 'style="background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.35); color: #7C3AED; font-weight: 600;"' : ''}>
         ⬡ <span data-credit-remaining>${isVip ? '∞' : dailyLimit}</span>/<span data-credit-limit>${isVip ? '∞' : dailyLimit}</span>
         ${orgLabel ? `<span class="credit-partner-tag" ${isVip ? 'style="background: linear-gradient(135deg, #1E38C8, #7C3AED); color: #fff; font-weight: 700;"' : ''}>${orgLabel}</span>` : ''}
@@ -728,9 +732,11 @@ const renderBottomChatBar = (role: Role, placeholder: string, _quickActions?: st
             <button type="button" class="composer-tool-btn composer-matter-btn" data-action="open-matter-modal" aria-label="Open Chamber OS" title="${state.language === 'bn' ? 'মোকদ্দমা ফাইল ও চেম্বার ওএস (Chamber OS)' : 'Chamber OS · Matter Workspace & Dictaphone'}">
               ${icon('briefcase', 16)}
             </button>
-            <button type="button" class="composer-tool-btn composer-wa-btn" data-action="open-whatsapp-modal" aria-label="Open WhatsApp Helpline" title="${state.language === 'bn' ? 'হোয়াটসঅ্যাপ আইনি হেল্পলাইন বট' : 'WhatsApp Legal Helpline Bot'}">
+            ${role === 'professional' ? `
+            <button type="button" class="composer-tool-btn composer-wa-btn" data-action="open-whatsapp-modal" aria-label="Open Chamber WhatsApp" title="${state.language === 'bn' ? 'আইনজীবী চেম্বার হোয়াটসঅ্যাপ' : 'Lawyer Chamber WhatsApp Gateway'}">
               ${icon('whatsapp', 16)}
             </button>
+            ` : ''}
             <button type="button" class="composer-tool-btn composer-attach-btn" data-action="open-ocr-modal" aria-label="Upload document for OCR" title="${state.language === 'bn' ? 'দলিল বা রায় আপলোড করুন (Google Vision OCR)' : 'Upload Deed / FIR / Order (Vision OCR)'}">
               ${icon('upload', 17)}
             </button>
@@ -3477,7 +3483,14 @@ document.addEventListener('click', (event) => {
 
   if (action === 'open-whatsapp-modal') {
     event.preventDefault();
-    openWhatsAppModal();
+    if (state.role !== 'professional') {
+      alert(state.language === 'bn'
+        ? 'হোয়াটসঅ্যাপ চেম্বার ইন্টিগ্রেশন সুবিধাটি শুধুমাত্র নিবন্ধিত আইনজীবী ও চেম্বারের জন্য নির্ধারিত।'
+        : 'WhatsApp Chamber Integration is exclusively available for Advocates and Legal Chambers in Chamber OS.');
+      return;
+    }
+    const activeMatter = getActiveMatter();
+    openWhatsAppModal(activeMatter);
     return;
   }
 

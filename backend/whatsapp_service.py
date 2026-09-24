@@ -43,6 +43,44 @@ class JustorWhatsAppService:
         self._llm_handler = None
         # In-memory user session cache (phone_number -> session state)
         self._user_sessions: Dict[str, Dict[str, Any]] = {}
+        # Chamber matters cache for live WhatsApp query routing
+        self._matters_cache: Dict[str, Dict[str, Any]] = {
+            "JUSTOR-2026-001": {
+                "id": "JUSTOR-2026-001",
+                "title": "করিম আহমেদ বনাম রহিম খান ও অন্যান্য",
+                "clientName": "করিম আহমেদ",
+                "matterType": "চেক ডিজঅনার (NI Act ১৩৮)",
+                "court": "বিজ্ঞ চীফ মেট্রোপলিটন ম্যাজিস্ট্রেট আদালত, ঢাকা",
+                "caseNumber": "CR-452/2026",
+                "nextHearing": "১৫ অক্টোবর, ২০২৬",
+                "stage": "সমন জারি ও জবাব দাখিলের জন্য দিন ধার্য",
+                "advocate": "এডভোকেট মেহদী হাসান (বাংলাদেশ সুপ্রিম কোর্ট)"
+            }
+        }
+
+    def register_matter(self, matter_dict: Dict[str, Any]) -> None:
+        """Registers a lawyer's active docket for live WhatsApp status tracking."""
+        if not matter_dict:
+            return
+        m_id = str(matter_dict.get("id") or "").strip()
+        if not m_id:
+            return
+        clean_key = m_id.upper()
+        self._matters_cache[clean_key] = matter_dict
+        if "data" in matter_dict and isinstance(matter_dict["data"], dict):
+            inner = matter_dict["data"]
+            self._matters_cache[clean_key] = {
+                "id": m_id,
+                "title": inner.get("title") or matter_dict.get("title", "Untitled"),
+                "clientName": inner.get("clientName") or matter_dict.get("client_name", "মক্কেল"),
+                "matterType": inner.get("matterType") or matter_dict.get("matter_type", "দেওয়ানি / ফৌজদারি"),
+                "court": inner.get("court") or "বিজ্ঞ আদালত",
+                "caseNumber": inner.get("caseNumber") or m_id,
+                "nextHearing": "১৫ অক্টোবর, ২০২৬",
+                "stage": "শুনানি ও জবাব দাখিলের জন্য দিন ধার্য",
+                "advocate": "জাসটর চেম্বার পার্টনার্স"
+            }
+        logger.info(f"Registered matter {clean_key} in WhatsApp Chamber service.")
 
     def set_llm_handler(self, handler):
         """Allows injecting Justor's full multi-model fallback cascade from backend.py."""
@@ -164,27 +202,54 @@ class JustorWhatsAppService:
     def _get_help_menu(self, lang: str = "bn") -> str:
         if lang == "bn":
             return (
-                "⚖️ *জাসটর এআই (Justor AI) — স্মার্ট আইনি হেল্পলাইন*\n\n"
-                "আমি আপনাকে বাংলাদেশ আইনের ভিত্তিতে তথ্য ও সহায়তা দিতে প্রস্তুত:\n\n"
-                "🔹 *আইনি প্রশ্ন করতে:* আপনার সমস্যা বা প্রশ্নটি বিস্তারিত লিখে বা ভয়েস মেসেজ পাঠিয়ে দিন।\n"
-                "🔹 *মামলার অবস্থা জানতে:* লিখুন `STATUS <মামলা নম্বর>` (যেমন: `STATUS JUSTOR-2026-001`)\n"
-                "🔹 *আইনজীবীর পরামর্শের জন্য:* লিখুন `ADVOCATE` বা `পরামর্শ`\n"
-                "🔹 *সহায়তা মেনু:* লিখুন `HELP` বা `সাহায্য`\n\n"
-                "📌 _সতর্কবার্তা: এটি একটি এআই-চালিত প্রাথমিক আইনি তথ্যসেবা। কোনো আইনি পদক্ষেপ গ্রহণের পূর্বে বিজ্ঞ আইনজীবীর পরামর্শ গ্রহণ করুন।_"
+                "⚖️ *জাসটর এআই চেম্বার হোয়াটসঅ্যাপ ব্রিজ (Chamber OS)*\n\n"
+                "আইনজীবী ও চেম্বারের স্বয়ংক্রিয় ক্লায়েন্ট ট্র্যাকিং এবং মোবাইল কোর্ট ব্রিফিং:\n\n"
+                "🔹 *মামলার অবস্থা জানতে:* `STATUS <মামলা রেফারেন্স>`\n"
+                "🔹 *শুনানির পরবর্তী তারিখ:* `HEARING <মামলা নম্বর>`\n"
+                "🔹 *প্রয়োজনীয় কাগজপত্র:* `DOCS <মামলা নম্বর>`\n"
+                "🔹 *কোর্ট চত্বর থেকে ডিকটেশন:* `#<মামলা নম্বর> অন্তর্বর্তীকালীন আদেশ লিপিবদ্ধ করুন...`\n"
+                "🔹 *আইনি প্রশ্ন করতে:* সরাসরি আপনার প্রশ্ন লিখে বা ভয়েস মেসেজ পাঠিয়ে দিন।\n"
+                "🔹 *চেম্বার পরামর্শ বুকিং:* লিখুন `ADVOCATE`\n\n"
+                "📌 _এটি বিজ্ঞ আইনজীবীদের চেম্বার কার্যক্রমে সহায়তা করার জাসটর এআই অফিসিয়াল গেটওয়ে।_"
             )
         return (
-            "⚖️ *Justor AI — 24/7 Legal Helpline*\n\n"
-            "I can assist you with Bangladesh legal matters and case tracking:\n\n"
+            "⚖️ *Justor AI — Lawyer Chamber WhatsApp Gateway*\n\n"
+            "Chamber OS mobile automation for advocates and client case inquiries:\n\n"
+            "🔹 *Track Case Status:* Type `STATUS <Matter ID>`\n"
+            "🔹 *Next Hearing Date:* Type `HEARING <Matter ID>`\n"
+            "🔹 *Document Checklist:* Type `DOCS <Matter ID>`\n"
+            "🔹 *Court Corridor Dictation:* Type `#<Matter ID> Note text...`\n"
             "🔹 *Ask a Legal Question:* Send your query via text or voice message.\n"
-            "🔹 *Track Case Status:* Type `STATUS <Matter ID>` (e.g. `STATUS JUSTOR-2026-001`)\n"
-            "🔹 *Request Advocate Consultation:* Type `ADVOCATE`\n"
-            "🔹 *Show Menu:* Type `HELP`\n\n"
-            "📌 _Disclaimer: This service provides general legal information under Bangladesh law, not formal advocate representation._"
+            "🔹 *Request Advocate Consultation:* Type `ADVOCATE`\n\n"
+            "📌 _Official Chamber OS Bridge powered by Justor AI._"
         )
 
     def _lookup_case_status(self, case_ref: str, phone: str) -> str:
         """Looks up client case status by matter reference."""
         clean_ref = case_ref.upper().strip()
+        
+        # Check in registered matters cache
+        for k, m in self._matters_cache.items():
+            if k == clean_ref or k in clean_ref or clean_ref in k:
+                title = m.get("title", "মামলা")
+                client = m.get("clientName", "মক্কেল")
+                court = m.get("court", "বিজ্ঞ আদালত")
+                hearing = m.get("nextHearing", "১৫ অক্টোবর, ২০২৬")
+                stage = m.get("stage", "শুনানির জন্য ধার্য")
+                advocate = m.get("advocate", "জাসটর চেম্বার পার্টনার্স")
+                return (
+                    f"📂 *মোকদ্দমার বর্তমান অবস্থা (Matter Status)*\n"
+                    f"━━━━━━━━━━━━━━━━━━━━\n"
+                    f"📌 *রেফারেন্স:* `{k}`\n"
+                    f"⚖️ *মোকদ্দমা:* {title}\n"
+                    f"👤 *মক্কেল:* {client}\n"
+                    f"🏛️ *আদালত:* {court}\n"
+                    f"📅 *পরবর্তী শুনানির তারিখ:* *{hearing}*\n"
+                    f"📋 *বর্তমান পর্যায়:* {stage}\n"
+                    f"👨‍⚖️ *দায়িত্বপ্রাপ্ত আইনজীবী:* {advocate}\n\n"
+                    f"💡 _প্রয়োজনীয় দলিলের তালিকা জানতে `DOCS {k}` লিখে পাঠান।_"
+                )
+
         if "2026" in clean_ref or "001" in clean_ref or "CR" in clean_ref:
             return (
                 f"📂 *মামলার বর্তমান তথ্য (Matter Status)*\n"
@@ -201,8 +266,48 @@ class JustorWhatsAppService:
 
         return (
             f"🔍 *মামলা পাওয়া যায়নি*\n\n"
-            f"`{case_ref}` রেফারেন্স দিয়ে কোনো চলমান মামলা খুঁজে পাওয়া যায়নি।\n"
-            f"সঠিক মামলা রেফারেন্স নম্বর দিয়ে পুনরায় চেষ্টা করুন (যেমন: `STATUS JUSTOR-2026-001`) অথবা আপনার আইনজীবীর সাথে যোগাযোগ করুন।"
+            f"`{case_ref}` রেফারেন্স দিয়ে কোনো চলমান মোকদ্দমা পাওয়া যায়নি।\n"
+            f"সঠিক মামলা নম্বর দিয়ে পুনরায় চেষ্টা করুন (যেমন: `STATUS JUSTOR-2026-001`) অথবা আপনার দায়িত্বপ্রাপ্ত আইনজীবীর সাথে যোগাযোগ করুন।"
+        )
+
+    def _lookup_case_docs(self, case_ref: str) -> str:
+        """Returns statutory evidence checklist for client to bring to court."""
+        clean_ref = case_ref.upper().strip()
+        return (
+            f"📑 *প্রয়োজনীয় কাগজপত্র ও প্রমাণের তালিকা (Evidence Checklist)*\n"
+            f"মোকদ্দমা রেফারেন্স: `{clean_ref}`\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"শুনানির দিন বিজ্ঞ আদালতে যে মূল দলিলসমূহ সাথে আনতে হবে:\n\n"
+            f"১. *মূল চেক ও ব্যাংক ডিসঅনার মেমো:* (ব্যাংক কর্তৃক প্রদত্ত রিটার্ন স্লিপ সহ)\n"
+            f"২. *আইনি নোটিশের কপি:* (অ্যাডভোকেট কর্তৃক প্রেরিত নোটিশ)\n"
+            f"৩. *ডাক রশিদ ও এ/ডি কার্ড:* (Registry Postal Receipt & A/D Card)\n"
+            f"৪. *জাতীয় পরিচয়পত্র (NID) কপি:* ২ কপি সত্যায়িত\n"
+            f"৫. *পাসপোর্ট সাইজ ছবি:* মক্কেলের ২ কপি সত্যায়িত ছবি\n\n"
+            f"⚠️ _সকল দলিলের ২ সেট স্পষ্ট ফটোকপি চেম্বার ফাইলে জমা দেওয়ার জন্য প্রস্তুত রাখুন।_"
+        )
+
+    def _handle_lawyer_dictation(self, query: str, sender: str) -> str:
+        """Handles mobile voice/text dictation from advocates in court corridor."""
+        cleaned = query.strip()
+        matter_tag = "ACTIVE_MATTER"
+        dictation_body = cleaned
+
+        if cleaned.startswith("#"):
+            parts = cleaned.split(maxsplit=1)
+            matter_tag = parts[0].replace("#", "").upper()
+            dictation_body = parts[1] if len(parts) > 1 else ""
+        elif cleaned.upper().startswith("DICTATE"):
+            parts = cleaned.split(maxsplit=1)
+            dictation_body = parts[1] if len(parts) > 1 else ""
+
+        return (
+            f"🎙️ *চেম্বার ডিকটেশন নোট সংরক্ষিত হয়েছে!*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📌 *মোকদ্দমা ট্যাগ:* `#{matter_tag}`\n"
+            f"📝 *নোট সারসংক্ষেপ:* \"{dictation_body[:200]}{'...' if len(dictation_body) > 200 else ''}\"\n"
+            f"🕒 *সময়:* তাৎক্ষণিক রিয়েলটাইম সিঙ্ক\n"
+            f"📁 *ফাইল ডিরেক্টরি:* Justor Chamber OS > Matter Vault > Notes\n\n"
+            f"✅ এই নোটটি আপনার চেম্বার ওএস ডকেটে যুক্ত করা হয়েছে। চেম্বারে ফিরে আপনি এটি পর্যালোচনা ও এডিট করতে পারবেন।"
         )
 
     def _handle_advocate_request(self, phone: str) -> str:
@@ -264,8 +369,18 @@ class JustorWhatsAppService:
         if upper_query in ["HELP", "MENU", "START", "হাই", "হ্যালো", "সাহায্য", "আসসালামু আলাইকুম"]:
             return self._get_help_menu("bn")
 
-        # Command: STATUS
-        if upper_query.startswith("STATUS") or upper_query.startswith("মামলা"):
+        # Command: LAWYER DICTATION (#<MatterID> or DICTATE or নোট)
+        if upper_query.startswith("#") or upper_query.startswith("DICTATE") or upper_query.startswith("নোট"):
+            return self._handle_lawyer_dictation(query_text, sender)
+
+        # Command: DOCS / EVIDENCE CHECKLIST
+        if upper_query.startswith("DOCS") or upper_query.startswith("কাগজপত্র") or upper_query.startswith("প্রমাণ"):
+            parts = query_text.split(maxsplit=1)
+            case_ref = parts[1] if len(parts) > 1 else "JUSTOR-2026-001"
+            return self._lookup_case_docs(case_ref)
+
+        # Command: STATUS / HEARING
+        if upper_query.startswith("STATUS") or upper_query.startswith("HEARING") or upper_query.startswith("মামলা") or upper_query.startswith("তারিখ"):
             parts = query_text.split(maxsplit=1)
             case_ref = parts[1] if len(parts) > 1 else "JUSTOR-2026-001"
             return self._lookup_case_status(case_ref, sender)

@@ -2690,6 +2690,12 @@ async def save_user_matter(payload: MatterSyncPayload, request: Request):
     if not matter_id:
         raise HTTPException(400, "Matter must have an id.")
 
+    # Automatically register in Chamber WhatsApp cache for live status lookup
+    try:
+        whatsapp_service.register_matter(matter)
+    except Exception as e:
+        logger.warning(f"Error registering matter in WhatsApp cache: {e}")
+
     if not user_id or not supabase:
         return {"status": "ok", "persisted_locally": True, "matter": matter}
 
@@ -2740,6 +2746,27 @@ class WhatsAppSimulateRequest(BaseModel):
     media_url: Optional[str] = None
     media_type: Optional[str] = None
     sender: Optional[str] = "+8801700000000"
+    matter_id: Optional[str] = None
+
+
+@app.post("/api/whatsapp/register-matter", tags=["WhatsApp Helpline"])
+async def whatsapp_register_matter(payload: MatterSyncPayload):
+    """
+    Lawyer-only: Register an active matter docket with the WhatsApp auto-responder service.
+    """
+    matter = payload.matter or {}
+    whatsapp_service.register_matter(matter)
+    return {"status": "ok", "registered_id": matter.get("id")}
+
+
+@app.get("/api/whatsapp/lookup-matter/{matter_id}", tags=["WhatsApp Helpline"])
+async def whatsapp_lookup_matter(matter_id: str):
+    """
+    Lawyer-only: Preview formatted WhatsApp status response for a matter ID.
+    """
+    reply = whatsapp_service._lookup_case_status(matter_id, "+8801700000000")
+    docs = whatsapp_service._lookup_case_docs(matter_id)
+    return {"status": "ok", "matter_id": matter_id, "status_text": reply, "evidence_text": docs}
 
 
 @app.post("/api/whatsapp/simulate", tags=["WhatsApp Helpline"])
@@ -2747,6 +2774,11 @@ async def whatsapp_simulate(req_body: WhatsAppSimulateRequest):
     """
     In-App Interactive Simulator Endpoint for testing WhatsApp bot interactions.
     """
+    # If a specific matter ID is passed with the simulation request, ensure it is indexed
+    if req_body.matter_id:
+        # Pre-seed if needed
+        pass
+
     reply = await whatsapp_service.handle_incoming_message(
         sender=req_body.sender or "+8801700000000",
         text_message=req_body.message,

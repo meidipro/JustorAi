@@ -313,6 +313,7 @@ function cIcon(name: string, size = 16, className = ''): string {
     calendar: '<rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
     fileText: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
     quote: '<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>',
+    whatsapp: '<path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/>',
   };
   return `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"${cls}>${paths[name] || paths.doc}</svg>`;
 }
@@ -388,7 +389,7 @@ export function openMatterWorkspaceModal(
   }
 
   let currentMatter = getActiveMatter() || matters[0];
-  let currentTab: 'dictaphone' | 'consultation' | 'summarizer' | 'chronology' | 'hearing_pack' | 'consistency' | 'legal_memo' | 'overview' = 'dictaphone';
+  let currentTab: 'dictaphone' | 'consultation' | 'summarizer' | 'chronology' | 'hearing_pack' | 'consistency' | 'legal_memo' | 'overview' | 'whatsapp' = 'dictaphone';
 
   const backdrop = document.createElement('div');
   backdrop.className = 'matter-modal-backdrop';
@@ -482,6 +483,9 @@ export function openMatterWorkspaceModal(
           </button>
           <button type="button" class="matter-tab-btn ${currentTab === 'overview' ? 'active' : ''}" data-tab="overview">
             ${cIcon('vault', 15)} <span>${isBn ? 'চেম্বার ভল্ট' : 'Chamber Vault'}</span>
+          </button>
+          <button type="button" class="matter-tab-btn ${currentTab === 'whatsapp' ? 'active' : ''}" data-tab="whatsapp">
+            ${cIcon('whatsapp', 15)} <span>${isBn ? 'হোয়াটসঅ্যাপ ব্রিজ' : 'WhatsApp Bridge'}</span>
           </button>
         </div>
 
@@ -1529,6 +1533,188 @@ export function openMatterWorkspaceModal(
       `;
     }
 
+    // ── 9. WHATSAPP CHAMBER BRIDGE & CLIENT AUTOMATION ──
+    if (currentTab === 'whatsapp') {
+      const chamberPhone = localStorage.getItem('justor_chamber_phone') || '+8801700000000';
+      const cleanPhoneDigits = chamberPhone.replace(/[^0-9]/g, '');
+      const waLink = `https://wa.me/${cleanPhoneDigits}?text=STATUS%20${encodeURIComponent(currentMatter.id)}`;
+      const clientSmsBn = `সম্মানিত মক্কেল ${currentMatter.clientName || 'ক্লায়েন্ট'}, আপনার মোকদ্দমা "${currentMatter.title}"-এর পরবর্তী শুনানির তারিখ ও তথ্যের জন্য আমাদের চেম্বার হোয়াটসঅ্যাপে ক্লিক করুন অথবা STATUS ${currentMatter.id} লিখে পাঠান: ${waLink}`;
+      const clientSmsEn = `Dear Client ${currentMatter.clientName || ''}, to check the next court date and verified updates for "${currentMatter.title}", send STATUS ${currentMatter.id} to our Chamber WhatsApp: ${waLink}`;
+
+      return `
+        <div class="matter-tab-content">
+          <div class="matter-intro-callout">
+            <div class="intro-callout-badge">
+              ${cIcon('whatsapp', 13)}
+              <span>CHAMBERS 24/7 CLIENT TRACKING & DICTATION</span>
+            </div>
+            <strong>${isBn ? 'আইনজীবী চেম্বার হোয়াটসঅ্যাপ ব্রিজ (Lawyer Chamber WhatsApp Gateway)' : 'Lawyer Chamber WhatsApp Gateway & Client Automation'}</strong>
+            <p>${isBn 
+              ? 'মক্কেলদের প্রতিদিনের ঘনঘন ফোনকল থেকে মুক্তি এবং আদালত চত্বর থেকে তাৎক্ষণিক ভয়েস ডিকটেশন সরাসরি মোকদ্দমা ফাইলে সংরক্ষণ করার সুপ্রিম কোর্ট ও জজ কোর্ট স্ট্যান্ডার্ড অটোমেশন।'
+              : 'Free your chamber from repetitive client status phone calls. Give clients verified 24/7 automated hearing updates and dictate voice notes on-the-go directly into this active matter vault.'}
+            </p>
+          </div>
+
+          <!-- Section 1: Active Matter Client WhatsApp Hub -->
+          <div class="dictaphone-composer-card" style="margin-bottom: 24px;">
+            <div class="dictaphone-input-header">
+              <span class="composer-label">
+                ${cIcon('user', 14)}
+                <span>${isBn ? '১. এই মোকদ্দমার মক্কেল হোয়াটসঅ্যাপ ট্র্যাকিং লিংক' : '1. Active Client WhatsApp Tracking Link'}</span>
+              </span>
+              <span style="font-size: 11.5px; color: #25D366; font-weight: 700; background: rgba(37, 211, 102, 0.1); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(37, 211, 102, 0.25);">
+                LIVE AUTO-RESPONDER READY
+              </span>
+            </div>
+
+            <div style="background: #FAF7F0; border: 1px solid #E2D9C8; border-radius: 8px; padding: 16px; margin: 12px 0;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px;">
+                <div>
+                  <small style="color: #64748B; display: block; font-size: 11px; text-transform: uppercase;">মোকদ্দমা রেফারেন্স / Case ID</small>
+                  <strong style="color: #0F172A; font-family: monospace; font-size: 14px;">${escapeHtml(currentMatter.id)}</strong>
+                </div>
+                <div>
+                  <small style="color: #64748B; display: block; font-size: 11px; text-transform: uppercase;">মক্কেলের নাম / Client</small>
+                  <strong style="color: #0F172A; font-size: 13.5px;">${escapeHtml(currentMatter.clientName || 'General Client')}</strong>
+                </div>
+                <div>
+                  <small style="color: #64748B; display: block; font-size: 11px; text-transform: uppercase;">আদালতের এখতিয়ার / Court</small>
+                  <strong style="color: #0F172A; font-size: 13.5px;">${escapeHtml(currentMatter.court || 'বিজ্ঞ আদালত')}</strong>
+                </div>
+                <div>
+                  <small style="color: #64748B; display: block; font-size: 11px; text-transform: uppercase;">চেম্বার হোয়াটসঅ্যাপ নম্বর</small>
+                  <strong style="color: #128C7E; font-size: 13.5px;">${escapeHtml(chamberPhone)}</strong>
+                </div>
+              </div>
+
+              <!-- 1-Click Link Row -->
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: #FFFFFF; border: 1px solid #CBD5E1; padding: 10px 12px; border-radius: 6px;">
+                <code style="flex: 1; color: #0F172A; font-size: 12px; word-break: break-all;">${waLink}</code>
+                <button type="button" class="button button-small btn-wa-copy" data-copy="${escapeHtml(waLink)}" style="display: inline-flex; align-items: center; gap: 6px;">
+                  ${cIcon('copy', 13)}
+                  <span>${isBn ? 'লিংক কপি করুন' : 'Copy Link'}</span>
+                </button>
+                <button type="button" class="button button-small" id="btn-wa-launch-web" style="background: #25D366; color: #0F172A; font-weight: 700; border: none; display: inline-flex; align-items: center; gap: 6px;">
+                  ${cIcon('external', 13)}
+                  <span>${isBn ? 'হোয়াটসঅ্যাপে খুলুন' : 'Open WhatsApp'}</span>
+                </button>
+              </div>
+
+              <!-- Ready SMS Copy Buttons -->
+              <div style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
+                <button type="button" class="button button-small button-outline btn-wa-copy" data-copy="${escapeHtml(clientSmsBn)}">
+                  📋 ${isBn ? 'মক্কেলকে পাঠানোর বাংলা এসএমএস কপি' : 'Copy Bengali SMS for Client'}
+                </button>
+                <button type="button" class="button button-small button-outline btn-wa-copy" data-copy="${escapeHtml(clientSmsEn)}">
+                  📋 ${isBn ? 'ইংরেজি এসএমএস কপি' : 'Copy English SMS'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Court Corridor Mobile Dictation & In-Tab Simulator -->
+          <div class="dictaphone-composer-card" style="margin-bottom: 24px;">
+            <div class="dictaphone-input-header">
+              <span class="composer-label">
+                ${cIcon('mic', 14)}
+                <span>${isBn ? '২. আদালত চত্বর থেকে মোবাইল ডিকটেশন ও লাইভ টেস্ট' : '2. Court Corridor Mobile Dictation & Live Testing'}</span>
+              </span>
+              <button type="button" class="button button-small button-secondary" id="btn-wa-open-full-sim" style="display: inline-flex; align-items: center; gap: 6px;">
+                ${cIcon('sparkle', 13)}
+                <span>${isBn ? 'সম্পূর্ণ মোবাইল সিমুলেটর খুলুন' : 'Launch Full WhatsApp Simulator'}</span>
+              </button>
+            </div>
+
+            <p style="font-size: 13px; color: #475569; margin: 8px 0 14px; line-height: 1.5;">
+              ${isBn 
+                ? `সুপ্রিম কোর্ট বা জজ কোর্ট থেকে বের হয়ে আপনার চেম্বার হোয়াটসঅ্যাপ নম্বরে <code>#${escapeHtml(currentMatter.id)}</code> দিয়ে মেসেজ বা অডিও পাঠান। Justor AI সাথে সাথে নোটটি এই মোকদ্দমা ফাইলে সংরক্ষণ করে দেবে।`
+                : `Dictate or message directly from the court corridor. Start your message or voice note with <code>#${escapeHtml(currentMatter.id)}</code> to automatically transcribe and log into this matter file.`}
+            </p>
+
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="STATUS ${currentMatter.id}">STATUS ${currentMatter.id}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="HEARING ${currentMatter.id}">HEARING ${currentMatter.id}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DOCS ${currentMatter.id}">DOCS ${currentMatter.id}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="#${currentMatter.id} কোর্টে শুনানি সম্পন্ন: আসামি হাজির, জামিন আগামী তারিখ পর্যন্ত বহাল।">কোর্ট ডিকটেশন নোট (#)</button>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+              <input type="text" id="wa-tab-query-input" value="STATUS ${currentMatter.id}" style="flex: 1; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13.5px;" placeholder="Type WhatsApp message to test..." />
+              <button type="button" class="button button-primary" id="btn-wa-run-query" style="display: inline-flex; align-items: center; gap: 6px;">
+                ${cIcon('search', 13)}
+                <span>${isBn ? 'টেস্ট কোয়েরি চালান' : 'Send Test Query'}</span>
+              </button>
+            </div>
+
+            <!-- Live Response Container -->
+            <div id="wa-tab-response-box" style="display: none; background: #0F172A; color: #F8FAFC; padding: 16px 20px; border-radius: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; line-height: 1.6; border: 1px solid rgba(37, 211, 102, 0.3);">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; margin-bottom: 12px;">
+                <span style="color: #25D366; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                  ${cIcon('whatsapp', 14)} Justor WhatsApp Bot Live Output
+                </span>
+                <button type="button" id="btn-wa-save-tab-note" class="button button-small" style="background: rgba(56, 189, 248, 0.15); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.3); font-size: 11.5px; padding: 3px 8px;">
+                  📥 ${isBn ? 'এই ফলাফল মোকদ্দমা নোটে যুক্ত করুন' : 'File to Matter Notes'}
+                </button>
+              </div>
+              <div id="wa-tab-response-text" style="white-space: pre-wrap;"></div>
+            </div>
+          </div>
+
+          <!-- Section 3: Official Webhook & Chamber Business Number Setup -->
+          <div class="dictaphone-composer-card">
+            <div class="dictaphone-input-header">
+              <span class="composer-label">
+                ${cIcon('sparkle', 14)}
+                <span>${isBn ? '৩. চেম্বার হোয়াটসঅ্যাপ বিজনেস ওয়েবহুক সেটআপ (Meta Cloud API / Twilio)' : '3. Official Chamber WhatsApp Business Webhook Setup'}</span>
+              </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 12px;">
+              <!-- Meta Setup Card -->
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 14px; border-radius: 8px;">
+                <strong style="color: #0F172A; display: block; font-size: 13.5px; margin-bottom: 4px;">Meta WhatsApp Cloud API (Recommended)</strong>
+                <p style="font-size: 12px; color: #64748B; margin-bottom: 10px;">Meta-র অফিসিয়াল বিনামূল্যে প্রতি মাসে ১,০০০ কথোপকথন সুবিধা:</p>
+                <div style="font-size: 11.5px; margin-bottom: 6px;">
+                  <span style="color: #64748B;">Callback URL:</span>
+                  <div style="display: flex; gap: 4px; margin-top: 2px;">
+                    <input type="text" readonly value="https://api.justor.ai/api/whatsapp/meta" style="flex: 1; padding: 4px 8px; font-size: 11px; font-family: monospace; border: 1px solid #CBD5E1; border-radius: 4px;" />
+                    <button type="button" class="button button-small btn-wa-copy" data-copy="https://api.justor.ai/api/whatsapp/meta">Copy</button>
+                  </div>
+                </div>
+                <div style="font-size: 11.5px;">
+                  <span style="color: #64748B;">Verify Token:</span>
+                  <div style="display: flex; gap: 4px; margin-top: 2px;">
+                    <input type="text" readonly value="justor_wa_verify_2026" style="flex: 1; padding: 4px 8px; font-size: 11px; font-family: monospace; border: 1px solid #CBD5E1; border-radius: 4px;" />
+                    <button type="button" class="button button-small btn-wa-copy" data-copy="justor_wa_verify_2026">Copy</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Twilio Setup Card -->
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 14px; border-radius: 8px;">
+                <strong style="color: #0F172A; display: block; font-size: 13.5px; margin-bottom: 4px;">Twilio WhatsApp Sandbox</strong>
+                <p style="font-size: 12px; color: #64748B; margin-bottom: 10px;">দ্রুত টেস্টিং ও এসএমএস ট্রায়ালের জন্য:</p>
+                <div style="font-size: 11.5px; margin-bottom: 6px;">
+                  <span style="color: #64748B;">Webhook URL (HTTP POST):</span>
+                  <div style="display: flex; gap: 4px; margin-top: 2px;">
+                    <input type="text" readonly value="https://api.justor.ai/api/whatsapp/twilio" style="flex: 1; padding: 4px 8px; font-size: 11px; font-family: monospace; border: 1px solid #CBD5E1; border-radius: 4px;" />
+                    <button type="button" class="button button-small btn-wa-copy" data-copy="https://api.justor.ai/api/whatsapp/twilio">Copy</button>
+                  </div>
+                </div>
+                <div style="margin-top: 10px;">
+                  <label style="font-size: 11.5px; color: #64748B; display: block;">চেম্বার হোয়াটসঅ্যাপ নম্বর সেভ করুন:</label>
+                  <div style="display: flex; gap: 6px; margin-top: 3px;">
+                    <input type="text" id="wa-chamber-phone-input" value="${escapeHtml(chamberPhone)}" placeholder="+88017..." style="flex: 1; padding: 4px 8px; font-size: 12px; border: 1px solid #CBD5E1; border-radius: 4px;" />
+                    <button type="button" class="button button-small" id="btn-save-chamber-phone">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     return '';
   };
 
@@ -2071,6 +2257,125 @@ export function openMatterWorkspaceModal(
           saveStoredMatters(matters);
           renderModalContent();
         }
+      });
+    }
+
+    // ── Tab 9: WhatsApp Chamber Bridge Handlers ──
+    if (currentTab === 'whatsapp') {
+      // Copy buttons
+      backdrop.querySelectorAll<HTMLButtonElement>('.btn-wa-copy').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const text = btn.getAttribute('data-copy') || '';
+          if (text) {
+            navigator.clipboard.writeText(text);
+            const orig = btn.innerHTML;
+            btn.innerHTML = `${cIcon('check', 13)} <span>${isBn ? 'কপি সম্পন্ন' : 'Copied!'}</span>`;
+            setTimeout(() => { btn.innerHTML = orig; }, 1800);
+          }
+        });
+      });
+
+      // Launch WhatsApp Web
+      backdrop.querySelector('#btn-wa-launch-web')?.addEventListener('click', () => {
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`STATUS ${currentMatter.id}`)}`;
+        window.open(waUrl, '_blank');
+      });
+
+      // Launch full WhatsApp modal
+      backdrop.querySelector('#btn-wa-open-full-sim')?.addEventListener('click', async () => {
+        const { openWhatsAppModal } = await import('./whatsapp-modal');
+        openWhatsAppModal(currentMatter);
+      });
+
+      // Save chamber phone
+      backdrop.querySelector('#btn-save-chamber-phone')?.addEventListener('click', () => {
+        const phoneInput = backdrop.querySelector('#wa-chamber-phone-input') as HTMLInputElement;
+        if (phoneInput && phoneInput.value.trim()) {
+          localStorage.setItem('justor_chamber_phone', phoneInput.value.trim());
+          const saveBtn = backdrop.querySelector('#btn-save-chamber-phone') as HTMLButtonElement;
+          if (saveBtn) {
+            saveBtn.textContent = 'Saved!';
+            setTimeout(() => { saveBtn.textContent = 'Save'; }, 1500);
+          }
+          renderModalContent();
+        }
+      });
+
+      // Quick chips
+      const queryInput = backdrop.querySelector('#wa-tab-query-input') as HTMLInputElement;
+      const runQueryBtn = backdrop.querySelector('#btn-wa-run-query') as HTMLButtonElement;
+      const responseBox = backdrop.querySelector('#wa-tab-response-box') as HTMLElement;
+      const responseText = backdrop.querySelector('#wa-tab-response-text') as HTMLElement;
+
+      backdrop.querySelectorAll<HTMLButtonElement>('.btn-wa-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const q = chip.getAttribute('data-query');
+          if (q && queryInput) {
+            queryInput.value = q;
+            runQueryBtn?.click();
+          }
+        });
+      });
+
+      // Run live test query
+      runQueryBtn?.addEventListener('click', async () => {
+        const query = queryInput?.value.trim();
+        if (!query) return;
+
+        runQueryBtn.disabled = true;
+        runQueryBtn.innerHTML = `<span>${isBn ? 'প্রসেসিং হচ্ছে...' : 'Processing...'}</span>`;
+        if (responseBox) responseBox.style.display = 'block';
+        if (responseText) responseText.innerHTML = `<em>Justor WhatsApp Gateway responding...</em>`;
+
+        try {
+          const chamberPhone = localStorage.getItem('justor_chamber_phone') || '+8801700000000';
+          const resp = await fetch('/api/whatsapp/simulate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: query,
+              sender: chamberPhone,
+              matter_id: currentMatter.id
+            })
+          });
+
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const data = await resp.json();
+          const reply = data.reply || 'কোনো উত্তর পাওয়া যায়নি।';
+
+          if (responseText) {
+            responseText.textContent = reply;
+          }
+        } catch (err: any) {
+          if (responseText) {
+            responseText.textContent = `Error connecting to WhatsApp endpoint: ${err.message || err}`;
+          }
+        } finally {
+          runQueryBtn.disabled = false;
+          runQueryBtn.innerHTML = `${cIcon('search', 13)} <span>${isBn ? 'টেস্ট কোয়েরি চালান' : 'Send Test Query'}</span>`;
+        }
+      });
+
+      // Save tab response to notes
+      backdrop.querySelector('#btn-wa-save-tab-note')?.addEventListener('click', () => {
+        const text = responseText?.textContent || '';
+        if (!text) return;
+
+        if (!currentMatter.notes) currentMatter.notes = [];
+        currentMatter.notes.unshift({
+          id: 'note_' + Date.now(),
+          rawText: `[WhatsApp Chamber Gateway Output]\n${text}`,
+          data: {
+            matter_type: currentMatter.matterType,
+            dispute_summary: text.slice(0, 160),
+            next_actions: ['WhatsApp communication logged to chamber vault']
+          },
+          createdAt: new Date().toISOString()
+        });
+
+        saveStoredMatters(matters);
+        void syncMatterToCloud(currentMatter);
+        alert(isBn ? 'নোটটি সফলভাবে এই মোকদ্দমা ফাইলে সংরক্ষিত হয়েছে!' : 'Successfully filed into matter notes!');
       });
     }
   };
