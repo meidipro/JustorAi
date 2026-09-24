@@ -14,7 +14,7 @@ import {
   type ResourceState,
   type Role,
 } from './services';
-import { localizedPath, parseLocalizedPath, ui, type CopyKey } from './i18n';
+import { localizedPath, parseLocalizedPath, ui } from './i18n';
 import { chatStore, type ChatThread } from './chatStore';
 import { learningCatalog, getSection } from './learning/catalog';
 import { bindLearningSession, buildGoDeeperQuery, renderLearningHome } from './learning/ui';
@@ -27,10 +27,9 @@ import { analytics } from './analytics';
 const appRoot = document.getElementById('app');
 if (!appRoot) throw new Error('App root was not found.');
 
-// roleQuota is superseded by PARTNER_ORG_DAILY_LIMIT / UNAFFILIATED_DAILY_LIMIT — kept for reference only
-// const roleQuota: Record<Role, number> = { citizen: 3, student: 30, professional: 50 };
-const roleLabels: Record<Role, string> = { citizen: 'Citizen', student: 'Law Student', professional: 'Legal Professional' };
-/** Roles shown on public landing & start pages — citizen is hidden (guides-only via sign-in). */
+// Justor AI is exclusively for Advocates / Legal Professionals and Law Students
+const roleLabels: Record<Role, string> = { student: 'Law Student', professional: 'Legal Professional' };
+/** Roles shown on public landing & start pages */
 const publicRoleOrder: Role[] = ['professional', 'student'];
 const guideTopics = [
   { label: 'Property & Land', value: 'property' },
@@ -72,24 +71,18 @@ const roleSuggestedQueries: Record<Role, Array<{ title: string; desc: string; qu
     { title: 'Masdar Hossain Precedent', desc: 'Judicial separation from executive (53 DLR AD 1)', query: 'Summarize the landmark case brief for Secretary Ministry of Finance v. Masdar Hossain on judicial independence.', icon: 'scale' },
     { title: 'Dying Declaration Admissibility', desc: 'Evidence Act Section 32(1) exception to hearsay', query: 'What are the legal conditions for admissibility of a Dying Declaration under Section 32(1) of the Evidence Act?', icon: 'source' },
     { title: 'Criminal Breach of Trust vs Cheating', desc: 'Penal Code s.405/406 vs s.415/420 differences', query: 'What is the distinction between Criminal Breach of Trust under Section 406 and Cheating under Section 420 of the Penal Code?', icon: 'shield' }
-  ],
-  citizen: [
-    { title: 'Property Mutation & Khatian', desc: 'Applying for Namzari at AC Land office', query: 'How do I apply for land mutation (Namzari) after buying property in Bangladesh?', icon: 'home' },
-    { title: 'Cheque Bounce Legal Notice', desc: 'Steps within 30 days of bank slip', query: 'A cheque given to me bounced due to insufficient funds. What legal notice must I send within 30 days?', icon: 'clock' },
-    { title: 'Dower (Denmohor) & Maintenance', desc: 'Filing in Family Court for legal rights', query: 'How can a wife claim her unpaid dower (denmohor) and maintenance under Bangladesh Family Court laws?', icon: 'scale' },
-    { title: 'Cyber Harassment & GD', desc: 'Filing complaint under Cyber Security Act 2023', query: 'What should I do if someone is harassing me or sharing unauthorized photos online in Bangladesh?', icon: 'shield' }
   ]
 };
-const localizedRoleLabel = (role: Role): string => ui(state.language, role === 'citizen' ? 'citizen' : role === 'student' ? 'student' : 'professional');
-const rolePromise = (role: Role): string => ui(state.language, role === 'citizen' ? 'citizenPromise' : role === 'student' ? 'studentPromise' : 'professionalPromise');
-const roleBody = (role: Role): string => ui(state.language, role === 'citizen' ? 'citizenBody' : role === 'student' ? 'studentBody' : 'professionalBody');
+const localizedRoleLabel = (role: Role): string => ui(state.language, role === 'student' ? 'student' : 'professional');
+const rolePromise = (role: Role): string => ui(state.language, role === 'student' ? 'studentPromise' : 'professionalPromise');
+const roleBody = (role: Role): string => ui(state.language, role === 'student' ? 'studentBody' : 'professionalBody');
 const mobileRoleBody = (role: Role): string => {
   if (state.language === 'bn') {
-    return role === 'professional' ? 'আইন ও কর্তৃত্বপূর্ণ উৎস গবেষণা করুন।' : role === 'student' ? 'মামলা ও আইন থেকে শিখুন।' : 'ব্যবহারিক আইনি নির্দেশনা খুঁজুন।';
+    return role === 'professional' ? 'আইন ও কর্তৃত্বপূর্ণ উৎস গবেষণা করুন।' : 'মামলা ও আইন থেকে শিখুন।';
   }
-  return role === 'professional' ? 'Research laws and authority.' : role === 'student' ? 'Learn cases and statutes.' : 'Find practical legal guidance.';
+  return role === 'professional' ? 'Research laws and authority.' : 'Learn cases and statutes.';
 };
-const roleContinue = (role: Role): string => ui(state.language, role === 'citizen' ? 'continueCitizen' : role === 'student' ? 'continueStudent' : 'continueProfessional');
+const roleContinue = (role: Role): string => ui(state.language, role === 'student' ? 'continueStudent' : 'continueProfessional');
 
 const state: {
   language: Language;
@@ -110,7 +103,7 @@ const state: {
   liveSearchEnabled: boolean;
 } = {
   ...parseLocalizedPath(window.location.pathname),
-  role: (localStorage.getItem('justor-role') as Role | null) ?? 'citizen',
+  role: (localStorage.getItem('justor-role') as Role | null) === 'student' ? 'student' : 'professional',
   menuOpen: false,
   sidebarOpen: false,
   session: null,
@@ -194,22 +187,27 @@ interface UserProfileData {
 const getStoredProfile = (): UserProfileData => {
   try {
     const raw = localStorage.getItem('justor_user_profile');
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.role === 'citizen') parsed.role = 'professional';
+      return parsed;
+    }
   } catch {}
   return {
     fullName: state.session?.user?.user_metadata?.full_name || (state.session?.user?.email ? state.session.user.email.split('@')[0] : 'User'),
     email: state.session?.user?.email || '',
-    role: state.role || 'citizen',
+    role: state.role || 'professional',
   };
 };
 
 const saveStoredProfile = (data: Partial<UserProfileData>): void => {
   const current = getStoredProfile();
   const updated = { ...current, ...data };
+  if (updated.role === ('citizen' as any)) updated.role = 'professional';
   localStorage.setItem('justor_user_profile', JSON.stringify(updated));
 };
 
-const VALID_ROLES: Role[] = ['citizen', 'student', 'professional'];
+const VALID_ROLES: Role[] = ['professional', 'student'];
 const ROLE_LOCK_KEY = 'justor-role-locked';
 const isValidRole = (value: unknown): value is Role => VALID_ROLES.includes(value as Role);
 const isRoleLocked = (): boolean => localStorage.getItem(ROLE_LOCK_KEY) === 'true' && isValidRole(localStorage.getItem('justor-role'));
@@ -236,7 +234,7 @@ const header = (): string => {
   const profile = getStoredProfile();
   const firstName = state.session ? (profile.fullName.split(' ')[0] || ui(state.language, 'profile')) : '';
   const locked = lockedRole();
-  const workspaceNavLinks = locked && locked !== 'citizen'
+  const workspaceNavLinks = locked
     ? route(`/workspace/${locked}`, localizedRoleLabel(locked))
     : `${route('/workspace/professional', ui(state.language, 'legalProfessional'))}
         ${route('/workspace/student', ui(state.language, 'lawStudent'))}`;
@@ -285,7 +283,7 @@ const header = (): string => {
         </div>
 
         <span class="menu-section-label">${ui(state.language, 'product')}</span>
-        ${locked && locked !== 'citizen'
+        ${locked
           ? route(`/workspace/${locked}`, localizedRoleLabel(locked), 'menu-nav-link')
           : `${route('/workspace/professional', ui(state.language, 'legalProfessional'), 'menu-nav-link')}${route('/workspace/student', ui(state.language, 'lawStudent'), 'menu-nav-link')}`}
         ${route('/legal-library', ui(state.language, 'library'), 'menu-nav-link')}
@@ -321,19 +319,18 @@ const header = (): string => {
 const footer = (): string => `
   <footer class="site-footer">
     <div class="footer-grid">
-      <div>${route('/', brand(true), 'brand-link')}<p>Bangladesh legal intelligence for guidance, learning and professional research.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
-      <nav aria-label="Product"><strong>Product</strong>${lockedRole() && lockedRole() !== 'citizen' ? route(`/workspace/${lockedRole()}`, localizedRoleLabel(lockedRole() as Role)) : `${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}`}${route('/guides', 'Legal Guides')}${route('/start', 'Start Justor')}</nav>
+      <div>${route('/', brand(true), 'brand-link')}<p>Bangladesh legal intelligence for professional research and legal study.</p><span class="beta-label">${ui(state.language, 'controlledBeta')}</span></div>
+      <nav aria-label="Product"><strong>Product</strong>${lockedRole() ? route(`/workspace/${lockedRole()}`, localizedRoleLabel(lockedRole() as Role)) : `${route('/workspace/professional', 'Legal Professional')}${route('/workspace/student', 'Law Student')}`}${route('/guides', 'Legal Guides')}${route('/start', 'Start Justor')}</nav>
       <nav aria-label="Resources"><strong>Resources</strong>${route('/legal-library', ui(state.language, 'library'))}${route('/guides', ui(state.language, 'guides'))}${route('/legal-updates', ui(state.language, 'updates'))}${route('/trust', ui(state.language, 'trust'))}</nav>
       <nav aria-label="Company"><strong>Company</strong>${route('/about', ui(state.language, 'about'))}${route('/about#team', 'Team')}${route('/careers', 'Careers')}${route('/about#investors', 'Investors')}${route('/contact', 'Contact')}${route('/feedback', 'Feedback')}</nav>
       <nav aria-label="Legal"><strong>Legal</strong>${route('/privacy', 'Privacy')}${route('/terms', 'Terms')}${route('/disclaimer', 'Disclaimer')}<a href="mailto:tajuddinahamed.contact@gmail.com">Email us</a></nav>
     </div>
-    <div class="footer-bottom"><span>© 2026 Justor AI</span><span>General legal information. Not a substitute for individual legal advice.</span><a href="tel:+8801764662967">+880 1764-662967</a></div>
+    <div class="footer-bottom"><span>© 2026 Justor AI</span><span>Strictly for Bangladesh advocates, legal professionals, and law students.</span><a href="tel:+8801764662967">+880 1764-662967</a></div>
   </footer>`;
 
 const roleRows = (surface: 'hero' | 'start' = 'hero'): string => {
   const locked = lockedRole();
-  // Citizens are guides-only — never shown on public landing/start pages
-  const roles = locked ? [locked === 'citizen' ? 'professional' : locked] as Role[] : publicRoleOrder;
+  const roles = locked ? [locked] : publicRoleOrder;
   return `
   <nav class="${surface === 'hero' ? 'role-selectors' : 'start-roles'}" aria-label="Choose your Justor experience">
     ${roles.map((role) => `<a href="${workspacePathForRole(role)}" data-route data-role="${role}" class="role-row ${surface === 'start' ? 'start-role-row' : ''}"><span class="role-row-body"><span class="role-label">${localizedRoleLabel(role)}</span><strong class="role-heading">${rolePromise(role)}</strong><span class="role-desc role-desc-desktop">${roleBody(role)}</span><span class="role-desc role-desc-mobile">${mobileRoleBody(role)}</span></span><span class="role-arrow" aria-hidden="true">→</span><span class="sr-only">${roleContinue(role)}</span></a>`).join('')}
@@ -367,7 +364,7 @@ const homePage = (): string => `
         <h1 class="hero-h1">${ui(state.language, 'heroHeadline')}</h1>
         <p class="hero-subtitle">${ui(state.language, 'heroBody')}</p>
         ${roleRows()}
-        <p class="hero-guide-note">${state.language === 'bn' ? 'নাগরিক গাইড পড়তে <a href="/guides" data-route>আইনি গাইড</a> দেখুন।' : 'Looking for citizen guides? <a href="/guides" data-route>Browse Legal Guides →</a>'}</p>
+        <p class="hero-guide-note">${state.language === 'bn' ? 'আইনি রেফারেন্স ও পাবলিক গাইড পড়তে <a href="/guides" data-route>আইনি গাইড</a> দেখুন।' : 'Looking for public legal references? <a href="/guides" data-route>Browse Legal Guides →</a>'}</p>
       </div>
       <div class="hero-visual hero-3d-canvas" role="presentation" aria-hidden="true">
         <img src="/visuals/hero-legal-environment-v2.webp" alt="" width="1" height="1" loading="lazy" decoding="async" fetchpriority="low" class="hero-3d-fallback" hidden data-hero-source>
@@ -606,50 +603,9 @@ const quotaLine = (_role: Role): string => {
   return `<span class="quota-line" data-quota>${state.session ? `${ui(state.language, 'dailyAllowance')}: ${limit}` : `${ui(state.language, 'signInQuotaPrefix')} ${limit} ${ui(state.language, 'answersPerDay')}`}</span>`;
 };
 
-const citizenSectors = [
-  { icon: '🏠', titleKey: 'sectorProperty', descKey: 'sectorPropertyDesc', cluster: 'property-land', query: 'My landlord won\'t return my advance deposit or rent dispute' },
-  { icon: '👨‍👩‍👧', titleKey: 'sectorFamily', descKey: 'sectorFamilyDesc', cluster: 'family-marriage', query: 'How to claim prompt dower (Denmohor) or maintenance under Muslim Family Law?' },
-  { icon: '⚖️', titleKey: 'sectorCriminal', descKey: 'sectorCriminalDesc', cluster: 'criminal-police', query: 'What are the rights upon police arrest under Section 54 and bail guidelines?' },
-  { icon: '💼', titleKey: 'sectorEmployment', descKey: 'sectorEmploymentDesc', cluster: 'employment-work', query: 'Statutory notice pay and compensation for termination under Labour Act Section 26' },
-  { icon: '🛒', titleKey: 'sectorConsumer', descKey: 'sectorConsumerDesc', cluster: 'consumer-contracts', query: 'Filing a consumer complaint for adulterated or defective products under Section 76' },
-  { icon: '📋', titleKey: 'sectorRights', descKey: 'sectorRightsDesc', cluster: 'rights-documents', query: 'Procedure for correcting NID, birth certificate or land Khatian porcha records' },
-  { icon: '🏢', titleKey: 'sectorBusiness', descKey: 'sectorBusinessDesc', cluster: 'business-licensing', query: 'Trade license requirements and municipal business regulatory compliance' },
-] as const;
+
 
 const renderEmptyLanding = (role: Role): string => {
-  if (role === 'citizen') {
-    return `
-      <div class="chat-empty-landing citizen-landing-sectors">
-        <div class="empty-landing-brand">
-          <div class="landing-logo-badge">
-            ${brandMarkSvg(false)}
-          </div>
-        </div>
-        <h1 class="empty-landing-title">${state.language === 'bn' ? 'কী ঘটেছে? আপনার পরিস্থিতি বেছে নিন' : 'What happened? Choose your situation'}</h1>
-        <p class="empty-landing-subtitle">
-          ${state.language === 'bn' 
-            ? 'বাস্তব করণীয়, প্রমাণ ও সরকারি সেবার পথ। জাস্টর প্রথমে সিটিজেন লিগ্যাল গাইডে খুঁজবে।' 
-            : 'Practical legal guidance, required evidence, and official routes.'}
-        </p>
-        <div class="citizen-sector-cards" role="region" aria-label="Citizen Legal Sectors">
-          ${citizenSectors.map((s) => `
-            <button type="button" class="citizen-sector-card" data-suggested-query="${escapeHtml(s.query)}" aria-label="${escapeHtml(ui(state.language, s.titleKey as CopyKey))}">
-              <span class="sector-card-icon-wrap" aria-hidden="true">${s.icon}</span>
-              <div class="sector-card-text">
-                <strong class="sector-card-title">${escapeHtml(ui(state.language, s.titleKey as CopyKey))}</strong>
-                <span class="sector-card-desc">${escapeHtml(ui(state.language, s.descKey as CopyKey))}</span>
-              </div>
-              <span class="sector-card-arrow" aria-hidden="true">${icon('arrow', 14)}</span>
-            </button>
-          `).join('')}
-        </div>
-        <div class="citizen-disclaimer-box">
-          <p>${ui(state.language, 'citizenDisclaimer')}</p>
-        </div>
-      </div>
-    `;
-  }
-
   const suggestions = roleSuggestedQueries[role] ?? roleSuggestedQueries.professional;
   return `
     <div class="chat-empty-landing">
@@ -766,11 +722,7 @@ const renderBottomChatBar = (role: Role, placeholder: string, _quickActions?: st
   </div>
 `;
 
-const citizenWelcomeMascot = (): string => `
-  <div class="citizen-welcome-mascot" data-citizen-mascot aria-label="Justor citizen guide assistant">
-    <span class="mascot-mark"><img src="/visuals/justor-mark.png" alt="" width="56" height="30"></span>
-    <div><strong>Start with a citizen guide.</strong><p>Search by the problem, service, document or evidence you already know.</p></div>
-  </div>`;
+
 
 const professionalWorkspace = (): string => {
   const thread = chatStore.getOrCreateActiveThread('professional');
@@ -851,31 +803,6 @@ const studentLearnWorkspace = (): string => {
   </main>`;
 };
 
-const citizenWorkspace = (): string => {
-  // Citizen AI chat is disabled — this role is now guides-only.
-  // Redirect citizen accounts to the legal guides directory.
-  const isBn = state.language === 'bn';
-  return `
-  <main id="page-content" class="inner-page citizen-guides-redirect">
-    <section class="compact-hero section-shell">
-      ${pageBackButton('/', isBn ? 'হোমে ফিরে যান' : 'Back to Home')}
-      <span class="section-kicker">${isBn ? 'আইনি গাইড' : 'Legal Guides'}</span>
-      <h1>${isBn ? 'বাস্তব আইনি পরিস্থিতির জন্য গাইড' : 'Practical Legal Guides'}</h1>
-      <p>${isBn ? 'সম্পত্তি, পরিবার, ফৌজদারি, কর্মসংস্থান ও ভোক্তা আইন বিষয়ে বাস্তব নির্দেশনা।' : 'Step-by-step guidance on property, family, criminal, employment and consumer law situations in Bangladesh.'}</p>
-      ${route('/guides', `${icon('book', 16)} ${isBn ? 'সব গাইড দেখুন' : 'Browse All Guides'} →`, 'button')}
-    </section>
-    <section class="section-shell" style="padding: 40px 0;">
-      <div class="citizen-guides-notice">
-        ${icon('shield', 18)}
-        <p>${isBn ? 'এই অ্যাকাউন্টটি গাইড পড়ার জন্য সক্ষম। আইনজীবী বা আইনের শিক্ষার্থী হলে নতুন অ্যাকাউন্ট তৈরি করুন।' : 'This account has access to legal guides. For AI-powered legal research, create a new account as a Legal Professional or Law Student.'}</p>
-        ${route('/login', isBn ? 'নতুন অ্যাকাউন্ট তৈরি করুন →' : 'Create a Professional Account →', 'link-arrow')}
-      </div>
-    </section>
-  </main>`;
-};
-
-
-
 const unavailable = (message?: string): string => `<div class="empty-state"><span>${icon('shield', 24)}</span><h3>${ui(state.language, 'unavailableTitle')}</h3><p>${message ?? ui(state.language, 'unavailableBody')}</p></div>`;
 const empty = (): string => `<div class="empty-state"><span>${icon('search', 24)}</span><h3>${ui(state.language, 'noResults')}</h3><p>${ui(state.language, 'noResultsBody')}</p></div>`;
 
@@ -888,7 +815,7 @@ const libraryPage = (): string => {
 const guidesPage = (): string => `
   <main id="page-content" class="inner-page">
     <section class="compact-hero section-shell">
-      ${pageBackButton('/workspace/citizen', state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
+      ${pageBackButton('/workspace/' + state.role, state.language === 'bn' ? 'ওয়ার্কস্পেসে ফিরে যান' : 'Back to Workspace')}
       <span class="section-kicker">${ui(state.language, 'citizenGuides')}</span>
       <h1>${ui(state.language, 'guidePageHeading')}</h1>
       <p>${ui(state.language, 'guidePageBody')}</p>
@@ -1188,7 +1115,7 @@ const chooseRolePage = (): string => {
         `).join('')}
       </div>
       <div class="choose-role-guide-note">
-        <span>${isBn ? '📋 নাগরিক হিসেবে শুধু আইনি গাইড পড়তে চাইলে —' : '📋 Just want to read citizen legal guides?'}</span>
+        <span>${isBn ? '📋 পাবলিক আইনি রেফারেন্স ও গাইড দেখতে চান?' : '📋 Looking for public statutory records & guides?'}</span>
         ${route('/guides', isBn ? 'আইনি গাইড ব্রাউজ করুন →' : 'Browse Legal Guides →', 'link-arrow')}
       </div>
     </section>
@@ -1242,13 +1169,13 @@ const careerRoles: CareerRole[] = [
     tag: 'Legal',
     tagClass: 'badge-legal',
     title: 'Legal Content Writer',
-    body: 'Bangladesh has 170 million people and most of them have never had meaningful access to legal information. You change that. You write plain-language legal explainers, citizen guides, and learning content that makes the law feel like something people can actually use.',
+    body: 'Bangladesh has a massive backlog of litigations and manual case preparation. You change that. You write authoritative legal explainers, statutory guides, and learning content that simplifies research for advocates and students.',
     tasks: [
-      'Write citizen-facing guides on family law, property, labour rights, and more',
+      'Write authoritative guides on procedural law, land enactments, civil appeals, and criminal procedure',
       'Script the bite-size Contract Act and other learning card series',
       'Translate complex legal provisions into plain Bangla and English',
-      'Fact-check all citizen-facing content against verified statute text',
-      'Research real case scenarios that citizens actually face',
+      'Fact-check all content against verified statute text and Supreme Court precedents',
+      'Research real case scenarios that advocates and students face',
     ],
     meta: 'Law student preferred · Strong Bangla writing essential · 14–25 hrs/week',
   },
@@ -1256,12 +1183,12 @@ const careerRoles: CareerRole[] = [
     tag: 'Design',
     tagClass: 'badge-design',
     title: 'Product Designer',
-    body: 'Justor serves three distinct users — lawyers, law students, and citizens. Each needs a different interface. You think in user journeys, not just screens, and you understand that in legal tech, clarity is a safety feature.',
+    body: 'Justor serves two core personas — lawyers and law students. Each needs an uncompromisingly professional interface. You think in user journeys, not just screens, and you understand that in legal tech, clarity is a safety feature.',
     tasks: [
-      'Design and iterate on workspace UX for lawyer and student modes',
-      'Create citizen-facing guide flows and sector card layouts',
+      'Design and iterate on workspace UX for Chamber OS, matter intelligence, and student modes',
+      'Create intuitive precedent search and clause comparison layouts',
       'Build and maintain a component library in Figma',
-      'Run informal usability tests with real users',
+      'Run informal usability tests with advocates and legal practitioners',
       'Work directly with CTO on frontend implementation handoff',
     ],
     meta: 'Basic Figma knowledge enough · We will teach the rest · 14–25 hrs/week',
@@ -1302,7 +1229,7 @@ const careerRoles: CareerRole[] = [
     tasks: [
       'Script and produce short Reels explaining real Bangladeshi laws in plain language',
       'Create Justor AI product reels — demos, features, behind-the-scenes',
-      'Make bilingual (EN/BN) carousel posts on laws citizens need to know',
+      'Make bilingual (EN/BN) carousel posts on statutory precedents and court procedures',
       'Research interesting, surprising, or alarming laws for content hooks',
       'Collaborate with legal intern to verify every legal fact before publishing',
     ],
@@ -1329,7 +1256,7 @@ const careerRoles: CareerRole[] = [
     body: 'Legal tech in Bangladesh is years behind where it needs to be. You research what is being built globally, what our users actually need locally, and what problems we should be solving in 12 months that we are not solving today. You write memos. We make decisions from them.',
     tasks: [
       'Map global legal AI products and identify what they do better or worse',
-      'Conduct user interviews with lawyers, law students, and citizens',
+      'Conduct user interviews with advocates, chamber counsel, and law students',
       'Research Bangladesh legal aid gaps using DBLA, bar council, and court data',
       'Write short internal research memos that inform product decisions',
       'Track papers and news on RAG, legal AI accuracy, and LLM reasoning',
@@ -1501,7 +1428,7 @@ const careersPage = (): string => {
   </main>`;
 };
 
-const notFoundPage = (): string => `<main id="page-content" class="not-found">${citizenWelcomeMascot()}<span>404</span><h1>This legal path was not found.</h1><p>The page may have moved or may not be part of the published beta.</p>${route('/legal-library', `Search Legal Library ${icon('arrow', 16)}`, 'button')}</main>`;
+const notFoundPage = (): string => `<main id="page-content" class="not-found"><span class="badge">404</span><h1>This legal path was not found.</h1><p>The page may have moved or may not be part of the published beta.</p>${route('/legal-library', `Search Legal Library ${icon('arrow', 16)}`, 'button')}</main>`;
 
 const hydrateHeroVisual = (): void => {
   const canvas = document.querySelector<HTMLCanvasElement>('.hero-3d-static');
@@ -1532,7 +1459,7 @@ const feedbackPage = (): string => `
       ${pageBackButton('/', state.language === 'bn' ? 'হোমে ফিরে যান' : 'Back to Home')}
       <span class="section-kicker">${state.language === 'bn' ? 'ব্যবহারকারী প্রতিক্রিয়া ও সমীক্ষা' : 'User Feedback & Evaluation'}</span>
       <h1>${state.language === 'bn' ? 'জাস্টর এআই ব্যবহারকারী মতামত সমীক্ষা' : 'Justor AI User Experience Survey'}</h1>
-      <p>${state.language === 'bn' ? 'আপনার মূল্যবান মতামত আমাদের এআই ও আইনি গবেষণা প্ল্যাটফর্মকে আরও উন্নত করতে সাহায্য করে।' : 'Your feedback helps us refine our legal AI intelligence, statutory verification, and user experience for lawyers, students, and citizens.'}</p>
+      <p>${state.language === 'bn' ? 'আপনার মূল্যবান মতামত আমাদের এআই ও আইনি গবেষণা প্ল্যাটফর্মকে আরও উন্নত করতে সাহায্য করে।' : 'Your feedback helps us refine our legal AI intelligence, statutory verification, and user experience for lawyers and law students.'}</p>
       <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
         <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdMfVydj2kMXZkf3SpYi_soA37YtTmAIB7VquPNkadYOmLSrg/viewform" target="_blank" rel="noopener">
           ${state.language === 'bn' ? 'নতুন উইন্ডোতে ফর্মটি খুলুন' : 'Open in New Window'} ${icon('external', 14)}
@@ -1612,11 +1539,6 @@ const profilePage = (): string => {
       title: isBn ? 'আইনের শিক্ষার্থী' : 'Law Student',
       desc: isBn ? 'এলএলবি ও বার কাউন্সিলের জন্য ধারা ও কেস বিশ্লেষণ' : 'LLB, LLM, or Bar vocational study & quizzes',
       icon: '🎓',
-    },
-    citizen: {
-      title: isBn ? 'সাধারণ নাগরিক' : 'Citizen',
-      desc: isBn ? 'বাস্তব সমস্যায় আইনি দিকনির্দেশনা ও সরকারি সেবার পথ' : 'Practical guidance, evidence & official routes',
-      icon: '👥',
     },
   };
 
@@ -1749,7 +1671,7 @@ const pageForPath = (path: string): string => {
   if (path === '/workspace/professional') return professionalWorkspace();
   if (path === '/workspace/student/learn' || path.startsWith('/workspace/student/learn/')) return studentLearnWorkspace();
   if (path === '/workspace/student') return studentWorkspace();
-  if (path === '/workspace/citizen') return citizenWorkspace();
+  if (path === '/workspace/citizen' || path === '/citizen') return professionalWorkspace();
   if (path === '/trust') return trustPage();
   if (path === '/about') return aboutPage();
   if (path === '/careers') return careersPage();
@@ -1771,9 +1693,9 @@ const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/')
 const setDocumentMeta = (): void => {
   document.documentElement.lang = state.language === 'bn' ? 'bn' : 'en';
   const titles: Record<string, string> = {
-    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/choose-role': 'Choose workspace', '/legal-library': 'Legal Library', '/guides': 'Citizen Legal Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
+    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/choose-role': 'Choose workspace', '/legal-library': 'Legal Library', '/guides': 'Legal Authority Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
   };
-  const dynamic = state.routePath.startsWith('/workspace/') ? `${roleLabels[state.routePath.split('/').pop() as Role]} Workspace` : state.routePath.startsWith('/guides/') || state.routePath.startsWith('/action-guides/') ? 'Citizen Legal Guide' : state.routePath.startsWith('/legal-updates/') ? 'Legal Update' : 'Justor AI';
+  const dynamic = state.routePath.startsWith('/workspace/') ? `${roleLabels[state.routePath.split('/').pop() as Role] || 'Legal'} Workspace` : state.routePath.startsWith('/guides/') || state.routePath.startsWith('/action-guides/') ? 'Legal Authority Guide' : state.routePath.startsWith('/legal-updates/') ? 'Legal Update' : 'Justor AI';
   document.title = `${titles[state.routePath] ?? dynamic} | Justor AI`;
 };
 
@@ -2094,7 +2016,6 @@ const hydrateRoute = async (path: string): Promise<void> => {
   if (path.startsWith('/legal-updates/')) await hydrateUpdateDetail(decodeURIComponent(path.slice('/legal-updates/'.length)));
   if (path === '/workspace/professional') await hydrateUpdates('[data-professional-updates]');
   hydrateLearningPath(path);
-  if (path === '/workspace/citizen') await hydrateCitizen();
   if (path === '/amendment-admin') {
     const mount = document.getElementById('amendment-admin-mount');
     if (mount) {
@@ -2111,216 +2032,7 @@ const hydrateRoute = async (path: string): Promise<void> => {
   }
 };
 
-interface LawyerRecommendation {
-  specialistTitle: string;
-  domainName: string;
-  icon: string;
-  actionReason: string;
-  documentsToBring: string[];
-  helpline: string;
-  helphoneNumber: string;
-}
-
-function getCitizenLawyerRecommendation(query: string, answerText: string, lang: Language): LawyerRecommendation {
-  const combined = `${query} ${answerText}`.toLowerCase();
-  const isBn = lang === 'bn';
-
-  // 1. Property / Land / Mutation / Eviction
-  if (
-    combined.includes('land') || combined.includes('property') || combined.includes('deed') ||
-    combined.includes('mutation') || combined.includes('khatian') || combined.includes('porcha') ||
-    combined.includes('dolil') || combined.includes('registry') || combined.includes('partition') ||
-    combined.includes('eviction') || combined.includes('tenant') || combined.includes('rent') ||
-    combined.includes('জমি') || combined.includes('দলিল') || combined.includes('খতিয়ান') ||
-    combined.includes('পর্চা') || combined.includes('নামজারি') || combined.includes('বেদখল') ||
-    combined.includes('উচ্ছেদ') || combined.includes('বায়নানামা') || combined.includes('মালিকানা')
-  ) {
-    return {
-      specialistTitle: isBn ? 'দেওয়ানি ও জমিজমা সংক্রান্ত আইনজীবী (Civil & Property Advocate)' : 'Deed & Land Litigation Advocate',
-      domainName: isBn ? 'ভূমি ও সম্পত্তি বিরোধ আইন' : 'Land, Property & Real Estate Law',
-      icon: '🏡',
-      actionReason: isBn
-        ? 'জমির মালিকানা বিরোধ, জাল দলিল বা বেদখল রোধে সহকারী জজ আদালতে দ্রুত স্বত্ব ঘোষণা মামলা (Title Suit) বা অস্থায়ী নিষেধাজ্ঞা (Injunction) চেয়ে প্রতিকার নিতে হবে।'
-        : 'Property ownership disputes, deed fraudulent claims, or possession threats require immediate filing of a Title Suit or Injunction in the Civil Court.',
-      documentsToBring: isBn
-        ? ['মূল বা সহি মহরর দলিল (Deed)', 'হালনাগাদ খতিয়ান ও পর্চা (CS/SA/RS/BS)', 'নামজারি খতিয়ান ও ডিসিআর (DCR)', 'হাল ভূমি উন্নয়ন কর রশিদ (দাখিলা)']
-        : ['Original / Certified Deed (মূল দলিল)', 'Updated Khatian / Porcha (খতিয়ান ও পর্চা)', 'Mutation Certificate & DCR', 'Up-to-date Land Development Tax Receipt'],
-      helpline: isBn ? 'সরকারি আইনগত সহায়তা' : 'Govt. Legal Aid Helpline',
-      helphoneNumber: '16430',
-    };
-  }
-
-  // 2. Family / Marriage / Divorce / Dower / Custody
-  if (
-    combined.includes('divorce') || combined.includes('marriage') || combined.includes('dower') ||
-    combined.includes('mohor') || combined.includes('kabin') || combined.includes('maintenance') ||
-    combined.includes('custody') || combined.includes('guardianship') || combined.includes('talaq') ||
-    combined.includes('বিয়ে') || combined.includes('বিবাহ') || combined.includes('তালাক') ||
-    combined.includes('দেনমোহর') || combined.includes('কাবিন') || combined.includes('খোরপোশ') ||
-    combined.includes('অভিভাবকত্ব') || combined.includes('হেফাজত') || combined.includes('পারিবারিক')
-  ) {
-    return {
-      specialistTitle: isBn ? 'পারিবারিক আদালত ও দাম্পত্য আইনজীবী (Family Court Advocate)' : 'Family Court & Matrimonial Advocate',
-      domainName: isBn ? 'পারিবারিক ও দাম্পত্য আইন' : 'Family & Matrimonial Law',
-      icon: '👨‍👩‍👧',
-      actionReason: isBn
-        ? 'দেনমোহর আদায়, স্ত্রী-সন্তানের খোরপোশ, তালাক কার্যকর বা সন্তানের হেফাজত নিশ্চিত করতে পারিবারিক আদালত আইন ২০২৩ অনুযায়ী উপযুক্ত আদালতে মামলা দায়ের করতে হবে।'
-        : 'Dower recovery, child maintenance, divorce execution, and child custody claims are legally enforced through the Family Court under the Family Courts Act 2023.',
-      documentsToBring: isBn
-        ? ['মূল নিকাহনামা / কাবিননামা (Kabinnama)', 'তালাকের নোটিশ ও ডাক রসিদ (যদি থাকে)', 'সন্তানদের জন্মনিবন্ধন সনদ', 'আর্থিক লেনদেন বা উপার্জনের প্রমাণ']
-        : ['Original Nikahnama / Kabinnama', 'Talaq Notice & Postal Registry Receipts (if served)', 'Birth Certificates of children', 'Proof of spouse earnings & transactions'],
-      helpline: isBn ? 'জাতীয় নারী ও শিশু সহায়তা হেল্পলাইন' : 'Women & Child Helpline',
-      helphoneNumber: '109 / 16430',
-    };
-  }
-
-  // 3. Cheque Bounce / NI Act 138 / Loan
-  if (
-    combined.includes('cheque') || combined.includes('check') || combined.includes('dishonour') ||
-    combined.includes('dishonor') || combined.includes('bounce') || combined.includes('138') ||
-    combined.includes('ni act') || combined.includes('loan') || combined.includes('চেক') ||
-    combined.includes('বাউন্স') || combined.includes('ডিজঅনার') || combined.includes('এনআই অ্যাক্ট') ||
-    combined.includes('১৩৮') || combined.includes('পাওনা টাকা')
-  ) {
-    return {
-      specialistTitle: isBn ? 'এনআই অ্যাক্ট ও ব্যাংকিং আইনজীবী (Cheque Dishonour Specialist)' : 'NI Act & Banking Litigation Advocate',
-      domainName: isBn ? 'চেক ডিজঅনার ও আর্থিক লেনদেন আইন' : 'Negotiable Instruments & Debt Recovery',
-      icon: '💳',
-      actionReason: isBn
-        ? 'চেক ডিজঅনারের তারিখ থেকে ৩০ দিনের মধ্যে আইনজীবীর মাধ্যমে লিখিত লিগ্যাল নোটিশ পাঠানো বাধ্যতামূলক। নোটিশ সময়মত না পাঠালে এনআই অ্যাক্ট ১৩৮ ধারায় মামলা করার সুযোগ নষ্ট হবে।'
-        : 'Section 138 of the NI Act mandates serving a formal legal notice within 30 days of cheque dishonour before instituting criminal proceedings in the Magistrate Court.',
-      documentsToBring: isBn
-        ? ['মূল ডিজঅনার্ড চেক ও ব্যাংক মেমো (Return Memo)', 'আইনজীবীর মাধ্যমে পাঠানো লিগ্যাল নোটিশ ও ডাক রসিদ', 'লেনদেন বা পাওনা টাকার চুক্তিপত্র', 'ব্যাংক স্টেটমেন্ট']
-        : ['Original Dishonoured Cheque & Bank Memo', 'Copy of Legal Notice sent via Advocate', 'Postal Registry (A/D) receipt & delivery acknowledgment', 'Underlying agreement / transaction proofs'],
-      helpline: isBn ? 'সরকারি আইনগত সহায়তা' : 'Govt. Legal Aid Helpline',
-      helphoneNumber: '16430',
-    };
-  }
-
-  // 4. Criminal / Police / Bail / Arrest / Remand / Fraud / Extortion
-  if (
-    combined.includes('criminal') || combined.includes('police') || combined.includes('fir') ||
-    combined.includes('gd') || combined.includes('bail') || combined.includes('arrest') ||
-    combined.includes('remand') || combined.includes('thana') || combined.includes('theft') ||
-    combined.includes('assault') || combined.includes('extortion') || combined.includes('fraud') ||
-    combined.includes('পুলিশ') || combined.includes('থানা') || combined.includes('মামলা') ||
-    combined.includes('জিডি') || combined.includes('এফআইআর') || combined.includes('জামিন') ||
-    combined.includes('রিমান্ড') || combined.includes('গ্রেপ্তার') || combined.includes('চাঁদাবাজি')
-  ) {
-    return {
-      specialistTitle: isBn ? 'ফৌজদারি ও জামিন বিশেষজ্ঞ আইনজীবী (Criminal Defense Advocate)' : 'Criminal Defense & Bail Advocate',
-      domainName: isBn ? 'ফৌজদারি কার্যবিধি ও দণ্ডবিধি' : 'Criminal Law & Procedure',
-      icon: '🚓',
-      actionReason: isBn
-        ? 'গ্রেপ্তার, পুলিশি হয়রানি বা মিথ্যা মামলায় সুরক্ষা পেতে চিফ মেট্রোপলিটন/জুডিসিয়াল ম্যাজিস্ট্রেট আদালতে অবিলম্বে জামিন আবেদন (Bail Petition) বা নারাজি দাখিল করতে হবে।'
-        : 'In cases of arrest, police custody, or formal charges, immediate representation is necessary to file a Bail Petition before the Magistrate or Sessions Court.',
-      documentsToBring: isBn
-        ? ['এজাহার (FIR) বা জিডির সার্টিফাইড কপি', 'ফরওয়ার্ডিং বা সিজারলিস্ট (যদি থাকে)', 'জাতীয় পরিচয়পত্র ও স্থানীয় প্রত্যয়নপত্র', 'মেডিকেল সার্টিফিকেট বা ইনজুরি রিপোর্ট (যদি থাকে)']
-        : ['Certified Copy of FIR / GD / Complaint', 'Police forwarding memo or seizure list (if available)', 'National ID (NID) & local address proofs', 'Medical injury certificate (if applicable)'],
-      helpline: isBn ? 'জাতীয় জরুরি সেবা' : 'National Emergency Helpline',
-      helphoneNumber: '999 / 16430',
-    };
-  }
-
-  // 5. Labour / Employment / Worker / Wage / Gratuity
-  if (
-    combined.includes('labour') || combined.includes('labor') || combined.includes('worker') ||
-    combined.includes('employee') || combined.includes('employer') || combined.includes('termination') ||
-    combined.includes('gratuity') || combined.includes('salary') || combined.includes('wage') ||
-    combined.includes('শ্রম') || combined.includes('চাকরি') || combined.includes('বরখাস্ত') ||
-    combined.includes('গ্র্যাচুইটি') || combined.includes('বেতন') || combined.includes('ছাঁটাই')
-  ) {
-    return {
-      specialistTitle: isBn ? 'শ্রম আইন ও কর্মসংস্থান আইনজীবী (Labour Law Advocate)' : 'Labour & Employment Advocate',
-      domainName: isBn ? 'বাংলাদেশ শ্রম আইন' : 'Bangladesh Labour Law',
-      icon: '💼',
-      actionReason: isBn
-        ? 'বেআইনি বরখাস্ত, বকেয়া মজুরি বা সার্ভিস বেনিফিট আদায়ে বাংলাদেশ শ্রম আইনের অধীনে নির্দিষ্ট সময়ের মধ্যে শ্রম আদালতে (Labour Court) অভিযোগ দায়ের করতে হবে।'
-        : 'Unlawful termination, unpaid gratuity, or severance disputes must be formally filed before the Bangladesh Labour Court within the statutory limitation period.',
-      documentsToBring: isBn
-        ? ['নিয়োগপত্র ও পরিচয়পত্র (Appointment Letter & ID)', 'বেতন স্লিপ বা ব্যাংক স্টেটমেন্ট', 'বরখাস্ত বা ছাঁটাইপত্র (যদি থাকে)', 'মালিকের কাছে প্রদত্ত লিখিত অভিযোগের কপি']
-        : ['Appointment Letter & Employee ID', 'Salary slips / Bank statement', 'Termination / Dismissal notice (if provided)', 'Copy of written grievance notice given to employer'],
-      helpline: isBn ? 'কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর' : 'Labour Inspection Helpline',
-      helphoneNumber: '16197 / 16430',
-    };
-  }
-
-  // 6. Cyber / Harassment / Online / Facebook / Digital
-  if (
-    combined.includes('cyber') || combined.includes('facebook') || combined.includes('online') ||
-    combined.includes('harassment') || combined.includes('blackmail') || combined.includes('leak') ||
-    combined.includes('সাইবার') || combined.includes('ফেসবুক') || combined.includes('ব্ল্যাকমেইল') ||
-    combined.includes('অনলাইন হয়রানি') || combined.includes('মানহানি')
-  ) {
-    return {
-      specialistTitle: isBn ? 'সাইবার ট্রাইব্যুনাল ও ডিজিটাল ক্রাইম আইনজীবী (Cyber Law Advocate)' : 'Cyber Law & Digital Crime Advocate',
-      domainName: isBn ? 'সাইবার সুরক্ষা ও ডিজিটাল আইন' : 'Cyber Security & Media Law',
-      icon: '📱',
-      actionReason: isBn
-        ? 'অনলাইন হয়রানি, ছবি বিকৃত বা ব্ল্যাকমেইলের বিরুদ্ধে সাইবার ট্রাইব্যুনাল বা সিআইডি সাইবার পুলিশ সেন্টারে ডিজিটাল প্রমাণাদি সহ অভিযোগ দাখিল করতে হবে।'
-        : 'Digital harassment, unauthorized content dissemination, or blackmail require filing a petition before the Cyber Tribunal or CID Cyber Police with verified electronic evidence.',
-      documentsToBring: isBn
-        ? ['ইউআরএল (URL) ও তারিখ সহ মূল স্ক্রিনশট', 'চ্যাট হিস্ট্রি ও অডিও/ভিডিও record', 'অভিযুক্তের প্রোফাইল লিংক বা ফোন নম্বর', 'স্থানীয় থানায় সাধারণ ডায়েরি (GD) কপি']
-        : ['High-res screenshots with visible URLs & timestamps', 'Exported chat logs & digital media files', 'Profile URL, phone number, or identifier of offender', 'General Diary (GD) copy filed at local police station'],
-      helpline: isBn ? 'পুলিশ সাইবার সাপোর্ট ফর উইমেন / জরুরি সেবা' : 'Police Cyber Support for Women',
-      helphoneNumber: '01320000888 / 999',
-    };
-  }
-
-  // Default: General Civil / Constitutional Advocate
-  return {
-    specialistTitle: isBn ? 'দেওয়ানি ও সাধারণ প্র্যাকটিস আইনজীবী (Civil & General Advocate)' : 'Civil & Statutory Practice Advocate',
-    domainName: isBn ? 'সাধারণ ও দেওয়ানি আইন' : 'Civil & Statutory Law',
-    icon: '⚖️',
-    actionReason: isBn
-      ? 'আপনার অধিকার সুরক্ষা, চুক্তি কার্যকর বা আনুষ্ঠানিক আইনি নোটিশ প্রেরণের জন্য সংশ্লিষ্ট আদালতের একজন উপযুক্ত আইনজীবীর সাথে সরাসরি পরামর্শ করা প্রয়োজন।'
-      : 'Protecting legal rights, serving statutory legal notices, or filing civil suits requires consultation with an advocate practicing in the relevant territorial jurisdiction.',
-    documentsToBring: isBn
-      ? ['সকল প্রাসঙ্গিক চুক্তি, নোটিশ ও চিঠিপত্র', 'অর্থ লেনদেন বা ব্যাংক রশিদ', 'জাতীয় পরিচয়পত্র (NID)', 'ঘটনার ধারাবাহিক সংক্ষিপ্ত বিবরণ']
-      : ['Relevant agreements, notices & communications', 'Financial receipts / transaction records', 'National ID (NID)', 'Written chronological summary of facts'],
-    helpline: isBn ? 'জাতীয় আইনগত সহায়তা সংস্থা' : 'National Legal Aid Services',
-    helphoneNumber: '16430',
-  };
-}
-
-function renderCitizenLawyerSuggestion(query: string, answerText: string, lang: Language): string {
-  const rec = getCitizenLawyerRecommendation(query, answerText, lang);
-  const isBn = lang === 'bn';
-
-  return `
-    <div class="citizen-lawyer-recommendation-card" role="region" aria-label="${isBn ? 'আইনজীবী পরামর্শের দিকনির্দেশনা' : 'Recommended Legal Counsel'}">
-      <div class="lawyer-rec-header">
-        <span class="lawyer-rec-icon" aria-hidden="true">${rec.icon}</span>
-        <div class="lawyer-rec-title-wrap">
-          <span class="lawyer-rec-kicker">${isBn ? 'প্রয়োজনীয় পরবর্তী পদক্ষেপ · আইনি পরামর্শ' : 'Recommended Next Step · Legal Representation'}</span>
-          <h4 class="lawyer-specialist-title">${escapeHtml(rec.specialistTitle)}</h4>
-        </div>
-      </div>
-
-      <div class="lawyer-rec-body">
-        <p class="lawyer-rec-reason">
-          <strong>${isBn ? 'কেন পরামর্শ প্রয়োজন:' : 'Why You Need This Specialist:'}</strong> ${escapeHtml(rec.actionReason)}
-        </p>
-
-        <div class="lawyer-checklist-box">
-          <strong class="checklist-title">📋 ${isBn ? 'পরামর্শের সময় সাথে যা নিয়ে যাবেন (প্রয়োজনীয় কাগজপত্র):' : 'Documents & Evidence to Bring:'}</strong>
-          <ul class="checklist-items">
-            ${rec.documentsToBring.map((doc) => `<li>${escapeHtml(doc)}</li>`).join('')}
-          </ul>
-        </div>
-
-        <div class="lawyer-hotline-footer">
-          <span class="hotline-badge">
-            ${icon('shield', 14)} 
-            <span>${escapeHtml(rec.helpline)}: <strong>${escapeHtml(rec.helphoneNumber)}</strong> ${isBn ? '(টোল ফ্রি)' : '(Free Helpline)'}</span>
-          </span>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-const formatInlineMarkdown = (text: string, role: Role): string => {
+const formatInlineMarkdown = (text: string, _role?: Role): string => {
   let formatted = escapeHtml(text);
   formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   formatted = formatted.replace(/__([^_]+)__/g, '<strong>$1</strong>');
@@ -2328,16 +2040,12 @@ const formatInlineMarkdown = (text: string, role: Role): string => {
   formatted = formatted.replace(/_([^_]+)_/g, '<em>$1</em>');
   formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-  if (role !== 'citizen') {
-    formatted = formatted
-      .replace(/\[(\d+)\]/g, (_match, p1) => {
-        const idx = parseInt(p1, 10) - 1;
-        return `<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation-index" data-citation-index="${idx}" aria-label="Inspect authority [${p1}]">[${p1}]</button>`;
-      })
-      .replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation" data-citation="$1">[$1]</button>');
-  } else {
-    formatted = formatted.replace(/\[\d+\]/g, '').replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '');
-  }
+  formatted = formatted
+    .replace(/\[(\d+)\]/g, (_match, p1) => {
+      const idx = parseInt(p1, 10) - 1;
+      return `<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation-index" data-citation-index="${idx}" aria-label="Inspect authority [${p1}]">[${p1}]</button>`;
+    })
+    .replace(/\[(ACT-\d+|DLR-\d+|CASE-\d+|S\d+)\]/g, '<button class="inline-citation-chip citation-chip" type="button" data-action="click-citation" data-citation="$1">[$1]</button>');
   return formatted;
 };
 
@@ -2347,7 +2055,6 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
   const htmlParts: string[] = [];
   let currentList: string[] = [];
   let currentListType: 'ul' | 'ol' = 'ul';
-  let isSkippingAuthorities = false;
 
   const flushList = () => {
     if (currentList.length) {
@@ -2362,29 +2069,6 @@ const formatAnswerMarkdown = (text: string, role: Role = 'professional'): string
     if (!line) {
       flushList();
       continue;
-    }
-
-    if (role === 'citizen') {
-      const lower = line.toLowerCase();
-      if (
-        lower.startsWith('## verified authorities') ||
-        lower.startsWith('### verified authorities') ||
-        lower.startsWith('# verified authorities') ||
-        lower.startsWith('**verified authorities') ||
-        lower.startsWith('## sources') ||
-        lower.startsWith('### sources')
-      ) {
-        isSkippingAuthorities = true;
-        flushList();
-        continue;
-      }
-      if (isSkippingAuthorities) {
-        if (line.startsWith('#') || (line.startsWith('**') && !line.startsWith('**['))) {
-          isSkippingAuthorities = false;
-        } else {
-          continue;
-        }
-      }
     }
 
     if (line.startsWith('#### ')) {
@@ -2492,33 +2176,7 @@ const renderResearchResult = (result: ResearchResult, role: Role = 'professional
     </div>
   ` : '';
 
-  if (role === 'citizen') {
-    const query = state.lastResearchQuery || '';
-    return `
-      <div class="citizen-result-layout">
-        <article class="citizen-analysis">
-          ${sourcesCarouselHtml}
-          <div class="citizen-steps-container">
-            <div class="research-formatted-markdown">
-              ${formatAnswerMarkdown(result.shortAnswer || '', 'citizen')}
-            </div>
-          </div>
-          ${relatedQuestionsHtml}
-          <!-- Suggested Lawyer Consultation Guidance -->
-          ${renderCitizenLawyerSuggestion(query, result.shortAnswer || '', cardLang)}
 
-          <div class="citizen-disclaimer-box">
-            <p>${ui(cardLang, 'citizenDisclaimer')}</p>
-          </div>
-          <div class="citizen-ask-more" style="margin-top: 16px;">
-            <button class="button button-secondary" type="button" data-action="focus-composer">
-              ${ui(cardLang, 'guideAskAi')}
-            </button>
-          </div>
-        </article>
-      </div>
-    `;
-  }
 
   const sources = result.authorities ?? [];
   const hasLiveSearch = Boolean(liveGrounding && ((liveGrounding.sources && liveGrounding.sources.length > 0) || (liveGrounding.search_queries && liveGrounding.search_queries.length > 0)));
@@ -3049,7 +2707,7 @@ const submitResearch = async (form: HTMLFormElement): Promise<void> => {
   sessionStorage.removeItem('justor-chat-display-query');
   
   if (!state.session) {
-    sessionStorage.setItem('justor_citizen_query_count', String(parseInt(sessionStorage.getItem('justor_citizen_query_count') || '0', 10) + 1));
+    sessionStorage.setItem('justor_guest_query_count', String(parseInt(sessionStorage.getItem('justor_guest_query_count') || '0', 10) + 1));
     state.session = authService.signInAsGuest();
     if (!isRoleLocked() && isValidRole(role)) lockUserRole(role);
   }
@@ -3861,7 +3519,7 @@ document.addEventListener('click', (event) => {
   if (action === 'ask-from-guide') {
     const context = { id: actionElement?.dataset.guideId ?? '', title: actionElement?.dataset.guideTitle ?? '', topic: actionElement?.dataset.guideTopic ?? '' };
     sessionStorage.setItem('justor-guide-context', JSON.stringify(context));
-    navigate(`${localizedPath('/workspace/citizen', state.language)}#ask`);
+    navigate(`${localizedPath('/workspace/' + state.role, state.language)}#ask`);
   }
   if (action === 'remove-context') {
     sessionStorage.removeItem('justor-guide-context');
@@ -4029,14 +3687,14 @@ document.addEventListener('submit', (event) => {
 window.addEventListener('popstate', () => render());
 
 const restorePendingContext = (): void => {
-  if (state.routePath !== '/workspace/citizen' || !state.session) return;
+  if (!state.session) return;
   const raw = sessionStorage.getItem('justor-guide-context');
   if (!raw) return;
   try {
     const context = JSON.parse(raw) as { id: string; title: string; topic: string };
     const handoff = document.querySelector<HTMLElement>('.citizen-ai-handoff');
     if (handoff && !handoff.querySelector('.chat-floating-composer')) {
-      handoff.insertAdjacentHTML('beforeend', renderBottomChatBar('citizen', 'Describe your specific situation...', ['Explain my next step', 'What evidence should I keep?'], context));
+      handoff.insertAdjacentHTML('beforeend', renderBottomChatBar(state.role, 'Describe your specific situation...', ['Explain my next step', 'What authorities apply?'], context));
     }
   } catch { sessionStorage.removeItem('justor-guide-context'); }
 };

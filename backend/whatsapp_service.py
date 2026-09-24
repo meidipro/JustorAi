@@ -111,7 +111,7 @@ class JustorWhatsAppService:
         return urls
 
     async def _call_gemini_chat(self, prompt: str, system_instruction: str) -> str:
-        """Call primary LLM cascade to synthesize citizen-friendly WhatsApp response."""
+        """Call primary LLM cascade to synthesize lawyer-grade WhatsApp response."""
         if self._llm_handler:
             try:
                 res = await self._llm_handler(prompt, system_instruction)
@@ -402,17 +402,17 @@ class JustorWhatsAppService:
         # Legal RAG Question Processing
         is_english = any(w in upper_query for w in ["SECTION", "LAW", "COURT", "PENAL", "CONTRACT", "ACT"]) and not any(ord(c) > 127 for c in query_text)
         system_instruction = (
-            "You are Justor AI's 24/7 Mobile Legal Assistant for Bangladesh citizens and advocates on WhatsApp.\n"
+            "You are Justor AI's 24/7 Mobile Legal Assistant exclusively for Bangladesh lawyers, advocates, and chamber counsel on WhatsApp.\n"
             "Format your answer specifically for WhatsApp:\n"
             "- Use clean *bold* headings and bullet points (•).\n"
             "- Keep answers concise, actionable, and easy to read on a mobile screen (under 1200 characters).\n"
-            "- Cite the exact controlling Bangladesh Statute and Section (e.g. 'নেগোশিয়েবল ইনস্ট্রুমেন্টস অ্যাক্ট, ১৮৮১-এর ধারা ১৩৮' or 'দণ্ডবিধি ১৮৬০-এর ধারা ৪২০').\n"
-            "- Provide practical steps: (১) কি নোটিশ দিতে হবে, (২) কোন আদালতে যেতে হবে, (৩) সময়সীমা (Limitation Period).\n"
-            "- Conclude with a 1-line disclaimer.\n"
+            "- Cite the exact controlling Bangladesh Statute, Section, and relevant Supreme Court Precedents (e.g. 'নেগোশিয়েবল ইনস্ট্রুমেন্টস অ্যাক্ট, ১৮৮১-এর ধারা ১৩৮' or 'দণ্ডবিধি ১৮৬০-এর ধারা ৪২০').\n"
+            "- Provide practical litigation steps: (১) কি নোটিশ দিতে হবে, (২) কোন আদালতে যেতে হবে, (৩) সময়সীমা (Limitation Period).\n"
+            "- Conclude with a 1-line professional note.\n"
             + ("Answer in natural, polite Bengali (বাংলা)." if not is_english else "Answer in clear, authoritative English.")
         )
 
-        prompt = f"Citizen Legal Query:\n\"{query_text}\"\n\nProvide an authoritative, clear explanation with applicable Bangladesh laws, practical timeline steps, and court jurisdiction."
+        prompt = f"Advocate Legal Query:\n\"{query_text}\"\n\nProvide an authoritative, clear explanation with applicable Bangladesh laws, practical timeline steps, and court jurisdiction."
 
         response = await self._call_gemini_chat(prompt, system_instruction)
         return response

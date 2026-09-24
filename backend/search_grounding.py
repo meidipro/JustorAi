@@ -73,9 +73,9 @@ class GoogleSearchGroundingService:
         )
 
         role_instruction = (
-            "Focus on clear, actionable steps for a citizen: exact government fees in BDT, required documents, official government portal URLs, and legal rights."
-            if user_role == "citizen" else
-            "Provide rigorous legal analysis: controlling statutory provisions, SRO/circular dates and numbers, gazette references, and administrative scope."
+            "Focus on legal doctrine, pedagogical breakdowns, and case precedents for law students."
+            if user_role in {"student", "Law Student"} else
+            "Provide rigorous legal analysis: controlling statutory provisions, SRO/circular dates and numbers, gazette references, and administrative scope for advocates and judicial counsel."
         )
 
         followup_title = "### প্রাসঙ্গিক আইনি প্রশ্ন" if is_bn else "### Related Follow-Up Questions"

@@ -11,8 +11,8 @@ export const translations = {
     // --- Landing Page ---
     landing_heroTitle_1: { en: 'Your AI Partner in Navigating', bn: 'বাংলাদেশী আইন কানুন বুঝতে' },
     landing_heroTitle_2: { en: 'Bangladeshi Law', bn: 'আপনার এআই সহযোগী' },
-    landing_heroSubtitle: { en: `Get instant, clear answers to your legal questions. Whether you're a citizen, a law student, or a legal professional, JustorAI simplifies complexity.`, bn: 'আপনার আইনি জিজ্ঞাসার তাৎক্ষণিক ও সুস্পষ্ট উত্তর পান। নাগরিক, আইনের ছাত্র বা আইন পেশাজীবী, সকলের জন্য JustorAI আইনি জটিলতাকে সহজ করে তোলে।' },
-    landing_heroDescription: { en: 'Trusted by citizens, law students, and legal professionals across Bangladesh.', bn: 'বাংলাদেশ জুড়ে নাগরিক, আইনের শিক্ষার্থী এবং আইন পেশাজীবীদের বিশ্বস্ত সহযোগী।' },
+    landing_heroSubtitle: { en: `Get instant, authoritative answers to your legal questions. Built exclusively for lawyers, advocates, and law students, JustorAI simplifies complex research.`, bn: 'আপনার আইনি জিজ্ঞাসার তাৎক্ষণিক ও প্রামাণিক উত্তর পান। আইনজীবী, বার কাউন্সিল সদস্য ও আইনের শিক্ষার্থীদের জন্য JustorAI গবেষণাকে সহজ করে তোলে।' },
+    landing_heroDescription: { en: 'Trusted by lawyers, advocates, and law students across Bangladesh.', bn: 'বাংলাদেশ জুড়ে আইনজীবী, অ্যাডভোকেট এবং আইনের শিক্ষার্থীদের বিশ্বস্ত সহযোগী।' },
     landing_cta_guest: { en: 'Try as Guest', bn: 'অতিথি হিসেবে দেখুন' },
     landing_cta_signup: { en: 'Sign Up for Full Features', bn: 'সম্পূর্ণ সুবিধা পেতে সাইন আপ করুন' },
     landing_cta_goToApp: { en: 'Go to App', bn: 'অ্যাপে যান' },

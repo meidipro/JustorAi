@@ -12,7 +12,7 @@ import type {
   PublicGuideIndexEntry,
 } from '../content/types/guide';
 
-export type Role = 'citizen' | 'student' | 'professional';
+export type Role = 'professional' | 'student';
 export type Language = 'en' | 'bn';
 
 export interface QuotaState {

@@ -456,14 +456,10 @@ def resolve_request_query(req: ChatRequest) -> str:
     return (getattr(req, "query", None) or getattr(req, "message", None) or "").strip()
 
 def resolve_request_role(req: ChatRequest) -> str:
-    r = getattr(req, "user_role", None) or getattr(req, "role", None) or "General Public"
-    if r in {"citizen", "Citizen", "General Public"}:
-        return "General Public"
-    elif r in {"student", "Law Student"}:
+    r = getattr(req, "user_role", None) or getattr(req, "role", None) or "Legal Professional"
+    if r in {"student", "Law Student"}:
         return "Law Student"
-    elif r in {"professional", "lawyer", "Legal Professional"}:
-        return "Legal Professional"
-    return r
+    return "Legal Professional"
 
 class FeedbackRequest(BaseModel):
     query_run_id: str
@@ -813,7 +809,7 @@ async def get_user_profile_data(user_id: Optional[str], email: Optional[str] = N
     if is_unlimited_user(email):
         return {"role": "Legal Professional", "partner_org": "unlimited-vip"}
     if not user_id or not supabase or user_id.startswith("guest-"):
-        return {"role": "General Public", "partner_org": None}
+        return {"role": "Legal Professional", "partner_org": None}
     try:
         def fetch_profile():
             return supabase.table("profiles").select("role, partner_org, email").eq("id", user_id).limit(1).execute()
@@ -825,16 +821,14 @@ async def get_user_profile_data(user_id: Optional[str], email: Optional[str] = N
             user_email = row.get("email") or email
             if is_unlimited_user(user_email) or (partner_org and partner_org.lower() == "unlimited-vip"):
                 return {"role": "Legal Professional", "partner_org": "unlimited-vip"}
-            if raw_role in {"Legal Professional", "lawyer", "Lawyer"}:
-                role = "Legal Professional"
-            elif raw_role in {"Law Student", "student", "Student"}:
+            if raw_role in {"Law Student", "student", "Student"}:
                 role = "Law Student"
             else:
-                role = "General Public"
+                role = "Legal Professional"
             return {"role": role, "partner_org": partner_org}
     except Exception as e:
         logger.warning(f"Profile lookup warning for user {user_id}: {e}")
-    return {"role": "General Public", "partner_org": None}
+    return {"role": "Legal Professional", "partner_org": None}
 
 
 # Backward-compat shim — used by any code still calling get_user_role()
@@ -1996,9 +1990,10 @@ def get_system_prompt(role: str, context: str, language: str = "EN") -> str:
                 "Reply with EXACTLY: \"I don't have verified information on this "
                 "in my database yet. Please consult the Bangladesh Code at "
                 "bdlaws.minlaw.gov.bd or a licensed lawyer.\" Do not use training memory.")
-    if role == "Legal Professional": base = prompt_lawyer(context)
-    elif role == "Law Student":      base = prompt_law_student(context)
-    else:                            base = prompt_general_public(context)
+    if role == "Law Student":
+        base = prompt_law_student(context)
+    else:
+        base = prompt_lawyer(context)
 
     if is_bn:
         base += (
@@ -3131,7 +3126,7 @@ async def chat(request: ChatRequest, req: Request):
         messages += [{"role": m.role, "content": m.content} for m in (request.history or [])[-6:]]
         messages.append({"role": "user", "content": query_str})
 
-        models = MODEL_CHAINS.get(user_role, MODEL_CHAINS["General Public"])
+        models = MODEL_CHAINS.get(user_role, MODEL_CHAINS["Legal Professional"])
         answer, model_used = await call_llm_with_fallbacks(models, messages)
         
         # Citation Verification & Sanitization
@@ -3528,7 +3523,7 @@ async def get_qa_queue(limit: int = 50, _: str = Depends(require_admin_secret)):
                 "id": "item_sample_1",
                 "query_run_id": "run_sample_injunction_bn",
                 "query": "আমার জমিতে প্রতিবেশী জোর করে দেয়াল তুলছে। আমি কি দেওয়ানী আদালতে অস্থায়ী নিষেধাজ্ঞা চাইতে পারি?",
-                "role": "General Public",
+                "role": "Law Student",
                 "feedback_rating": -1,
                 "feedback_category": "missing_authority",
                 "feedback_comment": "Check if Order XXXIX Rules 1-2 CPC is cited correctly",
