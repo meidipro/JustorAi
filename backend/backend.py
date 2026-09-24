@@ -2166,7 +2166,7 @@ async def _whatsapp_llm_adapter(prompt: str, system_instruction: str) -> str:
         {"role": "system", "content": system_instruction},
         {"role": "user", "content": prompt}
     ]
-    ans, _ = await call_llm_with_fallbacks(MODEL_CHAINS["General Public"], messages)
+    ans, _ = await call_llm_with_fallbacks(MODEL_CHAINS["Legal Professional"], messages)
     return ans
 
 try:

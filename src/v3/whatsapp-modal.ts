@@ -42,7 +42,7 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
     {
       id: 'm1',
       sender: 'bot',
-      text: `*আসসালামু আলাইকুম এডভোকেট সাহেব! আমি জাসটর চেম্বার হোয়াটসঅ্যাপ ব্রিজ (Chamber OS Gateway)।*\n\nআপনার চেম্বারের মক্কেলরা তাদের মামলার অবস্থা স্বয়ংক্রিয়ভাবে জানতে পারবে এবং আপনি কোর্ট চত্বর থেকে তাৎক্ষণিক ভয়েস বা টেক্সট নোট পাঠিয়ে ডকেটে ফাইল করতে পারবেন।\n\n- সক্রিয় মোকদ্দমার অবস্থা পরীক্ষা করতে লিখুন: \`STATUS ${matterId}\`\n- পরবর্তী শুনানির তারিখ জানতে: \`HEARING ${matterId}\`\n- প্রয়োজনীয় দলিলের চেকলিস্ট: \`DOCS ${matterId}\`\n- কোর্ট থেকে তাৎক্ষণিক ডিকটেশন: \`#${matterId} আদেশ: আসামি উপস্থিত, জামিন বহাল...\``,
+      text: `*আসসালামু আলাইকুম এডভোকেট সাহেব! আমি জাসটর চেম্বার হোয়াটসঅ্যাপ গেটওয়ে (Chamber OS Bridge)।*\n\nসুপ্রিম কোর্ট ও জেলা আদালতের বিজ্ঞ আইনজীবীদের ব্যক্তিগত চেম্বার সহকারী:\n\n• *কোর্ট চত্বর থেকে তাৎক্ষণিক ডিকটেশন:* \`#${matterId} জামিন মঞ্জুর, আগামী ২০ নভেম্বর জবাব দাখিল...\`\n• *সুপ্রিম কোর্ট নজির ও সাইটেশন:* \`PRECEDENT 138 NI Act notice limitation\`\n• *দৈনিক চেম্বার কার্যতালিকা:* \`CAUSELIST\`\n• *আইনি নোটিশের খসড়া:* \`DRAFT NOTICE 138 NI Act Cheque 10 Lakh\`\n• *মামলার বর্তমান অবস্থা:* \`STATUS ${matterId}\`\n• *প্রয়োজনীয় দলিলের তালিকা:* \`DOCS ${matterId}\`\n\n📌 _আদালতের যেকোনো দৈনিক আদেশপত্রের ছবি পাঠালেও তা বিশ্লেষণ করে পরবর্তী তারিখ ও তামাদি সময় বের করা হবে।_`,
       time: '10:00 AM'
     }
   ];
@@ -128,11 +128,12 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
 
             <!-- Quick Suggestions Row -->
             <div class="whatsapp-quick-chips">
-              <button type="button" class="wa-chip" data-query="STATUS ${matterId}">STATUS ${matterId}</button>
-              <button type="button" class="wa-chip" data-query="HEARING ${matterId}">শুনানির তারিখ</button>
-              <button type="button" class="wa-chip" data-query="DOCS ${matterId}">প্রয়োজনীয় দলিল</button>
-              <button type="button" class="wa-chip" data-query="#${matterId} কোর্টে শুনানি সম্পন্ন: আসামি হাজির, জামিন আগামী তারিখ পর্যন্ত বহাল।">কোর্ট ডিকটেশন (#)</button>
-              <button type="button" class="wa-chip" data-query="চেক বাউন্স হলে কতদিনের মধ্যে নোটিশ দিতে হয়?">আইনি ধারা</button>
+              <button type="button" class="wa-chip" data-query="CAUSELIST">📅 কার্যতালিকা (CAUSELIST)</button>
+              <button type="button" class="wa-chip" data-query="PRECEDENT 138 NI Act notice limitation">📚 নজির (PRECEDENT)</button>
+              <button type="button" class="wa-chip" data-query="DRAFT NOTICE 138 NI Act Cheque 10 Lakh BDT">📝 নোটিশ ড্রাফট</button>
+              <button type="button" class="wa-chip" data-query="#${matterId} অন্তর্বর্তীকালীন জামিন মঞ্জুর, আগামী ২০ নভেম্বর জবাব দাখিল।">🎙️ কোর্ট ডিকটেশন (#)</button>
+              <button type="button" class="wa-chip" data-query="STATUS ${matterId}">📂 STATUS ${matterId}</button>
+              <button type="button" class="wa-chip" data-query="DOCS ${matterId}">📑 দলিলের চেকলিস্ট</button>
             </div>
 
             <!-- WhatsApp Message Input Footer -->
@@ -165,17 +166,25 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
             <div class="whatsapp-sim-card">
               <h4>${waSvg('flask', 14)} <span>Advocate Quick Actions</span></h4>
               <div class="wa-test-scenarios">
-                <button type="button" class="wa-scenario-btn" data-query="STATUS ${matterId}">
-                  <strong>1. Test Client Status Lookup</strong>
-                  <span>Verify what your client sees for this active docket</span>
+                <button type="button" class="wa-scenario-btn" data-query="CAUSELIST">
+                  <strong>1. View Chamber Daily Cause List</strong>
+                  <span>See hearing dates and stages for all active matters</span>
                 </button>
-                <button type="button" class="wa-scenario-btn" data-query="#${matterId} অন্তর্বর্তীকালীন স্থগিতাদেশ ৬ মাসের জন্য মঞ্জুর হয়েছে। মক্কেলকে ২৫% অর্থ জমা দিতে বলা হয়েছে।">
-                  <strong>2. Test Mobile Dictation File</strong>
+                <button type="button" class="wa-scenario-btn" data-query="PRECEDENT Section 498 CrPC anticipatory bail guidelines">
+                  <strong>2. Supreme Court Precedents & Citations</strong>
+                  <span>Get controlling DLR/BLD ratio and submission tips</span>
+                </button>
+                <button type="button" class="wa-scenario-btn" data-query="#${matterId} অন্তর্বর্তীকালীন স্থগিতাদেশ ৬ মাসের জন্য মঞ্জুর হয়েছে। পরবর্তী তারিখ ১৫ নভেম্বর।">
+                  <strong>3. Court Corridor Dictation Sync</strong>
                   <span>Simulate filing court corridor note into matter vault</span>
                 </button>
-                <button type="button" class="wa-scenario-btn" data-query="DOCS ${matterId}">
-                  <strong>3. Test Evidence Checklist</strong>
-                  <span>Send client required original documents checklist</span>
+                <button type="button" class="wa-scenario-btn" data-query="DRAFT NOTICE 138 NI Act Cheque 500,000 BDT dishonor">
+                  <strong>4. Draft Statutory Legal Demand Notice</strong>
+                  <span>Generate ready-to-dispatch 30-day legal notice</span>
+                </button>
+                <button type="button" class="wa-scenario-btn" data-query="STATUS ${matterId}">
+                  <strong>5. Client Case Status Lookup</strong>
+                  <span>Verify what your client sees for this active docket</span>
                 </button>
               </div>
             </div>

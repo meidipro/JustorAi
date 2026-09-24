@@ -1632,10 +1632,12 @@ export function openMatterWorkspaceModal(
             </p>
 
             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="STATUS ${currentMatter.id}">STATUS ${currentMatter.id}</button>
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="HEARING ${currentMatter.id}">HEARING ${currentMatter.id}</button>
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DOCS ${currentMatter.id}">DOCS ${currentMatter.id}</button>
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="#${currentMatter.id} কোর্টে শুনানি সম্পন্ন: আসামি হাজির, জামিন আগামী তারিখ পর্যন্ত বহাল।">কোর্ট ডিকটেশন নোট (#)</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="CAUSELIST">📅 ${isBn ? 'কার্যতালিকা (CAUSELIST)' : 'Chamber Cause List'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="PRECEDENT 138 NI Act notice limitation">📚 ${isBn ? 'নজির (PRECEDENT)' : 'Precedent Search'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DRAFT NOTICE 138 NI Act Cheque 10 Lakh BDT">📝 ${isBn ? 'নোটিশ ড্রাফট' : 'Draft Notice'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="#${currentMatter.id} অন্তর্বর্তীকালীন জামিন মঞ্জুর, আগামী ২০ নভেম্বর জবাব দাখিল।">🎙️ ${isBn ? 'কোর্ট ডিকটেশন (#)' : 'Corridor Dictation'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="STATUS ${currentMatter.id}">📂 STATUS ${currentMatter.id}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DOCS ${currentMatter.id}">📑 ${isBn ? 'দলিলের চেকলিস্ট' : 'Evidence Docs'}</button>
             </div>
 
             <div style="display: flex; gap: 8px; margin-bottom: 14px;">
