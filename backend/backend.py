@@ -2850,6 +2850,46 @@ async def whatsapp_meta_verify(
     raise HTTPException(status_code=403, detail="Verification token mismatch.")
 
 
+META_WEBHOOK_LOGS = []
+
+
+@app.get("/api/whatsapp/meta-debug", tags=["WhatsApp Helpline"])
+async def whatsapp_meta_debug(test_phone: Optional[str] = None):
+    """Diagnoses Meta Cloud API credentials, recent webhook arrivals, and tests outbound sending."""
+    phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip() or META_WA_PHONE_NUMBER_ID
+    token = os.getenv("META_WA_ACCESS_TOKEN", "").strip() or META_WA_ACCESS_TOKEN
+    outbound_test = None
+    if test_phone and phone_id and token:
+        try:
+            url = f"https://graph.facebook.com/v21.0/{phone_id}/messages"
+            headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+            payload = {
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": test_phone.replace("+", "").replace(" ", "").replace("-", "").strip(),
+                "type": "text",
+                "text": {"preview_url": False, "body": "⚖️ Justor AI Meta Cloud API connection verified successfully!"}
+            }
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                r = await client.post(url, json=payload, headers=headers)
+                outbound_test = {
+                    "status_code": r.status_code,
+                    "response": r.json() if "application/json" in r.headers.get("content-type", "") else r.text
+                }
+        except Exception as e:
+            outbound_test = {"error": str(e)}
+
+    return {
+        "phone_number_id_set": bool(phone_id),
+        "phone_number_id_preview": (phone_id[:6] + "...") if phone_id else "NOT_SET",
+        "access_token_set": bool(token),
+        "verify_token": META_WA_VERIFY_TOKEN,
+        "recent_webhook_count": len(META_WEBHOOK_LOGS),
+        "recent_webhooks": META_WEBHOOK_LOGS[-10:],
+        "outbound_test": outbound_test
+    }
+
+
 @app.post("/api/whatsapp/meta", tags=["WhatsApp Helpline"])
 async def whatsapp_meta_webhook(request: Request):
     """
@@ -2857,6 +2897,14 @@ async def whatsapp_meta_webhook(request: Request):
     """
     try:
         data = await request.json()
+        log_entry = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "payload": data,
+            "dispatched": []
+        }
+        META_WEBHOOK_LOGS.append(log_entry)
+        if len(META_WEBHOOK_LOGS) > 30:
+            META_WEBHOOK_LOGS.pop(0)
     except Exception:
         return JSONResponse({"status": "invalid_json"}, status_code=400)
 
@@ -2885,8 +2933,13 @@ async def whatsapp_meta_webhook(request: Request):
                         media_url=media_url,
                         media_type=media_type
                     )
-                    await whatsapp_service.send_meta_whatsapp_message(to_phone=from_num, text=reply)
-                    logger.info(f"Meta WA message processed and dispatched to {from_num}. Reply length: {len(reply)}")
+                    sent_ok = await whatsapp_service.send_meta_whatsapp_message(to_phone=from_num, text=reply)
+                    log_entry["dispatched"].append({
+                        "to": from_num,
+                        "reply_preview": reply[:80],
+                        "sent_success": sent_ok
+                    })
+                    logger.info(f"Meta WA message processed and dispatched to {from_num}. Sent: {sent_ok}")
 
     return JSONResponse({"status": "received"}, status_code=200)
 

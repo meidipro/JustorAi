@@ -1040,14 +1040,21 @@ class JustorWhatsAppService:
 
     async def send_meta_whatsapp_message(self, to_phone: str, text: str) -> bool:
         """Sends an outbound WhatsApp message back to the user via Meta Cloud API."""
-        if not META_WA_PHONE_NUMBER_ID or not META_WA_ACCESS_TOKEN:
+        phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip() or META_WA_PHONE_NUMBER_ID
+        access_token = os.getenv("META_WA_ACCESS_TOKEN", "").strip() or META_WA_ACCESS_TOKEN
+        if not phone_id or not access_token:
+            load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=True)
+            phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip()
+            access_token = os.getenv("META_WA_ACCESS_TOKEN", "").strip()
+
+        if not phone_id or not access_token:
             logger.warning("META_WA_PHONE_NUMBER_ID or META_WA_ACCESS_TOKEN not set; skipping outbound Meta message.")
             return False
 
         clean_to = to_phone.replace("+", "").replace(" ", "").replace("-", "").strip()
-        url = f"https://graph.facebook.com/v19.0/{META_WA_PHONE_NUMBER_ID}/messages"
+        url = f"https://graph.facebook.com/v21.0/{phone_id}/messages"
         headers = {
-            "Authorization": f"Bearer {META_WA_ACCESS_TOKEN}",
+            "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json"
         }
         payload = {
@@ -1061,7 +1068,7 @@ class JustorWhatsAppService:
             async with httpx.AsyncClient(timeout=20.0) as client:
                 resp = await client.post(url, json=payload, headers=headers)
                 if resp.status_code in [200, 201]:
-                    logger.info(f"Meta outbound message sent successfully to {clean_to}")
+                    logger.info(f"Meta outbound message sent successfully to {clean_to}: {resp.text}")
                     return True
                 else:
                     logger.error(f"Meta outbound error ({resp.status_code}): {resp.text}")
