@@ -8,7 +8,7 @@ import time
 import io
 import urllib.request
 import urllib.error
-from datetime import datetime, date, timezone
+from datetime import datetime, date, timezone, timedelta
 from typing import List, Optional, Dict, Any, cast
 
 import httpx
@@ -495,6 +495,31 @@ class PilotApplicationRequest(BaseModel):
         if not cleaned:
             raise ValueError("This field is required.")
         return cleaned
+
+
+class SubscriptionCheckoutRequest(BaseModel):
+    plan: str = Field(default="founding_advocate", description="founding_advocate (499) or founding_chamber (1499)")
+    billing_cycle: str = Field(default="monthly")
+    payment_method: str = Field(default="bkash", description="bkash, nagad, or card")
+    trx_id: Optional[str] = Field(None, max_length=100)
+    sender_phone: str = Field(..., min_length=6, max_length=30)
+    advocate_name: str = Field(..., min_length=2, max_length=120)
+    chamber_name: Optional[str] = Field(None, max_length=200)
+    bar_association: Optional[str] = Field("Supreme Court Bar Association (SCBA)", max_length=200)
+    email: Optional[str] = Field(None, max_length=200)
+    practice_areas: Optional[List[str]] = None
+
+    @field_validator("sender_phone", "advocate_name")
+    @classmethod
+    def _strip_required_sub(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("This field is required.")
+        return cleaned
+
+
+class MorningBriefRequest(BaseModel):
+    phone: Optional[str] = Field(None, max_length=30)
 
 
 def resolve_provision_text(act_name: str, section_ref: str, as_of_date: Optional[str] = None) -> Optional[dict]:
@@ -3403,6 +3428,150 @@ async def apply_founding_pilot(app_data: PilotApplicationRequest, req: Request):
         "status": "success",
         "message": "Founding Pilot Application received! Our founding team will contact your chambers within 24 hours.",
         "application_id": f"PILOT-{int(time.time())}"
+    }
+
+
+@app.post("/api/subscription/checkout", tags=["Subscriptions & Billing"])
+async def subscription_checkout(sub_data: SubscriptionCheckoutRequest, req: Request):
+    """
+    Processes advocate subscription checkouts for Justor Chamber OS:
+    - Founding Advocate (Solo): ৳499/mo
+    - Founding Chamber (Firm/5 Users): ৳1,499/mo
+    Supports bKash, Nagad, and Card payments.
+    Triggers an instant WhatsApp welcome & confirmation receipt card to the advocate.
+    """
+    enforce_ip_rate_limit(req, "sub-checkout", 10, 3600)
+
+    is_chamber = sub_data.plan == "founding_chamber"
+    amount = 1499 if is_chamber else 499
+    amount_str = "৳১,৪৯৯/মাস" if is_chamber else "৳৪৯৯/মাস"
+    plan_title = "ফাউন্ডিং চেম্বার ওএস (Founding Chamber)" if is_chamber else "ফাউন্ডিং অ্যাডভোকেট (Solo Advocate)"
+
+    sub_id = f"SUB-JUSTOR-{int(time.time())}"
+    inv_id = f"INV-BD-{int(time.time())}"
+    now_iso = datetime.utcnow().isoformat()
+
+    record = {
+        "subscription_id": sub_id,
+        "invoice_id": inv_id,
+        "plan": sub_data.plan,
+        "plan_title": plan_title,
+        "amount": amount,
+        "currency": "BDT",
+        "payment_method": sub_data.payment_method,
+        "trx_id": sub_data.trx_id or "CARD_INSTANT_AUTH",
+        "advocate_name": sub_data.advocate_name,
+        "chamber_name": sub_data.chamber_name or "",
+        "bar_association": sub_data.bar_association or "Supreme Court Bar Association (SCBA)",
+        "sender_phone": sub_data.sender_phone,
+        "email": sub_data.email or "",
+        "practice_areas": sub_data.practice_areas or [],
+        "status": "ACTIVE",
+        "created_at": now_iso,
+        "valid_until": (datetime.utcnow() + timedelta(days=30)).isoformat()
+    }
+
+    # 1. Local JSON ledger
+    try:
+        sub_log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "evaluation", "surveys", "subscriptions_log.json")
+        existing_subs = []
+        if os.path.exists(sub_log_path):
+            with open(sub_log_path, "r", encoding="utf-8") as f:
+                try:
+                    existing_subs = json.load(f)
+                except Exception:
+                    existing_subs = []
+        existing_subs.append(record)
+        with open(sub_log_path, "w", encoding="utf-8") as f:
+            json.dump(existing_subs, f, indent=2, ensure_ascii=False)
+    except Exception as log_err:
+        logger.warning(f"Subscription ledger write error: {log_err}")
+
+    # 2. Supabase persistence
+    if supabase:
+        try:
+            def db_insert():
+                supabase.table("subscriptions").insert({
+                    "id": sub_id,
+                    "advocate_name": sub_data.advocate_name,
+                    "chamber_name": sub_data.chamber_name,
+                    "bar_association": sub_data.bar_association,
+                    "phone": sub_data.sender_phone,
+                    "plan": sub_data.plan,
+                    "amount": amount,
+                    "trx_id": sub_data.trx_id or "CARD",
+                    "payment_method": sub_data.payment_method,
+                    "status": "ACTIVE",
+                    "created_at": now_iso
+                }).execute()
+            await asyncio.to_thread(db_insert)
+        except Exception as db_err:
+            logger.info(f"Supabase subscription table note: {db_err}")
+
+    # 3. Instant WhatsApp Welcome Receipt
+    welcome_msg = (
+        f"⚖️ *জাসটর চেম্বার ওএস — মেম্বারশিপ অ্যাক্টিভেশন সফল!*\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"শ্রদ্ধেয় অ্যাডভোকেট {sub_data.advocate_name},\n"
+        f"জাসটর লিগ্যাল এআই চেম্বার ওএস-এ আপনাকে আন্তরিক স্বাগত। আপনার মেম্বারশিপ সক্রিয় করা হয়েছে।\n\n"
+        f"📋 *মেম্বারশিপ ভাউচার:*\n"
+        f"• প্ল্যান: *{plan_title}* ({amount_str})\n"
+        f"• পেমেন্ট মেথড: *{sub_data.payment_method.upper()}*\n"
+        f"• TrxID: `{sub_data.trx_id or 'INSTANT_CARD_AUTH'}`\n"
+        f"• স্ট্যাটাস: ✅ *ACTIVE*\n"
+        f"• ইনভয়েস: `#{inv_id}`\n"
+        f"• বার এসোসিয়েশন: {sub_data.bar_association}\n\n"
+        f"🚀 *আপনার দৈনিক অ্যাক্সেস উন্মুক্ত:*\n"
+        f"১. 🌅 প্রতিদিন সকাল ৮:০০টায় চেম্বার ব্রিফিং\n"
+        f"২. 🎙️ কোর্ট করিডোর থেকে ভয়েস নোটে ডকেট এন্ট্রি\n"
+        f"৩. 📄 ১-ক্লিকে হিয়ারিং প্রিপারেশন প্যাক ও ক্রস-একজাম প্রশ্ন\n"
+        f"৪. 🏛️ সুপ্রিম কোর্ট ও জেলা আদালতের আনলিমিটেড লিগ্যাল রিসার্চ\n\n"
+        f"💡 _যেকোনো সময় দৈনিক ব্রিফিং পেতে মেসেজ পাঠান:_ `BRIEF` অথবা `HELP`"
+    )
+
+    sent_wa = False
+    try:
+        sent_wa = await whatsapp_service.send_meta_whatsapp_message(to_phone=sub_data.sender_phone, text=welcome_msg)
+    except Exception as wa_err:
+        logger.warning(f"Outbound welcome WhatsApp failed: {wa_err}")
+
+    return {
+        "status": "active",
+        "subscription_id": sub_id,
+        "invoice_id": inv_id,
+        "plan": sub_data.plan,
+        "plan_title": plan_title,
+        "amount": amount,
+        "currency": "BDT",
+        "amount_str": amount_str,
+        "whatsapp_receipt_sent": sent_wa,
+        "welcome_card": welcome_msg,
+        "message": f"Welcome Advocate {sub_data.advocate_name}! Your {plan_title} account is active."
+    }
+
+
+@app.post("/api/whatsapp/send-morning-brief", tags=["WhatsApp Helpline"])
+async def send_morning_chamber_brief(brief_req: MorningBriefRequest):
+    """
+    Automated 8:00 AM Morning Chamber Briefing trigger:
+    Gathers active matters, evidence gaps, hearing dates, and statutory limitation alerts,
+    and dispatches via WhatsApp to the registered advocate.
+    """
+    target_phone = (brief_req.phone or "+8801700000000").strip()
+    brief_text = whatsapp_service._handle_daily_brief(target_phone)
+
+    sent_meta = False
+    try:
+        sent_meta = await whatsapp_service.send_meta_whatsapp_message(to_phone=target_phone, text=brief_text)
+    except Exception as e:
+        logger.warning(f"Error sending morning brief to {target_phone}: {e}")
+
+    return {
+        "status": "success",
+        "recipient": target_phone,
+        "brief": brief_text,
+        "timestamp": datetime.utcnow().isoformat(),
+        "sent_via_meta": sent_meta
     }
 
 

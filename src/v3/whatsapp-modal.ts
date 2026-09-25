@@ -83,10 +83,15 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
           <span style="color: #60A5FA; background: rgba(96, 165, 250, 0.12); padding: 1px 6px; border-radius: 4px; font-family: monospace;">${escapeHtml(matterId)}</span>
           <span style="color: #CBD5E1;">— ${escapeHtml(matterTitle)} (${escapeHtml(clientName)})</span>
         </div>
-        <button type="button" id="wa-file-last-note-btn" class="button button-small" style="background: #1E293B; border: 1px solid rgba(255,255,255,0.15); color: #38BDF8; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-          ${waSvg('folder', 13)}
-          <span>📥 File Last Message to Matter Notes</span>
-        </button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="wa-trigger-morning-brief-btn" class="button button-small" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #F59E0B; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <span>🌅 Send 8:00 AM Morning Brief</span>
+          </button>
+          <button type="button" id="wa-file-last-note-btn" class="button button-small" style="background: #1E293B; border: 1px solid rgba(255,255,255,0.15); color: #38BDF8; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            ${waSvg('folder', 13)}
+            <span>📥 File Last Message to Matter Notes</span>
+          </button>
+        </div>
       </div>
 
       <div class="whatsapp-tabs">
@@ -253,6 +258,33 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
             </div>
             <p class="wa-tip">Set HTTP POST on your Twilio Console WhatsApp Sandbox Settings.</p>
           </div>
+
+          <!-- Section 4: Automated 8:00 AM Morning Chamber Briefing -->
+          <div class="wa-guide-section" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(245, 158, 11, 0.35); padding: 18px 20px; border-radius: 12px; margin-top: 16px;">
+            <h4 style="color: #F59E0B; display: flex; align-items: center; gap: 8px;">
+              <span>🌅 4. Automated 8:00 AM Morning Chamber Briefing</span>
+              <span style="font-size: 10px; background: rgba(245, 158, 11, 0.2); color: #F59E0B; padding: 2px 6px; border-radius: 4px; font-weight: 700;">DAILY DISPATCH</span>
+            </h4>
+            <p style="color: #CBD5E1; font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+              Every morning at 8:00 AM, Justor AI scans all active chamber matters, cross-exam questions, evidence gaps, and statutory limitation deadlines (NI Act 138, CPC, CrPC), and delivers an executive brief directly to your WhatsApp.
+            </p>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; background: rgba(15, 23, 42, 0.6); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+              <div style="flex: 1; min-width: 220px;">
+                <label style="display: block; font-size: 11px; color: #94A3B8; margin-bottom: 4px;">Advocate WhatsApp Number:</label>
+                <div style="display: flex; gap: 6px;">
+                  <input type="tel" id="wa-tab-phone-input" value="${escapeHtml(chamberPhone)}" style="flex: 1; background: #0F172A; border: 1px solid #334155; color: #F8FAFC; padding: 6px 10px; border-radius: 6px; font-size: 12.5px; font-family: monospace;" placeholder="+88017XXXXXXXX" />
+                  <button type="button" id="wa-tab-save-phone-btn" class="button button-small" style="background: #334155; color: #F8FAFC; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">Save</button>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 10px; padding-top: 14px;">
+                <button type="button" id="wa-trigger-brief-tab-btn" class="button button-small" style="background: #F59E0B; color: #0F172A; font-weight: 700; border: none; padding: 7px 16px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                  <span>🚀 Send 8:00 AM Brief Now (Live Test)</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -301,6 +333,68 @@ export function openWhatsAppModal(matterContext?: LegalMatter | null): void {
       alert(`নোটটি সফলভাবে "${targetMatter.title}" মোকদ্দমা ফাইলে সংরক্ষিত হয়েছে!`);
     } else {
       alert('সক্রিয় মোকদ্দমা খুঁজে পাওয়া যায়নি।');
+    }
+  });
+
+  // Morning Briefing Triggers
+  const handleMorningBriefTrigger = async (buttonEl: HTMLButtonElement | null) => {
+    const origHtml = buttonEl?.innerHTML || '';
+    if (buttonEl) {
+      buttonEl.disabled = true;
+      buttonEl.innerHTML = '<span>⏳ Generating Brief...</span>';
+    }
+    const currentPhone = localStorage.getItem('justor_chamber_phone') || chamberPhone;
+    try {
+      const resp = await fetch('/api/whatsapp/send-morning-brief', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: currentPhone })
+      });
+      const data = await resp.json();
+      if (resp.ok && data.brief) {
+        messages.push({
+          id: `brief-${Date.now()}`,
+          sender: 'bot',
+          text: data.brief,
+          time: getCurrentTime()
+        });
+        renderMessages();
+
+        // Switch to simulator tab to view it
+        const simTab = modal.querySelector<HTMLButtonElement>('[data-tab="simulator"]');
+        simTab?.click();
+
+        alert(`🌅 শুভ সকাল! আজকের সকাল ৮:০০টার চেম্বার কেস ব্রিফিং প্রস্তুত এবং আপনার হোয়াটসঅ্যাপে (${currentPhone}) পাঠানো হয়েছে।`);
+      } else {
+        alert('ব্রিফিং তৈরিতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+      }
+    } catch {
+      alert('নেটওয়ার্ক ত্রুটি: ব্রিফিং সার্ভিস যুক্ত হতে পারেনি।');
+    } finally {
+      if (buttonEl) {
+        buttonEl.disabled = false;
+        buttonEl.innerHTML = origHtml;
+      }
+    }
+  };
+
+  modal.querySelector<HTMLButtonElement>('#wa-trigger-morning-brief-btn')?.addEventListener('click', function(this: HTMLButtonElement) {
+    void handleMorningBriefTrigger(this);
+  });
+  modal.querySelector<HTMLButtonElement>('#wa-trigger-brief-tab-btn')?.addEventListener('click', function(this: HTMLButtonElement) {
+    void handleMorningBriefTrigger(this);
+  });
+
+  // Save phone number from Tab 2
+  modal.querySelector<HTMLButtonElement>('#wa-tab-save-phone-btn')?.addEventListener('click', () => {
+    const phoneInput = modal.querySelector<HTMLInputElement>('#wa-tab-phone-input');
+    if (phoneInput && phoneInput.value.trim()) {
+      localStorage.setItem('justor_chamber_phone', phoneInput.value.trim());
+      const btn = modal.querySelector<HTMLButtonElement>('#wa-tab-save-phone-btn');
+      if (btn) {
+        btn.textContent = 'Saved!';
+        setTimeout(() => { btn.textContent = 'Save'; }, 1500);
+      }
     }
   });
 

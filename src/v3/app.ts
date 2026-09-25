@@ -270,7 +270,7 @@ const header = (): string => {
               <span class="pilot-pulse-dot" aria-hidden="true"></span>
               ${ui(state.language, 'foundingPilotCohort')}
             </span>
-            <span class="drawer-pilot-price-tag">৳200/mo</span>
+            <span class="drawer-pilot-price-tag">৳499/mo</span>
           </div>
           <div class="drawer-pilot-card-body">
             <strong class="drawer-pilot-title">${state.language === 'bn' ? 'ফাউন্ডিং চেম্বার্সে যুক্ত হোন ⚖️' : 'Join Founding Chambers ⚖️'}</strong>
@@ -295,7 +295,7 @@ const header = (): string => {
             <span class="pilot-pulse-dot" aria-hidden="true"></span>
             <span>${ui(state.language, 'foundingPilot')}</span>
           </span>
-          <span class="menu-nav-pilot-badge">৳200</span>
+          <span class="menu-nav-pilot-badge">৳499</span>
         </button>
         
         <span class="menu-section-label" style="margin-top: 16px;">${ui(state.language, 'resources')}</span>
@@ -480,10 +480,10 @@ const workspaceNav = (role: Role, items: Array<{ label: string; href: string; ic
 
     <!-- ChatGPT-Style Sidebar User Account Card & Footer Actions -->
     <div class="sidebar-bottom-actions">
-      <button class="sidebar-pilot-pill" type="button" data-action="open-pilot-modal" title="Founding Lawyer Pilot (৳200/mo)">
+      <button class="sidebar-pilot-pill" type="button" data-action="open-pilot-modal" title="Founding Advocate Tier (৳499/mo)">
         <span class="pilot-pulse-dot" aria-hidden="true"></span>
         <span class="sidebar-pilot-text">${ui(state.language, 'foundingPilot')}</span>
-        <span class="sidebar-pilot-badge">৳200</span>
+        <span class="sidebar-pilot-badge">৳499</span>
       </button>
       ${isRoleLocked() ? '' : `<button class="switch-experience" type="button" data-action="switch-experience">${ui(state.language, 'switchExperience')} ${icon('arrow', 15)}</button>`}
       
@@ -2577,66 +2577,132 @@ const printChambersLegalMemo = (result: ResearchResult, role: Role, language: La
   }, 2000);
 };
 
-const renderPilotModal = (): string => `
+const renderPilotModal = (): string => {
+  const isBn = state.language === 'bn';
+  const savedPhone = localStorage.getItem('justor_chamber_phone') || '';
+
+  return `
   <div class="pilot-modal-overlay" data-pilot-modal-overlay>
     <div class="pilot-modal-card" role="dialog" aria-modal="true" aria-labelledby="pilot-modal-title">
       <div class="pilot-modal-header">
         <div>
-          <span class="pilot-kicker">EXCLUSIVELY FOR ADVOCATES & CHAMBERS</span>
-          <h2 id="pilot-modal-title" class="pilot-title">Join Founding Lawyer Pilot</h2>
+          <span class="pilot-kicker">${isBn ? 'সুপ্রিম কোর্ট ও জেলা বার আইনজীবীদের জন্য' : 'EXCLUSIVELY FOR ADVOCATES & CHAMBERS'}</span>
+          <h2 id="pilot-modal-title" class="pilot-title">${isBn ? 'ফাউন্ডিং অ্যাডভোকেট মেম্বারশিপ' : 'Join Founding Advocate Tier'}</h2>
         </div>
         <button type="button" class="pilot-modal-close" data-action="close-pilot-modal" aria-label="Close">✕</button>
       </div>
       <p class="pilot-desc">
-        We are onboarding our first 20 Founding Chambers across Dhaka Bar & the Supreme Court Bar. Get unlimited statutory research, 1-click court-ready Legal Memos, and priority ingestion of your chambers' core practice areas for <strong>just ৳200 for your first month</strong>.
+        ${isBn 
+          ? 'হোয়াটসঅ্যাপ গেটওয়ে ও চেম্বার ওএস ডকেটের মাধ্যমে আপনার আইনি প্র্যাকটিসকে স্বয়ংক্রিয় করুন। প্রতিদিন সকাল ৮:০০টায় কেস ব্রিফিং, কোর্ট থেকে ভয়েস নোট ডকেট ইনজেকশন ও আনলিমিটেড লিগ্যাল রিসার্চ।'
+          : 'Automate your legal practice with WhatsApp Chamber Gateway & Docket Vault. Get daily 8:00 AM WhatsApp case briefs, instant voice-note docket logging, and unlimited verified legal research.'}
       </p>
 
+      <!-- Plan Selection Cards -->
+      <div class="checkout-plans-grid">
+        <div class="checkout-plan-card is-selected" data-select-plan="founding_advocate" data-price="499" role="button" tabindex="0">
+          <span class="checkout-plan-badge">${isBn ? 'জনপ্রিয়' : 'SOLO ADVOCATE'}</span>
+          <div class="checkout-plan-title">
+            <span>${isBn ? 'ফাউন্ডিং অ্যাডভোকেট' : 'Founding Advocate'}</span>
+            <span class="plan-check-icon">✓</span>
+          </div>
+          <div class="checkout-plan-price">৳499 <small>/ ${isBn ? 'মাস' : 'month'}</small></div>
+          <ul class="checkout-plan-features">
+            <li>${isBn ? '১ জন আইনজীবী হোয়াটসঅ্যাপ এক্সেস' : '1 Advocate WhatsApp Access'}</li>
+            <li>${isBn ? 'প্রতিদিন সকাল ৮:০০টায় কেস ব্রিফিং' : 'Daily 8:00 AM WhatsApp Briefing'}</li>
+            <li>${isBn ? 'কোর্ট করিডোর থেকে ভয়েস নোটে ডকেট এন্ট্রি' : 'Voice-Note Corridor Docket Logging'}</li>
+            <li>${isBn ? '১-ক্লিকে হিয়ারিং প্যাক ও ক্রস-একজাম ড্রাফট' : 'Hearing Packs & Cross-Exam Prep'}</li>
+          </ul>
+        </div>
+
+        <div class="checkout-plan-card" data-select-plan="founding_chamber" data-price="1499" role="button" tabindex="0">
+          <span class="checkout-plan-badge" style="background: #D97706;">CHAMBER</span>
+          <div class="checkout-plan-title">
+            <span>${isBn ? 'ফাউন্ডিং চেম্বার ওএস' : 'Founding Chamber'}</span>
+            <span class="plan-check-icon" style="display: none;">✓</span>
+          </div>
+          <div class="checkout-plan-price">৳1,499 <small>/ ${isBn ? 'মাস' : 'month'}</small></div>
+          <ul class="checkout-plan-features">
+            <li>${isBn ? '৫ জন আইনজীবী ও অ্যাসোসিয়েট এক্সেস' : 'Up to 5 Advocates & Associates'}</li>
+            <li>${isBn ? 'শেয়ার্ড হোয়াটসঅ্যাপ গেটওয়ে ও অটো-রাউটিং' : 'Shared WhatsApp Gateway & Routing'}</li>
+            <li>${isBn ? 'সেন্ট্রালাইজড চেম্বার ভল্ট ও নজির সার্চ' : 'Centralized Vault & Precedent RAG'}</li>
+            <li>${isBn ? 'হাইকোর্ট ও সুপ্রিম কোর্ট গেজেট মনিটরিং' : 'Supreme Court Gazette Grounding'}</li>
+          </ul>
+        </div>
+      </div>
+
       <form class="pilot-form" data-action="submit-pilot-form">
+        <input type="hidden" name="plan" id="checkout-plan-input" value="founding_advocate" />
+        <input type="hidden" name="payment_method" id="checkout-pm-input" value="bkash" />
+
+        <!-- Payment Method Tabs -->
+        <div style="margin-bottom: 6px;">
+          <label style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block;">${isBn ? 'পেমেন্ট মেথড নির্বাচন করুন:' : 'Select Payment Method:'}</label>
+          <div class="checkout-payment-methods">
+            <button type="button" class="checkout-pm-tab active" data-pm="bkash" data-select-pm="bkash">
+              <span style="font-weight: 800; color: inherit;">bKash</span>
+            </button>
+            <button type="button" class="checkout-pm-tab" data-pm="nagad" data-select-pm="nagad">
+              <span style="font-weight: 800; color: inherit;">Nagad</span>
+            </button>
+            <button type="button" class="checkout-pm-tab" data-pm="card" data-select-pm="card">
+              <span>💳 Card / Online</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Payment Instructions Container -->
+        <div id="checkout-pm-instructions" class="checkout-pm-instruction">
+          <strong>${isBn ? 'bKash পেমেন্ট নির্দেশনা:' : 'bKash Payment Instructions:'}</strong><br/>
+          ১. আপনার bKash অ্যাপ থেকে <strong>Send Money</strong> অথবা <strong>Payment</strong> অপশনে যান: <code style="background: #FFE4E6; padding: 1px 6px; border-radius: 4px; color: #D12053; font-weight: 700;">01712-345678</code><br/>
+          ২. টাকার পরিমাণ দিন: <strong id="checkout-display-amount">৳499</strong> (রেফারেন্স: আপনার নাম)<br/>
+          ৩. সফল লেনদেনের পর প্রাপ্ত <strong>TrxID</strong> নিচে লিখে একাউন্ট সক্রিয় করুন।
+        </div>
+
         <div class="pilot-form-grid">
           <div class="pilot-field">
-            <label for="advocate-name">Advocate Name *</label>
+            <label for="advocate-name">${isBn ? 'আইনজীবীর নাম *' : 'Advocate Name *'}</label>
             <input type="text" id="advocate-name" name="advocate_name" placeholder="Advocate / Barrister Name" required />
           </div>
           <div class="pilot-field">
-            <label for="chamber-name">Chamber / Firm Name</label>
+            <label for="chamber-name">${isBn ? 'চেম্বার / ফার্মের নাম' : 'Chamber / Firm Name'}</label>
             <input type="text" id="chamber-name" name="chamber_name" placeholder="e.g. Rahman & Associates" />
           </div>
           <div class="pilot-field">
-            <label for="bar-association">Bar Association *</label>
+            <label for="bar-association">${isBn ? 'বার এসোসিয়েশন *' : 'Bar Association *'}</label>
             <select id="bar-association" name="bar_association" required>
               <option value="Supreme Court Bar Association (SCBA)">Supreme Court Bar Association (SCBA)</option>
               <option value="Dhaka Bar Association">Dhaka Bar Association</option>
               <option value="Chittagong District Bar Association">Chittagong District Bar Association</option>
+              <option value="Sylhet District Bar Association">Sylhet District Bar Association</option>
+              <option value="Rajshahi District Bar Association">Rajshahi District Bar Association</option>
               <option value="Other District Bar">Other District Bar</option>
               <option value="In-House Corporate Counsel">In-House Corporate Counsel</option>
             </select>
           </div>
           <div class="pilot-field">
-            <label for="advocate-phone">Mobile / WhatsApp *</label>
-            <input type="tel" id="advocate-phone" name="phone" placeholder="017XXXXXXXX" required />
+            <label for="advocate-phone">${isBn ? 'হোয়াটসঅ্যাপ / মোবাইল নম্বর *' : 'WhatsApp / Mobile Number *'}</label>
+            <input type="tel" id="advocate-phone" name="phone" value="${escapeHtml(savedPhone)}" placeholder="017XXXXXXXX" required />
           </div>
         </div>
 
-        <div class="pilot-field">
-          <label for="practice-areas">Primary Practice Area</label>
-          <input type="text" id="practice-areas" name="practice_areas" placeholder="e.g. Land/Property, NI Act 138, Writ/Constitutional, Criminal" />
-        </div>
-
-        <div class="pilot-field">
-          <label for="custom-needs">Specific Case Laws or Topics Needed</label>
-          <textarea id="custom-needs" name="custom_needs" rows="2" placeholder="Tell us which statutes, DLR volumes, or subject areas your chambers researches most..."></textarea>
+        <div class="pilot-field" id="checkout-trx-field">
+          <label for="trx-id">${isBn ? 'ট্রানজেকশন আইডি (TrxID) *' : 'Transaction ID (TrxID) *'}</label>
+          <input type="text" id="trx-id" name="trx_id" placeholder="e.g. BK98X7Y123" required />
         </div>
 
         <div class="pilot-actions">
-          <button class="button pilot-submit-btn" type="submit">
-            Apply for Founding Pilot (৳200/mo) ${icon('arrow', 14)}
+          <button class="button pilot-submit-btn" id="checkout-submit-btn" type="submit">
+            ${isBn ? 'মেম্বারশিপ সক্রিয় করুন (৳৪৯৯/মাস)' : 'Activate Founding Membership (৳499/mo)'} ${icon('arrow', 14)}
           </button>
-          <button class="button button-outline" type="button" data-action="close-pilot-modal">Cancel</button>
+          <button class="button button-outline" type="button" data-action="close-pilot-modal">
+            ${isBn ? 'বাতিল' : 'Cancel'}
+          </button>
         </div>
       </form>
     </div>
   </div>
-`;
+  `;
+};
 
 const getLiveThinkingSteps = (isLiveSearch: boolean) => {
   if (isLiveSearch) {
@@ -3471,6 +3537,87 @@ document.addEventListener('click', (event) => {
   if (action === 'close-pilot-modal') {
     document.querySelector('[data-pilot-modal-overlay]')?.remove();
   }
+
+  // Plan selection in Checkout Modal
+  const selectPlanEl = (event.target as HTMLElement)?.closest<HTMLElement>('[data-select-plan]');
+  if (selectPlanEl) {
+    const plan = selectPlanEl.dataset.selectPlan || 'founding_advocate';
+    const price = selectPlanEl.dataset.price || '499';
+    const container = selectPlanEl.closest('.pilot-modal-card');
+    if (container) {
+      container.querySelectorAll('.checkout-plan-card').forEach(c => {
+        c.classList.remove('is-selected');
+        const icon = c.querySelector<HTMLElement>('.plan-check-icon');
+        if (icon) icon.style.display = 'none';
+      });
+      selectPlanEl.classList.add('is-selected');
+      const checkIcon = selectPlanEl.querySelector<HTMLElement>('.plan-check-icon');
+      if (checkIcon) checkIcon.style.display = 'inline';
+
+      const planInput = container.querySelector<HTMLInputElement>('#checkout-plan-input');
+      if (planInput) planInput.value = plan;
+
+      const displayAmount = container.querySelector<HTMLElement>('#checkout-display-amount');
+      if (displayAmount) displayAmount.textContent = plan === 'founding_chamber' ? '৳1,499' : '৳499';
+
+      const submitBtn = container.querySelector<HTMLButtonElement>('#checkout-submit-btn');
+      if (submitBtn) {
+        submitBtn.innerHTML = `${state.language === 'bn' ? `মেম্বারশিপ সক্রিয় করুন (৳${price === '1499' ? '১,৪৯৯' : '৪৯৯'}/মাস)` : `Activate Membership (৳${price}/mo)`} ${icon('arrow', 14)}`;
+      }
+    }
+  }
+
+  // Payment method tab in Checkout Modal
+  const selectPmEl = (event.target as HTMLElement)?.closest<HTMLElement>('[data-select-pm]');
+  if (selectPmEl) {
+    const pm = selectPmEl.dataset.selectPm || 'bkash';
+    const container = selectPmEl.closest('.pilot-modal-card');
+    if (container) {
+      container.querySelectorAll('.checkout-pm-tab').forEach(t => t.classList.remove('active'));
+      selectPmEl.classList.add('active');
+
+      const pmInput = container.querySelector<HTMLInputElement>('#checkout-pm-input');
+      if (pmInput) pmInput.value = pm;
+
+      const planInput = container.querySelector<HTMLInputElement>('#checkout-plan-input');
+      const price = planInput?.value === 'founding_chamber' ? '1,499' : '499';
+      const isBn = state.language === 'bn';
+
+      const instructions = container.querySelector<HTMLElement>('#checkout-pm-instructions');
+      const trxField = container.querySelector<HTMLElement>('#checkout-trx-field');
+      const trxInput = container.querySelector<HTMLInputElement>('#trx-id');
+
+      if (instructions) {
+        if (pm === 'bkash') {
+          instructions.innerHTML = `
+            <strong>${isBn ? 'bKash পেমেন্ট নির্দেশনা:' : 'bKash Payment Instructions:'}</strong><br/>
+            ১. আপনার bKash অ্যাপ থেকে <strong>Send Money</strong> অথবা <strong>Payment</strong> অপশনে যান: <code style="background: #FFE4E6; padding: 1px 6px; border-radius: 4px; color: #D12053; font-weight: 700;">01712-345678</code><br/>
+            ২. টাকার পরিমাণ দিন: <strong id="checkout-display-amount">৳${price}</strong> (রেফারেন্স: আপনার নাম)<br/>
+            ৩. সফল লেনদেনের পর প্রাপ্ত <strong>TrxID</strong> নিচে লিখে একাউন্ট সক্রিয় করুন।
+          `;
+          if (trxField) trxField.style.display = 'flex';
+          if (trxInput) trxInput.required = true;
+        } else if (pm === 'nagad') {
+          instructions.innerHTML = `
+            <strong>${isBn ? 'Nagad পেমেন্ট নির্দেশনা:' : 'Nagad Payment Instructions:'}</strong><br/>
+            ১. আপনার Nagad ওয়ালেট অ্যাপ থেকে <strong>Send Money</strong> অপশনে যান: <code style="background: #FFF7ED; padding: 1px 6px; border-radius: 4px; color: #EA580C; font-weight: 700;">01712-345678</code><br/>
+            ২. টাকার পরিমাণ দিন: <strong id="checkout-display-amount">৳${price}</strong><br/>
+            ৩. প্রাপ্ত <strong>TrxID (৮ সংখ্যার কোড)</strong> নিচে লিখে সক্রিয় বাটনে ক্লিক করুন।
+          `;
+          if (trxField) trxField.style.display = 'flex';
+          if (trxInput) trxInput.required = true;
+        } else {
+          instructions.innerHTML = `
+            <strong>${isBn ? 'অনলাইন / কার্ড পেমেন্ট (SSLCommerz Gateway):' : 'Online / Card Payment (SSLCommerz):'}</strong><br/>
+            যেকোনো ভিসা, মাস্টারকার্ড বা ইন্টারনেট ব্যাংকিং-এর মাধ্যমে তাত্ক্ষণিক স্বয়ংক্রিয় অ্যাক্টিভেশন।<br/>
+            <em>TrxID প্রয়োজন নেই — সাবমিট করলেই তাত্ক্ষণিক মেম্বারশিপ সক্রিয় হবে।</em>
+          `;
+          if (trxField) trxField.style.display = 'none';
+          if (trxInput) trxInput.required = false;
+        }
+      }
+    }
+  }
   if (action === 'feedback-negative-toggle') {
     const drawer = document.querySelector<HTMLElement>('[data-feedback-drawer]');
     if (drawer) drawer.hidden = !drawer.hidden;
@@ -3630,35 +3777,109 @@ document.addEventListener('submit', (event) => {
   if (form.matches('[data-action="submit-pilot-form"]')) {
     event.preventDefault();
     const formData = new FormData(form);
-    const payload = {
-      advocate_name: String(formData.get('advocate_name') || '').trim(),
-      chamber_name: String(formData.get('chamber_name') || '').trim(),
-      bar_association: String(formData.get('bar_association') || '').trim(),
-      phone: String(formData.get('phone') || '').trim(),
-      practice_areas: [String(formData.get('practice_areas') || '').trim()].filter(Boolean),
-      custom_needs: String(formData.get('custom_needs') || '').trim(),
-    };
+    const plan = String(formData.get('plan') || 'founding_advocate');
+    const paymentMethod = String(formData.get('payment_method') || 'bkash');
+    const trxId = String(formData.get('trx_id') || '').trim();
+    const phone = String(formData.get('phone') || '').trim();
+    const advocateName = String(formData.get('advocate_name') || '').trim();
+    const chamberName = String(formData.get('chamber_name') || '').trim();
+    const barAssociation = String(formData.get('bar_association') || 'Supreme Court Bar Association (SCBA)').trim();
+
+    const isBn = state.language === 'bn';
+    const isChamber = plan === 'founding_chamber';
+    const amountStr = isChamber ? '৳১,৪৯৯/মাস' : '৳৪৯৯/মাস';
+    const planTitle = isChamber 
+      ? (isBn ? 'ফাউন্ডিং চেম্বার ওএস (Founding Chamber)' : 'Founding Chamber Tier')
+      : (isBn ? 'ফাউন্ডিং অ্যাডভোকেট (Solo Advocate)' : 'Founding Advocate Tier');
 
     const modalContainer = form.closest('.pilot-modal-card');
     if (modalContainer) {
       modalContainer.innerHTML = `
-        <div style="text-align: center; padding: 24px 12px;">
-          <span style="font-size: 40px; display: block; margin-bottom: 12px;">⚖️</span>
-          <h3 style="color: #0F172A; margin: 0 0 8px 0; font-size: 18px;">Founding Pilot Application Received!</h3>
-          <p style="color: #475467; font-size: 13.5px; line-height: 1.5; margin: 0 0 20px 0;">
-            Thank you Advocate ${escapeHtml(payload.advocate_name)}. Our founding team will contact you via WhatsApp / Phone (<strong>${escapeHtml(payload.phone)}</strong>) within 24 hours to activate your chambers account.
+        <div style="text-align: center; padding: 24px 14px;">
+          <div style="width: 52px; height: 52px; border-radius: 50%; background: #ECFDF5; color: #10B981; font-size: 26px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; border: 2px solid #A7F3D0;">
+            ✓
+          </div>
+          <h3 style="color: #0F172A; margin: 0 0 6px 0; font-size: 19px; font-weight: 700;">
+            ${isBn ? 'অভিনন্দন! মেম্বারশিপ সক্রিয় হয়েছে' : 'Welcome! Membership Activated'}
+          </h3>
+          <p style="color: #475467; font-size: 13px; line-height: 1.5; margin: 0 0 16px 0;">
+            ${isBn 
+              ? `বিজ্ঞ অ্যাডভোকেট <strong>${escapeHtml(advocateName)}</strong>, জাসটর চেম্বার ওএস-এ আপনার <strong>${planTitle}</strong> অ্যাকাউন্ট সফলভাবে সক্রিয় করা হয়েছে।`
+              : `Advocate <strong>${escapeHtml(advocateName)}</strong>, your <strong>${planTitle}</strong> account is now live.`}
           </p>
-          <button class="button button-small" type="button" data-action="close-pilot-modal">Close</button>
+
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; text-align: left; font-size: 12px; line-height: 1.6;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+              <span style="color: #64748B;">Plan:</span>
+              <strong style="color: #0F172A;">${planTitle} (${amountStr})</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+              <span style="color: #64748B;">Payment:</span>
+              <span style="color: #0F172A; font-family: monospace;">${paymentMethod.toUpperCase()} ${trxId ? `(${trxId})` : ''}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+              <span style="color: #64748B;">WhatsApp Gateway:</span>
+              <span style="color: #25D366; font-weight: 600;">📱 ${escapeHtml(phone)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: #64748B;">Daily 8:00 AM Brief:</span>
+              <span style="color: #10B981; font-weight: 600;">✅ Active</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="button" type="button" id="btn-open-wa-after-sub" style="background: #25D366; color: #0F172A; font-weight: 700; border: none;">
+              💬 ${isBn ? 'হোয়াটসঅ্যাপ সহকারী খুলুন' : 'Open WhatsApp Assistant'}
+            </button>
+            <button class="button button-outline" type="button" data-action="close-pilot-modal">
+              ${isBn ? 'চেম্বার ওএস-এ প্রবেশ করুন' : 'Enter Chamber OS'}
+            </button>
+          </div>
         </div>
       `;
+
+      modalContainer.querySelector('#btn-open-wa-after-sub')?.addEventListener('click', async () => {
+        modalContainer.closest('[data-pilot-modal-overlay]')?.remove();
+        const { openWhatsAppModal } = await import('./whatsapp-modal');
+        openWhatsAppModal();
+      });
     }
 
+    // Persist subscription in localStorage
+    localStorage.setItem('justor_subscription', JSON.stringify({
+      plan,
+      planTitle,
+      amount: isChamber ? 1499 : 499,
+      status: 'active',
+      phone,
+      advocateName,
+      chamberName,
+      barAssociation,
+      activatedAt: new Date().toISOString()
+    }));
+    localStorage.setItem('justor_chamber_phone', phone);
+
+    // Call backend checkout
     const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
-    void fetch(`${backendUrl}/api/pilot-application`, {
+    void fetch(`${backendUrl}/api/subscription/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        plan,
+        payment_method: paymentMethod,
+        trx_id: trxId,
+        sender_phone: phone,
+        advocate_name: advocateName,
+        chamber_name: chamberName,
+        bar_association: barAssociation
+      })
     });
+
+    showToast(
+      isBn ? 'মেম্বারশিপ সক্রিয়!' : 'Membership Activated!',
+      isBn ? `স্বাগতম অ্যাডভোকেট ${advocateName}। হোয়াটসঅ্যাপ ব্রিফিং কনফার্মেশন পাঠানো হয়েছে।` : `Welcome Advocate ${advocateName}. WhatsApp confirmation sent.`,
+      'positive'
+    );
   }
   if (form.matches('[data-action="submit-qa-feedback"]')) {
     event.preventDefault();

@@ -1,0 +1,21 @@
+[
+  {
+    "subscription_id": "SUB-JUSTOR-1790357374",
+    "invoice_id": "INV-BD-1790357374",
+    "plan": "founding_advocate",
+    "plan_title": "ফাউন্ডিং অ্যাডভোকেট (Solo Advocate)",
+    "amount": 499,
+    "currency": "BDT",
+    "payment_method": "bkash",
+    "trx_id": "BK98X7Y123",
+    "advocate_name": "Advocate Tanvir Ahmed",
+    "chamber_name": "Ahmed & Partners Chambers",
+    "bar_association": "Supreme Court Bar Association (SCBA)",
+    "sender_phone": "+8801712345678",
+    "email": "",
+    "practice_areas": [],
+    "status": "ACTIVE",
+    "created_at": "2026-09-25T17:29:34.218951",
+    "valid_until": "2026-10-25T17:29:34.218960"
+  }
+]

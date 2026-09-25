@@ -1632,19 +1632,24 @@ export function openMatterWorkspaceModal(
             </p>
 
             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="CAUSELIST">📅 ${isBn ? 'কার্যতালিকা (CAUSELIST)' : 'Chamber Cause List'}</button>
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="PRECEDENT 138 NI Act notice limitation">📚 ${isBn ? 'নজির (PRECEDENT)' : 'Precedent Search'}</button>
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DRAFT NOTICE 138 NI Act Cheque 10 Lakh BDT">📝 ${isBn ? 'নোটিশ ড্রাফট' : 'Draft Notice'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="What needs my attention?">🌅 ${isBn ? 'সকাল ৮:০০টার ব্রিফিং' : 'Morning Briefing'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="Rahim matter—hearing Sunday. Opposite party submitted this affidavit.">⚡ ${isBn ? 'অটোনোমাস ইনটেক' : 'Autonomous Intake'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DEADLINES">⏳ ${isBn ? 'তামাদি অ্যালার্ট' : 'Deadlines'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="CAUSELIST">📅 ${isBn ? 'কার্যতালিকা' : 'Cause List'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="PRECEDENT 138 NI Act notice limitation">📚 ${isBn ? 'নজির (PRECEDENT)' : 'Precedent'}</button>
               <button type="button" class="button button-small button-outline btn-wa-chip" data-query="#${currentMatter.id} অন্তর্বর্তীকালীন জামিন মঞ্জুর, আগামী ২০ নভেম্বর জবাব দাখিল।">🎙️ ${isBn ? 'কোর্ট ডিকটেশন (#)' : 'Corridor Dictation'}</button>
               <button type="button" class="button button-small button-outline btn-wa-chip" data-query="STATUS ${currentMatter.id}">📂 STATUS ${currentMatter.id}</button>
-              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DOCS ${currentMatter.id}">📑 ${isBn ? 'দলিলের চেকলিস্ট' : 'Evidence Docs'}</button>
+              <button type="button" class="button button-small button-outline btn-wa-chip" data-query="DOCS ${currentMatter.id}">📑 ${isBn ? 'দলিল চেকলিস্ট' : 'Evidence Docs'}</button>
             </div>
 
-            <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-              <input type="text" id="wa-tab-query-input" value="STATUS ${currentMatter.id}" style="flex: 1; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13.5px;" placeholder="Type WhatsApp message to test..." />
+            <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+              <input type="text" id="wa-tab-query-input" value="STATUS ${currentMatter.id}" style="flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid #CBD5E1; border-radius: 6px; font-size: 13.5px;" placeholder="Type WhatsApp message to test..." />
               <button type="button" class="button button-primary" id="btn-wa-run-query" style="display: inline-flex; align-items: center; gap: 6px;">
                 ${cIcon('search', 13)}
                 <span>${isBn ? 'টেস্ট কোয়েরি চালান' : 'Send Test Query'}</span>
+              </button>
+              <button type="button" class="button" id="btn-wa-trigger-morning-brief" style="background: rgba(245, 158, 11, 0.15); color: #D97706; border: 1px solid rgba(245, 158, 11, 0.35); font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                <span>🌅 ${isBn ? 'সকাল ৮:০০টার ব্রিফিং দেখুন' : 'Trigger 8:00 AM Brief'}</span>
               </button>
             </div>
 
@@ -2355,6 +2360,39 @@ export function openMatterWorkspaceModal(
         } finally {
           runQueryBtn.disabled = false;
           runQueryBtn.innerHTML = `${cIcon('search', 13)} <span>${isBn ? 'টেস্ট কোয়েরি চালান' : 'Send Test Query'}</span>`;
+        }
+      });
+
+      // Trigger 8:00 AM Morning Brief
+      backdrop.querySelector('#btn-wa-trigger-morning-brief')?.addEventListener('click', async () => {
+        const briefBtn = backdrop.querySelector('#btn-wa-trigger-morning-brief') as HTMLButtonElement;
+        if (briefBtn) {
+          briefBtn.disabled = true;
+          briefBtn.innerHTML = `<span>${isBn ? 'ব্রিফিং তৈরি হচ্ছে...' : 'Generating Brief...'}</span>`;
+        }
+        if (responseBox) responseBox.style.display = 'block';
+        if (responseText) responseText.innerHTML = `<em>${isBn ? 'সকাল ৮:০০টার চেম্বার ব্রিফিং তৈরি হচ্ছে...' : 'Generating 8:00 AM Chamber Briefing...'}</em>`;
+
+        try {
+          const chamberPhone = localStorage.getItem('justor_chamber_phone') || '+8801700000000';
+          const resp = await fetch('/api/whatsapp/send-morning-brief', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: chamberPhone })
+          });
+          const data = await resp.json();
+          if (resp.ok && data.brief) {
+            if (responseText) responseText.textContent = data.brief;
+          } else {
+            if (responseText) responseText.textContent = 'ব্রিফিং তৈরিতে ত্রুটি হয়েছে।';
+          }
+        } catch (e: any) {
+          if (responseText) responseText.textContent = `নেটওয়ার্ক ত্রুটি: ${e.message}`;
+        } finally {
+          if (briefBtn) {
+            briefBtn.disabled = false;
+            briefBtn.innerHTML = `<span>🌅 ${isBn ? 'সকাল ৮:০০টার ব্রিফিং দেখুন' : 'Trigger 8:00 AM Brief'}</span>`;
+          }
         }
       });
 
