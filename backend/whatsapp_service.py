@@ -1051,6 +1051,9 @@ class JustorWhatsAppService:
             logger.warning("META_WA_PHONE_NUMBER_ID or META_WA_ACCESS_TOKEN not set; skipping outbound Meta message.")
             return False
 
+        if len(text) > 4000:
+            text = text[:3980] + "\n\n...[মোকদ্দমার বাকি অংশ চেম্বার ভল্টে সংরক্ষিত]"
+
         clean_to = to_phone.replace("+", "").replace(" ", "").replace("-", "").strip()
         url = f"https://graph.facebook.com/v21.0/{phone_id}/messages"
         headers = {
@@ -1067,6 +1070,12 @@ class JustorWhatsAppService:
         try:
             async with httpx.AsyncClient(timeout=20.0) as client:
                 resp = await client.post(url, json=payload, headers=headers)
+                self.last_outbound_log = {
+                    "to": clean_to,
+                    "status_code": resp.status_code,
+                    "response": resp.text,
+                    "timestamp": datetime.utcnow().isoformat()
+                }
                 if resp.status_code in [200, 201]:
                     logger.info(f"Meta outbound message sent successfully to {clean_to}: {resp.text}")
                     return True
@@ -1074,6 +1083,11 @@ class JustorWhatsAppService:
                     logger.error(f"Meta outbound error ({resp.status_code}): {resp.text}")
                     return False
         except Exception as e:
+            self.last_outbound_log = {
+                "to": clean_to,
+                "error": str(e),
+                "timestamp": datetime.utcnow().isoformat()
+            }
             logger.error(f"Failed to send Meta WhatsApp message to {clean_to}: {e}")
             return False
 

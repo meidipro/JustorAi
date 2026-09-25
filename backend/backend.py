@@ -2886,7 +2886,8 @@ async def whatsapp_meta_debug(test_phone: Optional[str] = None):
         "verify_token": META_WA_VERIFY_TOKEN,
         "recent_webhook_count": len(META_WEBHOOK_LOGS),
         "recent_webhooks": META_WEBHOOK_LOGS[-10:],
-        "outbound_test": outbound_test
+        "outbound_test": outbound_test,
+        "last_outbound_log": getattr(whatsapp_service, "last_outbound_log", None)
     }
 
 
