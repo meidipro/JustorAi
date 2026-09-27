@@ -2789,6 +2789,53 @@ async def whatsapp_lookup_matter(matter_id: str):
     return {"status": "ok", "matter_id": matter_id, "status_text": reply, "evidence_text": docs}
 
 
+@app.post("/api/whatsapp/pair-token", tags=["WhatsApp Helpline"])
+async def create_whatsapp_pairing_token(request: Request):
+    """
+    Generates a secure 6-digit handshake code for the authenticated advocate to link their WhatsApp.
+    """
+    user = get_current_user(request)
+    guest_id = request.headers.get("X-Guest-Id", "")
+    user_id = user["id"] if user else (f"guest:{guest_id}" if guest_id else "guest:anon")
+    full_name = user.get("email", "").split("@")[0] if user else "অ্যাডভোকেট"
+    
+    code = whatsapp_service.generate_pairing_token(
+        user_id=user_id,
+        full_name=full_name,
+        chamber_name="Justor Chambers"
+    )
+    return {
+        "status": "ok",
+        "pairing_code": code,
+        "expires_in_seconds": 900,
+        "instructions": f"হোয়াটসঅ্যাপে পাঠান: LINK {code}",
+        "whatsapp_url": f"https://wa.me/15551722173?text=LINK%20{code}"
+    }
+
+
+@app.get("/api/whatsapp/pairing-status", tags=["WhatsApp Helpline"])
+async def get_whatsapp_pairing_status(request: Request):
+    """
+    Checks if the authenticated advocate has a verified linked WhatsApp phone number.
+    """
+    user = get_current_user(request)
+    user_id = user["id"] if user else None
+    if not user_id:
+        return {"paired": False, "phone": None}
+    
+    from backend.whatsapp_service import _load_tenants
+    tenants = _load_tenants()
+    for phone, info in tenants.items():
+        if isinstance(info, dict) and info.get("id") == user_id and info.get("verified"):
+            return {
+                "paired": True,
+                "phone": phone,
+                "chamber_name": info.get("chamber_name"),
+                "full_name": info.get("full_name")
+            }
+    return {"paired": False, "phone": None}
+
+
 @app.post("/api/whatsapp/simulate", tags=["WhatsApp Helpline"])
 async def whatsapp_simulate(req_body: WhatsAppSimulateRequest):
     """

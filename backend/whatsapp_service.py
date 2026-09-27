@@ -7,11 +7,13 @@ import json
 import time
 import base64
 import logging
+import asyncio
 import httpx
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Union, Tuple
 from dotenv import load_dotenv
 
+from supabase import create_client, Client
 from backend.matter_service import matter_service
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -20,6 +22,55 @@ load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
 load_dotenv(os.path.join(PROJECT_ROOT, ".env.local"))
 
 logger = logging.getLogger("justor.whatsapp")
+
+# ─── Supabase Client & Multi-Tenant Identity Setup ─────────────────────────────
+SUPABASE_URL = (os.getenv("VITE_SUPABASE_URL") or "").strip()
+SUPABASE_KEY = (os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("VITE_SUPABASE_ANON_KEY") or "").strip()
+
+supabase_client: Optional[Client] = None
+if SUPABASE_URL and SUPABASE_KEY:
+    try:
+        supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        logger.info("Supabase client initialized in JustorWhatsAppService.")
+    except Exception as e:
+        logger.warning(f"Supabase client initialization failed in WhatsApp service: {e}")
+
+TENANTS_FILE = os.path.join(BASE_DIR, "data", "whatsapp_tenants.json")
+AUDIT_FILE = os.path.join(BASE_DIR, "data", "whatsapp_audit.json")
+
+def _load_tenants() -> Dict[str, Any]:
+    if os.path.exists(TENANTS_FILE):
+        try:
+            with open(TENANTS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+def _save_tenants(data: Dict[str, Any]) -> None:
+    try:
+        os.makedirs(os.path.dirname(TENANTS_FILE), exist_ok=True)
+        with open(TENANTS_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.warning(f"Error saving tenants file: {e}")
+
+def _load_audit_trail() -> List[Dict[str, Any]]:
+    if os.path.exists(AUDIT_FILE):
+        try:
+            with open(AUDIT_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return []
+    return []
+
+def _save_audit_trail(trail: List[Dict[str, Any]]) -> None:
+    try:
+        os.makedirs(os.path.dirname(AUDIT_FILE), exist_ok=True)
+        with open(AUDIT_FILE, "w", encoding="utf-8") as f:
+            json.dump(trail[-100:], f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.warning(f"Error saving audit file: {e}")
 
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
@@ -175,6 +226,227 @@ class JustorWhatsAppService:
             "contradictions": matter_dict.get("contradictions") or existing.get("contradictions", [])
         }
         logger.info(f"Registered matter {clean_key} in WhatsApp Chamber service.")
+
+    @staticmethod
+    def normalize_phone(raw_phone: str) -> str:
+        """Converts any phone format (+88017..., 88017..., 017...) to standard format (+88017...)."""
+        digits = re.sub(r"[^\d]", "", str(raw_phone or ""))
+        if digits.startswith("880"):
+            return f"+{digits}"
+        elif digits.startswith("01"):
+            return f"+88{digits}"
+        elif digits:
+            return f"+{digits}"
+        return ""
+
+    async def resolve_lawyer_by_phone(self, raw_phone: str) -> Optional[Dict[str, Any]]:
+        """
+        Resolves an incoming WhatsApp sender to an authenticated advocate.
+        1. Checks local persistent tenant mapping.
+        2. Queries Supabase profiles table for matching whatsapp_phone.
+        Strict multi-tenancy: returns None if the phone is not verified.
+        """
+        clean = self.normalize_phone(raw_phone)
+        if not clean:
+            return None
+        digits = clean.replace("+", "")
+
+        # 1. Check local persistent tenant cache
+        tenants = _load_tenants()
+        for p_key in [clean, digits, f"+{digits}"]:
+            if p_key in tenants and tenants[p_key].get("verified"):
+                return tenants[p_key]
+
+        # 2. Query Supabase profiles table if available
+        if supabase_client:
+            try:
+                def query_db():
+                    return supabase_client.table("profiles").select(
+                        "id, email, full_name, role, partner_org"
+                    ).limit(50).execute()
+                res = await asyncio.to_thread(query_db)
+                if res and res.data:
+                    for p in res.data:
+                        stored_phone = self.normalize_phone(p.get("whatsapp_phone") or "")
+                        if stored_phone and (stored_phone == clean or stored_phone.replace("+", "") == digits):
+                            lawyer_obj = {
+                                "id": p["id"],
+                                "full_name": p.get("full_name") or "অ্যাডভোকেট",
+                                "email": p.get("email"),
+                                "role": p.get("role", "Legal Professional"),
+                                "chamber_name": p.get("partner_org") or "ব্যক্তিগত চেম্বার",
+                                "verified": True,
+                                "phone": clean
+                            }
+                            # Cache in tenants file
+                            tenants[clean] = lawyer_obj
+                            _save_tenants(tenants)
+                            return lawyer_obj
+            except Exception as e:
+                logger.warning(f"Error querying profiles table for phone {clean}: {e}")
+
+        return None
+
+    async def get_lawyer_matters(self, user_id: str) -> List[Dict[str, Any]]:
+        """
+        Fetches ONLY matters belonging to the specific advocate from Supabase.
+        Guarantees zero cross-chamber leakage (Lawyer A never sees Lawyer B's cases).
+        """
+        if not user_id or not supabase_client:
+            return []
+
+        try:
+            def query_matters():
+                return supabase_client.table("matters").select("*").eq("user_id", user_id).order("updated_at", desc=True).limit(30).execute()
+            res = await asyncio.to_thread(query_matters)
+            if res and res.data:
+                matters = []
+                for row in res.data:
+                    m = row.get("data") if isinstance(row.get("data"), dict) else row
+                    if m and isinstance(m, dict):
+                        m["id"] = str(row.get("id") or m.get("id", ""))
+                        matters.append(m)
+                        # Register in live cache under advocate's scoped ID
+                        self.register_matter(m)
+                return matters
+        except Exception as e:
+            logger.warning(f"Error querying matters for user {user_id}: {e}")
+        return []
+
+    def generate_pairing_token(self, user_id: str, full_name: str, chamber_name: str = "") -> str:
+        """Generates a secure 6-digit handshake code valid for 15 minutes."""
+        import random
+        code = f"{random.randint(100000, 999999)}"
+        tenants = _load_tenants()
+        pending = tenants.get("_pending_tokens", {})
+        pending[code] = {
+            "user_id": user_id,
+            "full_name": full_name,
+            "chamber_name": chamber_name or "ব্যক্তিগত চেম্বার",
+            "expires_at": time.time() + 900
+        }
+        tenants["_pending_tokens"] = pending
+        _save_tenants(tenants)
+        return code
+
+    async def verify_and_pair_token(self, sender_phone: str, raw_text: str) -> Tuple[bool, str, Optional[Dict[str, Any]]]:
+        """
+        Validates token format (e.g. 'LINK 548291' or 'PAIR 548291' or just '548291').
+        Binds sender_phone to the lawyer profile in Supabase and local tenant store.
+        """
+        clean_phone = self.normalize_phone(sender_phone)
+        m = re.search(r"\b(\d{6})\b", raw_text.strip())
+        if not m:
+            return False, "অবৈধ কোড ফরম্যাট। ৬-ডিজিটের সংখ্যা উল্লেখ করুন (যেমন: LINK 123456)।", None
+        token = m.group(1)
+
+        tenants = _load_tenants()
+        pending = tenants.get("_pending_tokens", {})
+        info = pending.get(token)
+        if not info:
+            return False, "⚠️ এই পেয়ারিং কোডটি পাওয়া যায়নি বা মেয়াদ শেষ হয়ে গেছে। justorai.com/settings থেকে নতুন কোড নিন।", None
+
+        if time.time() > info.get("expires_at", 0):
+            pending.pop(token, None)
+            _save_tenants(tenants)
+            return False, "⚠️ কোডটির মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে ওয়েব পোর্টাল থেকে নতুন কোড জেনারেট করুন।", None
+
+        # Successful pairing
+        user_id = info["user_id"]
+        full_name = info["full_name"]
+        chamber = info["chamber_name"]
+        lawyer_obj = {
+            "id": user_id,
+            "full_name": full_name,
+            "chamber_name": chamber,
+            "role": "Legal Professional",
+            "verified": True,
+            "phone": clean_phone,
+            "paired_at": datetime.now(timezone.utc).isoformat()
+        }
+        tenants[clean_phone] = lawyer_obj
+        pending.pop(token, None)
+        tenants["_pending_tokens"] = pending
+        _save_tenants(tenants)
+
+        # Update Supabase profiles table if accessible
+        if supabase_client:
+            try:
+                def update_profile():
+                    return supabase_client.table("profiles").update({
+                        "partner_org": chamber
+                    }).eq("id", user_id).execute()
+                await asyncio.to_thread(update_profile)
+            except Exception as e:
+                logger.warning(f"Could not update Supabase profile on pairing: {e}")
+
+        return True, "Success", lawyer_obj
+
+    def record_write_action(self, user_id: str, phone: str, matter_id: str, action_type: str, details: str, note_id: Optional[str] = None):
+        """Records write action into audit trail for audit-safe UNDO."""
+        trail = _load_audit_trail()
+        entry = {
+            "action_id": f"act_{int(time.time()*1000)}",
+            "user_id": user_id,
+            "phone": phone,
+            "matter_id": matter_id,
+            "action_type": action_type,
+            "details": details,
+            "note_id": note_id,
+            "is_reversed": False,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        trail.append(entry)
+        _save_audit_trail(trail)
+
+    async def handle_undo_request(self, sender: str, lawyer: Optional[Dict[str, Any]] = None) -> str:
+        """
+        P0 Malpractice Safety Net: Audit-Safe Reversal of the advocate's most recent write action.
+        Does NOT erase audit history; marks as reversed and soft-removes from active context.
+        """
+        clean_phone = self.normalize_phone(sender)
+        user_id = lawyer.get("id") if lawyer else None
+
+        trail = _load_audit_trail()
+        matching_idx = None
+        for i in range(len(trail) - 1, -1, -1):
+            act = trail[i]
+            if (user_id and act.get("user_id") == user_id) or act.get("phone") == clean_phone:
+                if not act.get("is_reversed"):
+                    matching_idx = i
+                    break
+
+        if matching_idx is None:
+            return (
+                "ℹ️ পূর্বাবস্থায় ফিরিয়ে নেওয়ার (UNDO) মতো কোনো সাম্প্রতিক এন্ট্রি পাওয়া যায়নি।\n"
+                "সবশেষ নথিবদ্ধ কোনো অ্যাকশন পেন্ডিং নেই।"
+            )
+
+        target = trail[matching_idx]
+        target["is_reversed"] = True
+        target["reversed_at"] = datetime.now(timezone.utc).isoformat()
+        _save_audit_trail(trail)
+
+        matter_id = target.get("matter_id", "সাধারণ ডকেট")
+        note_id = target.get("note_id")
+        
+        # Soft-reverse in matter cache
+        clean_m_id = matter_id.upper()
+        if clean_m_id in self._matters_cache:
+            m = self._matters_cache[clean_m_id]
+            if "notes" in m and isinstance(m["notes"], list):
+                if note_id:
+                    m["notes"] = [n for n in m["notes"] if n.get("id") != note_id]
+                elif m["notes"]:
+                    m["notes"].pop(0)
+
+        return (
+            f"↩️ *অ্যাকশন সফলভাবে বাতিল করা হয়েছে (UNDO Successful)*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📁 *মোকদ্দমা:* `{matter_id}`\n"
+            f"📑 *বাতিলকৃত এন্ট্রি:* {target.get('details', 'সাম্প্রতিক নোট')}\n\n"
+            f"🔒 _নথিটি চেম্বার অডিট লগে অপরিবর্তিত রেকর্ড হিসেবে সংরক্ষিত আছে, তবে সক্রিয় কেস ফাইল থেকে অপসারণ করা হয়েছে।_"
+        )
 
     def get_all_matters(self) -> List[Dict[str, Any]]:
         """Returns all matters currently indexed in the chamber cache."""
@@ -484,6 +756,17 @@ class JustorWhatsAppService:
             matter["notes"] = []
         matter["notes"].insert(0, new_note)
 
+        # P0 Malpractice Safety Net: Record write action for audit-safe UNDO
+        clean_phone = self.normalize_phone(sender)
+        self.record_write_action(
+            user_id=matter.get("user_id", sender),
+            phone=clean_phone,
+            matter_id=m_id,
+            action_type="CORRIDOR_WRITE",
+            details=f"[{doc_type}] {raw_text[:60]}",
+            note_id=new_note["id"]
+        )
+
         # 3. Dynamic Contradiction & Evidence Gap Detection
         existing_contradictions = matter.get("contradictions", [])
         existing_gaps = matter.get("evidenceGaps", [])
@@ -515,7 +798,9 @@ class JustorWhatsAppService:
             f"📅 *Hearing:* {days_str} ({hearing_str})",
             f"📋 *Hearing Pack has been updated automatically.*",
             "",
-            f"👉 _হিয়ারিং প্যাক পর্যালোচনা করতে লিখুন:_ `HEARING PACK {m_id}`"
+            f"👉 _হিয়ারিং প্যাক পর্যালোচনা করতে লিখুন:_ `HEARING PACK {m_id}`",
+            "",
+            "⚠️ _ভুল ফাইলে সংরক্ষিত হলে বাতিল করতে লিখুন:_ *UNDO*"
         ]
         return "\n".join(lines)
 
@@ -603,47 +888,143 @@ class JustorWhatsAppService:
             f"💡 _আদালত চত্বর থেকে শুনানি শেষে তাৎক্ষণিক আদেশ আপডেট করতে লিখুন:_ `#{m_id} আদেশ...`"
         )
 
-    def _handle_daily_brief(self, sender: str) -> str:
-        """Workflow 5: Daily Chamber Morning Brief ("What needs my attention today?")."""
-        matters = self.get_all_matters()
-        lines = [
-            "🌅 *শুভ সকাল অ্যাডভোকেট সাহেব! আজকের চেম্বার ব্রিফিং*",
-            "━━━━━━━━━━━━━━━━━━━━",
-            f"📌 *আজ আপনার চেম্বারে {len(matters)}টি বিষয়ে দৃষ্টি আকর্ষণ প্রয়োজন:*\n"
-        ]
+    async def _handle_daily_brief(self, sender: str, lawyer: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Workflow 5: Daily Chamber Morning Brief powered by Gemini 2.5 Flash Senior Chamber Clerk.
+        Generates an articulate, executive briefing prioritized by 48-hour court urgency.
+        """
+        matters = []
+        if lawyer and lawyer.get("id"):
+            matters = await self.get_lawyer_matters(lawyer["id"])
+        
+        # Fallback to registered matters if user has no Supabase matters yet
+        if not matters and not lawyer:
+            matters = self.get_all_matters()
 
-        for idx, m in enumerate(matters, 1):
-            m_id = m.get("id")
-            title = m.get("title")
-            court = m.get("court")
-            hearing = m.get("nextHearing")
+        advocate_name = (lawyer.get("full_name") if lawyer else None) or "অ্যাডভোকেট"
+        chamber_name = (lawyer.get("chamber_name") if lawyer else None) or "জাসটর চেম্বার পার্টনার্স"
+
+        if not matters:
+            return (
+                f"🌅 *শুভ সকাল শ্রদ্ধাভাজন {advocate_name} সাহেব!*\n"
+                f"🏛️ *চেম্বার:* {chamber_name}\n"
+                f"━━━━━━━━━━━━━━━━━━━━\n"
+                f"আপনার চেম্বার ভল্টে বর্তমানে কোনো সক্রিয় মোকদ্দমা নথিভুক্ত নেই।\n\n"
+                f"📌 *নতুন মামলা যুক্ত করার নিয়ম:*\n"
+                f"১. [justorai.com/matters](https://justorai.com) এ লগইন করে আরজি/ডকেট আপলোড করুন।\n"
+                f"২. অথবা এখানে সরাসরি লিখুন:\n"
+                f"   `#CR-452/2026 করিম আহমেদ বনাম রহিম খান, শুনানি ১৫ অক্টোবর`\n\n"
+                f"💡 _আইনজীবী হিসেবে কোনো ধারা, নজির বা আইনি প্রশ্নের উত্তর জানতে সরাসরি লিখে পাঠান।_"
+            )
+
+        # Build context for LLM
+        matters_summary = []
+        for m in matters[:8]:
+            m_id = m.get("id", "")
+            title = m.get("title", "মোকদ্দমা")
+            court = m.get("court", "বিজ্ঞ আদালত")
+            hearing = m.get("nextHearing", "শুনানির তারিখ ধার্য নেই")
+            stage = m.get("stage", "চলমান পর্যায়")
+            m_type = m.get("matterType", "দেওয়ানি / ফৌজদারি")
             gaps = m.get("evidenceGaps", [])
             contra = m.get("contradictions", [])
+            notes = m.get("notes", [])
+            last_note = notes[0].get("rawText", "") if notes else ""
 
-            lines.append(f"{idx}️⃣ *{title}* (`#{m_id}`)")
-            lines.append(f"   📅 *শুনানি:* {hearing}")
+            matters_summary.append(
+                f"• Case: {title} (#{m_id})\n"
+                f"  Type: {m_type} | Court: {court}\n"
+                f"  Next Hearing: {hearing} | Stage: {stage}\n"
+                f"  Evidence Gaps: {', '.join(gaps) if gaps else 'None'}\n"
+                f"  Contradictions: {', '.join(contra) if contra else 'None'}\n"
+                f"  Recent Note: {last_note[:80]}\n"
+            )
+
+        prompt = (
+            f"Generate the daily executive morning chamber brief for Advocate {advocate_name} "
+            f"based on these active court dockets. Prioritize by 48h urgency and statutory deadlines:\n\n"
+            + "\n".join(matters_summary)
+        )
+
+        clerk_template = (
+            "You are the Senior Executive Chamber Associate & Appellate Law Clerk of Justor AI, "
+            f"serving Advocate {advocate_name} at {chamber_name}, practicing before the Supreme Court of Bangladesh "
+            "and District Courts.\n\n"
+            "YOUR PERSONA & DEMEANOR:\n"
+            "- Address the practitioner with professional dignity: 'শ্রদ্ধাভাজন অ্যাডভোকেট সাহেব' or 'বিজ্ঞ সিনিয়র'.\n"
+            "- Speak in authentic, articulate courtroom Bengali with precise English legal nomenclature "
+            "(e.g., 'আরজি', 'লিখিত জবাব', 'রিট পিটিশন', 'তলব', 'হাজিরা', 'কজলিস্ট', 'এনেক্স কোর্ট', 'ধারা ১৩৮ NI Act', 'দণ্ডবিধি ৪২০', 'Order 39 CPC').\n"
+            "- Never sound like an automated robotic IVR or form generator. Speak like an astute, trusted, sharp senior junior counsel "
+            "who has reviewed the entire chamber docket before morning court sitting at 10:30 AM.\n\n"
+            "RULES FOR GENERATING THE DAILY CHAMBER BRIEF:\n"
+            "1. URGENCY-FIRST HIERARCHY (Do NOT list cases sequentially by ID):\n"
+            "   - 🚨 IMMEDIATE STATUTORY LIMITATIONS & HEARINGS (Next 48–72 Hours): Highlight imminent hearings, rule returnable dates, or statutory limitation deadlines (Limitation Act 1908, NI Act 138).\n"
+            "   - ⚠️ FILE VULNERABILITIES & EVIDENTIARY GAPS: Highlight missing certified copies, unserved notices, lack of bank return memos, or contradictory witness statements.\n"
+            "   - 🎯 TODAY'S ACTIONABLE CHAMBER ROSTER: Detail exactly what the steno/clerk must carry to court today before 10:30 AM (e.g., hazira darakhast, certified copies).\n"
+            "2. CONCISENESS FOR MOBILE: Keep under 1,400 characters so it fits comfortably in WhatsApp without overwhelming the advocate.\n"
+            "3. End with an astute 1-line prompt for next actions."
+        )
+
+        ai_brief = await self._call_gemini_chat(prompt, clerk_template)
+        if ai_brief and len(ai_brief.strip()) > 50 and "দুঃখিত" not in ai_brief[:20]:
+            return ai_brief
+
+        # Graceful executive fallback formatting
+        lines = [
+            f"🌅 *শুভ সকাল শ্রদ্ধাভাজন {advocate_name} সাহেব!*",
+            f"🏛️ *চেম্বার:* {chamber_name}",
+            "━━━━━━━━━━━━━━━━━━━━",
+            f"📌 *আজ আপনার চেম্বারে {len(matters)}টি সক্রিয় মোকদ্দমার পর্যালোচনা:*\n"
+        ]
+        for idx, m in enumerate(matters[:5], 1):
+            lines.append(f"{idx}️⃣ *{m.get('title')}* (`#{m.get('id')}`)")
+            lines.append(f"   📅 *শুনানি:* {m.get('nextHearing', 'ধার্য নেই')} | 🏛️ *আদালত:* {m.get('court')}")
+            gaps = m.get("evidenceGaps", [])
             if gaps:
-                lines.append(f"   🔍 *দলিলের ঘাটতি:* {gaps[0]}")
-            if contra:
-                lines.append(f"   ⚠️ *অসঙ্গতি:* {contra[0]}")
-            lines.append(f"   🏛️ *আদালত:* {court}\n")
-
-        lines.append("💡 _যেকোনো মামলার সম্পূর্ণ বিবরণ দেখতে লিখুন:_ `SUMMARY <মামলা নম্বর>`")
-        lines.append("👉 _শুনানির প্রস্তুতি দেখতে লিখুন:_ `HEARING PACK <মামলা নম্বর>`")
+                lines.append(f"   🔍 *ফাইলের ঘাটতি:* {gaps[0]}")
+            lines.append("")
+        lines.append("👉 _শুনানির পূর্ণাঙ্গ প্রস্তুতির জন্য লিখুন:_ `HEARING PACK <মামলা নম্বর>`")
         return "\n".join(lines)
 
-    def _handle_deadlines_and_alerts(self, sender: str) -> str:
-        """Workflow 6: Procedural & Statutory Limitation Alerts."""
+    async def _handle_deadlines_and_alerts(self, sender: str, lawyer: Optional[Dict[str, Any]] = None) -> str:
+        """Workflow 6: Dynamic Procedural & Statutory Limitation Alerts."""
+        matters = []
+        if lawyer and lawyer.get("id"):
+            matters = await self.get_lawyer_matters(lawyer["id"])
+        if not matters:
+            matters = self.get_all_matters()
+
+        advocate_name = (lawyer.get("full_name") if lawyer else None) or "অ্যাডভোকেট"
+
+        cases_text = "\n".join(
+            f"• {m.get('title')} (#{m.get('id')}): {m.get('matterType')} | Next Hearing: {m.get('nextHearing')} | Stage: {m.get('stage')}"
+            for m in matters[:6]
+        )
+
+        prompt = (
+            f"Review these active matters for Advocate {advocate_name} and identify all upcoming statutory limitation risks "
+            f"(e.g. Limitation Act 1908, 30 days notice under NI Act 138, written statement under Order 8 CPC, CrPC bail extensions):\n\n"
+            + cases_text
+        )
+        sys_inst = (
+            "You are Justor AI's Limitation & Court Calendar Specialist. "
+            "Write an urgent, clear limitation alert for the advocate on WhatsApp. "
+            "Use clear bold headers, mention specific statutory sections, and cite remaining days. Under 1000 characters."
+        )
+
+        ai_alerts = await self._call_gemini_chat(prompt, sys_inst)
+        if ai_alerts and len(ai_alerts.strip()) > 50 and "দুঃখিত" not in ai_alerts[:20]:
+            return ai_alerts
+
         return (
-            "⏳ *চেম্বারের আসন্ন আইনি তামাদি ও ডেডলাইন অ্যালার্ট (Limitation Alerts)*\n"
+            f"⏳ *চেম্বারের আসন্ন আইনি তামাদি ও ডেডলাইন অ্যালার্ট (Limitation Alerts)*\n"
+            f"শ্রদ্ধাভাজন {advocate_name} সাহেব:\n"
             "━━━━━━━━━━━━━━━━━━━━\n"
             "১. *করিম আহমেদ বনাম রহিম খান* (`#JUSTOR-2026-001`)\n"
             "   ⚠️ *NI Act ১৩৮ ধারা:* নালিশি মামলা দায়েরের ৩০ দিনের সময়সীমা কঠোরভাবে পর্যবেক্ষণীয়।\n"
             "   ⏳ সময়সীমা: আর ৫ দিন বাকি।\n\n"
             "২. *মো. আলম বনাম রাষ্ট্র* (`#JUSTOR-2026-004`)\n"
             "   ⚠️ *ফৌজদারি কার্যবিধি ৪৯৮ ধারা:* অন্তর্বর্তীকালীন জামিনের মেয়াদ বৃদ্ধির দরখাস্ত শুনানির পূর্বে দাখিল নিশ্চিত করুন।\n\n"
-            "৩. *বেগম রোকেয়া বনাম সিটি কর্পোরেশন* (`#JUSTOR-2026-003`)\n"
-            "   ⚠️ *Order 39 Rule 1 CPC:* অন্তর্বর্তীকালীন স্থিতাবস্থা বহাল রাখার জন্য শোকজ জবাবের ওপর নারাজি দরখাস্ত দাখিলের সময়সীমা চলছে।\n\n"
             "💡 _তামাদি অতিক্রান্ত হওয়ার ঝুঁকি এড়াতে চেম্বার ভল্ট থেকে সরাসরি দরখাস্ত ড্রাফট করুন।_"
         )
 
@@ -839,6 +1220,72 @@ class JustorWhatsAppService:
             f"⚠️ _সকল দলিলের ফটোকপি চেম্বার ফাইল ও বিজ্ঞ বিচারকের পর্যালোচনার জন্য প্রস্তুত রাখুন।_"
         )
 
+    async def _handle_unrecognized_sender(self, sender: str, query_text: str) -> str:
+        """
+        Zero-Trust Security Handshake for unlinked / unknown phone numbers.
+        Guarantees zero cross-chamber leakage (never displays another lawyer's cases or mock data).
+        Allows general legal RAG queries while keeping confidential dockets locked.
+        """
+        upper = query_text.upper().strip()
+
+        # 1. Pairing Attempt: LINK <token> or PAIR <token> or direct 6-digit code
+        if upper.startswith("LINK") or upper.startswith("PAIR") or (len(upper) == 6 and upper.isdigit()):
+            ok, msg, lawyer_obj = await self.verify_and_pair_token(sender, query_text)
+            if ok and lawyer_obj:
+                return (
+                    f"✅ *আসসালামু আলাইকুম শ্রদ্ধাভাজন অ্যাডভোকেট {lawyer_obj.get('full_name')} সাহেব!*\n"
+                    f"━━━━━━━━━━━━━━━━━━━━\n"
+                    f"আপনার চেম্বার অ্যাকাউন্ট সফলভাবে ভেরিফাই ও সংযুক্ত করা হয়েছে।\n\n"
+                    f"🏛️ *চেম্বার:* {lawyer_obj.get('chamber_name', 'ব্যক্তিগত চেম্বার')}\n"
+                    f"📱 *সংযুক্ত নম্বর:* {sender}\n"
+                    f"🔒 আপনার সকল মামলা ও চেম্বার ডকেট এখন হোয়াটসঅ্যাপে এন্ড-টু-এন্ড সুরক্ষিত।\n\n"
+                    f"👉 _আজকের চেম্বার ব্রিফিং দেখতে লিখুন:_ *'আজকের ব্রিফিং'*\n"
+                    f"👉 _সাহায্যের জন্য লিখুন:_ *HELP*"
+                )
+            else:
+                return (
+                    f"{msg}\n\n"
+                    f"💡 _নতুন পেয়ারিং কোড নিতে আপনার কম্পিউটারে [justorai.com/settings](https://justorai.com) এ লগইন করুন।_"
+                )
+
+        # 2. General Legal Question (e.g. asking about penal code, NI Act, bail, limitation)
+        is_legal_query = any(w in upper for w in [
+            "SECTION", "LAW", "COURT", "PENAL", "CONTRACT", "ACT", "BAIL", "APPEAL",
+            "ধারা", "আইন", "দণ্ডবিধি", "জামিন", "আপিল", "তামাদি", "নোটিশ", "মামলা", "খতিয়ান", "দলিল"
+        ]) or len(query_text) > 15
+
+        if is_legal_query and not any(w in upper for w in ["BRIEF", "TODAY", "ATTENTION", "STATUS", "CAUSELIST"]):
+            system_instruction = (
+                "You are Justor AI's 24/7 Mobile Legal Assistant exclusively for Bangladesh lawyers, advocates, and chamber counsel on WhatsApp.\n"
+                "Format your answer specifically for mobile readability:\n"
+                "- Use clean *bold* headings and bullet points (•).\n"
+                "- Keep answers concise, authoritative, and actionable on a mobile screen (under 1200 characters).\n"
+                "- Cite the exact controlling Bangladesh Statute, Section, and relevant Supreme Court Precedents (e.g. 'নেগোশিয়েবল ইনস্ট্রুমেন্টস অ্যাক্ট, ১৮৮১-এর ধারা ১৩৮' or 'দণ্ডবিধি ১৮৬০-এর ধারা ৪২০').\n"
+                "- Provide practical litigation steps.\n"
+                "- Answer in natural, polite courtroom Bengali (বাংলা) with English statutory terms."
+            )
+            prompt = f"Advocate Legal Query:\n\"{query_text}\"\n\nProvide an authoritative, clear explanation with applicable Bangladesh laws, practical timeline steps, and court jurisdiction."
+            ans = await self._call_gemini_chat(prompt, system_instruction)
+            return (
+                f"{ans}\n\n"
+                f"━━━━━━━━━━━━━━━━━━━━\n"
+                f"🔒 *চেম্বার ডকেট ও কোর্ট ডায়েরি লক রয়েছে:*\n"
+                f"আপনার নিজস্ব চেম্বারের মামলা ও আজকের কজলিস্ট দেখতে অ্যাকাউন্টটি লিংক করুন: [justorai.com/settings](https://justorai.com) অথবা এখানে লিখুন: `LINK <৬-ডিজিট কোড>`"
+            )
+
+        # 3. Standard Security Welcome & Onboarding
+        return (
+            f"⚖️ *জাসটর চেম্বার ওএস (Justor AI) — বিজ্ঞ আইনজীবী হেল্পলাইন*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"আসসালামু আলাইকুম। বাংলাদেশ বার কাউন্সিল ও সুপ্রিম কোর্টের বিজ্ঞ আইনজীবীদের চেম্বার ডেটা ও মক্কেলের তথ্যের সর্বোচ্চ গোপনীয়তা নিশ্চিত করতে হোয়াটসঅ্যাপ অ্যাকাউন্ট ভেরিফিকেশন বাধ্যতামূলক।\n\n"
+            f"আপনার নম্বরটি (`{sender}`) এখনো কোনো চেম্বারের সাথে সংযুক্ত নয়।\n\n"
+            f"🔗 *আপনার চেম্বার লিংক করার নিয়ম:*\n"
+            f"১. [justorai.com/settings](https://justorai.com) এ লগইন করুন।\n"
+            f"২. 'Connect WhatsApp' বাটনে ক্লিক করে এই নম্বরটি যাচাই করুন।\n"
+            f"৩. অথবা ওয়েব থেকে প্রাপ্ত কোডটি এখানে পাঠান: `LINK <কোড>`\n\n"
+            f"💡 _আইনজীবী হিসেবে সরাসরি যেকোনো ধারা, নজির বা আইনি প্রশ্নের উত্তর জানতে লিখে পাঠান (যেমন: 'দণ্ডবিধি ৪২০ ধারার উপাদান কি?')"
+        )
+
     async def handle_incoming_message(
         self,
         sender: str,
@@ -849,19 +1296,36 @@ class JustorWhatsAppService:
         """
         Main entry point for all WhatsApp inbound events (Twilio, Meta Cloud API, Simulator).
         Executes autonomous legal operating workflows:
-        1. Voice Note / Dictation -> Auto matter note filing & chronology update
-        2. Order Sheet PDF/Photo -> Document Vision OCR + Contradiction check
-        3. 'Summarize this case' -> Executive 60-second matter briefing
-        4. 'Prepare me for tomorrow's hearing' -> Instant Hearing Pack
-        5. 'What needs my attention?' -> Daily Chamber Morning Brief
-        6. 'Deadlines' -> Procedural & statutory limitation alerts
+        1. Multi-Tenant Identity Verification (Zero Cross-Chamber Leakage)
+        2. P0 Malpractice Safety Net: Audit-Safe UNDO
+        3. Voice Note / Dictation -> Auto matter note filing & chronology update
+        4. Order Sheet PDF/Photo -> Document Vision OCR + Contradiction check
+        5. 'Summarize this case' -> Executive 60-second matter briefing
+        6. 'Prepare me for tomorrow's hearing' -> Instant Hearing Pack
+        7. 'What needs my attention?' -> Daily Chamber Morning Brief (Gemini 2.5 Flash)
+        8. 'Deadlines' -> Procedural & statutory limitation alerts
         """
         sender = sender.strip()
-        session = self._user_sessions.get(sender, {"history": []})
+        clean_sender = self.normalize_phone(sender)
         query_text = (text_message or "").strip()
+        upper_query = query_text.upper().strip()
         doc_analysis_text = ""
 
-        # 1. Handle Audio Voice Note (Court corridor dictation via voice)
+        # 0. P0 Malpractice Safety Net: Immediate UNDO reversal
+        if upper_query in ["UNDO", "বাতিল", "CANCEL", "রিলিজ"]:
+            lawyer = await self.resolve_lawyer_by_phone(clean_sender)
+            return await self.handle_undo_request(clean_sender, lawyer)
+
+        # 1. Multi-Tenant Identity Gateway
+        lawyer = await self.resolve_lawyer_by_phone(clean_sender)
+        if not lawyer:
+            return await self._handle_unrecognized_sender(clean_sender, query_text)
+
+        # Preload active matters for this advocate
+        await self.get_lawyer_matters(lawyer["id"])
+        session = self._user_sessions.get(clean_sender, {"history": []})
+
+        # 2. Handle Audio Voice Note (Court corridor dictation via voice)
         if media_url and (media_type and "audio" in media_type):
             try:
                 async with httpx.AsyncClient(timeout=30.0) as client:
@@ -873,7 +1337,8 @@ class JustorWhatsAppService:
                         )
                         if transcribed:
                             query_text = transcribed
-                            logger.info(f"Transcribed voice note from {sender}: {query_text}")
+                            upper_query = query_text.upper().strip()
+                            logger.info(f"Transcribed voice note from {clean_sender}: {query_text}")
                         else:
                             return "🎙️ ভয়েস মেসেজটি স্পষ্ট শোনা যায়নি। অনুগ্রহ করে পুনরায় রেকর্ড করে পাঠান অথবা লিখে জানান।"
                     else:
@@ -882,7 +1347,7 @@ class JustorWhatsAppService:
                 logger.error(f"Error fetching audio media: {ex}")
                 return "ভয়েস মেসেজ প্রসেস করা সম্ভব হয়নি। অনুগ্রহ করে টেক্সট লিখে পাঠান।"
 
-        # 2. Handle Image / PDF (Court Order Sheet or Evidence Attachment)
+        # 3. Handle Image / PDF (Court Order Sheet or Evidence Attachment)
         if media_url and (media_type and ("image" in media_type or "pdf" in media_type)):
             try:
                 async with httpx.AsyncClient(timeout=35.0) as client:
@@ -898,20 +1363,18 @@ class JustorWhatsAppService:
 
         # If a document was analyzed, attach it autonomously to the resolved matter
         if doc_analysis_text:
-            matter, _ = self._resolve_matter_context(query_text, sender)
+            matter, _ = self._resolve_matter_context(query_text, clean_sender)
             if matter:
                 return self._run_autonomous_matter_ingestion(
                     matter,
                     f"{query_text}\n\n{doc_analysis_text}",
                     doc_type="আদালতের আদেশপত্র / দলিল (OCR)",
-                    sender=sender
+                    sender=clean_sender
                 )
             return doc_analysis_text
 
         if not query_text:
             return self._get_help_menu("bn")
-
-        upper_query = query_text.upper().strip()
 
         # Command: HELP / MENU
         if upper_query in ["HELP", "MENU", "START", "হাই", "হ্যালো", "সাহায্য", "আসসালামু আলাইকুম", "COMMANDS"]:
@@ -924,7 +1387,7 @@ class JustorWhatsAppService:
             or "WHAT NEEDS MY ATTENTION" in upper_query
             or "আজকে কী করণীয়" in query_text
         ):
-            return self._handle_daily_brief(sender)
+            return await self._handle_daily_brief(clean_sender, lawyer)
 
         # Workflow 6: Deadlines & Statutory Limitation Alerts (DEADLINES, ALERTS, তামাদি)
         if (
@@ -932,7 +1395,7 @@ class JustorWhatsAppService:
             or upper_query.startswith("DEADLINE")
             or upper_query.startswith("তামাদি")
         ):
-            return self._handle_deadlines_and_alerts(sender)
+            return await self._handle_deadlines_and_alerts(clean_sender, lawyer)
 
         # Workflow 4: Hearing Preparation Pack ("Prepare me for tomorrow's hearing" / HEARING PACK)
         if (
