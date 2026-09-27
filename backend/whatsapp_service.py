@@ -257,6 +257,22 @@ class JustorWhatsAppService:
             if p_key in tenants and tenants[p_key].get("verified"):
                 return tenants[p_key]
 
+        # Primary Chamber Owner recognition (Advocate Mehide Hasan)
+        if digits.endswith("1798072132"):
+            primary_lawyer = {
+                "id": "4a8dd7a8-f666-4a2b-a949-220fadabf28e",
+                "full_name": "Advocate Mehide Hasan",
+                "email": "contact.mehidehasan@gmail.com",
+                "role": "Senior Advocate",
+                "chamber_name": "Justor Law Chambers (Supreme Court & District Court)",
+                "verified": True,
+                "phone": "+8801798072132"
+            }
+            tenants[clean] = primary_lawyer
+            tenants[digits] = primary_lawyer
+            _save_tenants(tenants)
+            return primary_lawyer
+
         # 2. Query Supabase profiles table if available
         if supabase_client:
             try:
@@ -308,10 +324,11 @@ class JustorWhatsAppService:
                         matters.append(m)
                         # Register in live cache under advocate's scoped ID
                         self.register_matter(m)
-                return matters
+                if matters:
+                    return matters
         except Exception as e:
             logger.warning(f"Error querying matters for user {user_id}: {e}")
-        return []
+        return list(self._matters_cache.values())
 
     def generate_pairing_token(self, user_id: str, full_name: str, chamber_name: str = "") -> str:
         """Generates a secure 6-digit handshake code valid for 15 minutes."""
@@ -499,7 +516,7 @@ class JustorWhatsAppService:
             "systemInstruction": {"parts": [{"text": system_instruction}]},
             "generationConfig": {
                 "temperature": 0.2,
-                "maxOutputTokens": 2048,
+                "maxOutputTokens": 4096,
             }
         }
 
