@@ -17,5 +17,14 @@
     "verified": true,
     "phone": "+8801798072132"
   },
-  "_pending_tokens": {}
+  "_pending_tokens": {},
+  "+8801811112233": {
+    "id": "lawyer-rahim-12345",
+    "full_name": "Advocate Abdur Rahim",
+    "chamber_name": "Rahim & Partners, High Court",
+    "role": "Legal Professional",
+    "verified": true,
+    "phone": "+8801811112233",
+    "paired_at": "2026-09-28T19:36:11.909257+00:00"
+  }
 }

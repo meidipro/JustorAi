@@ -498,18 +498,18 @@ class JustorWhatsAppService:
             or os.getenv("GOOGLE_API_KEY", "").strip()
         )
 
-    def _get_api_urls(self, model_name: str = "gemini-2.5-flash") -> list[str]:
+    def _get_api_urls(self, model_name: str = "gemini-flash-latest") -> list[str]:
         urls = []
         if self.api_key:
-            urls.append(
-                f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
-                f"?key={self.api_key}"
-            )
-            urls.append(
-                f"https://aiplatform.googleapis.com/v1beta1/projects/{GCP_PROJECT_ID}"
-                f"/locations/{VERTEX_LOCATION}/publishers/google/models/{model_name}:generateContent"
-                f"?key={self.api_key}"
-            )
+            # Model fallback sequence: requested model -> gemini-flash-latest -> gemini-3.5-flash-lite -> gemini-2.5-flash
+            candidate_models = [model_name]
+            for fallback in ["gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"]:
+                if fallback not in candidate_models:
+                    candidate_models.append(fallback)
+            for m in candidate_models:
+                urls.append(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={self.api_key}"
+                )
         return urls
 
     async def _call_gemini_chat(self, prompt: str, system_instruction: str) -> str:
@@ -536,6 +536,7 @@ class JustorWhatsAppService:
         }
 
         for url in urls:
+            model_id = url.split("/models/")[1].split(":")[0] if "/models/" in url else "gemini"
             try:
                 async with httpx.AsyncClient(timeout=30.0) as client:
                     resp = await client.post(url, json=body)
@@ -547,11 +548,39 @@ class JustorWhatsAppService:
                             text = "".join(p.get("text", "") for p in parts if "text" in p).strip()
                             if text:
                                 return text
+                    elif resp.status_code in [429, 503]:
+                        logger.warning(f"Model {model_id} returned {resp.status_code}; trying next model in cascade...")
+                        await asyncio.sleep(0.5)
+                        continue
                     else:
                         logger.warning(f"Gemini API returned {resp.status_code}: {resp.text[:120]}")
             except Exception as e:
-                logger.warning(f"Error calling Gemini endpoint ({url[:40]}...): {e}")
+                logger.warning(f"Error calling Gemini endpoint ({model_id}): {e}")
                 continue
+
+        # High-availability fail-safe: Groq openai/gpt-oss-120b fallback
+        groq_key = os.getenv("GROQ_API_KEY", "").strip()
+        if groq_key:
+            try:
+                from groq import Groq
+                groq_client = Groq(api_key=groq_key)
+                completion = await asyncio.to_thread(
+                    lambda: groq_client.chat.completions.create(
+                        model="openai/gpt-oss-120b",
+                        messages=[
+                            {"role": "system", "content": system_instruction},
+                            {"role": "user", "content": prompt}
+                        ],
+                        temperature=0.2,
+                        max_tokens=3000
+                    )
+                )
+                if completion and completion.choices and completion.choices[0].message.content:
+                    ans = completion.choices[0].message.content.strip()
+                    if ans:
+                        return ans
+            except Exception as gx:
+                logger.warning(f"Groq fail-safe in whatsapp_service failed: {gx}")
 
         return "দুঃখিত, সংযোগে ত্রুটি হয়েছে। অনুগ্রহ করে আবার প্রশ্নটি পাঠান।"
 
@@ -1077,18 +1106,25 @@ class JustorWhatsAppService:
             "   _(ভয়েস মেসেজ পাঠালেও তা স্বয়ংক্রিয়ভাবে ডকেটে ফাইল হবে)_\n\n"
             "২. 📷 *আদালতের আদেশপত্রের ছবি পাঠান:*\n"
             "   _ছবি পাঠালেই এআই স্বয়ংক্রিয়ভাবে মামলার সাথে যুক্ত করে অসঙ্গতি ও পরবর্তী তারিখ বের করবে।_\n\n"
-            "৩. 📂 *মামলার ৬০ সেকেন্ডের সারসংক্ষেপ:*\n"
-            "   • `SUMMARY` অথবা `সারসংক্ষেপ <মামলা নম্বর>`\n\n"
-            "৪. 🎯 *শুনানির পূর্ণাঙ্গ প্রস্তুতি (Hearing Pack):*\n"
+            "৩. 🎯 *জেরা ও আপত্তি কৌশল (Trial Cross-Exam):*\n"
+            "   • `CROSS <মামলা বা জেরার বিষয়>`\n"
+            "   _যেমন:_ `CROSS JUSTOR-2026-001 সাক্ষীকে চেক হস্তান্তর নিয়ে জেরা`\n\n"
+            "৪. 📑 *জরুরি কোর্টরুম দরখাস্তের খসড়া:*\n"
+            "   • `DRAFT <দরখাস্তের নাম বা ধারা>`\n"
+            "   _যেমন:_ `DRAFT দেওয়ানি ১৪৮ ধারায় সময় প্রার্থনা` অথবা `DRAFT হাজিরা`\n\n"
+            "৫. ⏳ *আইনি তামাদি ও ডেডলাইন গণক:*\n"
+            "   • `LIMITATION <আদেশ বা আপিল>` অথবা `DEADLINES`\n"
+            "   _যেমন:_ `LIMITATION দেওয়ানি আপিল জেলা জজ আদালতে কত দিন`\n\n"
+            "৬. 🎯 *শুনানির পূর্ণাঙ্গ প্রস্তুতি (Hearing Pack):*\n"
             "   • `HEARING PACK` অথবা `প্রস্তুতি <মামলা নম্বর>`\n\n"
-            "৫. 🌅 *আজকের চেম্বার ব্রিফিং:*\n"
-            "   • `ATTENTION` অথবা `BRIEF` অথবা `আজকের ব্রিফিং`\n\n"
-            "৬. ⏳ *আইনি তামাদি ও ডেডলাইন অ্যালার্ট:*\n"
-            "   • `DEADLINES` অথবা `তামাদি`\n\n"
-            "৭. 📚 *সুপ্রিম কোর্টের নজির অনুসন্ধান:*\n"
+            "৭. 🌅 *আজকের চেম্বার ব্রিফিং:*\n"
+            "   • `BRIEF` অথবা `আজকের ব্রিফিং`\n\n"
+            "৮. 📚 *সুপ্রিম কোর্টের নজির অনুসন্ধান:*\n"
             "   • `PRECEDENT <বিষয়>` _(যেমন: PRECEDENT 138 NI Act)_\n\n"
-            "৮. 📝 *আইনি নোটিশের খসড়া:*\n"
+            "৯. 📝 *আইনি নোটিশের খসড়া:*\n"
             "   • `DRAFT NOTICE <বিবরণ>`\n\n"
+            "১০. 📂 *মামলার সারসংক্ষেপ:*\n"
+            "   • `SUMMARY <মামলা নম্বর>`\n\n"
             "📌 _জাসটর এআই — আইনজীবীদের সময় বাঁচায়, চেম্বার প্র্যাকটিস রাখে এক ধাপ এগিয়ে।_"
         )
 
@@ -1288,6 +1324,119 @@ class JustorWhatsAppService:
             f"━━━━━━━━━━━━━━━━━━━━\n"
             + reply + "\n\n"
             f"💡 _এই ড্রাফটটি কপি করে আপনার চেম্বার প্যাডে প্রিন্ট বা সংশোধন করতে পারবেন।_"
+        )
+
+    async def _handle_cross_examination(self, query: str, sender: str) -> str:
+        """
+        Super-Intelligence: Generates structured trial cross-examination roadmap & objection defense.
+        """
+        clean_q = query.strip()
+        for pfx in ["CROSS-EXAMINATION", "CROSS", "জেরা", "জেরার প্রশ্ন", "জেরা কৌশল"]:
+            if clean_q.upper().startswith(pfx):
+                clean_q = clean_q[len(pfx):].strip()
+                break
+
+        matter, _ = self._resolve_matter_context(clean_q, sender)
+        m_title = matter.get("title", "মোকদ্দমা") if matter else "মোকদ্দমা"
+        m_id = matter.get("id", "") if matter else ""
+        m_court = matter.get("court", "বিজ্ঞ আদালত") if matter else "বিজ্ঞ আদালত"
+        m_type = matter.get("matterType", "") if matter else ""
+        contradictions = matter.get("contradictions", []) if matter else []
+        gaps = matter.get("evidenceGaps", []) if matter else []
+
+        context_notes = f"Case: {m_title} (#{m_id})\nCourt: {m_court}\nType: {m_type}\n"
+        if contradictions:
+            context_notes += f"Known Contradictions: {'; '.join(contradictions)}\n"
+        if gaps:
+            context_notes += f"Evidentiary Gaps: {'; '.join(gaps)}\n"
+
+        system_instruction = (
+            "You are Justor AI's Master Trial Advocate & Senior Appellate Counsel of the Supreme Court of Bangladesh.\n"
+            "An advocate is entering the witness box to cross-examine an opponent witness or party.\n"
+            "Generate an elite, high-leverage 4-Stage Cross-Examination Roadmap in crisp courtroom Bengali (with legal terms in English):\n\n"
+            "🎯 *১. জেরার মূল কৌশলগত লক্ষ্য (Trial Objectives):* (কী ছাড়পত্র/স্বীকৃতি আদায় করতে হবে)\n"
+            "⛓️ *২. ফাঁদে ফেলার প্রশ্নমালা (Leading Trap Questions):* (Direct leading questions designed to force irreversible 'Yes' or 'No' answers, giving the witness no room to explain)\n"
+            "💥 *৩. বৈপরীত্য ও নথিপত্রের আঘাত (Impeachment via Contradictions):* (Using previous statements, affidavits, or bank records under Sections 145 & 155 of the Evidence Act, 1872)\n"
+            "🛡️ *৪. প্রতিপক্ষের সম্ভাব্য আপত্তি ও তাৎক্ষণিক জবাব (Anticipated Objections & Statutory Counter-Rule):* (Predict what the opponent lawyer will shout—e.g., 'Irrelevant', 'Hearsay', 'Beyond Pleadings'—and the exact Section of the Evidence Act/CPC to cite to the Judge to overrule the objection).\n\n"
+            "Keep format high-contrast, structured for WhatsApp reading, under 1400 characters."
+        )
+
+        prompt = (
+            f"Case Context:\n{context_notes}\n"
+            f"Advocate Instructions:\n\"{clean_q or 'Cross examine opponent on their pleadings'}\"\n\n"
+            f"Generate the comprehensive courtroom cross-examination master strategy."
+        )
+
+        reply = await self._call_gemini_chat(prompt, system_instruction)
+        return (
+            f"🎯 *জেরা ও আপত্তি কৌশল (Trial Cross-Examination Roadmap)*\n"
+            f"মোকদ্দমা: *{m_title}* (`#{m_id}`)\n"
+            f"🏛️ আদালত: {m_court}\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            + reply
+        )
+
+    async def _handle_emergency_petition_draft(self, query: str, sender: str) -> str:
+        """
+        Super-Intelligence: Instant Courtroom Emergency Petitions & Applications Drafter.
+        Drafts Time petitions (Sec 148 CPC), Hazira, Bail (Sec 497/498 CrPC), Injunctions.
+        """
+        clean_q = query.strip()
+        matter, _ = self._resolve_matter_context(clean_q, sender)
+        court = matter.get("court", "বিজ্ঞ আদালত") if matter else "বিজ্ঞ আদালত"
+        case_no = matter.get("caseNumber", matter.get("id", "CR-___/2026")) if matter else "CR-___/2026"
+        client = matter.get("clientName", "মক্কেল") if matter else "মক্কেল"
+        opponent = matter.get("opponentName", "বিবাদী") if matter else "বিবাদী"
+
+        system_instruction = (
+            "You are Justor AI's Senior Court Drafting Clerk for Bangladesh Advocates.\n"
+            "Draft a formal, complete, ready-to-file Emergency Courtroom Application / Petition in formal legal Bengali.\n"
+            "Follow strict Bangladesh Subordinate / High Court formatting:\n"
+            "1. মোকাম: [Court Name]\n"
+            "2. মোকদ্দমা নং ও সাল: [Case Number]\n"
+            "3. পক্ষগণের নাম: [Plaintiff/Petitioner] ... বাদী/দরখাস্তকারী  বনাম  [Defendant/OP] ... বিবাদী/ও/পি\n"
+            "4. দরখাস্তের শিরোনাম (ধারা ও আইন উল্লেখসহ — যেমন: 'দেওয়ানি কার্যবিধির ১৪৮ ধারামতে সময় প্রার্থনার দরখাস্ত' বা 'সিআরপিসির ৪৯৮ ধারামতে জামিনের আবেদন' বা 'হাজিরা দরখাস্ত')\n"
+            "5. বিনীত নিবেদন (৩টি সুস্পষ্ট ও যুক্তিযুক্ত কারণ)\n"
+            "6. অতএব বিনীত প্রার্থনা (সুনির্দিষ্ট ও মার্জিত আদালতের আদেশ প্রার্থনা)\n"
+            "7. তারিখ ও এডভোকেট স্বাক্ষর ব্লক।\n"
+            "Keep the draft formal, dignified, professional, and ready to print or copy."
+        )
+
+        prompt = (
+            f"Court: {court}\nCase No: {case_no}\nPetitioner/Client: {client}\nOpponent: {opponent}\n"
+            f"Request: \"{clean_q}\"\n\nDraft the complete emergency courtroom petition."
+        )
+
+        reply = await self._call_gemini_chat(prompt, system_instruction)
+        return (
+            f"📑 *আদালতের জরুরি দরখাস্তের খসড়া (Court Petition Draft)*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            + reply + "\n\n"
+            f"💡 _ড্রাফটটি কপি করে আপনার চেম্বার প্যাডে প্রিন্ট বা প্রয়োজনমতো সংশোধন করুন।_"
+        )
+
+    async def _handle_limitation_calculator(self, query: str, sender: str) -> str:
+        """
+        Super-Intelligence: Statutory Limitation & Malpractice Risk Calculator under Limitation Act 1908.
+        """
+        clean_q = query.strip()
+        system_instruction = (
+            "You are Justor AI's Statutory Limitation Calculator & Court Procedure Expert under the Limitation Act, 1908 and Bangladesh Laws.\n"
+            "When an advocate asks about limitation, deadlines, or days to file:\n"
+            "1. ⏳ *বিধিবদ্ধ সময়সীমা (Statutory Period):* State the exact limitation period (e.g. ৩০ দিন / ৬০ দিন / ৯০ দিন / ৩ বছর).\n"
+            "2. 📖 *তামাদি আইনের অনুচ্ছেদ (Limitation Act Article):* Cite the exact Article of Schedule I of Limitation Act, 1908 (e.g. Art 152 for Civil Appeal, Art 154 for Criminal Appeal, Art 156 for High Court Appeal, Art 113 for Specific Performance, etc.) or Special Law section.\n"
+            "3. 📅 *কার্যকর ডেডলাইন ও হিসাব:* Calculate the deadline from the date mentioned.\n"
+            "4. ✂️ *ধারা ১২-এর সুবিধা (Exclusion of Copying Time):* Explicitly state that time spent obtaining Certified Copies (নকল তোলার সময়) is excluded under Section 12.\n"
+            "5. ⚠️ *ধারা ৫ মতে তামাদি মওকুফ (Section 5 Condonation):* State whether delay can be condoned under Section 5 on showing 'sufficient cause' (and warn if Section 5 is barred under special laws like Artha Rin or NI Act).\n"
+            "Format with bold headings and bullets for WhatsApp. Keep under 1100 characters."
+        )
+
+        prompt = f"Advocate query regarding legal limitation and deadline:\n\"{clean_q}\"\n\nProvide precise limitation calculation and legal analysis."
+        reply = await self._call_gemini_chat(prompt, system_instruction)
+        return (
+            f"⏳ *আইনি তামাদি ও ডেডলাইন বিশ্লেষণ (Limitation & Risk Calculator)*\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            + reply
         )
 
     def _lookup_case_docs(self, case_ref: str) -> str:
@@ -1513,13 +1662,55 @@ class JustorWhatsAppService:
         ):
             return await self._handle_daily_brief(clean_sender, lawyer)
 
-        # Workflow 6: Deadlines & Statutory Limitation Alerts (DEADLINES, ALERTS, তামাদি)
+        # Workflow 6: Deadlines & Statutory Limitation Alerts (DEADLINES, ALERTS)
         if (
-            upper_query in ["DEADLINES", "DEADLINE", "ALERTS", "LIMITATION", "তামাদি", "ডেডলাইন", "সময়সীমা"]
-            or upper_query.startswith("DEADLINE")
-            or upper_query.startswith("তামাদি")
+            upper_query in ["DEADLINES", "DEADLINE", "ALERTS", "ডেডলাইন", "সময়সীমা"]
+            or upper_query == "LIMITATION"
+            or upper_query == "তামাদি"
         ):
             return await self._handle_deadlines_and_alerts(clean_sender, lawyer)
+
+        # Super-Intelligence 1: Statutory Limitation & Risk Calculator (Limitation Act, 1908)
+        if (
+            upper_query.startswith("LIMITATION")
+            or upper_query.startswith("CALCULATE LIMITATION")
+            or upper_query.startswith("তামাদি হিসাব")
+            or upper_query.startswith("তামাদি গণনা")
+            or "কত দিন সময়" in query_text
+            or "তামাদি কত দিন" in query_text
+            or ("তামাদি" in query_text and len(query_text.split()) > 1)
+        ):
+            return await self._handle_limitation_calculator(query_text, sender)
+
+        # Super-Intelligence 2: Trial Cross-Examination Roadmap & Objection Defense
+        if (
+            upper_query.startswith("CROSS")
+            or upper_query.startswith("CROSS-EXAMINATION")
+            or upper_query.startswith("CROSS EXAMINATION")
+            or upper_query.startswith("জেরা")
+            or upper_query.startswith("জেরার প্রশ্ন")
+            or upper_query.startswith("জেরা কৌশল")
+            or "CROSS-EXAM" in upper_query
+            or "সাক্ষীকে জেরা" in query_text
+        ):
+            return await self._handle_cross_examination(query_text, sender)
+
+        # Super-Intelligence 3: Courtroom Emergency Petitions & Applications Drafter
+        # Catches: DRAFT HAZIRA, DRAFT TIME PETITION, দরখাস্ত, হাজিরা, সময় প্রার্থনা, জামিনের আবেদন (except DRAFT NOTICE)
+        if (
+            (upper_query.startswith("DRAFT") and not upper_query.startswith("DRAFT NOTICE") and not upper_query.startswith("DRAFT LEGAL NOTICE"))
+            or upper_query.startswith("PETITION")
+            or upper_query.startswith("দরখাস্ত")
+            or upper_query.startswith("আবেদন")
+            or upper_query.startswith("হাজিরা")
+            or upper_query.startswith("সময় প্রার্থনা")
+            or "জরুরি দরখাস্ত" in query_text
+            or "হাজিরা দরখাস্ত" in query_text
+            or "সময় প্রার্থনার আবেদন" in query_text
+            or "জামিনের দরখাস্ত" in query_text
+            or "জামিনের আবেদন" in query_text
+        ):
+            return await self._handle_emergency_petition_draft(query_text, sender)
 
         # Workflow 4: Hearing Preparation Pack ("Prepare me for tomorrow's hearing" / HEARING PACK)
         if (
