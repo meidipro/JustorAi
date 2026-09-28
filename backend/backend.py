@@ -48,7 +48,7 @@ from backend.learning import router as learning_router
 from backend.ocr_service import legal_ocr_service
 from backend.search_grounding import legal_search_grounding
 from backend.matter_service import matter_service
-from backend.whatsapp_service import whatsapp_service, META_WA_VERIFY_TOKEN
+from backend.whatsapp_service import whatsapp_service, META_WA_VERIFY_TOKEN, ACTIVE_PERMANENT_META_TOKEN
 from backend.legal_normalize import is_bengali_requested, normalize_bengali_text
 from backend.security_controls import (
     admin_secret,
@@ -2970,18 +2970,47 @@ async def whatsapp_meta_webhook(request: Request):
                 text_content = ""
                 media_url = None
                 media_type = None
+                media_bytes = None
+                media_id = None
 
                 if msg_type == "text":
                     text_content = msg.get("text", {}).get("body", "")
                 elif msg_type == "audio":
                     media_type = msg.get("audio", {}).get("mime_type", "audio/ogg")
+                    media_id = msg.get("audio", {}).get("id")
+                elif msg_type == "image":
+                    media_type = msg.get("image", {}).get("mime_type", "image/jpeg")
+                    media_id = msg.get("image", {}).get("id")
+                    text_content = msg.get("image", {}).get("caption", "")
+                elif msg_type == "document":
+                    media_type = msg.get("document", {}).get("mime_type", "application/pdf")
+                    media_id = msg.get("document", {}).get("id")
+                    text_content = msg.get("document", {}).get("caption", "")
+
+                # Fetch media bytes from Meta Graph API
+                if media_id:
+                    try:
+                        token = os.getenv("META_WA_ACCESS_TOKEN", "").strip() or ACTIVE_PERMANENT_META_TOKEN
+                        async with httpx.AsyncClient(timeout=30.0) as client:
+                            meta_media_url = f"https://graph.facebook.com/v21.0/{media_id}"
+                            r = await client.get(meta_media_url, headers={"Authorization": f"Bearer {token}"})
+                            if r.status_code == 200:
+                                download_url = r.json().get("url")
+                                if download_url:
+                                    r_bin = await client.get(download_url, headers={"Authorization": f"Bearer {token}"})
+                                    if r_bin.status_code == 200:
+                                        media_bytes = r_bin.content
+                                        logger.info(f"Downloaded Meta media {media_id} ({len(media_bytes)} bytes, type: {media_type})")
+                    except Exception as ex:
+                        logger.error(f"Error fetching Meta media {media_id}: {ex}")
 
                 if from_num:
                     reply = await whatsapp_service.handle_incoming_message(
                         sender=from_num,
                         text_message=text_content,
                         media_url=media_url,
-                        media_type=media_type
+                        media_type=media_type,
+                        media_bytes=media_bytes
                     )
                     sent_ok = await whatsapp_service.send_meta_whatsapp_message(to_phone=from_num, text=reply)
                     log_entry["dispatched"].append({

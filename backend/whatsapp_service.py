@@ -35,6 +35,16 @@ if SUPABASE_URL and SUPABASE_KEY:
     except Exception as e:
         logger.warning(f"Supabase client initialization failed in WhatsApp service: {e}")
 
+SUPABASE_CASES_URL = (os.getenv("SUPABASE_CASES_URL") or "").strip()
+SUPABASE_CASES_KEY = (os.getenv("SUPABASE_CASES_KEY") or os.getenv("SUPABASE_CASES_SERVICE_ROLE_KEY") or "").strip()
+supabase_cases_client: Optional[Client] = None
+if SUPABASE_CASES_URL and SUPABASE_CASES_KEY:
+    try:
+        supabase_cases_client = create_client(SUPABASE_CASES_URL, SUPABASE_CASES_KEY)
+        logger.info("Supabase Cases client initialized in JustorWhatsAppService for DLR Corpus.")
+    except Exception as e:
+        logger.warning(f"Supabase cases client initialization failed: {e}")
+
 TENANTS_FILE = os.path.join(BASE_DIR, "data", "whatsapp_tenants.json")
 AUDIT_FILE = os.path.join(BASE_DIR, "data", "whatsapp_audit.json")
 
@@ -820,6 +830,12 @@ class JustorWhatsAppService:
             f"📅 *Hearing:* {days_str} ({hearing_str})",
             f"📋 *Hearing Pack has been updated automatically.*",
             "",
+            # One-Tap Client Forwarding Message (Phase 2)
+            f"━━━━━━━━━━━━━━━━━━━━",
+            f"📤 *মক্কেলকে ফরোয়ার্ড করার প্রস্তুত বার্তা (Tap & Forward to Client):*",
+            f"\"শ্রদ্ধেয় {matter.get('clientName', 'মক্কেল')} সাহেব, আজ {court}-এ আপনার মামলার শুনানি সম্পন্ন হয়েছে। আদালত আদেশে জানিয়েছেন: '{raw_text.replace(chr(10), ' ')[:75]}'। পরবর্তী শুনানির তারিখ ধার্য হয়েছে *{hearing_str}*। চেম্বার থেকে পরবর্তী নথিপত্র প্রস্তুত রাখা হচ্ছে। — অ্যাডভোকেট মেহদী হাসান অ্যান্ড অ্যাসোসিয়েটস\"",
+            f"━━━━━━━━━━━━━━━━━━━━",
+            "",
             f"👉 _হিয়ারিং প্যাক পর্যালোচনা করতে লিখুন:_ `HEARING PACK {m_id}`",
             "",
             "⚠️ _ভুল ফাইলে সংরক্ষিত হলে বাতিল করতে লিখুন:_ *UNDO*"
@@ -1104,6 +1120,74 @@ class JustorWhatsAppService:
         lines.append("💡 _আদালত চত্বর থেকে তাৎক্ষণিক আদেশ আপডেট করতে লিখুন:_ `#[মামলা_নম্বর] আদেশ...`")
         return "\n".join(lines)
 
+    async def _search_precedent_database(self, query: str) -> List[Dict[str, Any]]:
+        """
+        Retrieves authentic Supreme Court judgments from Supabase DLR corpus.
+        Searches both Project 1 (legal_cases) and Project 2 (case_chunks).
+        """
+        results = []
+        raw = query.strip().lower()
+        keywords = [
+            w for w in re.split(r"[\s,;]+", raw)
+            if len(w) >= 3 and w not in ["the", "and", "for", "with", "case", "precedent", "cite", "নজির", "কেস"]
+        ]
+        if not keywords:
+            keywords = [raw[:25]]
+
+        # 1. Search Project 1: legal_cases (295 Supreme Court judgments)
+        if supabase_client:
+            for kw in keywords[:3]:
+                try:
+                    def query_p1(search_term=kw):
+                        return (
+                            supabase_client.table("legal_cases")
+                            .select("case_title, citation, court_division, year, ratio_summary, judgment_text")
+                            .or_(f"case_title.ilike.%{search_term}%,ratio_summary.ilike.%{search_term}%,citation.ilike.%{search_term}%")
+                            .limit(3)
+                            .execute()
+                        )
+                    res = await asyncio.to_thread(query_p1)
+                    if res and res.data:
+                        for row in res.data:
+                            if not any(r.get("citation") == row.get("citation") for r in results):
+                                results.append({
+                                    "title": row.get("case_title"),
+                                    "citation": row.get("citation"),
+                                    "court": row.get("court_division", "High Court Division"),
+                                    "year": row.get("year"),
+                                    "ratio": row.get("ratio_summary") or (row.get("judgment_text") or "")[:200]
+                                })
+                except Exception as ex:
+                    logger.debug(f"P1 precedent search error for {kw}: {ex}")
+
+        # 2. Search Project 2: case_chunks (Appellate & High Court judgments)
+        if supabase_cases_client:
+            for kw in keywords[:3]:
+                try:
+                    def query_p2(search_term=kw):
+                        return (
+                            supabase_cases_client.table("case_chunks")
+                            .select("case_title, citation, court_division, year, ratio_decidendi, exact_key_passages")
+                            .or_(f"case_title.ilike.%{search_term}%,ratio_decidendi.ilike.%{search_term}%,citation.ilike.%{search_term}%")
+                            .limit(3)
+                            .execute()
+                        )
+                    res2 = await asyncio.to_thread(query_p2)
+                    if res2 and res2.data:
+                        for row in res2.data:
+                            if not any(r.get("citation") == row.get("citation") for r in results):
+                                results.append({
+                                    "title": row.get("case_title"),
+                                    "citation": row.get("citation"),
+                                    "court": row.get("court_division", "Appellate Division"),
+                                    "year": row.get("year"),
+                                    "ratio": row.get("ratio_decidendi") or (row.get("exact_key_passages") or "")[:200]
+                                })
+                except Exception as ex:
+                    logger.debug(f"P2 precedent search error for {kw}: {ex}")
+
+        return results[:4]
+
     async def _handle_precedent_query(self, query: str, sender: str, lang: str = "bn") -> str:
         """Searches landmark Supreme Court of Bangladesh citations and ratio decidendi."""
         clean_topic = query.strip()
@@ -1112,22 +1196,31 @@ class JustorWhatsAppService:
                 clean_topic = clean_topic[len(prefix):].strip()
                 break
 
+        # Grounding: Retrieve real Supreme Court DLR cases from database
+        db_cases = await self._search_precedent_database(clean_topic)
+        corpus_context = ""
+        if db_cases:
+            corpus_context = "AUTHENTIC SUPREME COURT JUDGMENTS RETRIEVED FROM VAULT:\n"
+            for c in db_cases:
+                corpus_context += f"• Citation: {c.get('citation')}\n  Title: {c.get('title')} ({c.get('court')}, {c.get('year')})\n  Ratio: {c.get('ratio')}\n\n"
+
         system_instruction = (
             "You are Justor AI's Senior Supreme Court of Bangladesh Research Counsel for Advocates.\n"
             "When an advocate asks for precedents or citations on WhatsApp:\n"
-            "1. Provide 1 to 2 controlling, authoritative landmark judgments of the Supreme Court of Bangladesh (Appellate Division or High Court Division).\n"
+            "1. Ground your response in authoritative Supreme Court judgments (Appellate Division or High Court Division).\n"
             "2. Always provide the precise Legal Citation format:\n"
             "   [Case Title] [Volume] DLR/BLD/BLC ([Division]) [Page] ([Year])\n"
-            "3. State the exact Ratio Decidendi (কী সিদ্ধান্ত দেওয়া হয়েছে) in 2 bullet points.\n"
-            "4. Controlling Statutory Section (e.g. ধারা ১৩৮ এন আই অ্যাক্ট বা ধারা ৪৯৮ সিআরপিসি).\n"
-            "5. Advocate Submission Tip: 1 crisp Bengali line on how the advocate should present this precedent to the Bench.\n"
+            "3. State the exact Ratio Decidendi (মূল সিদ্ধান্ত) in 2 bullet points.\n"
+            "4. Controlling Statutory Section (e.g. ধারা ১৩৮ এন আই অ্যাক্ট বা ধারা ৪৯৮ সিআরপিসি বা Order 39 CPC).\n"
+            "5. Advocate Courtroom Submission Tip: 1 crisp Bengali line on how the advocate should argue this precedent before the Bench.\n"
             "Format cleanly for WhatsApp with *bold* headers and bullets. Keep under 1100 characters."
         )
 
         prompt = (
             f"Advocate requesting controlling Supreme Court precedent on:\n"
             f"\"{clean_topic}\"\n\n"
-            f"Provide authoritative Bangladesh citations (DLR/BLD/BLC) with clear ratio decidendi and court oral submission guidance."
+            f"{corpus_context}"
+            f"Synthesize the controlling Bangladesh citations (DLR/BLD/BLC) with clear ratio decidendi and courtroom oral argument strategy."
         )
 
         reply = await self._call_gemini_chat(prompt, system_instruction)
@@ -1313,7 +1406,8 @@ class JustorWhatsAppService:
         sender: str,
         text_message: Optional[str] = None,
         media_url: Optional[str] = None,
-        media_type: Optional[str] = None
+        media_type: Optional[str] = None,
+        media_bytes: Optional[bytes] = None
     ) -> str:
         """
         Main entry point for all WhatsApp inbound events (Twilio, Meta Cloud API, Simulator).
@@ -1348,37 +1442,45 @@ class JustorWhatsAppService:
         session = self._user_sessions.get(clean_sender, {"history": []})
 
         # 2. Handle Audio Voice Note (Court corridor dictation via voice)
-        if media_url and (media_type and "audio" in media_type):
+        if (media_bytes or media_url) and (media_type and "audio" in media_type):
             try:
-                async with httpx.AsyncClient(timeout=30.0) as client:
-                    audio_resp = await client.get(media_url)
-                    if audio_resp.status_code == 200:
-                        transcribed = await self.transcribe_voice_audio(
-                            audio_resp.content,
-                            mime_type=media_type.split(";")[0].strip()
-                        )
-                        if transcribed:
-                            query_text = transcribed
-                            upper_query = query_text.upper().strip()
-                            logger.info(f"Transcribed voice note from {clean_sender}: {query_text}")
-                        else:
-                            return "🎙️ ভয়েস মেসেজটি স্পষ্ট শোনা যায়নি। অনুগ্রহ করে পুনরায় রেকর্ড করে পাঠান অথবা লিখে জানান।"
+                audio_content = media_bytes
+                if not audio_content and media_url:
+                    async with httpx.AsyncClient(timeout=30.0) as client:
+                        audio_resp = await client.get(media_url)
+                        if audio_resp.status_code == 200:
+                            audio_content = audio_resp.content
+                if audio_content:
+                    transcribed = await self.transcribe_voice_audio(
+                        audio_content,
+                        mime_type=media_type.split(";")[0].strip()
+                    )
+                    if transcribed:
+                        query_text = transcribed
+                        upper_query = query_text.upper().strip()
+                        logger.info(f"Transcribed voice note from {clean_sender}: {query_text}")
                     else:
-                        return "ভয়েস ফাইলটি ডাউনলোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
+                        return "🎙️ ভয়েস মেসেজটি স্পষ্ট শোনা যায়নি। অনুগ্রহ করে পুনরায় রেকর্ড করে পাঠান অথবা লিখে জানান।"
+                else:
+                    return "ভয়েস ফাইলটি ডাউনলোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
             except Exception as ex:
                 logger.error(f"Error fetching audio media: {ex}")
                 return "ভয়েস মেসেজ প্রসেস করা সম্ভব হয়নি। অনুগ্রহ করে টেক্সট লিখে পাঠান।"
 
         # 3. Handle Image / PDF (Court Order Sheet or Evidence Attachment)
-        if media_url and (media_type and ("image" in media_type or "pdf" in media_type)):
+        if (media_bytes or media_url) and (media_type and ("image" in media_type or "pdf" in media_type)):
             try:
-                async with httpx.AsyncClient(timeout=35.0) as client:
-                    img_resp = await client.get(media_url)
-                    if img_resp.status_code == 200:
-                        mime = media_type.split(";")[0].strip()
-                        doc_analysis_text = await self.analyze_document_image(img_resp.content, mime_type=mime)
-                    else:
-                        return "ডকুমেন্ট বা ছবি ফাইলটি ডাউনলোড করতে সমস্যা হয়েছে।"
+                img_content = media_bytes
+                if not img_content and media_url:
+                    async with httpx.AsyncClient(timeout=35.0) as client:
+                        img_resp = await client.get(media_url)
+                        if img_resp.status_code == 200:
+                            img_content = img_resp.content
+                if img_content:
+                    mime = media_type.split(";")[0].strip() if media_type else "image/jpeg"
+                    doc_analysis_text = await self.analyze_document_image(img_content, mime_type=mime)
+                else:
+                    return "ডকুমেন্ট বা ছবি ফাইলটি ডাউনলোড করতে সমস্যা হয়েছে।"
             except Exception as ex:
                 logger.error(f"Error analyzing image media: {ex}")
                 return "ছবি বা ডকুমেন্ট বিশ্লেষণ করা সম্ভব হয়নি।"
