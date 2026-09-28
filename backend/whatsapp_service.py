@@ -75,8 +75,11 @@ def _save_audit_trail(trail: List[Dict[str, Any]]) -> None:
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
 TWILIO_WHATSAPP_NUMBER = os.getenv("TWILIO_WHATSAPP_NUMBER", "").strip()
-META_WA_PHONE_NUMBER_ID = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip()
-META_WA_ACCESS_TOKEN = os.getenv("META_WA_ACCESS_TOKEN", "").strip()
+META_WA_PHONE_NUMBER_ID = os.getenv("META_WA_PHONE_NUMBER_ID", "1372121945981473").strip()
+META_WA_ACCESS_TOKEN = (
+    os.getenv("META_WA_ACCESS_TOKEN", "").strip()
+    or "EAAUXJ0AG6f4BSgt1cUAoMgsqJKluYG8qaWrwmx6HyRdXsjlyzdtCuiOH4aD8czHDLwEUZBDEuKNy1FQtanMxspR9qZBXxRSzV8HQL8W6nKb0lQLAbvcOCQqr28i4D7FVRMde1X5Fur3DykMaOcZBdL6nDUtWduYxruKHCqZCXeqaF7wJQStm6GHmpnjjoAZDZD"
+)
 META_WA_VERIFY_TOKEN = os.getenv("META_WA_VERIFY_TOKEN", "justor_wa_verify_2026").strip()
 
 GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID", "justorai-508321").strip()

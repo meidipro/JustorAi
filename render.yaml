@@ -31,7 +31,13 @@ services:
         value: "us-central1"
       - key: OPENROUTER_API_KEY
         sync: false
-      - key: DASHSCOPE_API_KEY
+      - key: META_WA_PHONE_NUMBER_ID
+        value: "1372121945981473"
+      - key: META_WA_BUSINESS_ACCOUNT_ID
+        value: "2291916644898351"
+      - key: META_WA_VERIFY_TOKEN
+        value: "justor_wa_verify_2026"
+      - key: META_WA_ACCESS_TOKEN
         sync: false
       - key: PYTHON_VERSION
         value: "3.11.0"
