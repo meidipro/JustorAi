@@ -75,11 +75,13 @@ def _save_audit_trail(trail: List[Dict[str, Any]]) -> None:
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
 TWILIO_WHATSAPP_NUMBER = os.getenv("TWILIO_WHATSAPP_NUMBER", "").strip()
+ACTIVE_PERMANENT_META_TOKEN = "EAAUXJ0AG6f4BSgt1cUAoMgsqJKluYG8qaWrwmx6HyRdXsjlyzdtCuiOH4aD8czHDLwEUZBDEuKNy1FQtanMxspR9qZBXxRSzV8HQL8W6nKb0lQLAbvcOCQqr28i4D7FVRMde1X5Fur3DykMaOcZBdL6nDUtWduYxruKHCqZCXeqaF7wJQStm6GHmpnjjoAZDZD"
+_env_wa_token = os.getenv("META_WA_ACCESS_TOKEN", "").strip()
+if not _env_wa_token or "BSpOjnspmwU103Wl" in _env_wa_token:
+    META_WA_ACCESS_TOKEN = ACTIVE_PERMANENT_META_TOKEN
+else:
+    META_WA_ACCESS_TOKEN = _env_wa_token
 META_WA_PHONE_NUMBER_ID = os.getenv("META_WA_PHONE_NUMBER_ID", "1372121945981473").strip()
-META_WA_ACCESS_TOKEN = (
-    os.getenv("META_WA_ACCESS_TOKEN", "").strip()
-    or "EAAUXJ0AG6f4BSgt1cUAoMgsqJKluYG8qaWrwmx6HyRdXsjlyzdtCuiOH4aD8czHDLwEUZBDEuKNy1FQtanMxspR9qZBXxRSzV8HQL8W6nKb0lQLAbvcOCQqr28i4D7FVRMde1X5Fur3DykMaOcZBdL6nDUtWduYxruKHCqZCXeqaF7wJQStm6GHmpnjjoAZDZD"
-)
 META_WA_VERIFY_TOKEN = os.getenv("META_WA_VERIFY_TOKEN", "justor_wa_verify_2026").strip()
 
 GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID", "justorai-508321").strip()
@@ -1525,12 +1527,10 @@ class JustorWhatsAppService:
         """Sends an outbound WhatsApp message back to the user via Meta Cloud API."""
         phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip() or META_WA_PHONE_NUMBER_ID
         access_token = os.getenv("META_WA_ACCESS_TOKEN", "").strip() or META_WA_ACCESS_TOKEN
-        if not phone_id or not access_token:
-            load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=True)
-            phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip()
-            access_token = os.getenv("META_WA_ACCESS_TOKEN", "").strip()
-
-        if not phone_id or not access_token:
+        if not access_token or "BSpOjnspmwU103Wl" in access_token:
+            access_token = ACTIVE_PERMANENT_META_TOKEN
+        if not phone_id:
+            phone_id = "1372121945981473"
             logger.warning("META_WA_PHONE_NUMBER_ID or META_WA_ACCESS_TOKEN not set; skipping outbound Meta message.")
             return False
 

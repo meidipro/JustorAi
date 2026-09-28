@@ -2903,8 +2903,10 @@ META_WEBHOOK_LOGS = []
 @app.get("/api/whatsapp/meta-debug", tags=["WhatsApp Helpline"])
 async def whatsapp_meta_debug(test_phone: Optional[str] = None):
     """Diagnoses Meta Cloud API credentials, recent webhook arrivals, and tests outbound sending."""
-    phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip() or META_WA_PHONE_NUMBER_ID
+    phone_id = os.getenv("META_WA_PHONE_NUMBER_ID", "").strip() or "1372121945981473"
     token = os.getenv("META_WA_ACCESS_TOKEN", "").strip() or META_WA_ACCESS_TOKEN
+    if not token or "BSpOjnspmwU103Wl" in token:
+        token = "EAAUXJ0AG6f4BSgt1cUAoMgsqJKluYG8qaWrwmx6HyRdXsjlyzdtCuiOH4aD8czHDLwEUZBDEuKNy1FQtanMxspR9qZBXxRSzV8HQL8W6nKb0lQLAbvcOCQqr28i4D7FVRMde1X5Fur3DykMaOcZBdL6nDUtWduYxruKHCqZCXeqaF7wJQStm6GHmpnjjoAZDZD"
     outbound_test = None
     if test_phone and phone_id and token:
         try:
