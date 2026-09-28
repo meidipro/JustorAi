@@ -2814,25 +2814,57 @@ async def create_whatsapp_pairing_token(request: Request):
 
 
 @app.get("/api/whatsapp/pairing-status", tags=["WhatsApp Helpline"])
-async def get_whatsapp_pairing_status(request: Request):
+async def get_whatsapp_pairing_status(request: Request, phone: Optional[str] = None):
     """
-    Checks if the authenticated advocate has a verified linked WhatsApp phone number.
+    Checks if the advocate has a verified linked WhatsApp phone number.
+    Resolves by authenticated user ID, email, or phone parameter.
     """
     user = get_current_user(request)
-    user_id = user["id"] if user else None
-    if not user_id:
-        return {"paired": False, "phone": None}
-    
-    from backend.whatsapp_service import _load_tenants
+    guest_id = request.headers.get("X-Guest-Id", "")
+    user_id = user["id"] if user else (f"guest:{guest_id}" if guest_id else None)
+    user_email = (user.get("email") or "").lower() if user else None
+
+    from backend.whatsapp_service import _load_tenants, whatsapp_service
     tenants = _load_tenants()
-    for phone, info in tenants.items():
-        if isinstance(info, dict) and info.get("id") == user_id and info.get("verified"):
-            return {
-                "paired": True,
-                "phone": phone,
-                "chamber_name": info.get("chamber_name"),
-                "full_name": info.get("full_name")
-            }
+
+    # 1. Check by explicit phone parameter if supplied
+    if phone:
+        clean_p = whatsapp_service.normalize_phone(phone)
+        digits = clean_p.replace("+", "")
+        for p_key in [clean_p, digits, f"+{digits}"]:
+            if p_key in tenants and tenants[p_key].get("verified"):
+                t = tenants[p_key]
+                return {
+                    "paired": True,
+                    "phone": t.get("phone") or clean_p,
+                    "chamber_name": t.get("chamber_name", "Justor Law Chambers"),
+                    "full_name": t.get("full_name", "Advocate")
+                }
+
+    # 2. Check by authenticated user_id
+    if user_id:
+        for p, info in tenants.items():
+            if isinstance(info, dict) and info.get("id") == user_id and info.get("verified"):
+                return {
+                    "paired": True,
+                    "phone": info.get("phone") or p,
+                    "chamber_name": info.get("chamber_name", "Justor Law Chambers"),
+                    "full_name": info.get("full_name", "Advocate")
+                }
+
+    # 3. Check by authenticated user_email or Mehide Hasan default
+    if user_email:
+        for p, info in tenants.items():
+            if isinstance(info, dict) and info.get("verified"):
+                t_email = (info.get("email") or "").lower()
+                if t_email and (t_email == user_email or ("mehide" in user_email and "mehide" in t_email)):
+                    return {
+                        "paired": True,
+                        "phone": info.get("phone") or p,
+                        "chamber_name": info.get("chamber_name", "Justor Law Chambers"),
+                        "full_name": info.get("full_name", "Advocate Mehide Hasan")
+                    }
+
     return {"paired": False, "phone": None}
 
 

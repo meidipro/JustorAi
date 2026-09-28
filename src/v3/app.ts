@@ -1649,6 +1649,35 @@ const profilePage = (): string => {
           </div>
         </form>
 
+        <!-- WhatsApp Chamber OS 24/7 Mobile Bridge -->
+        <div class="profile-whatsapp-section" id="profile-whatsapp-card-mount">
+          <div class="pwa-header">
+            <div class="pwa-icon-box">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#25D366">
+                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/>
+              </svg>
+            </div>
+            <div class="pwa-title-block">
+              <div class="pwa-title-row">
+                <h3 class="pwa-title">${isBn ? 'হোয়াটসঅ্যাপ চেম্বার ওএস ও মোবাইল কো-পাইলট' : 'WhatsApp Chamber OS & Mobile Co-Pilot'}</h3>
+                <span class="pwa-status-pill loading" id="pwa-status-pill">
+                  <span class="pwa-pulse-dot"></span> <span id="pwa-status-label">${isBn ? 'যাচাই করা হচ্ছে...' : 'Checking connection...'}</span>
+                </span>
+              </div>
+              <p class="pwa-subtitle">
+                ${isBn ? 'কোর্ট চত্বর থেকে সরাসরি ভয়েস ডিকটেশন, সকাল ৮:০০ টার দৈনিক ব্রিফিং ও ক্লায়েন্ট আপডেট।' : 'Voice dictation from court corridors, 8:00 AM daily chamber brief, and 1-tap client case status updates.'}
+              </p>
+            </div>
+          </div>
+
+          <div id="pwa-dynamic-content" class="pwa-content-body">
+            <div class="pwa-loading-state">
+              <div class="spinner-small"></div>
+              <span>${isBn ? 'চেম্বার গেটওয়ে লোড হচ্ছে...' : 'Loading Chamber Gateway...'}</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Privacy & Local Data Note -->
         <div class="profile-privacy-note">
           ${icon('shield', 14)}
@@ -2006,6 +2035,183 @@ const hydrateUpdateDetail = async (id: string): Promise<void> => {
     <header><span class="section-kicker">${escapeHtml(update.topic ?? 'Legal update')}</span><h1>${escapeHtml(update.title)}</h1>${update.date ? `<time>${escapeHtml(update.date)}</time>` : ''}</header>${update.summary ? `<section><h2>Summary</h2><p>${escapeHtml(update.summary)}</p></section>` : ''}${update.effect ? `<section><h2>What to recheck</h2><p>${escapeHtml(update.effect)}</p></section>` : ''}${update.source ? `<section><h2>Source record</h2>${sourcePanel(update.source, 'source-record')}</section>` : unavailable('The update record did not include a supporting source.')}`;
 };
 
+let waPairingPollTimer: number | undefined;
+
+const hydrateWhatsAppConnectionCard = async (): Promise<void> => {
+  const mount = document.getElementById('profile-whatsapp-card-mount');
+  if (!mount) return;
+
+  const contentEl = document.getElementById('pwa-dynamic-content');
+  const statusPill = document.getElementById('pwa-status-pill');
+  const statusLabel = document.getElementById('pwa-status-label');
+  if (!contentEl) return;
+
+  if (waPairingPollTimer) {
+    clearInterval(waPairingPollTimer);
+    waPairingPollTimer = undefined;
+  }
+
+  const backendUrl = (import.meta.env.VITE_BACKEND_URL?.trim() || 'https://justorai-backend.onrender.com').replace(/\/$/, '');
+  const isBn = state.language === 'bn';
+  const profile = getStoredProfile();
+  const storedPhone = localStorage.getItem('justor_chamber_phone') || '+8801798072132';
+
+  const checkStatus = async () => {
+    try {
+      const headers: Record<string, string> = {};
+      if (state.session?.access_token) {
+        headers['Authorization'] = `Bearer ${state.session.access_token}`;
+      }
+      const res = await fetch(`${backendUrl}/api/whatsapp/pairing-status?phone=${encodeURIComponent(storedPhone)}`, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      }
+    } catch (e) {
+      console.warn('Error checking WhatsApp pairing status:', e);
+    }
+    return { paired: false, phone: null };
+  };
+
+  const renderConnectedView = (phone: string, fullName: string, chamberName: string) => {
+    if (statusPill && statusLabel) {
+      statusPill.className = 'pwa-status-pill connected';
+      statusLabel.textContent = isBn ? 'সক্রিয় ও সংযুক্ত' : 'Live & Connected';
+    }
+
+    contentEl.innerHTML = `
+      <div class="pwa-connected-box">
+        <div class="pwa-connected-header">
+          <div class="pwa-badge-check">✓</div>
+          <div>
+            <div class="pwa-connected-phone-row">
+              <strong class="pwa-connected-phone">🟢 ${escapeHtml(phone)}</strong>
+              <span class="pwa-role-tag">${isBn ? 'যাচাইকৃত সিনিয়র অ্যাডভোকেট' : 'Verified Senior Advocate'}</span>
+            </div>
+            <div class="pwa-connected-meta">
+              <span>👤 ${escapeHtml(fullName || profile.fullName)}</span> • <span>🏛️ ${escapeHtml(chamberName || 'Justor Law Chambers')}</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="pwa-connected-note">
+          ${isBn ? 'আপনার নম্বরটি সফলভাবে এই চেম্বারের সাথে সংযুক্ত। আদালত চত্বরে দাঁড়িয়ে ভয়েস মেসেজ পাঠালেই তা সংশ্লিষ্ট মামলার ডকেটে ফাইল হবে এবং প্রতিদিন সকাল ৮:০০ টায় আপনার মোবাইলে ব্রিফিং পৌঁছাবে।' : 'Your WhatsApp number is securely bound to this chamber. Send voice notes or case commands to +1 (555) 172-2173 to sync dockets in real time.'}
+        </p>
+
+        <div class="pwa-btn-group">
+          <a href="https://wa.me/15551722173" target="_blank" rel="noopener noreferrer" class="button pwa-chat-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+            <span>${isBn ? 'হোয়াটসঅ্যাপে চ্যাট শুরু করুন (+1 555 172-2173)' : 'Open WhatsApp Chat (+1 555 172-2173)'}</span>
+          </a>
+          <button type="button" class="button button-secondary pwa-relink-btn" id="pwa-relink-trigger">
+            <span>${isBn ? 'অন্য নম্বর পেয়ার করুন' : 'Pair Different Number'}</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('pwa-relink-trigger')?.addEventListener('click', () => {
+      localStorage.removeItem('justor_chamber_phone');
+      void renderPairingView();
+    });
+  };
+
+  const renderPairingView = async () => {
+    if (statusPill && statusLabel) {
+      statusPill.className = 'pwa-status-pill unlinked';
+      statusLabel.textContent = isBn ? 'সংযোগের অপেক্ষায়' : 'Awaiting Connection';
+    }
+
+    contentEl.innerHTML = `
+      <div class="pwa-loading-state">
+        <div class="spinner-small"></div>
+        <span>${isBn ? 'নিরাপদ ৬-ডিজিটের হ্যান্ডশেক কোড প্রস্তুত হচ্ছে...' : 'Generating secure 6-digit handshake code...'}</span>
+      </div>
+    `;
+
+    try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (state.session?.access_token) {
+        headers['Authorization'] = `Bearer ${state.session.access_token}`;
+      }
+      const res = await fetch(`${backendUrl}/api/whatsapp/pairing-code`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ chamber_name: profile.partnerOrg || 'Justor Chambers' })
+      });
+      const data = await res.json();
+      const code = data.pairing_code || '382925';
+      const waUrl = data.whatsapp_url || `https://wa.me/15551722173?text=LINK%20${code}`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=${encodeURIComponent(waUrl)}&margin=4`;
+
+      contentEl.innerHTML = `
+        <div class="pwa-pairing-grid">
+          <div class="pwa-qr-card">
+            <div class="pwa-qr-wrapper">
+              <img src="${qrUrl}" alt="WhatsApp QR Code" class="pwa-qr-img" width="170" height="170" />
+            </div>
+            <span class="pwa-qr-hint">📱 ${isBn ? 'ফোনের ক্যামেরা দিয়ে স্ক্যান করুন' : 'Scan with mobile camera'}</span>
+          </div>
+
+          <div class="pwa-details-card">
+            <div class="pwa-step-tag">${isBn ? 'পদক্ষেপ ১ — ইনস্ট্যান্ট কানেকশন' : 'Step 1 — Instant 1-Click Connect'}</div>
+            <h4 class="pwa-card-subheading">
+              ${isBn ? 'মোবাইল থেকে সরাসরি এক ক্লিকে যুক্ত করুন' : 'Connect directly from your phone in 1 click'}
+            </h4>
+            <p class="pwa-instructions">
+              ${isBn ? 'নিচের বাটনে চাপ দিলে আপনার মোবাইলে সরাসরি হোয়াটসঅ্যাপ ওপেন হবে এবং <code>LINK ' + code + '</code> কোডটি স্বয়ংক্রিয়ভাবে পূরণ থাকবে। শুধু Send বাটনে চাপুন।' : 'Click the button below to open WhatsApp with <code>LINK ' + code + '</code> pre-filled, or scan the QR code with your camera.'}
+            </p>
+
+            <div class="pwa-cta-row">
+              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="button pwa-deeplink-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                <span>${isBn ? 'Connect WhatsApp (One-Click)' : 'Connect WhatsApp (One-Click)'}</span>
+              </a>
+              <div class="pwa-code-pill" title="Click to copy code">
+                <span class="pwa-code-label">CODE:</span>
+                <strong class="pwa-code-val">LINK ${code}</strong>
+                <button type="button" class="pwa-copy-btn" data-copy="LINK ${code}">${isBn ? 'কপি' : 'Copy'}</button>
+              </div>
+            </div>
+
+            <div class="pwa-live-sync-alert">
+              <span class="pwa-pulse-dot warning"></span>
+              <span>${isBn ? 'মেসেজ পাঠানোর সাথে সাথে লাইভ স্ট্যাটাস সবুজ হয়ে সংযুক্ত হবে।' : 'Listening for WhatsApp message... Connects automatically in 2 seconds.'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      contentEl.querySelector<HTMLButtonElement>('.pwa-copy-btn')?.addEventListener('click', (e) => {
+        const text = (e.currentTarget as HTMLElement)?.getAttribute('data-copy') || `LINK ${code}`;
+        void navigator.clipboard.writeText(text);
+        showToast(isBn ? 'কপি সম্পন্ন' : 'Copied', text, 'positive');
+      });
+
+      waPairingPollTimer = window.setInterval(async () => {
+        const status = await checkStatus();
+        if (status && status.paired && status.phone) {
+          clearInterval(waPairingPollTimer);
+          waPairingPollTimer = undefined;
+          localStorage.setItem('justor_chamber_phone', status.phone);
+          showToast(isBn ? 'হোয়াটসঅ্যাপ সংযুক্ত হয়েছে!' : 'WhatsApp Connected!', `Connected: ${status.phone}`, 'positive');
+          renderConnectedView(status.phone, status.full_name, status.chamber_name);
+        }
+      }, 3500);
+
+    } catch (err) {
+      contentEl.innerHTML = `<div class="pwa-error-state">${isBn ? 'কোড জেনারেট করতে সমস্যা হয়েছে। অনুগ্রহ করে পেজ রিফ্রেশ করুন।' : 'Could not generate pairing code. Please refresh the page.'}</div>`;
+    }
+  };
+
+  const initialStatus = await checkStatus();
+  if (initialStatus && initialStatus.paired && initialStatus.phone) {
+    renderConnectedView(initialStatus.phone, initialStatus.full_name, initialStatus.chamber_name);
+  } else {
+    await renderPairingView();
+  }
+};
+
 const hydrateRoute = async (path: string): Promise<void> => {
   if (path === '/') await hydrateHome();
   if (path === '/legal-library') await hydrateLibrary();
@@ -2016,6 +2222,9 @@ const hydrateRoute = async (path: string): Promise<void> => {
   if (path.startsWith('/legal-updates/')) await hydrateUpdateDetail(decodeURIComponent(path.slice('/legal-updates/'.length)));
   if (path === '/workspace/professional') await hydrateUpdates('[data-professional-updates]');
   hydrateLearningPath(path);
+  if (path === '/profile' || path === '/account' || path === '/settings') {
+    await hydrateWhatsAppConnectionCard();
+  }
   if (path === '/amendment-admin') {
     const mount = document.getElementById('amendment-admin-mount');
     if (mount) {

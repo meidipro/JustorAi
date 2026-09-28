@@ -10719,4 +10719,403 @@ button.exec-badge-authorities:hover {
   }
 }
 
+/* ── 7. WhatsApp Chamber OS Connection Card & QR Deep Link ──────────────────────── */
+.profile-whatsapp-section {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1.5px solid #E2E8F0;
+}
+
+.pwa-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.pwa-icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: rgba(37, 211, 102, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(37, 211, 102, 0.3);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.15);
+}
+
+.pwa-title-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.pwa-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pwa-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.pwa-subtitle {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: #64748B;
+  line-height: 1.5;
+}
+
+.pwa-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.pwa-status-pill.connected {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.pwa-status-pill.unlinked {
+  background: rgba(245, 158, 11, 0.12);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.pwa-status-pill.loading {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748B;
+  border: 1px solid rgba(100, 116, 139, 0.25);
+}
+
+.pwa-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  animation: pwa-pulse 2s infinite;
+}
+
+.pwa-pulse-dot.warning {
+  background: #F59E0B;
+  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
+}
+
+@keyframes pwa-pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Connected State Card */
+.pwa-connected-box {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.06), rgba(16, 185, 129, 0.09));
+  border: 1.5px solid rgba(37, 211, 102, 0.35);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.08);
+}
+
+.pwa-connected-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.pwa-badge-check {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #10B981;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
+  flex-shrink: 0;
+}
+
+.pwa-connected-phone-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pwa-connected-phone {
+  font-size: 17px;
+  color: #0F172A;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.pwa-role-tag {
+  background: #10B981;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.pwa-connected-meta {
+  font-size: 13.5px;
+  color: #475569;
+  margin-top: 3px;
+}
+
+.pwa-connected-note {
+  font-size: 13.5px;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.pwa-btn-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pwa-chat-btn {
+  background: #25D366 !important;
+  color: #0F172A !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.pwa-chat-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4) !important;
+}
+
+.pwa-relink-btn {
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  font-size: 13.5px !important;
+}
+
+/* Pairing Grid Layout */
+.pwa-pairing-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 28px;
+  align-items: center;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.pwa-qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.pwa-qr-wrapper {
+  background: #FFFFFF;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pwa-qr-img {
+  display: block;
+  border-radius: 6px;
+}
+
+.pwa-qr-hint {
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 500;
+  text-align: center;
+}
+
+.pwa-details-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.pwa-step-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #25D366;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.pwa-card-subheading {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.pwa-instructions {
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.pwa-instructions code {
+  background: #E2E8F0;
+  color: #0F172A;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.pwa-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.pwa-deeplink-btn {
+  background: #25D366 !important;
+  color: #0F172A !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 12px 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-decoration: none !important;
+  font-size: 14.5px !important;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.pwa-deeplink-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45) !important;
+}
+
+.pwa-code-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.pwa-code-label {
+  color: #64748B;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.pwa-code-val {
+  color: #0F172A;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.pwa-copy-btn {
+  background: #E2E8F0;
+  color: #334155;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pwa-copy-btn:hover {
+  background: #CBD5E1;
+}
+
+.pwa-live-sync-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #64748B;
+}
+
+.pwa-loading-state,
+.pwa-error-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  border: 1px dashed #CBD5E1;
+  font-size: 14px;
+  color: #64748B;
+}
+
+@media (max-width: 680px) {
+  .pwa-pairing-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+  .pwa-cta-row {
+    justify-content: center;
+  }
+  .pwa-connected-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .pwa-connected-phone-row {
+    justify-content: center;
+  }
+  .pwa-btn-group {
+    justify-content: center;
+  }
+}
+
+
 
