@@ -2868,6 +2868,107 @@ async def get_whatsapp_pairing_status(request: Request, phone: Optional[str] = N
     return {"paired": False, "phone": None}
 
 
+class WhatsAppOnboardActivateRequest(BaseModel):
+    token: str
+    full_name: str
+    chamber_name: str
+    bar_roll: Optional[str] = ""
+    email: Optional[str] = ""
+    password: Optional[str] = ""
+
+
+@app.get("/api/whatsapp/onboard-info", tags=["WhatsApp Helpline"])
+async def whatsapp_onboard_info(token: str = Query(...)):
+    """
+    Validates a 1-tap onboarding token from WhatsApp and returns pre-verified phone details.
+    """
+    from backend.whatsapp_service import whatsapp_service
+    info = whatsapp_service.validate_magic_onboard_token(token.strip())
+    if not info:
+        return JSONResponse(status_code=400, content={"status": "error", "message": "Invalid or expired token"})
+    
+    phone = info.get("phone")
+    raw_phone = info.get("raw_phone", phone)
+    
+    # Check if this phone is already paired with an existing advocate
+    tenants = _load_tenants()
+    existing_profile = None
+    for p_key in [phone, phone.replace("+", ""), f"+{phone.replace('+', '')}"]:
+        if p_key in tenants and tenants[p_key].get("verified"):
+            existing_profile = tenants[p_key]
+            break
+
+    return {
+        "status": "ok",
+        "valid": True,
+        "phone": phone,
+        "display_phone": raw_phone,
+        "is_existing": existing_profile is not None,
+        "existing_profile": existing_profile
+    }
+
+
+@app.post("/api/whatsapp/onboard-activate", tags=["WhatsApp Helpline"])
+async def whatsapp_onboard_activate(req_body: WhatsAppOnboardActivateRequest):
+    """
+    Activates a new chamber profile directly from the 1-Tap WhatsApp Onboarding link.
+    Automatically pairs the verified phone number and dispatches a live welcome message.
+    """
+    import uuid
+    from backend.whatsapp_service import whatsapp_service
+    
+    token = req_body.token.strip()
+    info = whatsapp_service.validate_magic_onboard_token(token)
+    if not info:
+        return JSONResponse(status_code=400, content={"status": "error", "message": "Invalid or expired onboarding session"})
+
+    phone = info.get("phone")
+    user_id = str(uuid.uuid4())
+    full_name = req_body.full_name.strip() or "Advocate"
+    chamber_name = req_body.chamber_name.strip() or "Justor Law Chambers"
+    email = req_body.email.strip() if req_body.email else f"advocate_{phone.replace('+', '')}@justorai.com"
+
+    lawyer_obj = whatsapp_service.complete_magic_onboard(
+        token=token,
+        user_id=user_id,
+        full_name=full_name,
+        chamber_name=chamber_name,
+        email=email,
+        role="Senior Advocate",
+        bar_roll=req_body.bar_roll.strip() if req_body.bar_roll else ""
+    )
+
+    if not lawyer_obj:
+        return JSONResponse(status_code=500, content={"status": "error", "message": "Failed to activate chamber profile"})
+
+    # Send instantaneous live confirmation message via WhatsApp
+    welcome_text = (
+        f"🎉 *অভিনন্দন শ্রদ্ধাভাজন {full_name} সাহেব!*\n"
+        f"━━━━━━━━━━━━━━━━━━━━\n"
+        f"🏛️ *চেম্বার:* {chamber_name}\n"
+        f"📱 *হোয়াটসঅ্যাপ ভেরিফাইড:* {phone}\n\n"
+        f"আপনার চেম্বার অ্যাকাউন্ট সফলভাবে সক্রিয় হয়েছে। এখন থেকে এই হোয়াটসঅ্যাপেই আপনার সার্বক্ষণিক এআই লিগ্যাল কো-পাইলট প্রস্তুত।\n\n"
+        f"👉 *আজকের কোর্ট ব্রিফিং দেখতে লিখুন:* `BRIEF`\n"
+        f"👉 *যেকোনো আইনি প্রশ্ন সরাসরি লিখে পাঠান!*"
+    )
+    
+    # Run dispatch in background so web response is instantaneous
+    asyncio.create_task(whatsapp_service.send_meta_whatsapp_message(to_phone=phone, text=welcome_text))
+
+    return {
+        "status": "ok",
+        "success": True,
+        "user": {
+            "id": user_id,
+            "full_name": full_name,
+            "chamber_name": chamber_name,
+            "email": email,
+            "phone": phone
+        },
+        "redirect": "/workspace/professional"
+    }
+
+
 @app.post("/api/whatsapp/simulate", tags=["WhatsApp Helpline"])
 async def whatsapp_simulate(req_body: WhatsAppSimulateRequest):
     """

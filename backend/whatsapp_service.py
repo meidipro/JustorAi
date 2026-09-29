@@ -361,6 +361,78 @@ class JustorWhatsAppService:
         _save_tenants(tenants)
         return code
 
+    def create_magic_onboard_token(self, sender_phone: str) -> str:
+        """
+        Generates a secure 30-minute token for an unknown WhatsApp user to register/connect on the web.
+        Token format: WA_<random_hex_12>
+        """
+        import secrets
+        clean_phone = self.normalize_phone(sender_phone)
+        token = f"WA_{secrets.token_hex(6)}"
+        tenants = _load_tenants()
+        pending_onboard = tenants.get("_pending_onboard", {})
+        pending_onboard[token] = {
+            "phone": clean_phone,
+            "raw_phone": sender_phone,
+            "created_at": time.time(),
+            "expires_at": time.time() + 1800  # 30 minutes
+        }
+        tenants["_pending_onboard"] = pending_onboard
+        _save_tenants(tenants)
+        return token
+
+    def validate_magic_onboard_token(self, token: str) -> Optional[Dict[str, Any]]:
+        """Validates token and returns phone info if valid and not expired."""
+        tenants = _load_tenants()
+        pending_onboard = tenants.get("_pending_onboard", {})
+        info = pending_onboard.get(token)
+        if not info:
+            return None
+        if time.time() > info.get("expires_at", 0):
+            pending_onboard.pop(token, None)
+            _save_tenants(tenants)
+            return None
+        return info
+
+    def complete_magic_onboard(
+        self,
+        token: str,
+        user_id: str,
+        full_name: str,
+        chamber_name: str,
+        email: str = "",
+        role: str = "Senior Advocate",
+        bar_roll: str = ""
+    ) -> Optional[Dict[str, Any]]:
+        """Binds verified phone from magic token to the newly created/activated lawyer chamber."""
+        tenants = _load_tenants()
+        pending_onboard = tenants.get("_pending_onboard", {})
+        info = pending_onboard.get(token)
+        if not info:
+            return None
+
+        phone = info["phone"]
+        lawyer_obj = {
+            "id": user_id,
+            "full_name": full_name,
+            "chamber_name": chamber_name or "ব্যক্তিগত চেম্বার",
+            "email": email,
+            "role": role,
+            "bar_roll": bar_roll,
+            "verified": True,
+            "phone": phone,
+            "paired_at": datetime.utcnow().isoformat()
+        }
+
+        tenants[phone] = lawyer_obj
+        clean_plain = phone.replace("+", "").strip()
+        tenants[clean_plain] = lawyer_obj
+
+        # Cleanup used token
+        pending_onboard.pop(token, None)
+        _save_tenants(tenants)
+        return lawyer_obj
+
     async def verify_and_pair_token(self, sender_phone: str, raw_text: str) -> Tuple[bool, str, Optional[Dict[str, Any]]]:
         """
         Validates token format (e.g. 'LINK 548291' or 'PAIR 548291' or just '548291').
@@ -1553,24 +1625,31 @@ class JustorWhatsAppService:
             )
             prompt = f"Advocate Legal Query:\n\"{query_text}\"\n\nProvide an authoritative, clear explanation with applicable Bangladesh laws, practical timeline steps, and court jurisdiction."
             ans = await self._call_gemini_chat(prompt, system_instruction)
+            token = self.create_magic_onboard_token(sender)
+            onboard_url = f"https://justorai.com/onboard?token={token}"
             return (
                 f"{ans}\n\n"
                 f"━━━━━━━━━━━━━━━━━━━━\n"
-                f"🔒 *চেম্বার ডকেট ও কোর্ট ডায়েরি লক রয়েছে:*\n"
-                f"আপনার নিজস্ব চেম্বারের মামলা ও আজকের কজলিস্ট দেখতে অ্যাকাউন্টটি লিংক করুন: [justorai.com/settings](https://justorai.com) অথবা এখানে লিখুন: `LINK <৬-ডিজিট কোড>`"
+                f"🔒 *আপনার ব্যক্তিগত চেম্বার ডকেট ও কোর্ট ডায়েরি লক রয়েছে:*\n"
+                f"আপনার মামলা সংরক্ষণ, মক্কেল এসএমএস ও সকালের ব্রিফিং আনলক করতে ১-ট্যাপে চেম্বার প্রোফাইল সক্রিয় করুন:\n"
+                f"👉 🔗 {onboard_url}"
             )
 
-        # 3. Standard Security Welcome & Onboarding
+        # 3. Standard Security Welcome & 1-Tap Magic Onboarding
+        token = self.create_magic_onboard_token(sender)
+        onboard_url = f"https://justorai.com/onboard?token={token}"
         return (
             f"⚖️ *জাসটর চেম্বার ওএস (Justor AI) — বিজ্ঞ আইনজীবী হেল্পলাইন*\n"
             f"━━━━━━━━━━━━━━━━━━━━\n"
-            f"আসসালামু আলাইকুম। বাংলাদেশ বার কাউন্সিল ও সুপ্রিম কোর্টের বিজ্ঞ আইনজীবীদের চেম্বার ডেটা ও মক্কেলের তথ্যের সর্বোচ্চ গোপনীয়তা নিশ্চিত করতে হোয়াটসঅ্যাপ অ্যাকাউন্ট ভেরিফিকেশন বাধ্যতামূলক।\n\n"
-            f"আপনার নম্বরটি (`{sender}`) এখনো কোনো চেম্বারের সাথে সংযুক্ত নয়।\n\n"
-            f"🔗 *আপনার চেম্বার লিংক করার নিয়ম:*\n"
-            f"১. [justorai.com/settings](https://justorai.com) এ লগইন করুন।\n"
-            f"২. 'Connect WhatsApp' বাটনে ক্লিক করে এই নম্বরটি যাচাই করুন।\n"
-            f"৩. অথবা ওয়েব থেকে প্রাপ্ত কোডটি এখানে পাঠান: `LINK <কোড>`\n\n"
-            f"💡 _আইনজীবী হিসেবে সরাসরি যেকোনো ধারা, নজির বা আইনি প্রশ্নের উত্তর জানতে লিখে পাঠান (যেমন: 'দণ্ডবিধি ৪২০ ধারার উপাদান কি?')"
+            f"আসসালামু আলাইকুম। বাংলাদেশ বার কাউন্সিল ও সুপ্রিম কোর্টের বিজ্ঞ আইনজীবীদের প্রথম এআই চেম্বার কো-পাইলট-এ আপনাকে স্বাগতম।\n\n"
+            f"আপনার ব্যক্তিগত চেম্বার ডকেট, মক্কেলের নথি ও সকালের কজলিস্টের সম্পূর্ণ সুরক্ষা নিশ্চিত করতে অনুগ্রহ করে চেম্বার প্রোফাইলটি সক্রিয় করুন:\n\n"
+            f"👉 *১-ট্যাপে চেম্বার প্রোফাইল চালু করতে ক্লিক করুন:*\n"
+            f"🔗 {onboard_url}\n\n"
+            f"✨ *সুবিধাসমূহ:*\n"
+            f"• আপনার নম্বরটি (`{sender}`) ইতিমধ্যে যাচাইকৃত — কোনো ওটিপির ঝামেলা নেই।\n"
+            f"• চেম্বার চালু হওয়ার সাথে সাথে এই হোয়াটসঅ্যাপেই আপনার ব্যক্তিগত এআই সহকারী সক্রিয় হবে।\n"
+            f"• সম্পূর্ণ গোপনীয় ও অ্যান্ড-টু-অ্যান্ড এনক্রিপ্টেড।\n\n"
+            f"💡 _অথবা সরাসরি যেকোনো আইনি ধারা বা নজির নিয়ে প্রশ্ন লিখে পাঠাতে পারেন (যেমন: 'দণ্ডবিধি ৪২০ ধারার উপাদান কি?')_"
         )
 
     async def handle_incoming_message(

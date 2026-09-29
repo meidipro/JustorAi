@@ -1087,6 +1087,139 @@ const loginPage = (): string => {
   </main>`;
 };
 
+const onboardPage = (): string => {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token') || '';
+  const isBn = state.language === 'bn';
+
+  return `
+  <main id="page-content" class="login-page onboard-page">
+    <!-- Left Hero & Brand Column -->
+    <section class="login-brand-panel">
+      <div class="login-brand-top">
+        <a href="${localizedPath('/', state.language)}" data-route class="login-logo-link">${brand(true)}</a>
+        <div class="login-badge-pill" style="border-color: #10b981; color: #10b981;">
+          <span class="badge-dot" style="background: #10b981;"></span>
+          <span>${isBn ? 'হোয়াটসঅ্যাপ ভেরিফাইড কানেকশন' : 'WhatsApp Verified Connection'}</span>
+        </div>
+      </div>
+      
+      <div class="login-brand-hero">
+        <span class="section-kicker section-kicker-light">${isBn ? 'আইনজীবী চেম্বার অ্যাক্টিভেশন' : 'Advocate Chamber Activation'}</span>
+        <h1>${isBn ? 'আপনার চেম্বার চালু করুন — হোয়াটসঅ্যাপে সার্বক্ষণিক এআই অ্যাসিস্ট্যান্ট।' : 'Activate Your Chamber — 24/7 AI Legal Assistant on WhatsApp.'}</h1>
+        <p class="login-hero-desc">
+          ${isBn 
+            ? 'আপনার হোয়াটসঅ্যাপ নম্বরটি সফলভাবে সংযুক্ত হতে প্রস্তুত। চেম্বারের নাম ও তথ্য দিয়ে চালু করলেই সরাসরি হোয়াটসঅ্যাপে কোর্ট ডকেট, ড্রাফটিং ও কজলিস্ট ব্রিফিং পাবেন।' 
+            : 'Your WhatsApp number is ready for activation. Enter your chamber details to unlock instant corridor dictation, trial cross-exam, and daily cause-list briefs on WhatsApp.'}
+        </p>
+        
+        <div class="login-feature-list">
+          <div class="login-feature-card">
+            <span class="login-feature-icon">📱</span>
+            <div>
+              <strong>${isBn ? '১-ক্লিকে ফোন নম্বর লিঙ্ক' : 'Zero-Password Instant Sync'}</strong>
+              <p>${isBn ? 'হোয়াটসঅ্যাপ মেসেজ থেকেই আপনার নম্বরটি সরাসরি যাচাই করা হয়েছে।' : 'Pre-verified from your WhatsApp handshake. No complex OTPs needed.'}</p>
+            </div>
+          </div>
+          <div class="login-feature-card">
+            <span class="login-feature-icon">⚖️</span>
+            <div>
+              <strong>${isBn ? 'বাংলাদেশ সুপ্রিম কোর্ট ও জেলা আদালত' : 'Bangladesh Courts Spec'}</strong>
+              <p>${isBn ? 'দেওয়ানি, ফৌজদারি ও রিট মামলার বিশেষায়িত ড্রাফটিং ও তামাদি গণক।' : 'Specialized CPC/CrPC drafting, Limitation Act 1908, and DLR precedents.'}</p>
+            </div>
+          </div>
+          <div class="login-feature-card">
+            <span class="login-feature-icon">🛡️</span>
+            <div>
+              <strong>${isBn ? 'চেম্বার গোপনীয়তা ও এনক্রিপশন' : 'Enterprise Chamber Isolation'}</strong>
+              <p>${isBn ? 'আপনার চেম্বারের মামলা ও মক্কেলের তথ্য সম্পূর্ণ আলাদা ও সুরক্ষিত।' : 'Multi-tenant docket encryption. Zero cross-chamber data leaks.'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-brand-footer">
+        <div class="login-incubation-badge">
+          <span>Justor AI — Empowering Advocates Across Bangladesh</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Authentication / Onboarding Box -->
+    <section class="login-auth-panel">
+      <div class="login-auth-topbar">
+        ${pageBackButton('/', isBn ? 'হোমে ফিরে যান' : 'Back to Home')}
+        <button class="language-switch login-language-btn" type="button" data-action="language" aria-label="Switch language">${ui(state.language, 'language')}</button>
+      </div>
+
+      <div class="login-card-box" id="onboard-card-container">
+        <div class="login-card-header">
+          <span class="section-kicker" style="color: #10b981;">● ${isBn ? 'হোয়াটসঅ্যাপ থেকে আগমন' : 'Verified WhatsApp Source'}</span>
+          <h2>${isBn ? 'চেম্বার প্রোফাইল তৈরি করুন' : 'Activate Chamber Profile'}</h2>
+          <p>${isBn ? 'মাত্র ৩০ সেকেন্ডে নিচের তথ্যগুলো দিন — সক্রিয় হওয়ার সাথে সাথে হোয়াটসঅ্যাপে নোটিফিকেশন পাবেন।' : 'Complete this quick 30-second setup. Your WhatsApp bot will activate immediately.'}</p>
+        </div>
+
+        <form class="onboard-form" data-action="submit-onboard-form" style="display: flex; flex-direction: column; gap: 14px; margin-top: 12px;">
+          <input type="hidden" name="token" value="${escapeHtml(token)}" />
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94a3b8);">
+              ${isBn ? 'যাচাইকৃত হোয়াটসঅ্যাপ নম্বর' : 'Verified WhatsApp Number'}
+            </label>
+            <div id="onboard-phone-badge" style="padding: 10px 14px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+              <span>🟢</span>
+              <span id="onboard-phone-display">${isBn ? 'যাচাই করা হচ্ছে...' : 'Validating token...'}</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="onboard-name" style="font-size: 13px; font-weight: 600; color: var(--text-primary, #e2e8f0);">
+              ${isBn ? 'বিজ্ঞ আইনজীবীর পুরো নাম *' : 'Advocate Full Name *'}
+            </label>
+            <input type="text" id="onboard-name" name="full_name" required placeholder="${isBn ? 'যেমন: Advocate Mehide Hasan' : 'e.g. Advocate Mehide Hasan'}" style="padding: 11px 14px; border-radius: 8px; border: 1px solid var(--border-color, #334155); background: var(--bg-primary, #0f172a); color: #fff; font-size: 14px;" />
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="onboard-chamber" style="font-size: 13px; font-weight: 600; color: var(--text-primary, #e2e8f0);">
+              ${isBn ? 'চেম্বার / ফার্মের নাম *' : 'Chamber / Law Firm Name *'}
+            </label>
+            <input type="text" id="onboard-chamber" name="chamber_name" required placeholder="${isBn ? 'যেমন: Justor Law Chambers' : 'e.g. Justor Law Chambers'}" style="padding: 11px 14px; border-radius: 8px; border: 1px solid var(--border-color, #334155); background: var(--bg-primary, #0f172a); color: #fff; font-size: 14px;" />
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="onboard-bar" style="font-size: 13px; font-weight: 600; color: var(--text-primary, #e2e8f0);">
+              ${isBn ? 'বার অ্যাসোসিয়েশন / আদালত (ঐচ্ছিক)' : 'Bar Association / Court (Optional)'}
+            </label>
+            <input type="text" id="onboard-bar" name="bar_roll" placeholder="${isBn ? 'যেমন: Supreme Court Bar / Dhaka Bar' : 'e.g. Supreme Court Bar Association'}" style="padding: 11px 14px; border-radius: 8px; border: 1px solid var(--border-color, #334155); background: var(--bg-primary, #0f172a); color: #fff; font-size: 14px;" />
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 4px;">
+            <label for="onboard-email" style="font-size: 13px; font-weight: 600; color: var(--text-secondary, #94a3b8);">
+              ${isBn ? 'ইমেইল অ্যাড্রেস (ওয়েব লগইনের জন্য ঐচ্ছিক)' : 'Email Address (Optional for web login)'}
+            </label>
+            <input type="email" id="onboard-email" name="email" placeholder="advocate@example.com" style="padding: 11px 14px; border-radius: 8px; border: 1px solid var(--border-color, #334155); background: var(--bg-primary, #0f172a); color: #fff; font-size: 14px;" />
+          </div>
+
+          <button class="button" type="submit" id="onboard-submit-btn" style="margin-top: 8px; padding: 13px 20px; font-size: 15px; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>🚀</span>
+            <span>${isBn ? 'চেম্বার চালু করুন ও হোয়াটসঅ্যাপ কানেক্ট করুন' : 'Activate Chamber & Connect WhatsApp'}</span>
+          </button>
+        </form>
+
+        <div id="onboard-status-msg" style="margin-top: 14px; display: none;"></div>
+
+        <div class="login-card-footer" style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-color, #232B3E);">
+          <div class="login-privacy-badge">
+            ${icon('shield', 14)}
+            <span>${isBn ? 'আপনার নম্বর ও মামলা তথ্য সর্বোচ্চ গোপনীয়তায় সংরক্ষিত।' : 'Your number and client files are strictly confidential and encrypted.'}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  `;
+};
+
 const chooseRolePage = (): string => {
   if (!state.session) {
     return loginPage();
@@ -1706,6 +1839,7 @@ const pageForPath = (path: string): string => {
   if (path === '/careers') return careersPage();
   if (path === '/contact') return contactPage();
   if (path === '/login') return loginPage();
+  if (path === '/onboard' || path.startsWith('/onboard')) return onboardPage();
   if (path === '/choose-role') return chooseRolePage();
   if (path === '/profile' || path === '/account' || path === '/settings') return profilePage();
   if (path === '/privacy') return policyPage('privacy');
@@ -1717,12 +1851,12 @@ const pageForPath = (path: string): string => {
   return notFoundPage();
 };
 
-const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/') || path === '/login' || path === '/start' || path === '/profile' || path === '/choose-role';
+const isFocusedRoute = (path: string): boolean => path.startsWith('/workspace/') || path === '/login' || path === '/start' || path === '/profile' || path === '/choose-role' || path === '/onboard' || path.startsWith('/onboard');
 
 const setDocumentMeta = (): void => {
   document.documentElement.lang = state.language === 'bn' ? 'bn' : 'en';
   const titles: Record<string, string> = {
-    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/choose-role': 'Choose workspace', '/legal-library': 'Legal Library', '/guides': 'Legal Authority Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
+    '/': 'Bangladesh Legal Intelligence', '/start': 'Start Justor', '/choose-role': 'Choose workspace', '/legal-library': 'Legal Library', '/guides': 'Legal Authority Guides', '/legal-updates': 'Legal Updates', '/trust': 'Trust Method', '/about': 'About', '/careers': 'Careers', '/contact': 'Contact', '/login': 'Sign In', '/onboard': 'Chamber Activation & WhatsApp Co-Pilot', '/profile': 'User Profile & Settings', '/privacy': 'Privacy', '/terms': 'Terms', '/disclaimer': 'Disclaimer',
   };
   const dynamic = state.routePath.startsWith('/workspace/') ? `${roleLabels[state.routePath.split('/').pop() as Role] || 'Legal'} Workspace` : state.routePath.startsWith('/guides/') || state.routePath.startsWith('/action-guides/') ? 'Legal Authority Guide' : state.routePath.startsWith('/legal-updates/') ? 'Legal Update' : 'Justor AI';
   document.title = `${titles[state.routePath] ?? dynamic} | Justor AI`;
@@ -2212,6 +2346,154 @@ const hydrateWhatsAppConnectionCard = async (): Promise<void> => {
   }
 };
 
+const hydrateOnboardPage = async (): Promise<void> => {
+  const container = document.getElementById('onboard-card-container');
+  if (!container) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token') || '';
+  const isBn = state.language === 'bn';
+  const phoneDisplay = document.getElementById('onboard-phone-display');
+  const nameInput = document.getElementById('onboard-name') as HTMLInputElement | null;
+  const chamberInput = document.getElementById('onboard-chamber') as HTMLInputElement | null;
+  const statusMsg = document.getElementById('onboard-status-msg');
+  const form = container.querySelector<HTMLFormElement>('.onboard-form');
+  const submitBtn = document.getElementById('onboard-submit-btn') as HTMLButtonElement | null;
+
+  if (!token) {
+    if (phoneDisplay) {
+      phoneDisplay.innerHTML = `<span style="color: #ef4444;">${isBn ? '⚠️ কোনো ভ্যালিড টোকেন পাওয়া যায়নি' : '⚠️ No valid onboarding token found'}</span>`;
+    }
+    if (statusMsg) {
+      statusMsg.style.display = 'block';
+      statusMsg.innerHTML = `
+        <div style="padding: 12px 14px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; color: #ef4444; font-size: 13px;">
+          ${isBn ? 'টোকেনটি পাওয়া যায়নি। অনুগ্রহ করে আপনার হোয়াটসঅ্যাপ থেকে আমাদের নম্বরে "Hi" লিখে পাঠান।' : 'Please message "Hi" to our WhatsApp number to generate a fresh 1-tap activation link.'}
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // Fetch token details from backend
+  try {
+    const res = await fetch(`/api/whatsapp/onboard-info?token=${encodeURIComponent(token)}`);
+    const data = await res.json();
+    if (res.ok && data.status === 'ok') {
+      if (phoneDisplay) {
+        phoneDisplay.innerHTML = `<span>${data.display_phone || data.phone}</span> <span style="font-size: 11px; background: #10b981; color: #fff; padding: 2px 6px; border-radius: 10px; margin-left: 6px;">${isBn ? 'যাচাইকৃত' : 'VERIFIED'}</span>`;
+      }
+      if (data.is_existing && data.existing_profile) {
+        if (nameInput && !nameInput.value) nameInput.value = data.existing_profile.full_name || '';
+        if (chamberInput && !chamberInput.value) chamberInput.value = data.existing_profile.chamber_name || '';
+      }
+    } else {
+      if (phoneDisplay) {
+        phoneDisplay.innerHTML = `<span style="color: #f59e0b;">${isBn ? '⚠️ লিংকটির মেয়াদ শেষ হয়েছে' : '⚠️ Link Expired or Invalid'}</span>`;
+      }
+      if (statusMsg) {
+        statusMsg.style.display = 'block';
+        statusMsg.innerHTML = `
+          <div style="padding: 12px 14px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; color: #f59e0b; font-size: 13px;">
+            ${isBn ? 'এই অ্যাক্টিভেশন লিংকের মেয়াদ শেষ হয়ে গেছে। আপনার হোয়াটসঅ্যাপ থেকে পুনরায় যেকোনো মেসেজ পাঠালে নতুন লিংক পেয়ে যাবেন।' : 'This onboarding link has expired. Send any message on WhatsApp to get a fresh link.'}
+          </div>
+        `;
+      }
+    }
+  } catch (e) {
+    if (phoneDisplay) {
+      phoneDisplay.textContent = isBn ? 'ভেরিফিকেশন সম্পন্ন হচ্ছে...' : 'Verifying connection...';
+    }
+  }
+
+  // Handle Form Submission
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!submitBtn) return;
+
+      const fd = new FormData(form);
+      const payload = {
+        token: token,
+        full_name: (fd.get('full_name') as string || '').trim(),
+        chamber_name: (fd.get('chamber_name') as string || '').trim(),
+        bar_roll: (fd.get('bar_roll') as string || '').trim(),
+        email: (fd.get('email') as string || '').trim()
+      };
+
+      if (!payload.full_name || !payload.chamber_name) {
+        showToast(isBn ? 'সতর্কতা' : 'Required Fields', isBn ? 'অনুগ্রহ করে নাম ও চেম্বার পূরণ করুন' : 'Please provide full name and chamber name', 'warning');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>⏳</span> <span>${isBn ? 'চেম্বার চালু হচ্ছে...' : 'Activating Chamber...'}</span>`;
+
+      try {
+        const res = await fetch('/api/whatsapp/onboard-activate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (res.ok && result.status === 'ok') {
+          if (result.user?.phone) {
+            localStorage.setItem('justor_chamber_phone', result.user.phone);
+          }
+          
+          container.innerHTML = `
+            <div style="text-align: center; padding: 30px 10px;">
+              <div style="font-size: 52px; margin-bottom: 12px;">🎉</div>
+              <h2 style="font-size: 24px; color: #10b981; margin-bottom: 8px;">
+                ${isBn ? 'চেম্বার সফলভাবে সক্রিয় হয়েছে!' : 'Chamber Successfully Activated!'}
+              </h2>
+              <p style="color: var(--text-secondary, #94a3b8); font-size: 15px; max-width: 420px; margin: 0 auto 20px;">
+                ${isBn 
+                  ? `অভিনন্দন অ্যাডভোকেট <strong>${escapeHtml(payload.full_name)}</strong>! আপনার <strong>${escapeHtml(payload.chamber_name)}</strong> চেম্বার যুক্ত হয়েছে। আপনার হোয়াটসঅ্যাপে একটি স্বাগত মেসেজ পাঠানো হয়েছে।`
+                  : `Congratulations Advocate <strong>${escapeHtml(payload.full_name)}</strong>! Your chamber has been activated and your WhatsApp assistant is now live.`}
+              </p>
+
+              <div style="padding: 16px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; margin-bottom: 24px; display: inline-flex; align-items: center; gap: 12px;">
+                <span style="font-size: 24px;">📱</span>
+                <div style="text-align: left;">
+                  <strong style="color: #10b981; display: block; font-size: 14px;">WhatsApp Copilot Active</strong>
+                  <span style="color: var(--text-secondary, #94a3b8); font-size: 13px;">${escapeHtml(result.user?.phone || payload.full_name)}</span>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto;">
+                <button type="button" class="button" id="onboard-dashboard-btn" style="padding: 12px 20px; background: #2563eb; color: #fff; font-weight: 600; border-radius: 8px; border: none; cursor: pointer;">
+                  ${isBn ? 'চেম্বার ড্যাশবোর্ডে প্রবেশ করুন' : 'Go to Chamber Dashboard'} →
+                </button>
+              </div>
+            </div>
+          `;
+
+          showToast(isBn ? 'সফল!' : 'Success!', isBn ? 'চেম্বার সক্রিয় ও হোয়াটসঅ্যাপ কানেক্টেড' : 'Chamber activated & WhatsApp connected', 'positive');
+
+          container.querySelector('#onboard-dashboard-btn')?.addEventListener('click', () => {
+            navigate(localizedPath('/workspace/professional', state.language));
+          });
+
+          window.setTimeout(() => {
+            navigate(localizedPath('/workspace/professional', state.language));
+          }, 3200);
+
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>🚀</span> <span>${isBn ? 'পুনরায় চেষ্টা করুন' : 'Try Again'}</span>`;
+          showToast(isBn ? 'ত্রুটি' : 'Error', result.message || 'Activation failed', 'warning');
+        }
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>🚀</span> <span>${isBn ? 'পুনরায় চেষ্টা করুন' : 'Try Again'}</span>`;
+        showToast(isBn ? 'সংযোগ ত্রুটি' : 'Connection Error', 'Please check network and try again', 'warning');
+      }
+    });
+  }
+};
+
 const hydrateRoute = async (path: string): Promise<void> => {
   if (path === '/') await hydrateHome();
   if (path === '/legal-library') await hydrateLibrary();
@@ -2222,6 +2504,9 @@ const hydrateRoute = async (path: string): Promise<void> => {
   if (path.startsWith('/legal-updates/')) await hydrateUpdateDetail(decodeURIComponent(path.slice('/legal-updates/'.length)));
   if (path === '/workspace/professional') await hydrateUpdates('[data-professional-updates]');
   hydrateLearningPath(path);
+  if (path === '/onboard' || path.startsWith('/onboard')) {
+    await hydrateOnboardPage();
+  }
   if (path === '/profile' || path === '/account' || path === '/settings') {
     await hydrateWhatsAppConnectionCard();
   }
