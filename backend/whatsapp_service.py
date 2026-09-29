@@ -1095,37 +1095,60 @@ class JustorWhatsAppService:
             "💡 _তামাদি অতিক্রান্ত হওয়ার ঝুঁকি এড়াতে চেম্বার ভল্ট থেকে সরাসরি দরখাস্ত ড্রাফট করুন।_"
         )
 
-    def _get_help_menu(self, lang: str = "bn") -> str:
+    def _get_help_menu(self, lang: str = "bn", lawyer: Optional[Dict[str, Any]] = None) -> str:
+        raw_name = (lawyer.get("full_name") if lawyer else "") or "অ্যাডভোকেট সাহেব"
+        name = raw_name if "Advocate" in raw_name else f"Advocate {raw_name}"
+        chamber = (lawyer.get("chamber_name") if lawyer else "") or "জাসটর লিগ্যাল চেম্বার"
+
+        if lang == "en":
+            return (
+                f"⚖️ *Greetings, {name if lawyer else 'Counsel'}!*\n"
+                f"━━━━━━━━━━━━━━━━━━━━\n"
+                f"🏛️ *Chamber:* {chamber}\n"
+                f"🤖 *Your 24/7 Personal AI Legal Co-Pilot is Ready.*\n\n"
+                f"You can chat with me naturally without any special codes:\n\n"
+                f"💬 *1. General Legal Queries & Strategy (Free-form Chat):*\n"
+                f"Ask anything just like asking a senior chamber associate:\n"
+                f"• _\"Can a judicial magistrate grant bail in 302 Penal Code case?\"_\n"
+                f"• _\"What are the required ingredients for Section 138 NI Act notice?\"_\n"
+                f"• _\"Brainstorm defense strategy for cheque dishonor with no consideration.\"_\n\n"
+                f"🎙️ *2. Corridor Dictation & Client Forwarding:* (Voice or Text)\n"
+                f"• Type `#[Case_No] order details...` or send a voice message\n"
+                f"• Instant docket sync + 1-Tap Client WhatsApp update message.\n\n"
+                f"🌅 *3. Morning Chamber Brief & Causelist:*\n"
+                f"• `BRIEF` — Today's court schedule, sitting times & statutory alerts\n"
+                f"• `CAUSELIST` — Complete chamber hearing diary\n\n"
+                f"📑 *4. Courtroom Applications & Trial Cross-Exam:*\n"
+                f"• `DRAFT Time petition under Sec 148 CPC`\n"
+                f"• `CROSS Questions to impeach prosecution witness on land boundaries`\n"
+                f"• `LIMITATION Days to file criminal revision in Sessions Court`\n"
+                f"• `PRECEDENT Supreme Court decisions on ad-interim injunction`\n\n"
+                f"👉 _Type any question, dictate a note, or tell me how I can assist your practice!_"
+            )
+
         return (
-            "⚖️ *জাসটর চেম্বার ওএস — বিজ্ঞ আইনজীবী হোয়াটসঅ্যাপ গেটওয়ে*\n"
-            "━━━━━━━━━━━━━━━━━━━━\n"
-            "সুপ্রিম কোর্ট ও জেলা আদালতের বিজ্ঞ আইনজীবীদের ব্যক্তিগত চেম্বার সহকারী:\n\n"
-            "১. 🎙️ *কোর্ট চত্বর থেকে তাৎক্ষণিক ডিকটেশন:*\n"
-            "   • `#[মামলা_নম্বর] আদেশ বা নোট`\n"
-            "   _যেমন:_ `#CR-452/2026 জামিন মঞ্জুর, আগামী ১৫ নভেম্বর জবাব দাখিল`\n"
-            "   _(ভয়েস মেসেজ পাঠালেও তা স্বয়ংক্রিয়ভাবে ডকেটে ফাইল হবে)_\n\n"
-            "২. 📷 *আদালতের আদেশপত্রের ছবি পাঠান:*\n"
-            "   _ছবি পাঠালেই এআই স্বয়ংক্রিয়ভাবে মামলার সাথে যুক্ত করে অসঙ্গতি ও পরবর্তী তারিখ বের করবে।_\n\n"
-            "৩. 🎯 *জেরা ও আপত্তি কৌশল (Trial Cross-Exam):*\n"
-            "   • `CROSS <মামলা বা জেরার বিষয়>`\n"
-            "   _যেমন:_ `CROSS JUSTOR-2026-001 সাক্ষীকে চেক হস্তান্তর নিয়ে জেরা`\n\n"
-            "৪. 📑 *জরুরি কোর্টরুম দরখাস্তের খসড়া:*\n"
-            "   • `DRAFT <দরখাস্তের নাম বা ধারা>`\n"
-            "   _যেমন:_ `DRAFT দেওয়ানি ১৪৮ ধারায় সময় প্রার্থনা` অথবা `DRAFT হাজিরা`\n\n"
-            "৫. ⏳ *আইনি তামাদি ও ডেডলাইন গণক:*\n"
-            "   • `LIMITATION <আদেশ বা আপিল>` অথবা `DEADLINES`\n"
-            "   _যেমন:_ `LIMITATION দেওয়ানি আপিল জেলা জজ আদালতে কত দিন`\n\n"
-            "৬. 🎯 *শুনানির পূর্ণাঙ্গ প্রস্তুতি (Hearing Pack):*\n"
-            "   • `HEARING PACK` অথবা `প্রস্তুতি <মামলা নম্বর>`\n\n"
-            "৭. 🌅 *আজকের চেম্বার ব্রিফিং:*\n"
-            "   • `BRIEF` অথবা `আজকের ব্রিফিং`\n\n"
-            "৮. 📚 *সুপ্রিম কোর্টের নজির অনুসন্ধান:*\n"
-            "   • `PRECEDENT <বিষয়>` _(যেমন: PRECEDENT 138 NI Act)_\n\n"
-            "৯. 📝 *আইনি নোটিশের খসড়া:*\n"
-            "   • `DRAFT NOTICE <বিবরণ>`\n\n"
-            "১০. 📂 *মামলার সারসংক্ষেপ:*\n"
-            "   • `SUMMARY <মামলা নম্বর>`\n\n"
-            "📌 _জাসটর এআই — আইনজীবীদের সময় বাঁচায়, চেম্বার প্র্যাকটিস রাখে এক ধাপ এগিয়ে।_"
+            f"⚖️ *আসসালামু আলাইকুম শ্রদ্ধাভাজন {name}!* \n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"🏛️ *চেম্বার:* {chamber}\n"
+            f"🤖 *আপনার সার্বক্ষণিক ব্যক্তিগত এআই লিগ্যাল কো-পাইলট প্রস্তুত।*\n\n"
+            f"আমাকে আপনার সার্বক্ষণিক চেম্বার জুনিয়র হিসেবে ব্যবহার করতে পারেন:\n\n"
+            f"💬 *১. যেকোনো সাধারণ আইনি প্রশ্ন ও মামলা কৌশল (সরাসরি কথোপকথন):*\n"
+            f"কোনো বিশেষ কমান্ড লাগবে না, সরাসরি স্বাভাবিক বাংলায় বা ইংরেজিতে লিখুন:\n"
+            f"• _'ম্যাজিস্ট্রেট কি ৩০২ ধারায় জামিন দিতে পারেন?'_\n"
+            f"• _'এনআই অ্যাক্ট ১৩৮ ধারায় নোটিশের সময়সীমা ও উপাদান কি কি?'_\n"
+            f"• _'দেওয়ানি একতরফা ডিক্রি রদের জন্য কোন ধারায় আবেদন করতে হবে?'_\n\n"
+            f"🎙️ *২. কোর্ট চত্বর থেকে তাৎক্ষণিক ডিকটেশন (ভয়েস বা টেক্সট):*\n"
+            f"• `#[মামলা_নম্বর] আদেশ বা নোট` _(যেমন: #JUSTOR-2026-001 অন্তর্বর্তীকালীন নিষেধাজ্ঞা মঞ্জুর)_\n"
+            f"• ভয়েস মেসেজ পাঠালেও তা স্বয়ংক্রিয়ভাবে ডকেটে ফাইল হবে এবং মক্কেলকে ফরোয়ার্ড করার প্রস্তুত এসএমএস তৈরি হবে।\n\n"
+            f"🌅 *৩. সকালের চেম্বার ব্রিফিং ও কার্যতালিকা:*\n"
+            f"• `BRIEF` — আজকের সকালের কোর্ট ব্রিফিং, কজলিস্ট ও জরুরি ডেডলাইন\n"
+            f"• `CAUSELIST` — চেম্বারের সম্পূর্ণ মোকদ্দমা কার্যতালিকা\n\n"
+            f"📑 *৪. জরুরি কোর্টরুম দরখাস্ত ও ট্রায়াল জেরা (Cross-Exam):*\n"
+            f"• `DRAFT সময় প্রার্থনা` বা `DRAFT জামিনের আবেদন`\n"
+            f"• `CROSS সাক্ষীকে চেক বা দখল নিয়ে জেরা করার কৌশল`\n"
+            f"• `LIMITATION দেওয়ানি আপিল জেলা জজ আদালতে কত দিন`\n"
+            f"• `PRECEDENT ১৪৪ ধারা বা অন্তর্বর্তীকালীন নিষেধাজ্ঞার নজির`\n\n"
+            f"👉 _আপনার যেকোনো আইনি প্রশ্ন, মামলা পর্যালোচনা বা ডিকটেশন লিখে পাঠান!_"
         )
 
     def _handle_causelist_query(self, sender: str, lang: str = "bn") -> str:
@@ -1646,12 +1669,16 @@ class JustorWhatsAppService:
                 )
             return doc_analysis_text
 
-        if not query_text:
-            return self._get_help_menu("bn")
-
-        # Command: HELP / MENU
-        if upper_query in ["HELP", "MENU", "START", "হাই", "হ্যালো", "সাহায্য", "আসসালামু আলাইকুম", "COMMANDS"]:
-            return self._get_help_menu("bn")
+        # Command: HELP / MENU / GREETING
+        greeting_words = [
+            "HELP", "MENU", "START", "COMMANDS", "INFO",
+            "HI", "HELLO", "HEY", "GREETINGS", "GOOD MORNING", "GOOD AFTERNOON", "GOOD EVENING",
+            "SALAM", "SALAAM", "ASSALAMU ALAIKUM", "ASSALAMUALAIKUM", "SLM",
+            "হাই", "হ্যালো", "সাহায্য", "আসসালামু আলাইকুম", "সালাম", "শুভ সকাল", "কেমন আছেন", "মেনু"
+        ]
+        if upper_query in greeting_words:
+            lang = "en" if upper_query in ["HI", "HELLO", "HEY", "HELP", "MENU", "COMMANDS", "START", "GOOD MORNING", "GOOD AFTERNOON", "GOOD EVENING", "GREETINGS", "INFO"] else "bn"
+            return self._get_help_menu(lang=lang, lawyer=lawyer)
 
         # Workflow 5: Daily Chamber Morning Brief ("What needs my attention?" / BRIEF / ATTENTION)
         if (
@@ -1740,13 +1767,42 @@ class JustorWhatsAppService:
             return self._handle_summarize_case(case_ref or query_text, sender)
 
         # Workflow 1 & 2: Autonomous Corridor Dictation & Matter Update (#<ID> or 'Rahim matter—hearing Sunday...')
-        # Triggered if explicit #TAG or if message mentions matter details / court orders
-        if (
+        # Triggered if explicit #TAG or NOTE/DICTATE command, OR clear court outcome phrases (never on questions/queries)
+        is_question = (
+            query_text.strip().endswith("?")
+            or any(query_text.lower().strip().startswith(w) for w in [
+                "can ", "could ", "what ", "how ", "is ", "are ", "why ", "explain ", "tell me ",
+                "does ", "when ", "which ", "who ", "where ", "shall ", "will ",
+                "কখন", "কীভাবে", "কিভাবে", "কী", "কি ", "কেন", "কোন", "কোথায়", "কোথায়", "কার"
+            ])
+            or "উপাদান কি" in query_text
+            or "ধারা কি" in query_text
+            or "পার্থক্য কি" in query_text
+            or "পরামর্শ" in query_text
+            or "পরামর্শ কি" in query_text
+        )
+
+        court_order_action_phrases = [
+            "ORDER PASSED", "BAIL GRANTED", "BAIL REJECTED", "BAIL REFUSED", "ADJOURNED TO",
+            "NEXT DATE", "NEXT HEARING", "WARRANT ISSUED", "STAY GRANTED", "INJUNCTION EXTENDED",
+            "HEARING SUNDAY", "HEARING MONDAY", "TIME PETITION ALLOWED", "HAZIRA SUBMITTED",
+            "আদেশ দেওয়া হয়েছে", "আদেশ দিয়েছেন", "জামিন মঞ্জুর", "জামিন নামঞ্জুর", "পরবর্তী তারিখ",
+            "শুনানি রবিবার", "শুনানি ধার্য", "হাজিরা দাখিল", "সময় মঞ্জুর", "ইনজাংশন বৃদ্ধি"
+        ]
+
+        is_explicit_dictation = (
             upper_query.startswith("#")
             or upper_query.startswith("DICTATE")
             or upper_query.startswith("নোট")
-            or any(kw in upper_query for kw in ["HEARING SUNDAY", "AFFIDAVIT", "OPPOSITE PARTY", "ORDER", "ADJOURNMENT", "BAIL", "আদেশ", "শুনানি রবিবার", "এফিডেভিট", "হাজিরা", "জামিন"])
-        ):
+            or upper_query.startswith("NOTE")
+        )
+
+        is_implicit_dictation = (
+            not is_question
+            and any(phrase in upper_query for phrase in court_order_action_phrases)
+        )
+
+        if is_explicit_dictation or is_implicit_dictation:
             matter, clean_body = self._resolve_matter_context(query_text, sender)
             if matter:
                 return self._run_autonomous_matter_ingestion(
@@ -1798,20 +1854,29 @@ class JustorWhatsAppService:
             case_ref = parts[1] if len(parts) > 1 else "JUSTOR-2026-001"
             return self._handle_summarize_case(case_ref, sender)
 
-        # Fallback: Legal Professional RAG Question Processing
-        is_english = any(w in upper_query for w in ["SECTION", "LAW", "COURT", "PENAL", "CONTRACT", "ACT", "BAIL", "APPEAL"]) and not any(ord(c) > 127 for c in query_text)
+        # Fallback: Dedicated Personal AI Legal Co-Pilot (General queries, legal research, case strategy, law analysis)
+        lawyer_name = lawyer.get("full_name", "Counsel") if lawyer else "Counsel"
+        chamber_name = lawyer.get("chamber_name", "Chamber") if lawyer else "Chamber"
+
+        is_english = any(w in upper_query for w in [
+            "SECTION", "LAW", "COURT", "PENAL", "CONTRACT", "ACT", "BAIL", "APPEAL",
+            "WHAT", "HOW", "WHY", "CAN", "IS", "TELL", "EXPLAIN", "ADVISE", "STRATEGY",
+            "PROCEDURE", "EVIDENCE", "SUIT", "CIVIL", "CRIMINAL", "WRIT", "PETITION"
+        ]) and not any(ord(c) > 127 for c in query_text)
+
         system_instruction = (
-            "You are Justor AI's 24/7 Mobile Legal Assistant exclusively for Bangladesh lawyers, advocates, and chamber counsel on WhatsApp.\n"
-            "Format your answer specifically for mobile readability:\n"
+            f"You are Advocate {lawyer_name}'s dedicated 24/7 Personal AI Legal Co-Pilot on WhatsApp (Chamber: {chamber_name}), specialized in Bangladesh jurisprudence, Supreme Court practice, and district trial procedure.\n"
+            "Format your answer specifically for mobile readability on WhatsApp:\n"
             "- Use clean *bold* headings and bullet points (•).\n"
-            "- Keep answers concise, authoritative, and actionable on a mobile screen (under 1200 characters).\n"
-            "- Cite the exact controlling Bangladesh Statute, Section, and relevant Supreme Court Precedents (e.g. 'নেগোশিয়েবল ইনস্ট্রুমেন্টস অ্যাক্ট, ১৮৮১-এর ধারা ১৩৮' or 'দণ্ডবিধি ১৮৬০-এর ধারা ৪২০').\n"
-            "- Provide practical litigation steps: (১) কি নোটিশ দিতে হবে, (২) কোন আদালতে যেতে হবে, (৩) সময়সীমা (Limitation Period).\n"
+            "- Keep answers authoritative, clear, and actionable on a mobile screen (under 1200 characters).\n"
+            "- Cite the exact controlling Bangladesh Statute, Section, and relevant Supreme Court Precedents (DLR / BLD / BLC) where applicable.\n"
+            "- Provide practical litigation steps and procedural advice: (১) কি নোটিশ দিতে হবে, (২) কোন আদালতে যেতে হবে, (৩) সময়সীমা (Limitation Period).\n"
+            "- Provide litigation defense or prosecution strategy tips when asked.\n"
             "- Conclude with a 1-line professional note.\n"
-            + ("Answer in natural, polite Bengali (বাংলা)." if not is_english else "Answer in clear, authoritative English.")
+            + ("Answer in natural, polite courtroom Bengali (বাংলা) with English statutory terms in brackets." if not is_english else "Answer in clear, authoritative, formal legal English.")
         )
 
-        prompt = f"Advocate Legal Query:\n\"{query_text}\"\n\nProvide an authoritative, clear explanation with applicable Bangladesh laws, practical timeline steps, and court jurisdiction."
+        prompt = f"Advocate {lawyer_name} asks:\n\"{query_text}\"\n\nProvide an authoritative, clear explanation with applicable Bangladesh laws, practical timeline steps, and court jurisdiction."
 
         response = await self._call_gemini_chat(prompt, system_instruction)
         return response
