@@ -17,6 +17,24 @@
     "verified": true,
     "phone": "+8801798072132"
   },
+  "+8801714369988": {
+    "id": "4a8dd7a8-f666-4a2b-a949-220fadabf28e",
+    "full_name": "Advocate Mehide Hasan",
+    "email": "mehidehasan@justorai.com",
+    "role": "Senior Advocate",
+    "chamber_name": "Justor Law Chambers (Supreme Court & District Court)",
+    "verified": true,
+    "phone": "+8801714369988"
+  },
+  "8801714369988": {
+    "id": "4a8dd7a8-f666-4a2b-a949-220fadabf28e",
+    "full_name": "Advocate Mehide Hasan",
+    "email": "mehidehasan@justorai.com",
+    "role": "Senior Advocate",
+    "chamber_name": "Justor Law Chambers (Supreme Court & District Court)",
+    "verified": true,
+    "phone": "+8801714369988"
+  },
   "_pending_tokens": {},
   "+8801811112233": {
     "id": "lawyer-rahim-12345",
